@@ -1,16 +1,15 @@
 package com.szusta.meduva.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.Collection;
 
 @Entity
-@Data
+@Table(name = "role")
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class Role {
@@ -20,4 +19,8 @@ public class Role {
     private Long id;
 
     private String name;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JsonIgnore
+    Collection<User> users;
 }

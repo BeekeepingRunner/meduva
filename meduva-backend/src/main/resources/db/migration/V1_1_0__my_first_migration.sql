@@ -17,9 +17,24 @@ CREATE TABLE IF NOT EXISTS user (
     session_expire TIMESTAMP DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=UTF8;
 
-CREATE TABLE IF NOT EXISTS user_roles (
-    id_user INT NOT NULL,
-    id_role INT NOT NULL,
-    FOREIGN KEY (id_user) REFERENCES user (id),
-    FOREIGN KEY (id_role) REFERENCES role (id)
+CREATE TABLE IF NOT EXISTS user_role (
+    user_id INT NOT NULL,
+    role_id INT NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES user (id),
+    FOREIGN KEY (role_id) REFERENCES role (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=UTF8;
+
+INSERT INTO role VALUES
+(null, "ROLE_CLIENT"),
+(null, "ROLE_WORKER"),
+(null, "ROLE_RECEPTIONIST"),
+(null, "ROLE_ADMIN");
+
+INSERT INTO user VALUES
+(1, "John", "Doe", "john.doe@gmail.com", "48123123123", "admin", "admin", null, 0, null, null);
+
+INSERT INTO user_role VALUES
+(1, 1),
+(1, 2),
+(1, 3),
+(1, 4);

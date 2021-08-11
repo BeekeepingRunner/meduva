@@ -1,4 +1,4 @@
-package com.szusta.meduva.config;
+package com.szusta.meduva.security;
 
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;

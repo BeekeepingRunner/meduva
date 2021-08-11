@@ -7,15 +7,15 @@ import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 
+// TODO:
+// Exception handling, validation
+
 @Controller
-@RequestMapping("/api")
 public class UserController {
 
     private final UserService userService;
@@ -23,6 +23,16 @@ public class UserController {
     @Autowired
     public UserController(UserService userService) {
         this.userService = userService;
+    }
+
+    @GetMapping("user/{id}")
+    public ResponseEntity<User> getUser(@PathVariable Long id) {
+        return ResponseEntity.ok().body(userService.getUserById(id));
+    }
+
+    @GetMapping("user/search/{login}")
+    public ResponseEntity<User> getUserByLogin(@PathVariable String login) {
+        return ResponseEntity.ok().body(userService.getUserByLogin(login));
     }
 
     @PostMapping("/user")
