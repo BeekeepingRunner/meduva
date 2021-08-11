@@ -14,7 +14,12 @@ CREATE TABLE IF NOT EXISTS user (
     salt VARCHAR(30) DEFAULT NULL,
     deleted TINYINT NOT NULL,
     session_id VARCHAR(256) DEFAULT NULL,
-    session_expire TIMESTAMP DEFAULT NULL,
+    session_expire TIMESTAMP DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=UTF8;
+
+CREATE TABLE IF NOT EXISTS user_roles (
+    id_user INT NOT NULL,
     id_role INT NOT NULL,
+    FOREIGN KEY (id_user) REFERENCES user (id),
     FOREIGN KEY (id_role) REFERENCES role (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=UTF8;
