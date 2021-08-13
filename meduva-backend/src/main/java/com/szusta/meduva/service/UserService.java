@@ -1,15 +1,34 @@
 package com.szusta.meduva.service;
 
-import com.szusta.meduva.model.Role;
 import com.szusta.meduva.model.User;
+import com.szusta.meduva.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
-import java.util.List;
+@Service
+public class UserService {
 
-public interface UserService {
-    User getUserById(Long id);
-    User getUserByLogin(String login);
-    User saveUser(User user);
-    Role saveRole(Role role);
-    void addRoleToUser(String login, String roleName);
-    List<User> getUsers();
+    UserRepository userRepository;
+
+    @Autowired
+    public UserService(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
+
+    public User findByLogin(String login) {
+        return userRepository.findByLogin(login)
+                .orElseThrow(() -> new RuntimeException("User not found with login " + login));
+    }
+
+    public Boolean existsByLogin(String login) {
+        return userRepository.existsByLogin(login);
+    }
+
+    public Boolean existsByEmail(String email) {
+        return userRepository.existsByEmail(email);
+    }
+
+    public User save(User user) {
+        return userRepository.save(user);
+    }
 }

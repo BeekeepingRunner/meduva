@@ -1,0 +1,25 @@
+package com.szusta.meduva.service;
+
+import com.szusta.meduva.model.ERole;
+import com.szusta.meduva.model.Role;
+import com.szusta.meduva.repository.RoleRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.Optional;
+
+@Service
+public class RoleService {
+
+    private RoleRepository roleRepository;
+
+    @Autowired
+    public RoleService(RoleRepository roleRepository) {
+        this.roleRepository = roleRepository;
+    }
+
+    public Role findByName(ERole name) {
+        return roleRepository.findByName(name)
+                .orElseThrow(() -> new RuntimeException("Error: Role not found:" + name.toString()));
+    }
+}

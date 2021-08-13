@@ -2,7 +2,7 @@ package com.szusta.meduva;
 
 import com.szusta.meduva.model.Role;
 import com.szusta.meduva.model.User;
-import com.szusta.meduva.service.UserService;
+// import com.szusta.meduva.service.UserService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -21,6 +21,7 @@ public class MeduvaApplication {
 		SpringApplication.run(MeduvaApplication.class, args);
 	}
 
+	/*
 	@Bean
 	CommandLineRunner run(UserService userService) {
 		return args -> {
@@ -46,4 +47,6 @@ public class MeduvaApplication {
 			}
 		};
 	}
+
+	 */
 }
