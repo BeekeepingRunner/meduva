@@ -11,11 +11,12 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.util.List;
 
 // TODO:
 // Exception handling, validation
 
-@Controller
+@RestController
 public class UserController {
 
     private final UserService userService;
@@ -28,6 +29,11 @@ public class UserController {
     @GetMapping("user/{id}")
     public ResponseEntity<User> getUser(@PathVariable Long id) {
         return ResponseEntity.ok().body(userService.getUserById(id));
+    }
+
+    @GetMapping("user")
+    public ResponseEntity<List<User>> getAllUsers() {
+        return ResponseEntity.ok().body(userService.getUsers());
     }
 
     @GetMapping("user/search/{login}")

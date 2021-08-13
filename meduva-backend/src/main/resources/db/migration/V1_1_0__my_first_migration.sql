@@ -30,8 +30,9 @@ INSERT INTO role VALUES
 (null, "ROLE_RECEPTIONIST"),
 (null, "ROLE_ADMIN");
 
+-- hashed password is 1234 --
 INSERT INTO user VALUES
-(1, "John", "Doe", "john.doe@gmail.com", "48123123123", "admin", "admin", null, 0, null, null);
+(1, "John", "Doe", "john.doe@gmail.com", "48123123123", "sampleLogin", "$2a$10$9qx.WFyh9819GyUlQh0M5uj6JZo7FXETpDH5BWeMpJYKY91afWZ2y", null, 0, null, null);
 
 INSERT INTO user_role VALUES
 (1, 1),

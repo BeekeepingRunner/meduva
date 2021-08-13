@@ -21,42 +21,29 @@ public class MeduvaApplication {
 		SpringApplication.run(MeduvaApplication.class, args);
 	}
 
-	/*
-	@Bean
-	public WebMvcConfigurer corsConfigurer() {
-		return new WebMvcConfigurer() {
-			@Override
-			public void addCorsMappings(CorsRegistry registry) {
-				registry.addMapping("/**")
-						.allowedOrigins("*")
-						.allowedMethods("GET", "POST", "PUT", "DELETE");
-			}
-		};
-	}
-*/
-
-	/*
 	@Bean
 	CommandLineRunner run(UserService userService) {
 		return args -> {
-			userService.saveUser(
-					new User(
-							null,
-							"name",
-							"surname",
-							"samplemail@mail.com",
-							"48123123123",
-							"sampleLogin",
-							"1234",
-							null,
-							false,
-							null,
-							new ArrayList<Role>()));
+			if (userService.getUserByLogin("admin") == null) {
+				userService.saveUser(
+						new User(
+								null,
+								"john",
+								"doe",
+								"samplemail@mail.com",
+								"48123123123",
+								"admin",
+								"admin",
+								null,
+								false,
+								null,
+								new ArrayList<Role>()));
 
-			userService.addRoleToUser("sampleLogin", "ROLE_CLIENT");
-			userService.addRoleToUser("sampleLogin", "ROLE_WORKER");
+				userService.addRoleToUser("admin", "ROLE_CLIENT");
+				userService.addRoleToUser("admin", "ROLE_WORKER");
+				userService.addRoleToUser("admin", "ROLE_RECEPTIONIST");
+				userService.addRoleToUser("admin", "ROLE_ADMIN");
+			}
 		};
 	}
-
-	 */
 }

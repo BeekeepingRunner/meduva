@@ -10,11 +10,13 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 // TODO:
 // Exception handling, validation (?)
@@ -26,22 +28,26 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository) {
+    public UserServiceImpl(UserRepository userRepository,
+                           RoleRepository roleRepository,
+                           PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
-    public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-        User user = userRepository.findByLogin(userName);
+        User user = userRepository.findByLogin(username);
         if (user == null) {
             log.error("User not found in the database");
             throw new RuntimeException("User not found in the database");
         } else {
-            log.error("User not found in the database");
+            log.info("User {} found in the database", user.getLogin());
         }
 
         Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
@@ -49,10 +55,16 @@ public class UserServiceImpl implements UserService, UserDetailsService {
             authorities.add(new SimpleGrantedAuthority(role.getName()));
         });
 
+        log.info("Authorities = {}", authorities.toString());
+
         return new org.springframework.security.core.userdetails.User(
                 user.getLogin(),
                 user.getPassword(),
                 authorities);
+    }
+
+    public List<User> getUsers() {
+        return userRepository.findAll();
     }
 
     public User getUserById(Long id) {
@@ -70,7 +82,8 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     public User saveUser(User user) {
-        log.info("Saving new user {} to the database", user.getLogin());
+        log.info("Saving new user {} with password {} to the database", user.getLogin(), user.getPassword());
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         return userRepository.save(user);
     }
 
