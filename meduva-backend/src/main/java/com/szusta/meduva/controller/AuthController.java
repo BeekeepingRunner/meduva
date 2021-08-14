@@ -1,15 +1,19 @@
 package com.szusta.meduva.controller;
 
+import com.szusta.meduva.exception.TokenRefreshException;
 import com.szusta.meduva.model.ERole;
+import com.szusta.meduva.model.RefreshToken;
 import com.szusta.meduva.model.Role;
 import com.szusta.meduva.model.User;
 import com.szusta.meduva.payload.request.LoginRequest;
+import com.szusta.meduva.payload.request.RefreshTokenRequest;
 import com.szusta.meduva.payload.request.SignupRequest;
 import com.szusta.meduva.payload.response.JwtResponse;
 import com.szusta.meduva.payload.response.MessageResponse;
 import com.szusta.meduva.repository.RoleRepository;
 import com.szusta.meduva.repository.UserRepository;
 import com.szusta.meduva.security.jwt.JwtUtils;
+import com.szusta.meduva.service.RefreshTokenService;
 import com.szusta.meduva.service.RoleService;
 import com.szusta.meduva.service.UserDetailsImpl;
 import com.szusta.meduva.service.UserService;
@@ -37,18 +41,21 @@ public class AuthController {
     RoleService roleService;
     PasswordEncoder encoder;
     JwtUtils jwtUtils;
+    RefreshTokenService refreshTokenService;
 
     @Autowired
     public AuthController(AuthenticationManager authenticationManager,
                           UserService userService,
                           RoleService roleService,
                           PasswordEncoder encoder,
-                          JwtUtils jwtUtils) {
+                          JwtUtils jwtUtils,
+                          RefreshTokenService refreshTokenService) {
         this.authenticationManager = authenticationManager;
         this.userService = userService;
         this.roleService = roleService;
         this.encoder = encoder;
         this.jwtUtils = jwtUtils;
+        this.refreshTokenService = refreshTokenService;
     }
 
     @PostMapping("/signin")
@@ -60,19 +67,42 @@ public class AuthController {
                         loginRequest.getLogin(), loginRequest.getPassword()));
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        String jwt = jwtUtils.generateJwtToken(authentication);
-
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+
+        String jwt = jwtUtils.generateJwtToken(userDetails);
+
         List<String> roles = userDetails.getAuthorities().stream()
                 .map(item -> item.getAuthority())
                 .collect(Collectors.toList());
 
+        RefreshToken refreshToken = refreshTokenService.createRefreshToken(userDetails.getId());
+
         return ResponseEntity.ok(new JwtResponse(
                 jwt,
+                refreshToken.getToken(),
                 userDetails.getId(),
                 userDetails.getUsername(),
                 userDetails.getEmail(),
                 roles));
+    }
+
+    @PostMapping("/refreshtoken")
+    // request should be @Valid
+    public ResponseEntity<?> refreshToken(@RequestBody RefreshTokenRequest request) {
+
+        String requestRefreshToken = request.getRefreshToken();
+
+        String outRefreshToken =  refreshTokenService.findByToken(requestRefreshToken)
+                .map(refreshTokenService::verifyExpiration)
+                .map(RefreshToken::getUser)
+                .map(user -> {
+                    String token = jwtUtils.generateJwtToken(UserDetailsImpl.build(user));
+                    return token;
+                })
+                .orElseThrow(() -> new TokenRefreshException(
+                        requestRefreshToken, "Refresh token is not in database!"));
+
+        return ResponseEntity.ok().body(outRefreshToken);
     }
 
     @PostMapping("/signup")
@@ -138,7 +168,7 @@ public class AuthController {
                 }
             });
         }
-        
+
         return userRoles;
     }
 }

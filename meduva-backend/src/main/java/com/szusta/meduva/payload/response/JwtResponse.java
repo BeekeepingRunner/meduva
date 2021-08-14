@@ -1,21 +1,25 @@
 package com.szusta.meduva.payload.response;
 
-import lombok.Getter;
-import lombok.Setter;
-
 import java.util.List;
 
 public class JwtResponse {
 
     private String token;
     private String type = "Bearer ";
+    private String refreshToken;
     private Long id;
     private String login;
     private String email;
     private List<String> roles;
 
-    public JwtResponse(String token, Long id, String login, String email, List<String> roles) {
+    public JwtResponse(String token,
+                       String refreshToken,
+                       Long id,
+                       String login,
+                       String email,
+                       List<String> roles) {
         this.token = token;
+        this.refreshToken = refreshToken;
         this.id = id;
         this.login = login;
         this.email = email;
@@ -28,6 +32,14 @@ public class JwtResponse {
 
     public void setAccessToken(String accessToken) {
         this.token = accessToken;
+    }
+
+    public String getRefreshToken() {
+        return refreshToken;
+    }
+
+    public void setRefreshToken(String refreshToken) {
+        this.refreshToken = refreshToken;
     }
 
     public String getTokenType() {
