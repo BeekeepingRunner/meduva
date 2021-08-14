@@ -1,5 +1,8 @@
 package com.szusta.meduva.controller;
 
+import com.szusta.meduva.exception.EmailAlreadyInUseException;
+import com.szusta.meduva.exception.LoginAlreadyTakenException;
+import com.szusta.meduva.exception.RoleNotFoundException;
 import com.szusta.meduva.exception.TokenRefreshException;
 import com.szusta.meduva.model.ERole;
 import com.szusta.meduva.model.RefreshToken;
@@ -109,21 +112,13 @@ public class AuthController {
     public ResponseEntity<?> registerUser(@RequestBody SignupRequest signupRequest) {
 
         if (userService.existsByLogin(signupRequest.getLogin())) {
-            return ResponseEntity.badRequest()
-                    .body(new MessageResponse("Error: Username is already taken"));
+            throw new LoginAlreadyTakenException("Error: That login is already taken");
         }
         if (userService.existsByEmail(signupRequest.getEmail())) {
-            return ResponseEntity.badRequest()
-                    .body(new MessageResponse("Error: Email is already in use"));
+            throw new EmailAlreadyInUseException("Error: That email is already in use");
         }
 
-        Set<Role> roles;
-        try {
-            roles = processRequestRoles(signupRequest.getRole());
-        }
-        catch (RuntimeException e) {
-            return ResponseEntity.badRequest().body(new MessageResponse(e.getMessage()));
-        }
+        Set<Role> roles = processRequestRoles(signupRequest.getRole());
 
         User user = new User(
                 signupRequest.getLogin(),
@@ -166,7 +161,7 @@ public class AuthController {
                         userRoles.add(clientRole);
                         break;
                     default:
-                        throw new RuntimeException("Bad user role in request body");
+                        throw new RoleNotFoundException("Bad user role in request body");
                 }
             });
         }
