@@ -1,5 +1,6 @@
 package com.szusta.meduva.service;
 
+import com.szusta.meduva.exception.RoleNotFoundException;
 import com.szusta.meduva.model.ERole;
 import com.szusta.meduva.model.Role;
 import com.szusta.meduva.repository.RoleRepository;
@@ -18,6 +19,6 @@ public class RoleService {
 
     public Role findByName(ERole name) {
         return roleRepository.findByName(name)
-                .orElseThrow(() -> new RuntimeException("Error: Role not found:" + name.toString()));
+                .orElseThrow(() -> new RoleNotFoundException("Error: Role not found:" + name.toString()));
     }
 }
