@@ -73,6 +73,7 @@ public class AuthController {
                 .map(item -> item.getAuthority())
                 .collect(Collectors.toList());
 
+        refreshTokenService.deleteByUserId(userDetails.getId());    // delete previous refresh tokens
         RefreshToken refreshToken = refreshTokenService.createRefreshToken(userDetails.getId());
 
         return ResponseEntity.ok(new JwtResponse(
