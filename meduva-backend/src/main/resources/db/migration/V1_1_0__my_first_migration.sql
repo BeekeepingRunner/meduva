@@ -10,7 +10,8 @@ CREATE TABLE IF NOT EXISTS user (
     password VARCHAR(256) NOT NULL,
     name varchar(30) NOT NULL,
     surname VARCHAR(30) NOT NULL,
-    phone_number VARCHAR(11) DEFAULT NULL
+    phone_number VARCHAR(11) DEFAULT NULL,
+    deleted TINYINT DEFAULT 0 NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=UTF8;
 
 CREATE TABLE IF NOT EXISTS user_role (
@@ -36,7 +37,7 @@ INSERT INTO role VALUES
 
 -- hashed password is 1234 --
 INSERT INTO user VALUES
-(1, "john.doe@gmail.com", "sampleLogin", "$2a$10$9qx.WFyh9819GyUlQh0M5uj6JZo7FXETpDH5BWeMpJYKY91afWZ2y", "John", "Doe", "48123123123");
+(1, "john.doe@gmail.com", "sampleLogin", "$2a$10$9qx.WFyh9819GyUlQh0M5uj6JZo7FXETpDH5BWeMpJYKY91afWZ2y", "John", "Doe", "48123123123", 0);
 
 INSERT INTO user_role VALUES
 (1, 1),
