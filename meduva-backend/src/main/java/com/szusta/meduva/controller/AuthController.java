@@ -53,7 +53,7 @@ public class AuthController {
 
     @PostMapping("/signin")
     // Login request should be @Valid
-    public ResponseEntity<?> authenticateUser(@RequestBody LoginRequest loginRequest) {
+    public ResponseEntity<?> loginUser(@RequestBody LoginRequest loginRequest) {
 
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
@@ -76,16 +76,24 @@ public class AuthController {
     }
 
     @PostMapping("/signup")
+    // SignupRequest should be @Valid
     public ResponseEntity<?> registerUser(@RequestBody SignupRequest signupRequest) {
 
         if (userService.existsByLogin(signupRequest.getLogin())) {
             return ResponseEntity.badRequest()
                     .body(new MessageResponse("Error: Username is already taken"));
         }
-
         if (userService.existsByEmail(signupRequest.getEmail())) {
             return ResponseEntity.badRequest()
                     .body(new MessageResponse("Error: Email is already in use"));
+        }
+
+        Set<Role> roles;
+        try {
+            roles = processRequestRoles(signupRequest.getRole());
+        }
+        catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(new MessageResponse(e.getMessage()));
         }
 
         User user = new User(
@@ -93,44 +101,44 @@ public class AuthController {
                 signupRequest.getEmail(),
                 encoder.encode(signupRequest.getPassword()));
 
-        Set<String> strRoles = signupRequest.getRole();
-        Set<Role> roles = new HashSet<>();
-
-        if (strRoles == null) {
-            Role userRole = roleService.findByName(ERole.ROLE_CLIENT);
-            roles.add(userRole);
-        } else {
-            try {
-                strRoles.forEach(role -> {
-                    switch (role) {
-                        case "admin":
-                            Role adminRole = roleService.findByName(ERole.ROLE_ADMIN);
-                            roles.add(adminRole);
-                            break;
-                        case "receptionist":
-                            Role receptionistRole = roleService.findByName(ERole.ROLE_RECEPTIONIST);
-                            roles.add(receptionistRole);
-                            break;
-                        case "worker":
-                            Role workerRole = roleService.findByName(ERole.ROLE_WORKER);
-                            roles.add(workerRole);
-                            break;
-                        case "client":
-                            Role clientRole = roleService.findByName(ERole.ROLE_CLIENT);
-                            roles.add(clientRole);
-                            break;
-                        default:
-                            throw new RuntimeException("Bad user role in request body");
-                    }
-                });
-            } catch (RuntimeException e) {
-                return ResponseEntity.badRequest().body(new MessageResponse(e.getMessage()));
-            }
-        }
-
         user.setRoles(roles);
         userService.save(user);
 
         return ResponseEntity.ok(new MessageResponse("User registered successfully"));
+    }
+
+    private Set<Role> processRequestRoles(Set<String> requestStringRoles) {
+
+        Set<Role> userRoles = new HashSet<>();
+
+        if (requestStringRoles == null) {
+            Role userRole = roleService.findByName(ERole.ROLE_CLIENT);
+            userRoles.add(userRole);
+        } else {
+            requestStringRoles.forEach(role -> {
+                switch (role) {
+                    case "admin":
+                        Role adminRole = roleService.findByName(ERole.ROLE_ADMIN);
+                        userRoles.add(adminRole);
+                        break;
+                    case "receptionist":
+                        Role receptionistRole = roleService.findByName(ERole.ROLE_RECEPTIONIST);
+                        userRoles.add(receptionistRole);
+                        break;
+                    case "worker":
+                        Role workerRole = roleService.findByName(ERole.ROLE_WORKER);
+                        userRoles.add(workerRole);
+                        break;
+                    case "client":
+                        Role clientRole = roleService.findByName(ERole.ROLE_CLIENT);
+                        userRoles.add(clientRole);
+                        break;
+                    default:
+                        throw new RuntimeException("Bad user role in request body");
+                }
+            });
+        }
+        
+        return userRoles;
     }
 }
