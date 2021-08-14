@@ -10,8 +10,6 @@ import com.szusta.meduva.payload.request.RefreshTokenRequest;
 import com.szusta.meduva.payload.request.SignupRequest;
 import com.szusta.meduva.payload.response.JwtResponse;
 import com.szusta.meduva.payload.response.MessageResponse;
-import com.szusta.meduva.repository.RoleRepository;
-import com.szusta.meduva.repository.UserRepository;
 import com.szusta.meduva.security.jwt.JwtUtils;
 import com.szusta.meduva.service.RefreshTokenService;
 import com.szusta.meduva.service.RoleService;

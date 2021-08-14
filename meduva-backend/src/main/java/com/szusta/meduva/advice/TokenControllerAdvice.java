@@ -2,8 +2,6 @@ package com.szusta.meduva.advice;
 
 import com.szusta.meduva.exception.ErrorMessage;
 import com.szusta.meduva.exception.TokenRefreshException;
-import com.szusta.meduva.security.jwt.JwtUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
