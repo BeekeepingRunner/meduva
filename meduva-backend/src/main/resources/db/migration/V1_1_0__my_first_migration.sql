@@ -13,20 +13,6 @@ CREATE TABLE IF NOT EXISTS user (
     phone_number VARCHAR(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=UTF8;
 
-CREATE TABLE IF NOT EXISTS futureuser (
-    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(30) NOT NULL,
-    surname VARCHAR(30) NOT NULL,
-    email VARCHAR(40) NOT NULL,
-    phone_number VARCHAR(11) DEFAULT NULL,
-    login VARCHAR(20) DEFAULT NULL,
-    password VARCHAR(256) NOT NULL,
-    salt VARCHAR(30) DEFAULT NULL,
-    deleted TINYINT NOT NULL,
-    session_id VARCHAR(256) DEFAULT NULL,
-    session_expire TIMESTAMP DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=UTF8;
-
 CREATE TABLE IF NOT EXISTS user_role (
     user_id INT NOT NULL,
     role_id INT NOT NULL,
@@ -50,7 +36,6 @@ INSERT INTO role VALUES
 
 -- hashed password is 1234 --
 INSERT INTO user VALUES
--- (1, "John", "Doe", "john.doe@gmail.com", "48123123123", "sampleLogin", "$2a$10$9qx.WFyh9819GyUlQh0M5uj6JZo7FXETpDH5BWeMpJYKY91afWZ2y", null, 0, null, null);
 (1, "john.doe@gmail.com", "sampleLogin", "$2a$10$9qx.WFyh9819GyUlQh0M5uj6JZo7FXETpDH5BWeMpJYKY91afWZ2y", "John", "Doe", "48123123123");
 
 INSERT INTO user_role VALUES
