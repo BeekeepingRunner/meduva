@@ -24,14 +24,14 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    //private String name;
-    //private String surname;
     private String login;
     private String email;
     private String password;
 
-    //@Column(name = "phone_number")
-    //private String phoneNumber;
+    private String name;
+    private String surname;
+    @Column(name = "phone_number")
+    private String phoneNumber;
 
     //private String salt;
     //private boolean deleted;
@@ -43,6 +43,15 @@ public class User {
         this.login = login;
         this.email = email;
         this.password = password;
+    }
+
+    public User(String login, String email, String password, String name, String surname, String phoneNumber) {
+        this.login = login;
+        this.email = email;
+        this.password = password;
+        this.name = name;
+        this.surname = surname;
+        this.phoneNumber = phoneNumber;
     }
 
     @ManyToMany(

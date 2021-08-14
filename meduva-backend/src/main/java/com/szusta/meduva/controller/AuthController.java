@@ -128,7 +128,10 @@ public class AuthController {
         User user = new User(
                 signupRequest.getLogin(),
                 signupRequest.getEmail(),
-                encoder.encode(signupRequest.getPassword()));
+                encoder.encode(signupRequest.getPassword()),
+                signupRequest.getName(),
+                signupRequest.getSurname(),
+                signupRequest.getPhoneNumber());
 
         user.setRoles(roles);
         userService.save(user);

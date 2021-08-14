@@ -10,10 +10,12 @@ import java.util.Set;
 @Setter
 public class SignupRequest {
 
-    private String login;
     private String email;
+    private String login;
+    private String password;
+    private String name;
+    private String surname;
+    private String phoneNumber;
 
     private Set<String> role;
-
-    private String password;
 }
