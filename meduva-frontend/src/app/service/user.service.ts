@@ -29,4 +29,17 @@ export class UserService {
   getAdminBoard(): Observable<any> {
     return this.http.get(environment.API_URL + 'admin', { responseType : 'text' });
   }
+
+  getUserDetails(login: string): Observable<User> {
+    return this.http.get<User>(environment.API_BASE_URL + 'users/search/findByLogin?login=' + login);
+  }
+}
+
+export interface User {
+  name: string,
+  surname: string,
+  phoneNumber: string,
+  email: string,
+  login: string,
+  password: string
 }
