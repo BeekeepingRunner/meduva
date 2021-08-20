@@ -4,10 +4,13 @@ import com.szusta.meduva.exception.EmailAlreadyInUseException;
 import com.szusta.meduva.exception.ErrorMessage;
 import com.szusta.meduva.exception.LoginAlreadyTakenException;
 import com.szusta.meduva.exception.RoleNotFoundException;
+import org.springframework.beans.propertyeditors.StringTrimmerEditor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
@@ -76,4 +79,12 @@ public class AuthControllerAdvice {
                 request.getDescription(false)
         );
     }
+
+    /*
+    @InitBinder
+    public void initBinder(WebDataBinder dataBinder){
+        StringTrimmerEditor stringTrimmerEditor = new StringTrimmerEditor(true);
+        dataBinder.registerCustomEditor(String.class, stringTrimmerEditor);
+    }
+     */
 }
