@@ -2,6 +2,7 @@ package com.szusta.meduva.payload.request;
 
 
 import com.sun.istack.NotNull;
+import com.szusta.meduva.exception.LoginAlreadyTakenException;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.beans.propertyeditors.StringTrimmerEditor;
@@ -18,7 +19,7 @@ import java.util.Set;
 @Setter
 public class SignupRequest {
 
-    @Email
+    @Email(message = "Email must be in its correct format")
     //@Size(max = 35, message = "Email must contain maximum 35 characters")
     private String email;
 

@@ -1,21 +1,24 @@
 package com.szusta.meduva.advice;
 
-import com.szusta.meduva.exception.EmailAlreadyInUseException;
-import com.szusta.meduva.exception.ErrorMessage;
-import com.szusta.meduva.exception.LoginAlreadyTakenException;
-import com.szusta.meduva.exception.RoleNotFoundException;
+import com.szusta.meduva.exception.*;
 import org.springframework.beans.propertyeditors.StringTrimmerEditor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.validation.FieldError;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.context.request.WebRequest;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @RestControllerAdvice
 public class AuthControllerAdvice {
@@ -80,11 +83,27 @@ public class AuthControllerAdvice {
         );
     }
 
-    /*
-    @InitBinder
-    public void initBinder(WebDataBinder dataBinder){
-        StringTrimmerEditor stringTrimmerEditor = new StringTrimmerEditor(true);
-        dataBinder.registerCustomEditor(String.class, stringTrimmerEditor);
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public final ResponseEntity<Object> handleUserNotFoundException(MethodArgumentNotValidException ex, WebRequest request) {
+
+        final List<FieldError> fieldErrors = ex.getBindingResult().getFieldErrors();
+
+        final List<CustomFieldError> customFieldErrors = new ArrayList<>();
+
+        for (FieldError fieldError : fieldErrors) {
+
+            final String field = fieldError.getField();
+
+            final String message = fieldError.getDefaultMessage();
+
+            final CustomFieldError customFieldError = CustomFieldError.builder().field(field).message(message).build();
+
+            customFieldErrors.add(customFieldError);
+
+        }
+
+        return ResponseEntity.badRequest().body(customFieldErrors);
     }
-     */
+
 }
