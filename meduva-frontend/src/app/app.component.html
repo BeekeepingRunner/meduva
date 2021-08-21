@@ -1,30 +1,35 @@
 <mat-toolbar>
-  <button mat-icon-button *ngIf="sidenav.mode === 'over' && isLoggedIn"
-          (click)="sidenav.toggle()">
-    <mat-icon *ngIf="!sidenav.opened">
-      menu
-    </mat-icon>
-    <mat-icon *ngIf="sidenav.opened">
-      close
-    </mat-icon>
-  </button>
+  <div class="left-item">
+    <button mat-icon-button *ngIf="sidenav.mode === 'over' && isLoggedIn"
+            (click)="sidenav.toggle()">
+      <mat-icon *ngIf="!sidenav.opened">
+        menu
+      </mat-icon>
+      <mat-icon *ngIf="sidenav.opened">
+        close
+      </mat-icon>
+    </button>
 
-  <a href="#">Meduva</a>
+    <a href="#">Meduva</a>
+  </div>
 
-  <ul class="navbar-nav ml-auto" *ngIf="!isLoggedIn">
-    <li class="nav-item">
-      <a href="/register" class="nav-link" routerLink="register">Sign Up</a>
-    </li>
-    <li class="nav-item">
-      <a href="/login" class="nav-link" routerLink="login">Login</a>
-    </li>
-  </ul>
+  <div class="right-item">
+    <div class="my-row">
+      <a href="/register" class="nav-link" routerLink="register"
+         *ngIf="!isLoggedIn">
+        Sign Up
+      </a>
+      <a href="/login" class="nav-link" routerLink="login"
+         *ngIf="!isLoggedIn">
+        Login
+      </a>
+      <a href class="nav-link" (click)="logout()"
+         *ngIf="isLoggedIn">
+        LogOut
+      </a>
+    </div>
+  </div>
 
-  <ul class="navbar-nav ml-auto" *ngIf="isLoggedIn">
-    <li class="nav-item">
-      <a href class="nav-link" (click)="logout()">LogOut</a>
-    </li>
-  </ul>
 </mat-toolbar>
 
 <mat-sidenav-container>

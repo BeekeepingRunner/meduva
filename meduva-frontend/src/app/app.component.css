@@ -2,10 +2,21 @@ mat-toolbar {
   background: #4f4c79;
   color: white;
   padding-left: 20px;
+  display: flex;
+  justify-content: space-between;
 }
 
-mat-toolbar > a {
+a {
   color: white;
+}
+
+.my-row {
+  display: flex;
+  flex-direction: row;
+}
+
+.nav-link {
+  font-size: smaller;
 }
 
 mat-sidenav {
@@ -28,9 +39,6 @@ mat-sidenav {
   display: flex;
   justify-content: center;
   align-items: center;
-
-  font-size: 2rem;
-  color: lightgray;
 }
 
 mat-sidenav-container {
