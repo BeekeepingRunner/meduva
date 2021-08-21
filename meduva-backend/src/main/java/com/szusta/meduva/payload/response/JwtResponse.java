@@ -66,11 +66,11 @@ public class JwtResponse {
         this.email = email;
     }
 
-    public String getUsername() {
+    public String getLogin() {
         return login;
     }
 
-    public void setUsername(String username) {
+    public void setLogin(String username) {
         this.login = username;
     }
 
