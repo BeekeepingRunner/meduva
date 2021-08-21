@@ -3,6 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import {Router, RouterModule, Routes} from "@angular/router";
 import {FormsModule} from "@angular/forms";
 import {HttpClientModule} from "@angular/common/http";
+import {MatSidenavModule} from "@angular/material/sidenav";
 
 import { AppComponent } from './app.component';
 import { LoginComponent } from './component/login/login.component';
@@ -15,6 +16,12 @@ import { BoardWorkerComponent } from './component/board-worker/board-worker.comp
 import { BoardReceptionistComponent } from './component/board-receptionist/board-receptionist.component';
 
 import { authInterceptorProviders } from './helper/auth.interceptor';
+import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
+import {MatCheckboxModule} from "@angular/material/checkbox";
+import {MatToolbarModule} from "@angular/material/toolbar";
+import {MatIconModule} from "@angular/material/icon";
+import {MatDividerModule} from "@angular/material/divider";
+import {MatButtonModule} from "@angular/material/button";
 
 const routes: Routes = [
   { path: 'home', component: HomeComponent },
@@ -41,9 +48,16 @@ const routes: Routes = [
   ],
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
     RouterModule.forRoot(routes),
     FormsModule,
     HttpClientModule,
+    MatToolbarModule,
+    MatIconModule,
+    MatDividerModule,
+    MatSidenavModule,
+    MatCheckboxModule,
+    MatButtonModule,
   ],
   exports: [
     RouterModule

@@ -1,5 +1,7 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {TokenStorageService} from "./service/token-storage.service";
+import {MatSidenav} from "@angular/material/sidenav";
+import {BreakpointObserver} from "@angular/cdk/layout";
 
 @Component({
   selector: 'app-root',
@@ -8,17 +10,25 @@ import {TokenStorageService} from "./service/token-storage.service";
 })
 export class AppComponent implements OnInit {
 
+  @ViewChild(MatSidenav)
+  sidenav!: MatSidenav;
+
+  opened: boolean = false;
+
   private roles: string[] = [];
   isLoggedIn = false;
   showAdminBoard = false;
   showModeratorBoard = false;
   username?: string;
 
-  constructor(private tokenStorageService: TokenStorageService) {
+  constructor(
+    private observer: BreakpointObserver,
+    private tokenStorageService: TokenStorageService) {
   }
 
   ngOnInit(): void {
     this.isLoggedIn = !!this.tokenStorageService.getToken();
+    this.opened = this.isLoggedIn;
 
     if (this.isLoggedIn) {
       const user = this.tokenStorageService.getCurrentUser();
@@ -28,6 +38,20 @@ export class AppComponent implements OnInit {
       this.showModeratorBoard = this.roles.includes('ROLE_MODERATOR');
 
       this.username = user.username;
+    }
+  }
+
+  ngAfterViewInit() {
+    if (this.isLoggedIn) {
+      this.observer.observe(['(max-width: 800px)']).subscribe((res) => {
+        if (res.matches) {
+          this.sidenav.mode = 'over';
+          this.sidenav.close();
+        } else {
+          this.sidenav.mode = 'side';
+          this.sidenav.open();
+        }
+      });
     }
   }
 
