@@ -88,22 +88,33 @@ public class AuthControllerAdvice {
     public final ResponseEntity<Object> handleUserNotFoundException(MethodArgumentNotValidException ex, WebRequest request) {
 
         final List<FieldError> fieldErrors = ex.getBindingResult().getFieldErrors();
-
-        final List<CustomFieldError> customFieldErrors = new ArrayList<>();
+        final List<ErrorMessage> customFieldErrors = new ArrayList<>();
 
         for (FieldError fieldError : fieldErrors) {
 
-            final String field = fieldError.getField();
-
-            final String message = fieldError.getDefaultMessage();
-
-            final CustomFieldError customFieldError = CustomFieldError.builder().field(field).message(message).build();
+            final ErrorMessage customFieldError = ErrorMessage.builder()
+                    .httpStatus(HttpStatus.BAD_REQUEST.value())
+                    .date(new Date())
+                    .message(fieldError.getDefaultMessage())
+                    .description(request.getDescription(false))
+                    .build();
 
             customFieldErrors.add(customFieldError);
-
         }
-
         return ResponseEntity.badRequest().body(customFieldErrors);
     }
 
+    /*
+    //Exception handler dla Logowania nadpisujący komunikat "Bad Credentials" - nie działa, brak uprawnień
+    @ExceptionHandler(BadCredentialsException.class)
+    public ErrorMessage badLoginOrPasswordException(BadCredentialsException ex, WebRequest request) {
+
+        return new ErrorMessage(
+                HttpStatus.UNAUTHORIZED.value(),
+                new Date(),
+                "Invalid login or password",
+                request.getDescription(false)
+        );
+    }
+*/
 }
