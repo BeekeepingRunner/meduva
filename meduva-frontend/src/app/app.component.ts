@@ -13,12 +13,10 @@ export class AppComponent implements OnInit {
   @ViewChild(MatSidenav)
   sidenav!: MatSidenav;
 
-  opened: boolean = false;
-
   private roles: string[] = [];
   isLoggedIn = false;
-  showAdminBoard = false;
-  showModeratorBoard = false;
+  // showAdminBoard = false;
+  // showModeratorBoard = false;
   username?: string;
 
   constructor(
@@ -28,14 +26,13 @@ export class AppComponent implements OnInit {
 
   ngOnInit(): void {
     this.isLoggedIn = !!this.tokenStorageService.getToken();
-    this.opened = this.isLoggedIn;
 
     if (this.isLoggedIn) {
       const user = this.tokenStorageService.getCurrentUser();
       this.roles = user.roles;
 
-      this.showAdminBoard = this.roles.includes('ROLE_ADMIN');
-      this.showModeratorBoard = this.roles.includes('ROLE_MODERATOR');
+      //this.showAdminBoard = this.roles.includes('ROLE_ADMIN');
+      //this.showModeratorBoard = this.roles.includes('ROLE_MODERATOR');
 
       this.username = user.username;
     }

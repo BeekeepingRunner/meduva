@@ -11,7 +11,7 @@ export class ProfileComponent implements OnInit {
 
   currentUser: any;
 
-  dataUser!: User;
+  dataUser: any;
 
   constructor(
     private token: TokenStorageService,
@@ -25,7 +25,6 @@ export class ProfileComponent implements OnInit {
         this.dataUser = data;
       }
     );
-    console.log(this.dataUser);
   }
 
 }
