@@ -123,7 +123,7 @@ public class AuthController {
 
         Set<Role> roles = processRequestRoles(signupRequest.getRole());
 
-         User user = new User(
+        User user = new User(
                 signupRequest.getLogin(),
                 signupRequest.getEmail(),
                 encoder.encode(signupRequest.getPassword()),

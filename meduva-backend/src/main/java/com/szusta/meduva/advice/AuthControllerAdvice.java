@@ -83,7 +83,6 @@ public class AuthControllerAdvice {
         );
     }
 
-
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public final ResponseEntity<Object> handleUserNotFoundException(MethodArgumentNotValidException ex, WebRequest request) {
 
@@ -104,17 +103,4 @@ public class AuthControllerAdvice {
         return ResponseEntity.badRequest().body(customFieldErrors);
     }
 
-    /*
-    //Exception handler dla Logowania nadpisujący komunikat "Bad Credentials" - nie działa, brak uprawnień
-    @ExceptionHandler(BadCredentialsException.class)
-    public ErrorMessage badLoginOrPasswordException(BadCredentialsException ex, WebRequest request) {
-
-        return new ErrorMessage(
-                HttpStatus.UNAUTHORIZED.value(),
-                new Date(),
-                "Invalid login or password",
-                request.getDescription(false)
-        );
-    }
-*/
 }
