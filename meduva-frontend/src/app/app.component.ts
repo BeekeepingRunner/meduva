@@ -2,6 +2,7 @@ import {Component, OnInit, ViewChild} from '@angular/core';
 import {TokenStorageService} from "./service/token-storage.service";
 import {MatSidenav} from "@angular/material/sidenav";
 import {BreakpointObserver} from "@angular/cdk/layout";
+import {UserService} from "./service/user.service";
 
 @Component({
   selector: 'app-root',
@@ -13,28 +14,31 @@ export class AppComponent implements OnInit {
   @ViewChild(MatSidenav)
   sidenav!: MatSidenav;
 
-  private roles: string[] = [];
   isLoggedIn = false;
   // showAdminBoard = false;
   // showModeratorBoard = false;
-  username?: string;
+  fullName?: string;
 
   constructor(
     private observer: BreakpointObserver,
-    private tokenStorageService: TokenStorageService) {
+    private tokenStorageService: TokenStorageService,
+    private userService: UserService,
+    ) {
   }
 
   ngOnInit(): void {
     this.isLoggedIn = !!this.tokenStorageService.getToken();
 
     if (this.isLoggedIn) {
-      const user = this.tokenStorageService.getCurrentUser();
-      this.roles = user.roles;
+        let currentUser = this.tokenStorageService.getCurrentUser();
+        this.userService.getUserDetails(currentUser.id).subscribe(
+          data => {
+            this.fullName = data.name + ' ' + data.surname;
+          }
+        );
 
       //this.showAdminBoard = this.roles.includes('ROLE_ADMIN');
       //this.showModeratorBoard = this.roles.includes('ROLE_MODERATOR');
-
-      this.username = user.username;
     }
   }
 
