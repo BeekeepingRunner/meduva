@@ -19,14 +19,17 @@ import com.szusta.meduva.service.RoleService;
 import com.szusta.meduva.service.UserDetailsImpl;
 import com.szusta.meduva.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.propertyeditors.StringTrimmerEditor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -109,7 +112,7 @@ public class AuthController {
 
     @PostMapping("/signup")
     // SignupRequest should be @Valid
-    public ResponseEntity<?> registerUser(@RequestBody SignupRequest signupRequest) {
+    public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signupRequest) {
 
         if (userService.existsByLogin(signupRequest.getLogin())) {
             throw new LoginAlreadyTakenException("Error: That login is already taken");
@@ -168,4 +171,8 @@ public class AuthController {
 
         return userRoles;
     }
+
+
+
+
 }
