@@ -169,4 +169,9 @@ public class AuthController {
 
         return userRoles;
     }
+
+    @GetMapping("/user")
+    public List<User> getUsers() {
+        return userService.findAll();
+    }
 }
