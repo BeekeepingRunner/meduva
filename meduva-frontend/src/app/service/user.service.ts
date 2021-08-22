@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {environment} from "../../environments/environment";
+import {map} from "rxjs/operators";
 
 @Injectable({
   providedIn: 'root'
@@ -30,8 +31,20 @@ export class UserService {
     return this.http.get(environment.API_URL + 'admin', { responseType : 'text' });
   }
 
-  getUserDetails(login: string): Observable<User> {
-    return this.http.get<User>(environment.API_BASE_URL + 'users/search/findByLogin?login=' + login);
+  getUserDetails(userId: number): Observable<User> {
+    return this.http.get<User>(environment.API_BASE_URL + 'api/user/find/' + userId);
+  }
+
+  getMasterRole(roles: Role[]) : Role {
+    roles.sort((r1, r2) => {
+      if (r1.id > r2.id)
+        return -1;
+      else if (r1.id < r2.id)
+        return 1;
+      else
+        return 0;
+    });
+    return roles[0];
   }
 }
 
@@ -41,5 +54,11 @@ export interface User {
   phoneNumber: string,
   email: string,
   login: string,
-  password: string
+  password: string,
+  roles: Role[]
+}
+
+export interface Role {
+  id : number,
+  name : string
 }
