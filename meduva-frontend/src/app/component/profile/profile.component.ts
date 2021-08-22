@@ -10,8 +10,8 @@ import {User, UserService} from "../../service/user.service";
 export class ProfileComponent implements OnInit {
 
   currentUser: any;
-
   dataUser: any;
+  error!: string;
 
   constructor(
     private token: TokenStorageService,
@@ -20,11 +20,16 @@ export class ProfileComponent implements OnInit {
 
   ngOnInit(): void {
     this.currentUser = this.token.getCurrentUser();
-    this.userService.getUserDetails(this.currentUser.login).subscribe(
-      data => {
-        this.dataUser = data;
-      }
-    );
+    if (this.currentUser) {
+      this.userService.getUserDetails(this.currentUser.login).subscribe(
+        data => {
+          this.dataUser = data;
+        },
+        err => {
+          this.error = err.getError();
+        }
+      );
+    }
   }
 
 }

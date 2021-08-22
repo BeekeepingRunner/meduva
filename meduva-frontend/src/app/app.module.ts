@@ -11,9 +11,6 @@ import { RegisterComponent } from './component/register/register.component';
 import { HomeComponent } from './component/home/home.component';
 import { ProfileComponent } from './component/profile/profile.component';
 import { BoardAdminComponent } from './component/board-admin/board-admin.component';
-import { BoardClientComponent } from './component/board-client/board-client.component';
-import { BoardWorkerComponent } from './component/board-worker/board-worker.component';
-import { BoardReceptionistComponent } from './component/board-receptionist/board-receptionist.component';
 
 import { authInterceptorProviders } from './helper/auth.interceptor';
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
@@ -28,8 +25,6 @@ const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
   { path: 'profile', component: ProfileComponent },
-  { path: 'client', component: BoardClientComponent },
-  { path: 'worker', component: BoardWorkerComponent },
   { path: 'admin', component: BoardAdminComponent },
   { path: '', redirectTo: 'home', pathMatch: 'full' }
 ];
@@ -42,9 +37,6 @@ const routes: Routes = [
     HomeComponent,
     ProfileComponent,
     BoardAdminComponent,
-    BoardClientComponent,
-    BoardWorkerComponent,
-    BoardReceptionistComponent
   ],
   imports: [
     BrowserModule,
