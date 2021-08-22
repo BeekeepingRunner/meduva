@@ -21,7 +21,7 @@ a {
 
 mat-sidenav {
   margin: 8px;
-  width: 200px;
+  width: 250px;
   border-right: none;
   background: #4f4c79;
   color: white;
@@ -51,4 +51,20 @@ mat-sidenav-container {
 
 mat-icon {
   margin-right: 8px;
+}
+
+.admin-panel-items {
+}
+
+.mat-expansion-panel {
+  background: unset;
+  color: white;
+}
+
+.mat-expansion-panel-header {
+  padding: 0px;
+}
+
+.mat-expansion-panel-header-title {
+  color: white;
 }

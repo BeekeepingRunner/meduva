@@ -37,17 +37,87 @@
   <mat-sidenav class="mat-elevation-z8"
     #sidenav="matSidenav" mode="side">
 
-    <h4 class="name">Name{{ username }}</h4>
-    <p class="designation">Role</p>
-
-    <mat-divider></mat-divider>
+    <h4 class="name">{{ fullName }}</h4>
 
     <button mat-button class="menu-button" routerLink="profile">
       <mat-icon>person</mat-icon>
       <span>Profile</span>
     </button>
 
+    <button mat-button class="menu-button">
+      <mat-icon>book</mat-icon>
+      <span>Book a visit</span>
+    </button>
+
+    <button mat-button class="menu-button">
+      <mat-icon>view_list</mat-icon>
+      <span>Your visits</span>
+    </button>
+
     <mat-divider></mat-divider>
+
+    <button mat-button class="menu-button">
+      <mat-icon>schedule</mat-icon>
+      <span>Your schedule</span>
+    </button>
+
+    <button mat-button class="menu-button">
+      <mat-icon>event</mat-icon>
+      <span>Schedule management</span>
+    </button>
+
+    <mat-divider></mat-divider>
+
+    <button mat-button class="menu-button">
+      <mat-icon>accessible</mat-icon>
+      <span>Clients</span>
+    </button>
+
+    <br>
+
+    <mat-accordion>
+      <mat-expansion-panel hideToggle>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            <button mat-button class="menu-button">
+              <mat-icon>admin_panel_settings</mat-icon>
+              <span>Admin panel</span>
+            </button>
+          </mat-panel-title>
+          <mat-panel-description>
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+
+        <div class="admin-panel-items">
+          <button mat-button class="menu-button">
+            <mat-icon>work</mat-icon>
+            <span>Services</span>
+          </button>
+        </div>
+
+        <div class="admin-panel-items">
+          <button mat-button class="menu-button">
+            <mat-icon>build</mat-icon>
+            <span>Devices</span>
+          </button>
+        </div>
+
+        <div class="admin-panel-items">
+          <button mat-button class="menu-button">
+            <mat-icon>home</mat-icon>
+            <span>Rooms</span>
+          </button>
+        </div>
+
+        <div class="admin-panel-items">
+          <button mat-button class="menu-button">
+            <mat-icon>manage_accounts</mat-icon>
+            <span>Users</span>
+          </button>
+        </div>
+
+      </mat-expansion-panel>
+    </mat-accordion>
 
   </mat-sidenav>
 
