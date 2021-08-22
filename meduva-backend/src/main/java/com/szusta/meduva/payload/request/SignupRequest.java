@@ -1,6 +1,5 @@
 package com.szusta.meduva.payload.request;
 
-
 import lombok.Getter;
 import lombok.Setter;
 

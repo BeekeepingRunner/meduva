@@ -17,8 +17,8 @@ public class RoleService {
         this.roleRepository = roleRepository;
     }
 
-    public Role findByName(ERole name) {
+    public Role findByName(String name) {
         return roleRepository.findByName(name)
-                .orElseThrow(() -> new RoleNotFoundException("Error: Role not found:" + name.toString()));
+                .orElseThrow(() -> new RoleNotFoundException("Error: Role not found:" + name));
     }
 }

@@ -134,30 +134,31 @@ public class AuthController {
         return ResponseEntity.ok(new MessageResponse("User registered successfully"));
     }
 
-    private Set<Role> processRequestRoles(Set<String> requestStringRoles) {
+    private Set<Role> processRequestRoles(Set<String> requestRoles) {
 
         Set<Role> userRoles = new HashSet<>();
 
-        if (requestStringRoles == null) {
-            Role userRole = roleService.findByName(ERole.ROLE_CLIENT);
+        if (requestRoles == null) {
+            Role userRole = roleService.findByName("ROLE_CLIENT");
             userRoles.add(userRole);
         } else {
-            requestStringRoles.forEach(role -> {
+            requestRoles.forEach(role -> {
+
                 switch (role) {
-                    case "admin":
-                        Role adminRole = roleService.findByName(ERole.ROLE_ADMIN);
+                    case "ROLE_ADMIN":
+                        Role adminRole = roleService.findByName("ROLE_ADMIN");
                         userRoles.add(adminRole);
                         break;
-                    case "receptionist":
-                        Role receptionistRole = roleService.findByName(ERole.ROLE_RECEPTIONIST);
+                    case "ROLE_RECEPTIONIST":
+                        Role receptionistRole = roleService.findByName("ROLE_RECEPTIONIST");
                         userRoles.add(receptionistRole);
                         break;
-                    case "worker":
-                        Role workerRole = roleService.findByName(ERole.ROLE_WORKER);
+                    case "ROLE_WORKER":
+                        Role workerRole = roleService.findByName("ROLE_WORKER");
                         userRoles.add(workerRole);
                         break;
-                    case "client":
-                        Role clientRole = roleService.findByName(ERole.ROLE_CLIENT);
+                    case "ROLE_CLIENT":
+                        Role clientRole = roleService.findByName("ROLE_CLIENT");
                         userRoles.add(clientRole);
                         break;
                     default:
