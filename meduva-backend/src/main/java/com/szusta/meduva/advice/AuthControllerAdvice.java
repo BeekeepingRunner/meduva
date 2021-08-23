@@ -84,7 +84,7 @@ public class AuthControllerAdvice {
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public final ResponseEntity<Object> handleUserNotFoundException(MethodArgumentNotValidException ex, WebRequest request) {
+    public final ResponseEntity<Object> handleNotValidArguments(MethodArgumentNotValidException ex, WebRequest request) {
 
         final List<FieldError> fieldErrors = ex.getBindingResult().getFieldErrors();
         final List<ErrorMessage> customFieldErrors = new ArrayList<>();
