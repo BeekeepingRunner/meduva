@@ -1,18 +1,24 @@
 package com.szusta.meduva.advice;
 
-import com.szusta.meduva.exception.EmailAlreadyInUseException;
-import com.szusta.meduva.exception.ErrorMessage;
-import com.szusta.meduva.exception.LoginAlreadyTakenException;
-import com.szusta.meduva.exception.RoleNotFoundException;
+import com.szusta.meduva.exception.*;
+import org.springframework.beans.propertyeditors.StringTrimmerEditor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.validation.FieldError;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.context.request.WebRequest;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @RestControllerAdvice
 public class AuthControllerAdvice {
@@ -76,4 +82,25 @@ public class AuthControllerAdvice {
                 request.getDescription(false)
         );
     }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public final ResponseEntity<Object> handleUserNotFoundException(MethodArgumentNotValidException ex, WebRequest request) {
+
+        final List<FieldError> fieldErrors = ex.getBindingResult().getFieldErrors();
+        final List<ErrorMessage> customFieldErrors = new ArrayList<>();
+
+        for (FieldError fieldError : fieldErrors) {
+
+            final ErrorMessage customFieldError = ErrorMessage.builder()
+                    .httpStatus(HttpStatus.BAD_REQUEST.value())
+                    .date(new Date())
+                    .message(fieldError.getDefaultMessage())
+                    .description(request.getDescription(false))
+                    .build();
+
+            customFieldErrors.add(customFieldError);
+        }
+        return ResponseEntity.badRequest().body(customFieldErrors);
+    }
+
 }

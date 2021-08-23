@@ -35,6 +35,8 @@ export class UserService {
     return this.http.get<User>(environment.API_BASE_URL + 'api/user/find/' + userId);
   }
 
+  // Returns the most significant role from list of given roles
+  //
   getMasterRole(roles: Role[]) : Role {
     roles.sort((r1, r2) => {
       if (r1.id > r2.id)

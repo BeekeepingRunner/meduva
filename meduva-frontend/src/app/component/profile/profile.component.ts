@@ -25,7 +25,6 @@ export class ProfileComponent implements OnInit {
       this.userService.getUserDetails(this.currentUser.id).subscribe(
         data => {
           this.userDetails = data;
-          console.log(this.userDetails);
           this.userRole = this.userService.getMasterRole(this.userDetails.roles);
         },
         err => {

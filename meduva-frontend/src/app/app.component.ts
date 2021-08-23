@@ -42,7 +42,6 @@ export class AppComponent implements OnInit {
             data.roles.forEach(role => {
               this.roles.push(role.name);
             });
-
             this.showClientOptions = this.roles.includes('ROLE_CLIENT');
             this.showWorkerOptions = this.roles.includes('ROLE_WORKER');
             this.showReceptionistOptions = this.roles.includes('ROLE_RECEPTIONIST');
@@ -52,6 +51,8 @@ export class AppComponent implements OnInit {
     }
   }
 
+  // Responsible for closing and opening the side menu based on width of the browser's window
+  //
   ngAfterViewInit() {
     if (this.isLoggedIn) {
       this.observer.observe(['(max-width: 800px)']).subscribe((res) => {

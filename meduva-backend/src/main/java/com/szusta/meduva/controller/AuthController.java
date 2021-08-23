@@ -4,7 +4,6 @@ import com.szusta.meduva.exception.EmailAlreadyInUseException;
 import com.szusta.meduva.exception.LoginAlreadyTakenException;
 import com.szusta.meduva.exception.RoleNotFoundException;
 import com.szusta.meduva.exception.TokenRefreshException;
-import com.szusta.meduva.model.ERole;
 import com.szusta.meduva.model.RefreshToken;
 import com.szusta.meduva.model.Role;
 import com.szusta.meduva.model.User;
@@ -27,6 +26,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -60,7 +60,6 @@ public class AuthController {
     }
 
     @PostMapping("/signin")
-    // Login request should be @Valid
     public ResponseEntity<?> loginUser(@RequestBody LoginRequest loginRequest) {
 
         Authentication authentication = authenticationManager.authenticate(
@@ -108,8 +107,7 @@ public class AuthController {
     }
 
     @PostMapping("/signup")
-    // SignupRequest should be @Valid
-    public ResponseEntity<?> registerUser(@RequestBody SignupRequest signupRequest) {
+    public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signupRequest) {
 
         if (userService.existsByLogin(signupRequest.getLogin())) {
             throw new LoginAlreadyTakenException("Error: That login is already taken");
