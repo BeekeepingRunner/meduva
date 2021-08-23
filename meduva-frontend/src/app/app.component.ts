@@ -15,8 +15,12 @@ export class AppComponent implements OnInit {
   sidenav!: MatSidenav;
 
   isLoggedIn = false;
-  // showAdminBoard = false;
-  // showModeratorBoard = false;
+  roles: string[] = [];
+
+  showClientOptions = false;
+  showWorkerOptions = false;
+  showReceptionistOptions = false;
+  showAdminPanel = false;
   fullName?: string;
 
   constructor(
@@ -34,11 +38,17 @@ export class AppComponent implements OnInit {
         this.userService.getUserDetails(currentUser.id).subscribe(
           data => {
             this.fullName = data.name + ' ' + data.surname;
+
+            data.roles.forEach(role => {
+              this.roles.push(role.name);
+            });
+
+            this.showClientOptions = this.roles.includes('ROLE_CLIENT');
+            this.showWorkerOptions = this.roles.includes('ROLE_WORKER');
+            this.showReceptionistOptions = this.roles.includes('ROLE_RECEPTIONIST');
+            this.showAdminPanel = this.roles.includes('ROLE_ADMIN');
           }
         );
-
-      //this.showAdminBoard = this.roles.includes('ROLE_ADMIN');
-      //this.showModeratorBoard = this.roles.includes('ROLE_MODERATOR');
     }
   }
 

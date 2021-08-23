@@ -37,97 +37,91 @@
   <mat-sidenav class="mat-elevation-z8"
     #sidenav="matSidenav" mode="side">
 
-    <h4 class="name">{{ fullName }}</h4>
+    <div *ngIf="isLoggedIn">
+      <h4 class="name">{{ fullName }}</h4>
 
-    <button mat-button class="menu-button" routerLink="profile">
-      <mat-icon>person</mat-icon>
-      <span>Profile</span>
-    </button>
+      <div *ngIf="showClientOptions">
+        <button mat-button class="menu-button" routerLink="profile">
+          <mat-icon>person</mat-icon>
+          <span>Profile</span>
+        </button>
+        <button mat-button class="menu-button">
+          <mat-icon>book</mat-icon>
+          <span>Book a visit</span>
+        </button>
+        <button mat-button class="menu-button">
+          <mat-icon>view_list</mat-icon>
+          <span>Your visits</span>
+        </button>
+      </div>
 
-    <button mat-button class="menu-button">
-      <mat-icon>book</mat-icon>
-      <span>Book a visit</span>
-    </button>
+      <mat-divider></mat-divider>
 
-    <button mat-button class="menu-button">
-      <mat-icon>view_list</mat-icon>
-      <span>Your visits</span>
-    </button>
+      <button *ngIf="showWorkerOptions" mat-button class="menu-button">
+        <mat-icon>schedule</mat-icon>
+        <span>Your schedule</span>
+      </button>
+      <button *ngIf="showReceptionistOptions" mat-button class="menu-button">
+        <mat-icon>event</mat-icon>
+        <span>Schedule management</span>
+      </button>
 
-    <mat-divider></mat-divider>
+      <mat-divider></mat-divider>
 
-    <button mat-button class="menu-button">
-      <mat-icon>schedule</mat-icon>
-      <span>Your schedule</span>
-    </button>
+      <button *ngIf="showWorkerOptions" mat-button class="menu-button">
+        <mat-icon>accessible</mat-icon>
+        <span>Clients</span>
+      </button>
 
-    <button mat-button class="menu-button">
-      <mat-icon>event</mat-icon>
-      <span>Schedule management</span>
-    </button>
+      <br>
 
-    <mat-divider></mat-divider>
+      <mat-accordion *ngIf="showAdminPanel">
+        <mat-expansion-panel hideToggle>
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              <button mat-button class="menu-button">
+                <mat-icon>admin_panel_settings</mat-icon>
+                <span>Admin panel</span>
+              </button>
+            </mat-panel-title>
+            <mat-panel-description>
+            </mat-panel-description>
+          </mat-expansion-panel-header>
 
-    <button mat-button class="menu-button">
-      <mat-icon>accessible</mat-icon>
-      <span>Clients</span>
-    </button>
-
-    <br>
-
-    <mat-accordion>
-      <mat-expansion-panel hideToggle>
-        <mat-expansion-panel-header>
-          <mat-panel-title>
+          <div class="admin-panel-items">
             <button mat-button class="menu-button">
-              <mat-icon>admin_panel_settings</mat-icon>
-              <span>Admin panel</span>
+              <mat-icon>work</mat-icon>
+              <span>Services</span>
             </button>
-          </mat-panel-title>
-          <mat-panel-description>
-          </mat-panel-description>
-        </mat-expansion-panel-header>
+          </div>
 
-        <div class="admin-panel-items">
-          <button mat-button class="menu-button">
-            <mat-icon>work</mat-icon>
-            <span>Services</span>
-          </button>
-        </div>
-
-        <div class="admin-panel-items">
-          <button mat-button class="menu-button">
-            <mat-icon>build</mat-icon>
-            <span>Devices</span>
-          </button>
-        </div>
-
-        <div class="admin-panel-items">
-          <button mat-button class="menu-button">
-            <mat-icon>home</mat-icon>
-            <span>Rooms</span>
-          </button>
-        </div>
-
-        <div class="admin-panel-items">
-          <button mat-button class="menu-button">
-            <mat-icon>manage_accounts</mat-icon>
-            <span>Users</span>
-          </button>
-        </div>
-
-      </mat-expansion-panel>
-    </mat-accordion>
+          <div class="admin-panel-items">
+            <button mat-button class="menu-button">
+              <mat-icon>build</mat-icon>
+              <span>Devices</span>
+            </button>
+          </div>
+          <div class="admin-panel-items">
+            <button mat-button class="menu-button">
+              <mat-icon>home</mat-icon>
+              <span>Rooms</span>
+            </button>
+          </div>
+          <div class="admin-panel-items">
+            <button mat-button class="menu-button">
+              <mat-icon>manage_accounts</mat-icon>
+              <span>Users</span>
+            </button>
+          </div>
+        </mat-expansion-panel>
+      </mat-accordion>
+    </div>
 
   </mat-sidenav>
 
   <mat-sidenav-content>
-
     <div class="content mat-elevation-z8">
       <router-outlet></router-outlet>
     </div>
-    <!--
-    <p><button mat-button (click)="sidenav.toggle()">sidenav.toggle()</button></p>
-    -->
   </mat-sidenav-content>
 </mat-sidenav-container>
