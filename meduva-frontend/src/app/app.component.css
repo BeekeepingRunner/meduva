@@ -68,3 +68,7 @@ mat-icon {
 .mat-expansion-panel-header-title {
   color: white;
 }
+
+button:focus {
+  outline: none;
+}
