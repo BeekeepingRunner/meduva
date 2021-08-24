@@ -1,9 +1,6 @@
 package com.szusta.meduva.controller;
 
-import com.szusta.meduva.exception.EmailAlreadyInUseException;
-import com.szusta.meduva.exception.LoginAlreadyTakenException;
-import com.szusta.meduva.exception.RoleNotFoundException;
-import com.szusta.meduva.exception.TokenRefreshException;
+import com.szusta.meduva.exception.*;
 import com.szusta.meduva.model.RefreshToken;
 import com.szusta.meduva.model.Role;
 import com.szusta.meduva.model.User;
@@ -160,7 +157,7 @@ public class AuthController {
                         userRoles.add(clientRole);
                         break;
                     default:
-                        throw new RoleNotFoundException("Bad user role in request body");
+                        throw new BadRequestRole("Bad user role in request body");
                 }
             });
         }

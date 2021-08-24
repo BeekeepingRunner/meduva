@@ -71,9 +71,9 @@ public class AuthControllerAdvice {
         );
     }
 
-    @ExceptionHandler(value = RoleNotFoundException.class)
+    @ExceptionHandler(value = BadRequestRole.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorMessage handleRoleNotFoundException(RoleNotFoundException ex, WebRequest request) {
+    public ErrorMessage handleBadRequestRoleException(BadRequestRole ex, WebRequest request) {
 
         return new ErrorMessage(
                 HttpStatus.BAD_REQUEST.value(),
