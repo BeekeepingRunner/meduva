@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 
 @Component({
   selector: 'app-password-reset-email-input',
@@ -7,12 +8,23 @@ import { Component, OnInit } from '@angular/core';
 })
 export class PasswordResetEmailInputComponent implements OnInit {
 
-  constructor() { }
+  form!: FormGroup;
+  submitted: boolean = false;
+
+  constructor(
+    private formBuilder: FormBuilder
+  ) {}
 
   ngOnInit(): void {
+    this.form = this.formBuilder.group({
+      email: new FormControl('', [
+        Validators.required,
+        Validators.pattern('[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,3}$')
+      ]),
+    });
   }
 
   onSubmit() {
-
+    this.submitted = true;
   }
 }
