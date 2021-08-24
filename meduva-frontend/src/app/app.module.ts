@@ -21,10 +21,12 @@ import {MatDividerModule} from "@angular/material/divider";
 import {MatButtonModule} from "@angular/material/button";
 import {MatTreeModule} from "@angular/material/tree";
 import {MatExpansionModule} from "@angular/material/expansion";
+import { PasswordResetEmailInputComponent } from './component/password-reset-email-input/password-reset-email-input.component';
 
 const routes: Routes = [
   { path: 'home', component: HomeComponent },
   { path: 'login', component: LoginComponent },
+  { path: 'login/reset-password-email', component: PasswordResetEmailInputComponent },
   { path: 'register', component: RegisterComponent },
   { path: 'profile', component: ProfileComponent },
   { path: 'admin', component: BoardAdminComponent },
@@ -39,6 +41,7 @@ const routes: Routes = [
     HomeComponent,
     ProfileComponent,
     BoardAdminComponent,
+    PasswordResetEmailInputComponent,
   ],
   imports: [
     BrowserModule,
