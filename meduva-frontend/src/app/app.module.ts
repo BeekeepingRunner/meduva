@@ -22,11 +22,13 @@ import {MatButtonModule} from "@angular/material/button";
 import {MatTreeModule} from "@angular/material/tree";
 import {MatExpansionModule} from "@angular/material/expansion";
 import { PasswordResetEmailInputComponent } from './component/password-reset-email-input/password-reset-email-input.component';
+import { PasswordResetComponent } from './component/password-reset/password-reset.component';
 
 const routes: Routes = [
   { path: 'home', component: HomeComponent },
   { path: 'login', component: LoginComponent },
   { path: 'login/reset-password-email', component: PasswordResetEmailInputComponent },
+  { path: 'login/password-reset/:resetToken', component: PasswordResetComponent },
   { path: 'register', component: RegisterComponent },
   { path: 'profile', component: ProfileComponent },
   { path: 'admin', component: BoardAdminComponent },
@@ -42,6 +44,7 @@ const routes: Routes = [
     ProfileComponent,
     BoardAdminComponent,
     PasswordResetEmailInputComponent,
+    PasswordResetComponent,
   ],
   imports: [
     BrowserModule,

@@ -23,7 +23,7 @@ public class PasswordResetController {
     // Triggered when user sends email for the reset link
     @PostMapping("/request")
     public ResponseEntity<MessageResponse> resetPassword(@RequestBody final String email) {
-
+        
         // TODO: make sure that emailNotFound exception is handled here
         userAccountService.sendResetPasswordEmail(email);
         return ResponseEntity.ok(new MessageResponse("Password reset link has been sent to your email"));

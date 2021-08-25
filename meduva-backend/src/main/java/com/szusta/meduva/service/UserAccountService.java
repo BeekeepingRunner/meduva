@@ -1,6 +1,5 @@
 package com.szusta.meduva.service;
 
-import com.szusta.meduva.constant.MeduvaConstants;
 import com.szusta.meduva.model.PasswordResetToken;
 import com.szusta.meduva.model.User;
 import com.szusta.meduva.model.email.ForgotPasswordEmailContext;
@@ -8,7 +7,6 @@ import com.szusta.meduva.repository.PasswordResetTokenRepository;
 import com.szusta.meduva.security.jwt.JwtUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.mail.MailException;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
@@ -25,9 +23,7 @@ public class UserAccountService {
     private PasswordResetTokenRepository passwordResetTokenRepository;
     private JavaMailSender javaMailSender;
 
-    private MeduvaConstants meduvaConstants;
-
-    @Value("${meduva.app.base_url}")
+    @Value("${meduva.app.front_base_url}")
     String baseURL;
 
     @Autowired
@@ -35,13 +31,11 @@ public class UserAccountService {
             UserService userService,
             JwtUtils jwtUtils,
             PasswordResetTokenRepository passwordResetTokenRepository,
-            JavaMailSender javaMailSender,
-            MeduvaConstants meduvaConstants) {
+            JavaMailSender javaMailSender) {
         this.userService = userService;
         this.jwtUtils = jwtUtils;
         this.passwordResetTokenRepository = passwordResetTokenRepository;
         this.javaMailSender = javaMailSender;
-        this.meduvaConstants = meduvaConstants;
     }
 
     public void sendResetPasswordEmail(String email) {
@@ -52,6 +46,7 @@ public class UserAccountService {
                 user,
                 token,
                 new Date(new Date().getTime() + jwtUtils.getJwtExpirationMs()));
+        deletePreviousResetTokens(user);
         passwordResetTokenRepository.save(resetToken);
 
         // ForgotPasswordEmailContext emailContext = new ForgotPasswordEmailContext();
@@ -66,8 +61,12 @@ public class UserAccountService {
         javaMailSender.send(msg);
     }
 
+    private void deletePreviousResetTokens(User user) {
+        passwordResetTokenRepository.deleteByUser(user);
+    }
+
     private String getResetLink(String token) {
-        return MeduvaConstants.APP_BASE_URL + "/login/password-reset/" + token;
+        return baseURL + "/login/password-reset/" + token;
     }
 
     public void sendTestMail(String email) {
