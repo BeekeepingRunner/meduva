@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import {ActivatedRoute} from "@angular/router";
+import {UserService} from "../../service/user.service";
 
 @Component({
   selector: 'app-password-reset',
@@ -7,9 +9,26 @@ import { Component, OnInit } from '@angular/core';
 })
 export class PasswordResetComponent implements OnInit {
 
-  constructor() { }
+  resetToken: string = '';
+  name: string = '';
+
+  constructor(
+    private route: ActivatedRoute,
+    private userService: UserService,
+  ) { }
 
   ngOnInit(): void {
+    this.route.params.subscribe(
+      params => {
+        this.resetToken = params['resetToken'];
+
+        this.userService.getUserWithResetToken(this.resetToken).subscribe(
+          data => {
+            this.name = data.name;
+          }
+        );
+      }
+    )
   }
 
 }

@@ -1,5 +1,6 @@
 package com.szusta.meduva.service;
 
+import com.szusta.meduva.exception.PasswordResetTokenNotFoundException;
 import com.szusta.meduva.model.PasswordResetToken;
 import com.szusta.meduva.model.User;
 import com.szusta.meduva.model.email.ForgotPasswordEmailContext;
@@ -69,12 +70,11 @@ public class UserAccountService {
         return baseURL + "/login/password-reset/" + token;
     }
 
-    public void sendTestMail(String email) {
-        SimpleMailMessage msg = new SimpleMailMessage();
-        msg.setTo(email);
-        msg.setSubject("testMail");
-        msg.setText("Hello World \n Spring Boot email");
+    public User getUserFromResetToken(String resetToken) {
 
-        javaMailSender.send(msg);
+        PasswordResetToken storedResetToken = passwordResetTokenRepository.findByToken(resetToken)
+                .orElseThrow(() -> new PasswordResetTokenNotFoundException("Password reset token not found"));
+
+        return storedResetToken.getUser();
     }
 }

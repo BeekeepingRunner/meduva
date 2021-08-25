@@ -48,6 +48,10 @@ export class UserService {
     });
     return roles[0];
   }
+
+  getUserWithResetToken(resetToken: string): Observable<any> {
+    return this.http.post(environment.API_BASE_URL + 'api/password/user', resetToken);
+  }
 }
 
 export interface User {
