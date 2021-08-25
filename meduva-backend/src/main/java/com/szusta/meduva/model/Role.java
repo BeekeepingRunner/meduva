@@ -18,10 +18,15 @@ public class Role {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Enumerated(EnumType.STRING)
-    private ERole name;
+    @Column
+    private String name;
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JsonIgnore
     Collection<User> users;
+
+    public Role(Long id, String name) {
+        this.id = id;
+        this.name = name;
+    }
 }

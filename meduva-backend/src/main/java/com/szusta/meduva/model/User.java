@@ -39,6 +39,18 @@ public class User {
     //@Column(name = "session_id")
     //private String sessionId;
 
+
+    @ManyToMany(
+            fetch = FetchType.LAZY,
+            cascade = CascadeType.ALL
+    )
+    @JoinTable(
+            name = "user_role",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id")
+    )
+    private Set<Role> roles = new HashSet<>();
+
     public User(String login, String email, String password) {
         this.login = login;
         this.email = email;
@@ -54,14 +66,4 @@ public class User {
         this.phoneNumber = phoneNumber;
     }
 
-    @ManyToMany(
-            fetch = FetchType.LAZY,
-            cascade = CascadeType.ALL
-    )
-    @JoinTable(
-            name = "user_role",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id")
-    )
-    private Set<Role> roles = new HashSet<>();
 }

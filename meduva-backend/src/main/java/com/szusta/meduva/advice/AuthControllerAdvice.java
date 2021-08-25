@@ -71,9 +71,9 @@ public class AuthControllerAdvice {
         );
     }
 
-    @ExceptionHandler(value = RoleNotFoundException.class)
+    @ExceptionHandler(value = BadRequestRole.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorMessage handleRoleNotFoundException(RoleNotFoundException ex, WebRequest request) {
+    public ErrorMessage handleBadRequestRoleException(BadRequestRole ex, WebRequest request) {
 
         return new ErrorMessage(
                 HttpStatus.BAD_REQUEST.value(),
@@ -84,7 +84,7 @@ public class AuthControllerAdvice {
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public final ResponseEntity<Object> handleUserNotFoundException(MethodArgumentNotValidException ex, WebRequest request) {
+    public final ResponseEntity<Object> handleNotValidArguments(MethodArgumentNotValidException ex, WebRequest request) {
 
         final List<FieldError> fieldErrors = ex.getBindingResult().getFieldErrors();
         final List<ErrorMessage> customFieldErrors = new ArrayList<>();

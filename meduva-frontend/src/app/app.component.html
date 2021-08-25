@@ -1,41 +1,127 @@
-<div id="app">
-  <nav class="navbar navbar-expand navbar-dark bg-dark">
-    <a href="#" class="navbar-brand">Meduva</a>
-    <ul class="navbar-nav mr-auto" routerLinkActive="active">
-      <li class="nav-item">
-        <a href="/home" class="nav-link" routerLink="home">Home </a>
-      </li>
-      <li class="nav-item" *ngIf="showAdminBoard">
-        <a href="/admin" class="nav-link" routerLink="admin">Admin Board</a>
-      </li>
-      <li class="nav-item" *ngIf="showModeratorBoard">
-        <a href="/mod" class="nav-link" routerLink="mod">Moderator Board</a>
-      </li>
-      <li class="nav-item">
-        <a href="/user" class="nav-link" *ngIf="isLoggedIn" routerLink="profile">User</a>
-      </li>
-    </ul>
+<mat-toolbar>
+  <div class="left-item">
+    <button mat-icon-button *ngIf="sidenav.mode === 'over' && isLoggedIn"
+            (click)="sidenav.toggle()">
+      <mat-icon *ngIf="!sidenav.opened">
+        menu
+      </mat-icon>
+      <mat-icon *ngIf="sidenav.opened">
+        close
+      </mat-icon>
+    </button>
 
-    <ul class="navbar-nav ml-auto" *ngIf="!isLoggedIn">
-      <li class="nav-item">
-        <a href="/register" class="nav-link" routerLink="register">Sign Up</a>
-      </li>
-      <li class="nav-item">
-        <a href="/login" class="nav-link" routerLink="login">Login</a>
-      </li>
-    </ul>
-
-    <ul class="navbar-nav ml-auto" *ngIf="isLoggedIn">
-      <li class="nav-item">
-        <a href="/profile" class="nav-link" routerLink="profile">{{ username }}</a>
-      </li>
-      <li class="nav-item">
-        <a href class="nav-link" (click)="logout()">LogOut</a>
-      </li>
-    </ul>
-  </nav>
-
-  <div class="container">
-    <router-outlet></router-outlet>
+    <a href="#">Meduva</a>
   </div>
-</div>
+
+  <div class="right-item">
+    <div class="my-row">
+      <a href="/register" class="nav-link" routerLink="register"
+         *ngIf="!isLoggedIn">
+        Sign Up
+      </a>
+      <a href="/login" class="nav-link" routerLink="login"
+         *ngIf="!isLoggedIn">
+        Login
+      </a>
+      <a href class="nav-link" (click)="logout()"
+         *ngIf="isLoggedIn">
+        LogOut
+      </a>
+    </div>
+  </div>
+
+</mat-toolbar>
+
+<mat-sidenav-container>
+
+  <mat-sidenav class="mat-elevation-z8"
+    #sidenav="matSidenav" mode="side">
+
+    <div *ngIf="isLoggedIn">
+      <h4 class="name">{{ fullName }}</h4>
+
+      <div *ngIf="showClientOptions">
+        <button mat-button class="menu-button" routerLink="profile">
+          <mat-icon>person</mat-icon>
+          <span>Profile</span>
+        </button>
+        <button mat-button class="menu-button">
+          <mat-icon>book</mat-icon>
+          <span>Book a visit</span>
+        </button>
+        <button mat-button class="menu-button">
+          <mat-icon>view_list</mat-icon>
+          <span>Your visits</span>
+        </button>
+      </div>
+
+      <mat-divider></mat-divider>
+
+      <button *ngIf="showWorkerOptions" mat-button class="menu-button">
+        <mat-icon>schedule</mat-icon>
+        <span>Your schedule</span>
+      </button>
+      <button *ngIf="showReceptionistOptions" mat-button class="menu-button">
+        <mat-icon>event</mat-icon>
+        <span>Schedule management</span>
+      </button>
+
+      <mat-divider></mat-divider>
+
+      <button *ngIf="showWorkerOptions" mat-button class="menu-button">
+        <mat-icon>accessible</mat-icon>
+        <span>Clients</span>
+      </button>
+
+      <br>
+
+      <mat-accordion *ngIf="showAdminPanel">
+        <mat-expansion-panel hideToggle>
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              <button mat-button class="menu-button">
+                <mat-icon>admin_panel_settings</mat-icon>
+                <span>Admin panel</span>
+              </button>
+            </mat-panel-title>
+            <mat-panel-description>
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+
+          <div class="admin-panel-items">
+            <button mat-button class="menu-button">
+              <mat-icon>work</mat-icon>
+              <span>Services</span>
+            </button>
+          </div>
+
+          <div class="admin-panel-items">
+            <button mat-button class="menu-button">
+              <mat-icon>build</mat-icon>
+              <span>Devices</span>
+            </button>
+          </div>
+          <div class="admin-panel-items">
+            <button mat-button class="menu-button">
+              <mat-icon>home</mat-icon>
+              <span>Rooms</span>
+            </button>
+          </div>
+          <div class="admin-panel-items">
+            <button mat-button class="menu-button">
+              <mat-icon>manage_accounts</mat-icon>
+              <span>Users</span>
+            </button>
+          </div>
+        </mat-expansion-panel>
+      </mat-accordion>
+    </div>
+
+  </mat-sidenav>
+
+  <mat-sidenav-content>
+    <div class="content mat-elevation-z8">
+      <router-outlet></router-outlet>
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>

@@ -3,12 +3,12 @@ package com.szusta.meduva.exception;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-@ResponseStatus(HttpStatus.NOT_FOUND)
-public class RoleNotFoundException extends RuntimeException {
+@ResponseStatus(HttpStatus.BAD_REQUEST)
+public class BadRequestRole extends RuntimeException {
 
     public static final long serialVersionUID = 1L;
 
-    public RoleNotFoundException(String message) {
+    public BadRequestRole(String message) {
         super(message);
     }
 }

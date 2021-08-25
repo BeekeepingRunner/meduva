@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {TokenStorageService} from "../../service/token-storage.service";
-import {User, UserService} from "../../service/user.service";
+import {Role, User, UserService} from "../../service/user.service";
 
 @Component({
   selector: 'app-profile',
@@ -10,8 +10,9 @@ import {User, UserService} from "../../service/user.service";
 export class ProfileComponent implements OnInit {
 
   currentUser: any;
-
-  dataUser!: User;
+  userDetails: any;
+  userRole!: Role;
+  error!: string;
 
   constructor(
     private token: TokenStorageService,
@@ -20,12 +21,17 @@ export class ProfileComponent implements OnInit {
 
   ngOnInit(): void {
     this.currentUser = this.token.getCurrentUser();
-    this.userService.getUserDetails(this.currentUser.login).subscribe(
-      data => {
-        this.dataUser = data;
-      }
-    );
-    console.log(this.dataUser);
+    if (this.currentUser) {
+      this.userService.getUserDetails(this.currentUser.id).subscribe(
+        data => {
+          this.userDetails = data;
+          this.userRole = this.userService.getMasterRole(this.userDetails.roles);
+        },
+        err => {
+          this.error = err.getError();
+        }
+      );
+    }
   }
 
 }

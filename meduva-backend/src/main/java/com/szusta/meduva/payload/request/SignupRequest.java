@@ -1,15 +1,6 @@
 package com.szusta.meduva.payload.request;
-
-
-import com.sun.istack.NotNull;
-import com.szusta.meduva.exception.LoginAlreadyTakenException;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.beans.propertyeditors.StringTrimmerEditor;
-import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.InitBinder;
-
-import javax.validation.constraints.Digits;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;

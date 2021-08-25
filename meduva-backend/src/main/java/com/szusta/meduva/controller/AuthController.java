@@ -1,10 +1,6 @@
 package com.szusta.meduva.controller;
 
-import com.szusta.meduva.exception.EmailAlreadyInUseException;
-import com.szusta.meduva.exception.LoginAlreadyTakenException;
-import com.szusta.meduva.exception.RoleNotFoundException;
-import com.szusta.meduva.exception.TokenRefreshException;
-import com.szusta.meduva.model.ERole;
+import com.szusta.meduva.exception.*;
 import com.szusta.meduva.model.RefreshToken;
 import com.szusta.meduva.model.Role;
 import com.szusta.meduva.model.User;
@@ -19,14 +15,12 @@ import com.szusta.meduva.service.RoleService;
 import com.szusta.meduva.service.UserDetailsImpl;
 import com.szusta.meduva.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.propertyeditors.StringTrimmerEditor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -63,7 +57,6 @@ public class AuthController {
     }
 
     @PostMapping("/signin")
-    // Login request should be @Valid
     public ResponseEntity<?> loginUser(@RequestBody LoginRequest loginRequest) {
 
         Authentication authentication = authenticationManager.authenticate(
@@ -111,7 +104,6 @@ public class AuthController {
     }
 
     @PostMapping("/signup")
-    // SignupRequest should be @Valid
     public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signupRequest) {
 
         if (userService.existsByLogin(signupRequest.getLogin())) {
@@ -137,34 +129,35 @@ public class AuthController {
         return ResponseEntity.ok(new MessageResponse("User registered successfully"));
     }
 
-    private Set<Role> processRequestRoles(Set<String> requestStringRoles) {
+    private Set<Role> processRequestRoles(Set<String> requestRoles) {
 
         Set<Role> userRoles = new HashSet<>();
 
-        if (requestStringRoles == null) {
-            Role userRole = roleService.findByName(ERole.ROLE_CLIENT);
+        if (requestRoles == null) {
+            Role userRole = roleService.findByName("ROLE_CLIENT");
             userRoles.add(userRole);
         } else {
-            requestStringRoles.forEach(role -> {
+            requestRoles.forEach(role -> {
+
                 switch (role) {
-                    case "admin":
-                        Role adminRole = roleService.findByName(ERole.ROLE_ADMIN);
+                    case "ROLE_ADMIN":
+                        Role adminRole = roleService.findByName("ROLE_ADMIN");
                         userRoles.add(adminRole);
                         break;
-                    case "receptionist":
-                        Role receptionistRole = roleService.findByName(ERole.ROLE_RECEPTIONIST);
+                    case "ROLE_RECEPTIONIST":
+                        Role receptionistRole = roleService.findByName("ROLE_RECEPTIONIST");
                         userRoles.add(receptionistRole);
                         break;
-                    case "worker":
-                        Role workerRole = roleService.findByName(ERole.ROLE_WORKER);
+                    case "ROLE_WORKER":
+                        Role workerRole = roleService.findByName("ROLE_WORKER");
                         userRoles.add(workerRole);
                         break;
-                    case "client":
-                        Role clientRole = roleService.findByName(ERole.ROLE_CLIENT);
+                    case "ROLE_CLIENT":
+                        Role clientRole = roleService.findByName("ROLE_CLIENT");
                         userRoles.add(clientRole);
                         break;
                     default:
-                        throw new RoleNotFoundException("Bad user role in request body");
+                        throw new BadRequestRole("Bad user role in request body");
                 }
             });
         }
@@ -172,7 +165,8 @@ public class AuthController {
         return userRoles;
     }
 
-
-
-
+    @GetMapping("/user/search/all")
+    public List<User> getUsers() {
+        return userService.findAll();
+    }
 }
