@@ -1,5 +1,6 @@
 package com.szusta.meduva.service;
 
+import com.szusta.meduva.constant.MeduvaConstants;
 import com.szusta.meduva.model.PasswordResetToken;
 import com.szusta.meduva.model.User;
 import com.szusta.meduva.model.email.ForgotPasswordEmailContext;
@@ -24,6 +25,8 @@ public class UserAccountService {
     private PasswordResetTokenRepository passwordResetTokenRepository;
     private JavaMailSender javaMailSender;
 
+    private MeduvaConstants meduvaConstants;
+
     @Value("${meduva.app.base_url}")
     String baseURL;
 
@@ -32,11 +35,13 @@ public class UserAccountService {
             UserService userService,
             JwtUtils jwtUtils,
             PasswordResetTokenRepository passwordResetTokenRepository,
-            JavaMailSender javaMailSender) {
+            JavaMailSender javaMailSender,
+            MeduvaConstants meduvaConstants) {
         this.userService = userService;
         this.jwtUtils = jwtUtils;
         this.passwordResetTokenRepository = passwordResetTokenRepository;
         this.javaMailSender = javaMailSender;
+        this.meduvaConstants = meduvaConstants;
     }
 
     public void sendResetPasswordEmail(String email) {
@@ -56,12 +61,13 @@ public class UserAccountService {
         SimpleMailMessage msg = new SimpleMailMessage();
         msg.setTo(email);
         msg.setSubject("Password reset link");
-        msg.setText("Follow this link to reset your password:\n" + token);
-        try {
-            javaMailSender.send(msg);
-        } catch (MailException e) {
+        msg.setText("Follow this link to reset your password:\n" + getResetLink(token));
 
-        }
+        javaMailSender.send(msg);
+    }
+
+    private String getResetLink(String token) {
+        return MeduvaConstants.APP_BASE_URL + "/login/password-reset/" + token;
     }
 
     public void sendTestMail(String email) {

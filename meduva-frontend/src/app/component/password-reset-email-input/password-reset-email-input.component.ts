@@ -12,6 +12,7 @@ export class PasswordResetEmailInputComponent implements OnInit {
   form!: FormGroup;
   submitted: boolean = false;
   emailSent: boolean = false;
+  errorMessage: string = '';
 
   constructor(
     private formBuilder: FormBuilder,
@@ -29,9 +30,12 @@ export class PasswordResetEmailInputComponent implements OnInit {
 
   onSubmit() {
     this.submitted = true;
-    this.emailService.sendTestMail().subscribe(
+    this.emailService.sendResetLinkMail(this.form.get('email')?.value).subscribe(
       data => {
         this.emailSent = true;
+      },
+      err => {
+        this.errorMessage = err.message;
       }
     )
   }

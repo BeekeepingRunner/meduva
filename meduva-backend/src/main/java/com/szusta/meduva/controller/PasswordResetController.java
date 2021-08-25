@@ -3,7 +3,6 @@ package com.szusta.meduva.controller;
 import com.szusta.meduva.payload.response.MessageResponse;
 import com.szusta.meduva.service.UserAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -23,7 +22,7 @@ public class PasswordResetController {
 
     // Triggered when user sends email for the reset link
     @PostMapping("/request")
-    public ResponseEntity<MessageResponse> resetPassword(final String email) {
+    public ResponseEntity<MessageResponse> resetPassword(@RequestBody final String email) {
 
         // TODO: make sure that emailNotFound exception is handled here
         userAccountService.sendResetPasswordEmail(email);
