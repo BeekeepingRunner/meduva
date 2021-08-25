@@ -7,7 +7,9 @@ import com.szusta.meduva.repository.PasswordResetTokenRepository;
 import com.szusta.meduva.security.jwt.JwtUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.mail.MailException;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -20,7 +22,7 @@ public class UserAccountService {
     private UserService userService;
     private JwtUtils jwtUtils;
     private PasswordResetTokenRepository passwordResetTokenRepository;
-    private EmailService emailService;
+    private JavaMailSender javaMailSender;
 
     @Value("${meduva.app.base_url}")
     String baseURL;
@@ -30,11 +32,11 @@ public class UserAccountService {
             UserService userService,
             JwtUtils jwtUtils,
             PasswordResetTokenRepository passwordResetTokenRepository,
-            EmailService emailService) {
+            JavaMailSender javaMailSender) {
         this.userService = userService;
         this.jwtUtils = jwtUtils;
         this.passwordResetTokenRepository = passwordResetTokenRepository;
-        this.emailService = emailService;
+        this.javaMailSender = javaMailSender;
     }
 
     public void sendResetPasswordEmail(String email) {
@@ -47,14 +49,27 @@ public class UserAccountService {
                 new Date(new Date().getTime() + jwtUtils.getJwtExpirationMs()));
         passwordResetTokenRepository.save(resetToken);
 
-        ForgotPasswordEmailContext emailContext = new ForgotPasswordEmailContext();
-        emailContext.init(user);
-        emailContext.setToken(token);
-        emailContext.buildVerificationUrl(baseURL, resetToken.getToken());
+        // ForgotPasswordEmailContext emailContext = new ForgotPasswordEmailContext();
+        // emailContext.init(user);
+        // emailContext.setToken(token);
+        // emailContext.buildVerificationUrl(baseURL, resetToken.getToken());
+        SimpleMailMessage msg = new SimpleMailMessage();
+        msg.setTo(email);
+        msg.setSubject("Password reset link");
+        msg.setText("Follow this link to reset your password:\n" + token);
         try {
-            emailService.sendMail(emailContext);
-        } catch (Exception e) {
-            e.printStackTrace();
+            javaMailSender.send(msg);
+        } catch (MailException e) {
+
         }
+    }
+
+    public void sendTestMail(String email) {
+        SimpleMailMessage msg = new SimpleMailMessage();
+        msg.setTo(email);
+        msg.setSubject("testMail");
+        msg.setText("Hello World \n Spring Boot email");
+
+        javaMailSender.send(msg);
     }
 }

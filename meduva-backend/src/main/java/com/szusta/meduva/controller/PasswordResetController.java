@@ -48,4 +48,11 @@ public class PasswordResetController {
     }
 
      */
+
+    @GetMapping("/mail-test")
+    public ResponseEntity<MessageResponse> mailTest() {
+
+        userAccountService.sendTestMail("biegbart.z@gmail.com");
+        return ResponseEntity.ok(new MessageResponse("Password reset link has been sent to your email"));
+    }
 }
