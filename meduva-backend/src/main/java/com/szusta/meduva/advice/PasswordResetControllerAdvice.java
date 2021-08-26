@@ -29,7 +29,7 @@ public class PasswordResetControllerAdvice {
 
     @ExceptionHandler(value = UserNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ErrorMessage handleTokenRefreshException(UserNotFoundException ex, WebRequest request) {
+    public ErrorMessage handleUserNotFoundException(UserNotFoundException ex, WebRequest request) {
 
         return new ErrorMessage(
                 HttpStatus.NOT_FOUND.value(),
