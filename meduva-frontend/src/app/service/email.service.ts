@@ -9,10 +9,6 @@ export class EmailService {
 
   constructor(private http: HttpClient) { }
 
-  sendTestMail() {
-    return this.http.get(environment.API_BASE_URL + 'api/password/mail-test');
-  }
-
   sendResetLinkMail(email: string) {
     return this.http.post(environment.API_BASE_URL + 'api/password/request', email);
   }

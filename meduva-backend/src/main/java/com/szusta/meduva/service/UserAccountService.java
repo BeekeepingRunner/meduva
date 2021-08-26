@@ -3,7 +3,6 @@ package com.szusta.meduva.service;
 import com.szusta.meduva.exception.PasswordResetTokenNotFoundException;
 import com.szusta.meduva.model.PasswordResetToken;
 import com.szusta.meduva.model.User;
-import com.szusta.meduva.model.email.ForgotPasswordEmailContext;
 import com.szusta.meduva.repository.PasswordResetTokenRepository;
 import com.szusta.meduva.security.jwt.JwtUtils;
 import org.springframework.beans.factory.annotation.Autowired;

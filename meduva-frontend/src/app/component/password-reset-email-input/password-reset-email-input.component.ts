@@ -39,8 +39,7 @@ export class PasswordResetEmailInputComponent implements OnInit {
         this.info = 'Check your mailbox for password-reset link!';
       },
       err => {
-        // this.errorMessage = err.message;
-        this.info = 'Something went wrong. Please, try again later.';
+        this.info = err.error.message;
       }
     )
   }
