@@ -1,15 +1,12 @@
 package com.szusta.meduva.controller;
 
-import com.szusta.meduva.model.User;
 import com.szusta.meduva.service.UserAccountService;
-import com.szusta.meduva.service.UserService;
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -21,24 +18,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 public class PasswordResetControllerTest {
 
+    @MockBean
+    private UserAccountService userAccountService;
+
     @Autowired
     private MockMvc mockMvc;
 
-    @Mock
-    private UserAccountService userAccountService;
-
-    @Mock
-    private UserService userService;
-
-    @InjectMocks
-    private PasswordResetController passwordResetController;
-
-    @BeforeAll
-    private void setup() {
-        userService.save(new User(1, "samplemail@gmail.com", "12345678", ))
-    }
-
     @Test
+    @DisplayName("GET /request success")
     public void shouldReturnOk() throws Exception {
 
         String sampleMail = "samplemail@gmail.com";

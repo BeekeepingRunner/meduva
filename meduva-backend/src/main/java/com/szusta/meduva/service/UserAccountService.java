@@ -50,10 +50,6 @@ public class UserAccountService {
         deletePreviousResetTokens(user);
         passwordResetTokenRepository.save(resetToken);
 
-        // ForgotPasswordEmailContext emailContext = new ForgotPasswordEmailContext();
-        // emailContext.init(user);
-        // emailContext.setToken(token);
-        // emailContext.buildVerificationUrl(baseURL, resetToken.getToken());
         SimpleMailMessage msg = new SimpleMailMessage();
         msg.setTo(email);
         msg.setSubject("Password reset link");
