@@ -10,6 +10,7 @@ import {UserService} from "../../service/user.service";
 export class PasswordResetComponent implements OnInit {
 
   resetToken: string = '';
+  error: string = '';
   name: string = '';
 
   constructor(
@@ -17,6 +18,7 @@ export class PasswordResetComponent implements OnInit {
     private userService: UserService,
   ) { }
 
+  // Identify a user based on a reset token from link which brought him here
   ngOnInit(): void {
     this.route.params.subscribe(
       params => {
@@ -25,10 +27,17 @@ export class PasswordResetComponent implements OnInit {
         this.userService.getUserWithResetToken(this.resetToken).subscribe(
           data => {
             this.name = data.name;
+          },
+          err => {
+            this.error = err.error.message;
           }
         );
       }
     )
   }
 
+  // Send password change request
+  onSubmit() {
+
+  }
 }

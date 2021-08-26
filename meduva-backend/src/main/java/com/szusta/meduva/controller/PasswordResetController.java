@@ -1,6 +1,7 @@
 package com.szusta.meduva.controller;
 
 import com.szusta.meduva.model.User;
+import com.szusta.meduva.payload.request.ResetPasswordRequest;
 import com.szusta.meduva.payload.response.MessageResponse;
 import com.szusta.meduva.service.UserAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,29 +26,17 @@ public class PasswordResetController {
     @PostMapping("/request")
     public ResponseEntity<MessageResponse> resetPassword(@RequestBody final String email) {
 
-        // TODO: make sure that emailNotFound exception is handled here
         userAccountService.sendResetPasswordEmail(email);
         return ResponseEntity.ok(new MessageResponse("Password reset link has been sent to your email"));
     }
 
-    // Triggered when user clicks reset link
-    @GetMapping("/change")
-    public String changePassword(
-            @RequestParam(required = false) String token,
-            final RedirectAttributes redirectAttributes,
-            final Model model)
-    {
-        return "";
-    }
-
-    /*
     // Triggered when user sends new password
     @PostMapping("/change")
-    public String changePassword(final PasswordResetRequest requestData) {
-
+    public ResponseEntity<MessageResponse> changePassword(@RequestBody ResetPasswordRequest resetPasswordRequest)
+    {
+        // TODO: change password
+        return ResponseEntity.ok(new MessageResponse("Backend password change test successful!"));
     }
-
-     */
 
     @PostMapping("/user")
     public ResponseEntity<User> getUserWithResetToken(@RequestBody String resetToken) {
