@@ -23,6 +23,8 @@ import {MatTreeModule} from "@angular/material/tree";
 import {MatExpansionModule} from "@angular/material/expansion";
 import { PasswordResetEmailInputComponent } from './component/password-reset-email-input/password-reset-email-input.component';
 import { PasswordResetComponent } from './component/password-reset/password-reset.component';
+import {MatFormFieldModule} from "@angular/material/form-field";
+import {MatInputModule} from "@angular/material/input";
 
 const routes: Routes = [
   { path: 'home', component: HomeComponent },
@@ -61,6 +63,8 @@ const routes: Routes = [
     MatButtonModule,
     MatTreeModule,
     MatExpansionModule,
+    MatFormFieldModule,
+    MatInputModule,
   ],
   exports: [
     RouterModule
