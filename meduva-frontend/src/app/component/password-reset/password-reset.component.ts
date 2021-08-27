@@ -12,11 +12,10 @@ import {samePasswordsValidator} from "../../util/validator/same-passwords";
 export class PasswordResetComponent implements OnInit {
 
   resetToken: string = '';
+  userEmail: string = '';
   error: string = '';
-  id?: number;
 
   form!: FormGroup;
-  inputError: string = '';
 
   constructor(
     private route: ActivatedRoute,
@@ -30,9 +29,12 @@ export class PasswordResetComponent implements OnInit {
       {
         newPass : new FormControl('', [
           Validators.minLength(8),
-          Validators.maxLength(20)
+          Validators.maxLength(20),
+          Validators.required
         ]),
-        repeatNewPass : new FormControl('')
+        repeatNewPass : new FormControl('', [
+          Validators.required
+        ])
       },
       { validators : samePasswordsValidator });
 
@@ -44,9 +46,9 @@ export class PasswordResetComponent implements OnInit {
       params => {
         this.resetToken = params['resetToken'];
 
-        this.userService.getUserWithResetToken(this.resetToken).subscribe(
+        this.userService.getEmailFromResetToken(this.resetToken).subscribe(
           data => {
-            this.id = data.id;
+            this.userEmail = data;
           },
           err => {
             this.error = err.error.message;
@@ -58,6 +60,20 @@ export class PasswordResetComponent implements OnInit {
 
   // Send password change request
   onSubmit() {
-    
+
+    const passwordResetRequestBody = {
+      resetToken: this.resetToken,
+      password: this.form.controls.newPass.value,
+      repeatPassword: this.form.controls.repeatNewPass.value
+    };
+
+    this.userService.resetPassword(passwordResetRequestBody).subscribe(
+      data => {
+        console.log(data);
+      },
+      err => {
+        console.log(err);
+      }
+    );
   }
 }

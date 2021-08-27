@@ -35,7 +35,13 @@ public class PasswordResetController {
     public ResponseEntity<MessageResponse> changePassword(@RequestBody ResetPasswordRequest resetPasswordRequest)
     {
         // TODO: change password
-        return ResponseEntity.ok(new MessageResponse("Backend password change test successful!"));
+        String resetToken = resetPasswordRequest.getResetToken();
+        User user = userAccountService.getUserFromResetToken(resetToken);
+        if (user != null) {
+            return ResponseEntity.ok(new MessageResponse("Backend password change test successful!"));
+        } else {
+            return ResponseEntity.badRequest().body(new MessageResponse("Couldn't authenticate user"));
+        }
     }
 
     @PostMapping("/user")

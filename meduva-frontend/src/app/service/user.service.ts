@@ -15,18 +15,6 @@ export class UserService {
     return this.http.get(environment.API_URL + 'all', { responseType : 'text' });
   }
 
-  getClientBoard(): Observable<any> {
-    return this.http.get(environment.API_URL + 'client', { responseType : 'text' });
-  }
-
-  getWorkerBoard(): Observable<any> {
-    return this.http.get(environment.API_URL + 'worker', { responseType : 'text' });
-  }
-
-  getReceptionistBoard(): Observable<any> {
-    return this.http.get(environment.API_URL + 'receptionist', { responseType : 'text' });
-  }
-
   getAdminBoard(): Observable<any> {
     return this.http.get(environment.API_URL + 'admin', { responseType : 'text' });
   }
@@ -49,8 +37,14 @@ export class UserService {
     return roles[0];
   }
 
-  getUserWithResetToken(resetToken: string): Observable<any> {
-    return this.http.post(environment.API_BASE_URL + 'api/password/user', resetToken);
+  getEmailFromResetToken(resetToken: string): Observable<string> {
+    return this.http.post<User>(environment.API_BASE_URL + 'api/password/user', resetToken).pipe(
+      map(user => user.email)
+    );
+  }
+
+  resetPassword(requestBody: ResetPasswordRequest): Observable<any> {
+    return this.http.post(environment.API_BASE_URL + 'api/password/change', requestBody);
   }
 }
 
@@ -67,4 +61,10 @@ export interface User {
 export interface Role {
   id : number,
   name : string
+}
+
+export interface ResetPasswordRequest {
+  resetToken: string,
+  password: string,
+  repeatPassword: string
 }
