@@ -6,9 +6,7 @@ import com.szusta.meduva.payload.response.MessageResponse;
 import com.szusta.meduva.service.UserAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @RestController
 @RequestMapping("/api/password")
@@ -24,7 +22,7 @@ public class PasswordResetController {
 
     // Triggered when user sends email for the reset link
     @PostMapping("/request")
-    public ResponseEntity<MessageResponse> resetPassword(@RequestBody final String email) {
+    public ResponseEntity<MessageResponse> sendResetPasswordEmail(@RequestBody final String email) {
 
         userAccountService.sendResetPasswordEmail(email);
         return ResponseEntity.ok(new MessageResponse("Password reset link has been sent to your email"));
