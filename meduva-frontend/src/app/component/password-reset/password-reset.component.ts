@@ -24,7 +24,11 @@ export class PasswordResetComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.buildForm();
+    this.identifyUserFromToken();
+  }
 
+  private buildForm() {
     this.form = this.formBuilder.group(
       {
         newPass : new FormControl('', [
@@ -37,15 +41,13 @@ export class PasswordResetComponent implements OnInit {
         ])
       },
       { validators : samePasswordsValidator });
-
-    this.identifyUserFromToken();
   }
 
   identifyUserFromToken() {
     this.route.params.subscribe(
       params => {
         this.resetToken = params['resetToken'];
-
+        /*
         this.userService.getEmailFromResetToken(this.resetToken).subscribe(
           data => {
             this.userEmail = data;
@@ -54,13 +56,13 @@ export class PasswordResetComponent implements OnInit {
             this.error = err.error.message;
           }
         );
+        */
       }
     );
   }
 
-  // Send password change request
+  // Send password change request to the backend
   onSubmit() {
-
     const passwordResetRequestBody = {
       resetToken: this.resetToken,
       password: this.form.controls.newPass.value,
