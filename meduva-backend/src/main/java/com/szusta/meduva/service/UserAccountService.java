@@ -38,30 +38,24 @@ public class UserAccountService {
         this.javaMailSender = javaMailSender;
     }
 
-    public void sendResetPasswordEmail(String email) {
+    public PasswordResetToken createPasswordResetToken(User user) {
 
-        PasswordResetToken resetToken = createResetToken(email);
-        SimpleMailMessage mailMessage = createPasswordResetMailMessage(email, resetToken);
-        javaMailSender.send(mailMessage);
-    }
-
-    private PasswordResetToken createResetToken(String email) {
-        User user = userService.findByEmail(email);
-        PasswordResetToken resetToken = buildUserPasswordResetToken(email, user);
-        deletePreviousResetTokens(user);
-        return passwordResetTokenRepository.save(resetToken);
-    }
-
-    private PasswordResetToken buildUserPasswordResetToken(String email, User user) {
         String token = jwtUtils.generateJwtToken(UserDetailsImpl.build(user));
-        return new PasswordResetToken(
+        PasswordResetToken resetToken = new PasswordResetToken(
                 user,
                 token,
                 new Date(new Date().getTime() + jwtUtils.getJwtExpirationMs()));
+        return passwordResetTokenRepository.save(resetToken);
     }
 
-    private void deletePreviousResetTokens(User user) {
+    public void deletePreviousResetTokens(User user) {
         passwordResetTokenRepository.deleteByUser(user);
+    }
+
+    public void sendResetPasswordEmail(String email, PasswordResetToken resetToken) {
+
+        SimpleMailMessage mailMessage = createPasswordResetMailMessage(email, resetToken);
+        javaMailSender.send(mailMessage);
     }
 
     private SimpleMailMessage createPasswordResetMailMessage(String email, PasswordResetToken resetToken) {

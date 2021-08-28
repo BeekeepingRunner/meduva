@@ -39,34 +39,29 @@ public class UserAccountServiceTest {
     UserAccountService userAccountService;
 
     private static User user;
+    private static String token;
+    private static PasswordResetToken resetToken;
 
     @BeforeAll
     public static void setup() {
-         user = new User(
-                "login",
-                "email@email.com",
-                "password",
-                "name",
-                "surname",
-                "48123123123"
+        user = new User(
+        "login",
+        "email@email.com",
+        "password",
+        "name",
+        "surname",
+        "48123123123"
         );
+        token = "tokenString";
+        resetToken = new PasswordResetToken();
     }
 
     @Test
-    @DisplayName("Should use given dependencies")
-    public void sendResetPasswordEmailTest() {
+    public void createPasswordResetTokenTest() {
 
-        when(userService.findByEmail(user.getEmail())).thenReturn(user);
-        when(jwtUtils.generateJwtToken(UserDetailsImpl.build(user))).thenReturn("tokenString");
-        when(jwtUtils.getJwtExpirationMs()).thenReturn(1000);
-        when(passwordResetTokenRepository.deleteByUser(user)).thenReturn(0);
-
-        userAccountService.sendResetPasswordEmail(user.getEmail());
-
-        verify(userService, times(1)).findByEmail(user.getEmail());
-        verify(jwtUtils, times(1)).generateJwtToken(UserDetailsImpl.build(user));
-        verify(jwtUtils, times(1)).getJwtExpirationMs();
-        verify(passwordResetTokenRepository, times(1)).deleteByUser(user);
+        when(jwtUtils.generateJwtToken(UserDetailsImpl.build(user))).thenReturn(token);
+        when(jwtUtils.getJwtExpirationMs())
+        userAccountService.createPasswordResetToken(user);
     }
 
     @Test

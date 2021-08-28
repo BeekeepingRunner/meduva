@@ -1,8 +1,11 @@
 package com.szusta.meduva.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.szusta.meduva.model.PasswordResetToken;
 import com.szusta.meduva.model.User;
 import com.szusta.meduva.service.UserAccountService;
+import com.szusta.meduva.service.UserService;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +13,10 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.parameters.P;
 import org.springframework.test.web.servlet.MockMvc;
+
+import java.util.Date;
 
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -23,26 +29,48 @@ public class PasswordResetControllerTest {
 
     @MockBean
     private UserAccountService userAccountService;
+    @MockBean
+    private UserService userService;
 
     @Autowired
     private MockMvc mockMvc;
 
+    private static User user;
     ObjectMapper objectMapper = new ObjectMapper();
+
+    @BeforeAll
+    public static void setup() {
+        user = new User(
+                "login",
+                "email@email.com",
+                "password",
+                "name",
+                "surname",
+                "48123123123"
+        );
+    }
 
     @Test
     @DisplayName("GET /request success")
     public void requestSuccessTest() throws Exception {
 
-        String sampleMail = "samplemail@gmail.com";
-        doNothing().when(userAccountService).sendResetPasswordEmail(sampleMail);
+        when(userService.findByEmail(user.getEmail())).thenReturn(user);
+        PasswordResetToken resetToken = new PasswordResetToken();
+        when(userAccountService.createPasswordResetToken(user)).thenReturn(resetToken);
+
+        doNothing().when(userAccountService).deletePreviousResetTokens(user);
+        doNothing().when(userAccountService).sendResetPasswordEmail(user.getEmail(), resetToken);
 
         this.mockMvc.perform(
                 post("/api/password/request")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(sampleMail))
+                        .content(user.getEmail()))
                 .andExpect(status().isOk());
 
-        verify(userAccountService, times(1)).sendResetPasswordEmail(sampleMail);
+        verify(userService, times(1)).findByEmail(user.getEmail());
+        verify(userAccountService, times(1)).createPasswordResetToken(user);
+        verify(userAccountService, times(1)).deletePreviousResetTokens(user);
+        verify(userAccountService, times(1)).sendResetPasswordEmail(user.getEmail(), resetToken);
     }
 
     @Test

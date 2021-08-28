@@ -1,9 +1,11 @@
 package com.szusta.meduva.controller;
 
+import com.szusta.meduva.model.PasswordResetToken;
 import com.szusta.meduva.model.User;
 import com.szusta.meduva.payload.request.ResetPasswordRequest;
 import com.szusta.meduva.payload.response.MessageResponse;
 import com.szusta.meduva.service.UserAccountService;
+import com.szusta.meduva.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,18 +15,24 @@ import org.springframework.web.bind.annotation.*;
 public class PasswordResetController {
 
     private UserAccountService userAccountService;
+    private UserService userService;
 
     @Autowired
     public PasswordResetController(
-            UserAccountService userAccountService) {
+            UserAccountService userAccountService,
+            UserService userService) {
         this.userAccountService = userAccountService;
+        this.userService = userService;
     }
 
     // Triggered when user sends email for the reset link
     @PostMapping("/request")
     public ResponseEntity<MessageResponse> sendResetPasswordEmail(@RequestBody final String email) {
 
-        userAccountService.sendResetPasswordEmail(email);
+        User user = userService.findByEmail(email);
+        PasswordResetToken resetToken = userAccountService.createPasswordResetToken(user);
+        userAccountService.deletePreviousResetTokens(user);
+        userAccountService.sendResetPasswordEmail(email, resetToken);
         return ResponseEntity.ok(new MessageResponse("Password reset link has been sent to your email"));
     }
 
