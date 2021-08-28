@@ -40,25 +40,36 @@ public class UserAccountService {
 
     public void sendResetPasswordEmail(String email) {
 
+        PasswordResetToken resetToken = createResetToken(email);
+        SimpleMailMessage mailMessage = createPasswordResetMailMessage(email, resetToken);
+        javaMailSender.send(mailMessage);
+    }
+
+    private PasswordResetToken createResetToken(String email) {
         User user = userService.findByEmail(email);
+        PasswordResetToken resetToken = buildUserPasswordResetToken(email, user);
+        deletePreviousResetTokens(user);
+        return passwordResetTokenRepository.save(resetToken);
+    }
+
+    private PasswordResetToken buildUserPasswordResetToken(String email, User user) {
         String token = jwtUtils.generateJwtToken(UserDetailsImpl.build(user));
-        PasswordResetToken resetToken = new PasswordResetToken(
+        return new PasswordResetToken(
                 user,
                 token,
                 new Date(new Date().getTime() + jwtUtils.getJwtExpirationMs()));
-        deletePreviousResetTokens(user);
-        passwordResetTokenRepository.save(resetToken);
-
-        SimpleMailMessage msg = new SimpleMailMessage();
-        msg.setTo(email);
-        msg.setSubject("Password reset link");
-        msg.setText("Follow this link to reset your password:\n" + getResetLink(token));
-
-        javaMailSender.send(msg);
     }
 
     private void deletePreviousResetTokens(User user) {
         passwordResetTokenRepository.deleteByUser(user);
+    }
+
+    private SimpleMailMessage createPasswordResetMailMessage(String email, PasswordResetToken resetToken) {
+        SimpleMailMessage msg = new SimpleMailMessage();
+        msg.setTo(email);
+        msg.setSubject("Password reset link");
+        msg.setText("Follow this link to reset your password:\n" + getResetLink(resetToken.getToken()));
+        return msg;
     }
 
     private String getResetLink(String token) {
