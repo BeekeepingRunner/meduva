@@ -77,4 +77,9 @@ public class UserAccountService {
 
         return storedResetToken.getUser();
     }
+
+    public PasswordResetToken getResetToken(String token) {
+        return passwordResetTokenRepository.findByToken(token)
+                .orElseThrow(() -> new PasswordResetTokenNotFoundException("Password reset token not found"));
+    }
 }

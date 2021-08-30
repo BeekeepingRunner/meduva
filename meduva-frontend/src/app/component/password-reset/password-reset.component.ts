@@ -13,8 +13,7 @@ import {ResetTokenService} from "../../service/token/reset-token.service";
 export class PasswordResetComponent implements OnInit {
 
   resetToken: string = '';
-  // TODO: change it to true after expiration check
-  isTokenExpired: boolean = false;
+  isTokenValid: boolean = false;
 
   error: string = '';
 
@@ -55,10 +54,11 @@ export class PasswordResetComponent implements OnInit {
         this.resetToken = params['resetToken'];
         this.resetTokenService.validateResetToken(this.resetToken).subscribe(
           data => {
-
+            this.isTokenValid = true;
           },
           err => {
-
+            this.isTokenValid = false;
+            this.error = err.error.message;
           }
         );
       }

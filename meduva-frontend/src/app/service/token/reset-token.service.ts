@@ -13,7 +13,7 @@ export class ResetTokenService {
   ) { }
 
   validateResetToken(resetToken: string): Observable<any> {
-    return this.httpClient.post(environment.API_BASE_URL + '/api/password/validate-reset-token',{
+    return this.httpClient.post(environment.API_BASE_URL + 'api/password/validate-reset-token',{
       token: resetToken
     });
   }

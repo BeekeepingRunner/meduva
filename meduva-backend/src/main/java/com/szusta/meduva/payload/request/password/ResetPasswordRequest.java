@@ -1,4 +1,4 @@
-package com.szusta.meduva.payload.request;
+package com.szusta.meduva.payload.request.password;
 
 import lombok.Getter;
 import lombok.Setter;
