@@ -3,6 +3,7 @@ import {ActivatedRoute} from "@angular/router";
 import {UserService} from "../../service/user.service";
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {samePasswordsValidator} from "../../util/validator/same-passwords";
+import {ResetTokenService} from "../../service/token/reset-token.service";
 
 @Component({
   selector: 'app-password-reset',
@@ -12,20 +13,25 @@ import {samePasswordsValidator} from "../../util/validator/same-passwords";
 export class PasswordResetComponent implements OnInit {
 
   resetToken: string = '';
-  userEmail: string = '';
+  // TODO: change it to true after expiration check
+  isTokenExpired: boolean = false;
+
   error: string = '';
+
+  isPasswordChanged: boolean = false;
 
   form!: FormGroup;
 
   constructor(
     private route: ActivatedRoute,
     private userService: UserService,
+    private resetTokenService: ResetTokenService,
     private formBuilder: FormBuilder,
   ) { }
 
   ngOnInit(): void {
+    this.validateResetToken();
     this.buildForm();
-    this.identifyUserFromToken();
   }
 
   private buildForm() {
@@ -43,26 +49,23 @@ export class PasswordResetComponent implements OnInit {
       { validators : samePasswordsValidator });
   }
 
-  identifyUserFromToken() {
+  validateResetToken() {
     this.route.params.subscribe(
       params => {
         this.resetToken = params['resetToken'];
-        /*
-        this.userService.getEmailFromResetToken(this.resetToken).subscribe(
+        this.resetTokenService.validateResetToken(this.resetToken).subscribe(
           data => {
-            this.userEmail = data;
+
           },
           err => {
-            this.error = err.error.message;
+
           }
         );
-        */
       }
     );
   }
 
-  // Send password change request to the backend
-  onSubmit() {
+  resetPassword() {
     const passwordResetRequestBody = {
       resetToken: this.resetToken,
       password: this.form.controls.newPass.value,
@@ -71,10 +74,10 @@ export class PasswordResetComponent implements OnInit {
 
     this.userService.resetPassword(passwordResetRequestBody).subscribe(
       data => {
-        console.log(data);
+        this.isPasswordChanged = true;
       },
       err => {
-        console.log(err);
+        this.error = err.error.message;
       }
     );
   }

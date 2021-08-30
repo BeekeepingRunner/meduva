@@ -1,5 +1,5 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
-import {TokenStorageService} from "./service/token-storage.service";
+import {TokenStorageService} from "./service/token/token-storage.service";
 import {MatSidenav} from "@angular/material/sidenav";
 import {BreakpointObserver} from "@angular/cdk/layout";
 import {UserService} from "./service/user.service";

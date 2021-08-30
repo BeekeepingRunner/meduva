@@ -37,12 +37,6 @@ export class UserService {
     return roles[0];
   }
 
-  getEmailFromResetToken(resetToken: string): Observable<string> {
-    return this.http.post<User>(environment.API_BASE_URL + 'api/password/user', resetToken).pipe(
-      map(user => user.email)
-    );
-  }
-
   resetPassword(requestBody: ResetPasswordRequest): Observable<any> {
     return this.http.post(environment.API_BASE_URL + 'api/password/change', requestBody);
   }
