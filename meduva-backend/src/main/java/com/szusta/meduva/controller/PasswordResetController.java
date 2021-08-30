@@ -8,6 +8,7 @@ import com.szusta.meduva.service.UserAccountService;
 import com.szusta.meduva.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -16,13 +17,16 @@ public class PasswordResetController {
 
     private UserAccountService userAccountService;
     private UserService userService;
+    private PasswordEncoder passwordEncoder;
 
     @Autowired
     public PasswordResetController(
             UserAccountService userAccountService,
-            UserService userService) {
+            UserService userService,
+            PasswordEncoder passwordEncoder) {
         this.userAccountService = userAccountService;
         this.userService = userService;
+        this.passwordEncoder = passwordEncoder;
     }
 
     // Triggered when user sends email for the reset link
@@ -37,17 +41,15 @@ public class PasswordResetController {
     }
 
     // Triggered when user sends new password
+    // TODO: validate reset request
     @PostMapping("/change")
     public ResponseEntity<MessageResponse> changePassword(@RequestBody ResetPasswordRequest resetPasswordRequest)
     {
-        // TODO: change password
         String resetToken = resetPasswordRequest.getResetToken();
         User user = userAccountService.getUserFromResetToken(resetToken);
-        if (user != null) {
-            return ResponseEntity.ok(new MessageResponse("Backend password change test successful!"));
-        } else {
-            return ResponseEntity.badRequest().body(new MessageResponse("Couldn't authenticate user"));
-        }
+        user.setPassword(passwordEncoder.encode(resetPasswordRequest.getPassword()));
+        userService.save(user);
+        return ResponseEntity.ok(new MessageResponse("User password has been changed!"));
     }
 
     @PostMapping("/user")
