@@ -21,13 +21,10 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 
 import java.util.Arrays;
-import java.util.Collections;
 
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(
-        // securedEnabled = true,
-        // jsr250Enabled = true,
         prePostEnabled = true
 )
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {

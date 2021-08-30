@@ -44,6 +44,7 @@ public class PasswordResetController {
         return ResponseEntity.ok(new MessageResponse("Password reset link has been sent to your email"));
     }
 
+    // Triggered after user clicks reset link
     @PostMapping("/validate-reset-token")
     public ResponseEntity<MessageResponse> validateResetToken(@RequestBody final ResetTokenRequest resetToken) {
 

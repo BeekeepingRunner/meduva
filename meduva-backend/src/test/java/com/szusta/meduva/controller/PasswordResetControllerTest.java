@@ -3,6 +3,7 @@ package com.szusta.meduva.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.szusta.meduva.model.PasswordResetToken;
 import com.szusta.meduva.model.User;
+import com.szusta.meduva.payload.request.password.ResetTokenRequest;
 import com.szusta.meduva.service.UserAccountService;
 import com.szusta.meduva.service.UserService;
 import org.junit.jupiter.api.BeforeAll;
@@ -16,6 +17,7 @@ import org.springframework.http.MediaType;
 import org.springframework.security.core.parameters.P;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.time.Duration;
 import java.util.Date;
 
 import static org.mockito.Mockito.*;
@@ -90,4 +92,76 @@ public class PasswordResetControllerTest {
 
         verify(userAccountService, times(1)).getUserFromResetToken(resetToken);
     }
+
+    @Test
+    @DisplayName("POST /validate-reset-token OK test")
+    public void validateResetTokenOKTest() throws Exception {
+
+        ResetTokenRequest resetTokenReq = new ResetTokenRequest();
+        resetTokenReq.setToken("reset");
+        User user = new User();
+
+        when(userAccountService.getResetToken(resetTokenReq.getToken()))
+                .thenReturn(new PasswordResetToken(
+                        user,
+                        "token",
+                        Date.from(new Date().toInstant().plus(Duration.ofDays(2)))));
+
+        this.mockMvc.perform(
+                        post("/api/password/validate-reset-token")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(resetTokenReq)))
+                .andExpect(status().isOk());
+
+        verify(userAccountService, times(1)).getResetToken(resetTokenReq.getToken());
+    }
+
+    @Test
+    @DisplayName("POST /validate-reset-token Unauthorized test")
+    public void validateResetTokenUnauthorizedTest() throws Exception {
+
+        ResetTokenRequest resetTokenReq = new ResetTokenRequest();
+        resetTokenReq.setToken("reset");
+        User user = new User();
+
+        when(userAccountService.getResetToken(resetTokenReq.getToken()))
+                .thenReturn(new PasswordResetToken(
+                        user,
+                        "token",
+                        Date.from(new Date().toInstant().minus(Duration.ofSeconds(1)))));
+
+        this.mockMvc.perform(
+                        post("/api/password/validate-reset-token")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(resetTokenReq)))
+                .andExpect(status().isUnauthorized());
+
+        verify(userAccountService, times(1)).getResetToken(resetTokenReq.getToken());
+    }
+
+    // TODO: change whole test method body
+    /*
+    @DisplayName("POST /change test")
+    public void handlePasswordChangeRequestTest() throws Exception {
+
+        ResetTokenRequest resetTokenReq = new ResetTokenRequest();
+        resetTokenReq.setToken("reset");
+        User user = new User();
+
+        when(userAccountService.getResetToken(resetTokenReq.getToken()))
+                .thenReturn(new PasswordResetToken(
+                        user,
+                        "token",
+                        Date.from(new Date().toInstant().minus(Duration.ofSeconds(1)))));
+
+        this.mockMvc.perform(
+                        post("/api/password/validate-reset-token")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(resetTokenReq)))
+                .andExpect(status().isUnauthorized());
+
+        verify(userAccountService, times(1)).getResetToken(resetTokenReq.getToken());
+    }
+
+     */
 }
