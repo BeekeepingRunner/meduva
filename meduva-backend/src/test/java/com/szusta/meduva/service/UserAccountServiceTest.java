@@ -57,11 +57,11 @@ public class UserAccountServiceTest {
     }
 
     @Test
-    public void createPasswordResetTokenTest() {
-
-        when(jwtUtils.generateJwtToken(UserDetailsImpl.build(user))).thenReturn(token);
-        when(jwtUtils.getJwtExpirationMs())
-        userAccountService.createPasswordResetToken(user);
+    @DisplayName("Should delete previous tokens")
+    public void deletePreviousResetTokenTest() {
+        when(passwordResetTokenRepository.deleteByUser(user)).thenReturn(1);
+        userAccountService.deletePreviousResetTokens(user);
+        verify(passwordResetTokenRepository, times(1)).deleteByUser(user);
     }
 
     @Test
