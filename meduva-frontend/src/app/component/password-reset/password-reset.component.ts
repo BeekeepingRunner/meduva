@@ -58,7 +58,7 @@ export class PasswordResetComponent implements OnInit {
           },
           err => {
             this.isTokenValid = false;
-            this.error = err.error.message;
+            this.error = err;
           }
         );
       }

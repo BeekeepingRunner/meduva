@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -22,6 +23,7 @@ public class UserAccountService {
     private JwtUtils jwtUtils;
     private PasswordResetTokenRepository passwordResetTokenRepository;
     private JavaMailSender javaMailSender;
+    private PasswordEncoder passwordEncoder;
 
     @Value("${meduva.app.front_base_url}")
     String baseURL;
@@ -31,11 +33,13 @@ public class UserAccountService {
             UserService userService,
             JwtUtils jwtUtils,
             PasswordResetTokenRepository passwordResetTokenRepository,
-            JavaMailSender javaMailSender) {
+            JavaMailSender javaMailSender,
+            PasswordEncoder passwordEncoder) {
         this.userService = userService;
         this.jwtUtils = jwtUtils;
         this.passwordResetTokenRepository = passwordResetTokenRepository;
         this.javaMailSender = javaMailSender;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public PasswordResetToken createPasswordResetToken(User user) {
@@ -81,5 +85,12 @@ public class UserAccountService {
     public PasswordResetToken getResetToken(String token) {
         return passwordResetTokenRepository.findByToken(token)
                 .orElseThrow(() -> new PasswordResetTokenNotFoundException("Password reset token not found"));
+    }
+
+    public void resetPassword(String resetToken, String newPassword) {
+        User user = getUserFromResetToken(resetToken);
+        user.setPassword(passwordEncoder.encode(newPassword));
+        user = userService.save(user);
+        deletePreviousResetTokens(user);
     }
 }

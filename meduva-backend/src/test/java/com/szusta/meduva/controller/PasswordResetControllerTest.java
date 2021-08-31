@@ -3,6 +3,7 @@ package com.szusta.meduva.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.szusta.meduva.model.PasswordResetToken;
 import com.szusta.meduva.model.User;
+import com.szusta.meduva.payload.request.password.ResetPasswordRequest;
 import com.szusta.meduva.payload.request.password.ResetTokenRequest;
 import com.szusta.meduva.service.UserAccountService;
 import com.szusta.meduva.service.UserService;
@@ -14,7 +15,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.security.core.parameters.P;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.Duration;
@@ -139,29 +139,23 @@ public class PasswordResetControllerTest {
         verify(userAccountService, times(1)).getResetToken(resetTokenReq.getToken());
     }
 
-    // TODO: change whole test method body
-    /*
+    @Test
     @DisplayName("POST /change test")
     public void handlePasswordChangeRequestTest() throws Exception {
 
-        ResetTokenRequest resetTokenReq = new ResetTokenRequest();
-        resetTokenReq.setToken("reset");
-        User user = new User();
+        ResetPasswordRequest request = new ResetPasswordRequest();
+        request.setResetToken("resetToken");
+        request.setPassword("pass");
 
-        when(userAccountService.getResetToken(resetTokenReq.getToken()))
-                .thenReturn(new PasswordResetToken(
-                        user,
-                        "token",
-                        Date.from(new Date().toInstant().minus(Duration.ofSeconds(1)))));
+        doNothing().when(userAccountService).resetPassword(request.getResetToken(), request.getPassword());
 
         this.mockMvc.perform(
-                        post("/api/password/validate-reset-token")
+                        post("/api/password/change")
                                 .contentType(MediaType.APPLICATION_JSON)
-                                .content(objectMapper.writeValueAsString(resetTokenReq)))
-                .andExpect(status().isUnauthorized());
+                                .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isOk());
 
-        verify(userAccountService, times(1)).getResetToken(resetTokenReq.getToken());
+        verify(userAccountService, times(1))
+                .resetPassword(request.getResetToken(), request.getPassword());
     }
-
-     */
 }

@@ -21,7 +21,6 @@ public class PasswordResetController {
 
     private UserAccountService userAccountService;
     private UserService userService;
-    private PasswordEncoder passwordEncoder;
 
     @Autowired
     public PasswordResetController(
@@ -30,7 +29,6 @@ public class PasswordResetController {
             PasswordEncoder passwordEncoder) {
         this.userAccountService = userAccountService;
         this.userService = userService;
-        this.passwordEncoder = passwordEncoder;
     }
 
     // Triggered when user sends email for the reset link
@@ -63,10 +61,8 @@ public class PasswordResetController {
     public ResponseEntity<MessageResponse> handlePasswordChangeRequest(@RequestBody ResetPasswordRequest resetPasswordRequest)
     {
         String resetToken = resetPasswordRequest.getResetToken();
-        User user = userAccountService.getUserFromResetToken(resetToken);
-        user.setPassword(passwordEncoder.encode(resetPasswordRequest.getPassword()));
-        userService.save(user);
-        userAccountService.deletePreviousResetTokens(user);
+        userAccountService.resetPassword(resetToken, resetPasswordRequest.getPassword());
+
         return ResponseEntity.ok(new MessageResponse("Password has been changed!"));
     }
 
