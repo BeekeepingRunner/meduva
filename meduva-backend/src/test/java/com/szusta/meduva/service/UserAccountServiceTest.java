@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Date;
 import java.util.Optional;
@@ -33,6 +34,8 @@ public class UserAccountServiceTest {
     PasswordResetTokenRepository passwordResetTokenRepository;
     @MockBean
     JavaMailSender javaMailSender;
+    @MockBean
+    PasswordEncoder passwordEncoder;
 
     @Autowired
     @InjectMocks
