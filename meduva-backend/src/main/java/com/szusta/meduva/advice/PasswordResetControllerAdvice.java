@@ -18,7 +18,7 @@ public class PasswordResetControllerAdvice {
 
     @ExceptionHandler(value = MailException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public ErrorMessage handleTokenRefreshException(TokenRefreshException ex, WebRequest request) {
+    public ErrorMessage handleMailException(TokenRefreshException ex, WebRequest request) {
 
         return new ErrorMessage(
                 HttpStatus.INTERNAL_SERVER_ERROR.value(),
@@ -42,7 +42,7 @@ public class PasswordResetControllerAdvice {
 
     @ExceptionHandler(value = PasswordResetTokenNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ErrorMessage handleUserNotFoundException(PasswordResetTokenNotFoundException ex, WebRequest request) {
+    public ErrorMessage handlePasswordResetTokenNotFoundException(PasswordResetTokenNotFoundException ex, WebRequest request) {
 
         return new ErrorMessage(
                 HttpStatus.NOT_FOUND.value(),
