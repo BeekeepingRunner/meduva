@@ -1,6 +1,7 @@
 package com.szusta.meduva.advice;
 
 import com.szusta.meduva.exception.ErrorMessage;
+import com.szusta.meduva.exception.PasswordResetTokenNotFoundException;
 import com.szusta.meduva.exception.TokenRefreshException;
 import com.szusta.meduva.exception.UserNotFoundException;
 import org.springframework.http.HttpStatus;
@@ -35,6 +36,18 @@ public class PasswordResetControllerAdvice {
                 HttpStatus.NOT_FOUND.value(),
                 new Date(),
                 ex.getMessage(),
+                request.getDescription(false)
+        );
+    }
+
+    @ExceptionHandler(value = PasswordResetTokenNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ErrorMessage handleUserNotFoundException(PasswordResetTokenNotFoundException ex, WebRequest request) {
+
+        return new ErrorMessage(
+                HttpStatus.NOT_FOUND.value(),
+                new Date(),
+                "Password reset token not found.",
                 request.getDescription(false)
         );
     }

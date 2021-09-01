@@ -10,9 +10,12 @@ import com.szusta.meduva.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
 import java.util.Date;
 
 @RestController
@@ -25,8 +28,7 @@ public class PasswordResetController {
     @Autowired
     public PasswordResetController(
             UserAccountService userAccountService,
-            UserService userService,
-            PasswordEncoder passwordEncoder) {
+            UserService userService) {
         this.userAccountService = userAccountService;
         this.userService = userService;
     }
@@ -58,7 +60,7 @@ public class PasswordResetController {
     // Triggered when user sends new password
     // TODO: validate reset request
     @PostMapping("/change")
-    public ResponseEntity<MessageResponse> handlePasswordChangeRequest(@RequestBody ResetPasswordRequest resetPasswordRequest)
+    public ResponseEntity<MessageResponse> handlePasswordChangeRequest(@Valid @RequestBody ResetPasswordRequest resetPasswordRequest)
     {
         String resetToken = resetPasswordRequest.getResetToken();
         userAccountService.resetPassword(resetToken, resetPasswordRequest.getPassword());
