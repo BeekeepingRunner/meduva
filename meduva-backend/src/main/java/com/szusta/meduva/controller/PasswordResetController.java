@@ -58,7 +58,6 @@ public class PasswordResetController {
     }
 
     // Triggered when user sends new password
-    // TODO: validate reset request
     @PostMapping("/change")
     public ResponseEntity<MessageResponse> handlePasswordChangeRequest(@Valid @RequestBody ResetPasswordRequest resetPasswordRequest)
     {
