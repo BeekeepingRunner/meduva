@@ -5,7 +5,7 @@ import com.szusta.meduva.model.User;
 import com.szusta.meduva.payload.request.password.ResetPasswordRequest;
 import com.szusta.meduva.payload.request.password.ResetTokenRequest;
 import com.szusta.meduva.payload.response.MessageResponse;
-import com.szusta.meduva.service.UserAccountService;
+import com.szusta.meduva.service.PasswordResetService;
 import com.szusta.meduva.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,14 +22,14 @@ import java.util.Date;
 @RequestMapping("/api/password")
 public class PasswordResetController {
 
-    private UserAccountService userAccountService;
+    private PasswordResetService passwordResetService;
     private UserService userService;
 
     @Autowired
     public PasswordResetController(
-            UserAccountService userAccountService,
+            PasswordResetService passwordResetService,
             UserService userService) {
-        this.userAccountService = userAccountService;
+        this.passwordResetService = passwordResetService;
         this.userService = userService;
     }
 
@@ -38,9 +38,9 @@ public class PasswordResetController {
     public ResponseEntity<MessageResponse> sendResetPasswordEmail(@RequestBody final String email) {
 
         User user = userService.findByEmail(email);
-        userAccountService.deletePreviousResetTokens(user);
-        PasswordResetToken resetToken = userAccountService.createPasswordResetToken(user);
-        userAccountService.sendResetPasswordEmail(email, resetToken);
+        passwordResetService.deletePreviousResetTokens(user);
+        PasswordResetToken resetToken = passwordResetService.createPasswordResetToken(user);
+        passwordResetService.sendResetPasswordEmail(email, resetToken);
         return ResponseEntity.ok(new MessageResponse("Password reset link has been sent to your email"));
     }
 
@@ -48,7 +48,7 @@ public class PasswordResetController {
     @PostMapping("/validate-reset-token")
     public ResponseEntity<MessageResponse> validateResetToken(@RequestBody final ResetTokenRequest resetToken) {
 
-        PasswordResetToken storedResetToken = userAccountService.getResetToken(resetToken.getToken());
+        PasswordResetToken storedResetToken = passwordResetService.getResetToken(resetToken.getToken());
         if (storedResetToken.getExpiryDate().before(new Date())) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                     .body(new MessageResponse("Reset token has expired"));
@@ -62,7 +62,7 @@ public class PasswordResetController {
     public ResponseEntity<MessageResponse> handlePasswordChangeRequest(@Valid @RequestBody ResetPasswordRequest resetPasswordRequest)
     {
         String resetToken = resetPasswordRequest.getResetToken();
-        userAccountService.resetPassword(resetToken, resetPasswordRequest.getPassword());
+        passwordResetService.resetPassword(resetToken, resetPasswordRequest.getPassword());
 
         return ResponseEntity.ok(new MessageResponse("Password has been changed!"));
     }
@@ -70,7 +70,7 @@ public class PasswordResetController {
     @PostMapping("/user")
     public ResponseEntity<User> getUserWithResetToken(@RequestBody String resetToken) {
 
-        User user = userAccountService.getUserFromResetToken(resetToken);
+        User user = passwordResetService.getUserFromResetToken(resetToken);
         return ResponseEntity.ok(user);
     }
 }

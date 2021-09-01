@@ -5,7 +5,7 @@ import com.szusta.meduva.model.PasswordResetToken;
 import com.szusta.meduva.model.User;
 import com.szusta.meduva.payload.request.password.ResetPasswordRequest;
 import com.szusta.meduva.payload.request.password.ResetTokenRequest;
-import com.szusta.meduva.service.UserAccountService;
+import com.szusta.meduva.service.PasswordResetService;
 import com.szusta.meduva.service.UserService;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
@@ -30,7 +30,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class PasswordResetControllerTest {
 
     @MockBean
-    private UserAccountService userAccountService;
+    private PasswordResetService passwordResetService;
     @MockBean
     private UserService userService;
 
@@ -58,10 +58,10 @@ public class PasswordResetControllerTest {
 
         when(userService.findByEmail(user.getEmail())).thenReturn(user);
         PasswordResetToken resetToken = new PasswordResetToken();
-        when(userAccountService.createPasswordResetToken(user)).thenReturn(resetToken);
+        when(passwordResetService.createPasswordResetToken(user)).thenReturn(resetToken);
 
-        doNothing().when(userAccountService).deletePreviousResetTokens(user);
-        doNothing().when(userAccountService).sendResetPasswordEmail(user.getEmail(), resetToken);
+        doNothing().when(passwordResetService).deletePreviousResetTokens(user);
+        doNothing().when(passwordResetService).sendResetPasswordEmail(user.getEmail(), resetToken);
 
         this.mockMvc.perform(
                 post("/api/password/request")
@@ -70,9 +70,9 @@ public class PasswordResetControllerTest {
                 .andExpect(status().isOk());
 
         verify(userService, times(1)).findByEmail(user.getEmail());
-        verify(userAccountService, times(1)).createPasswordResetToken(user);
-        verify(userAccountService, times(1)).deletePreviousResetTokens(user);
-        verify(userAccountService, times(1)).sendResetPasswordEmail(user.getEmail(), resetToken);
+        verify(passwordResetService, times(1)).createPasswordResetToken(user);
+        verify(passwordResetService, times(1)).deletePreviousResetTokens(user);
+        verify(passwordResetService, times(1)).sendResetPasswordEmail(user.getEmail(), resetToken);
     }
 
     @Test
@@ -80,7 +80,7 @@ public class PasswordResetControllerTest {
     public void getUserWithResetTokenSuccessTest() throws Exception {
 
         String resetToken = "resetToken";
-        when(userAccountService.getUserFromResetToken(resetToken))
+        when(passwordResetService.getUserFromResetToken(resetToken))
                 .thenReturn(new User());
 
         this.mockMvc.perform(
@@ -90,7 +90,7 @@ public class PasswordResetControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().json(objectMapper.writeValueAsString(new User())));
 
-        verify(userAccountService, times(1)).getUserFromResetToken(resetToken);
+        verify(passwordResetService, times(1)).getUserFromResetToken(resetToken);
     }
 
     @Test
@@ -101,7 +101,7 @@ public class PasswordResetControllerTest {
         resetTokenReq.setToken("reset");
         User user = new User();
 
-        when(userAccountService.getResetToken(resetTokenReq.getToken()))
+        when(passwordResetService.getResetToken(resetTokenReq.getToken()))
                 .thenReturn(new PasswordResetToken(
                         user,
                         "token",
@@ -113,7 +113,7 @@ public class PasswordResetControllerTest {
                                 .content(objectMapper.writeValueAsString(resetTokenReq)))
                 .andExpect(status().isOk());
 
-        verify(userAccountService, times(1)).getResetToken(resetTokenReq.getToken());
+        verify(passwordResetService, times(1)).getResetToken(resetTokenReq.getToken());
     }
 
     @Test
@@ -124,7 +124,7 @@ public class PasswordResetControllerTest {
         resetTokenReq.setToken("reset");
         User user = new User();
 
-        when(userAccountService.getResetToken(resetTokenReq.getToken()))
+        when(passwordResetService.getResetToken(resetTokenReq.getToken()))
                 .thenReturn(new PasswordResetToken(
                         user,
                         "token",
@@ -136,7 +136,7 @@ public class PasswordResetControllerTest {
                                 .content(objectMapper.writeValueAsString(resetTokenReq)))
                 .andExpect(status().isUnauthorized());
 
-        verify(userAccountService, times(1)).getResetToken(resetTokenReq.getToken());
+        verify(passwordResetService, times(1)).getResetToken(resetTokenReq.getToken());
     }
 
     @Test
@@ -145,9 +145,10 @@ public class PasswordResetControllerTest {
 
         ResetPasswordRequest request = new ResetPasswordRequest();
         request.setResetToken("resetToken");
-        request.setPassword("pass");
+        request.setPassword("password");
+        request.setRepeatPassword("password");
 
-        doNothing().when(userAccountService).resetPassword(request.getResetToken(), request.getPassword());
+        doNothing().when(passwordResetService).resetPassword(request.getResetToken(), request.getPassword());
 
         this.mockMvc.perform(
                         post("/api/password/change")
@@ -155,7 +156,7 @@ public class PasswordResetControllerTest {
                                 .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isOk());
 
-        verify(userAccountService, times(1))
+        verify(passwordResetService, times(1))
                 .resetPassword(request.getResetToken(), request.getPassword());
     }
 }

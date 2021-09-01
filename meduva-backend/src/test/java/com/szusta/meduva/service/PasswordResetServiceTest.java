@@ -23,7 +23,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 @SpringBootTest
-public class UserAccountServiceTest {
+public class PasswordResetServiceTest {
 
     @MockBean
     UserService userService;
@@ -38,7 +38,7 @@ public class UserAccountServiceTest {
 
     @Autowired
     @InjectMocks
-    UserAccountService userAccountService;
+    PasswordResetService passwordResetService;
 
     private static User user;
     private static String token;
@@ -62,7 +62,7 @@ public class UserAccountServiceTest {
     @DisplayName("Should delete previous tokens")
     public void deletePreviousResetTokenTest() {
         when(passwordResetTokenRepository.deleteByUser(user)).thenReturn(1);
-        userAccountService.deletePreviousResetTokens(user);
+        passwordResetService.deletePreviousResetTokens(user);
         verify(passwordResetTokenRepository, times(1)).deleteByUser(user);
     }
 
@@ -71,9 +71,9 @@ public class UserAccountServiceTest {
         when(passwordResetTokenRepository.findByToken("token")).thenReturn(
                 Optional.of(new PasswordResetToken(user, "token", new Date())));
 
-        assertEquals(user, userAccountService.getUserFromResetToken("token"));
+        assertEquals(user, passwordResetService.getUserFromResetToken("token"));
         assertThrows(PasswordResetTokenNotFoundException.class, () -> {
-            userAccountService.getUserFromResetToken("badToken");
+            passwordResetService.getUserFromResetToken("badToken");
         });
     }
 }

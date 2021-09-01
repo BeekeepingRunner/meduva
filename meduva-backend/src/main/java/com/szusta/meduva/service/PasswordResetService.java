@@ -17,7 +17,7 @@ import java.util.Date;
 
 @Service
 @Transactional
-public class UserAccountService {
+public class PasswordResetService {
 
     private UserService userService;
     private JwtUtils jwtUtils;
@@ -29,7 +29,7 @@ public class UserAccountService {
     String baseURL;
 
     @Autowired
-    public UserAccountService(
+    public PasswordResetService(
             UserService userService,
             JwtUtils jwtUtils,
             PasswordResetTokenRepository passwordResetTokenRepository,
