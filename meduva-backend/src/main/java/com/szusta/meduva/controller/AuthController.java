@@ -107,7 +107,7 @@ public class AuthController {
     public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signupRequest) {
 
         checkForExistingCredentials(signupRequest);
-        saveNewUser(signupRequest);
+        saveNewUserFrom(signupRequest);
 
         return ResponseEntity.ok(new MessageResponse("User registered successfully"));
     }
@@ -122,7 +122,7 @@ public class AuthController {
         }
     }
 
-    private void saveNewUser(SignupRequest request) {
+    private void saveNewUserFrom(SignupRequest request) {
 
         Set<Role> roles = processRequestRoles(request.getRole());
 
@@ -143,35 +143,42 @@ public class AuthController {
         Set<Role> userRoles = new HashSet<>();
 
         if (requestRoles == null) {
-            Role userRole = roleService.findByName("ROLE_CLIENT");
-            userRoles.add(userRole);
+            addDefaultRoleTo(userRoles);
         } else {
-            requestRoles.forEach(role -> {
-
-                switch (role) {
-                    case "ROLE_ADMIN":
-                        Role adminRole = roleService.findByName("ROLE_ADMIN");
-                        userRoles.add(adminRole);
-                        break;
-                    case "ROLE_RECEPTIONIST":
-                        Role receptionistRole = roleService.findByName("ROLE_RECEPTIONIST");
-                        userRoles.add(receptionistRole);
-                        break;
-                    case "ROLE_WORKER":
-                        Role workerRole = roleService.findByName("ROLE_WORKER");
-                        userRoles.add(workerRole);
-                        break;
-                    case "ROLE_CLIENT":
-                        Role clientRole = roleService.findByName("ROLE_CLIENT");
-                        userRoles.add(clientRole);
-                        break;
-                    default:
-                        throw new BadRequestRole("Bad user role in request body");
-                }
-            });
+            addRoles(requestRoles, userRoles);
         }
 
         return userRoles;
+    }
+
+    private void addDefaultRoleTo(Set<Role> userRoles) {
+        userRoles.add(roleService.findByName("ROLE_CLIENT"));
+    }
+
+    private void addRoles(Set<String> requestRoles, Set<Role> userRoles) {
+        
+        requestRoles.forEach(role -> {
+            switch (role) {
+                case "ROLE_ADMIN":
+                    Role adminRole = roleService.findByName("ROLE_ADMIN");
+                    userRoles.add(adminRole);
+                    break;
+                case "ROLE_RECEPTIONIST":
+                    Role receptionistRole = roleService.findByName("ROLE_RECEPTIONIST");
+                    userRoles.add(receptionistRole);
+                    break;
+                case "ROLE_WORKER":
+                    Role workerRole = roleService.findByName("ROLE_WORKER");
+                    userRoles.add(workerRole);
+                    break;
+                case "ROLE_CLIENT":
+                    Role clientRole = roleService.findByName("ROLE_CLIENT");
+                    userRoles.add(clientRole);
+                    break;
+                default:
+                    throw new BadRequestRole("Bad user role in request body");
+            }
+        });
     }
 
     @GetMapping("/user/search/all")
