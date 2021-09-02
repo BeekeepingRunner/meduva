@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {environment} from "../../environments/environment";
-import {map} from "rxjs/operators";
 
 @Injectable({
   providedIn: 'root'
@@ -13,18 +12,6 @@ export class UserService {
 
   getPublicContent(): Observable<any> {
     return this.http.get(environment.API_URL + 'all', { responseType : 'text' });
-  }
-
-  getClientBoard(): Observable<any> {
-    return this.http.get(environment.API_URL + 'client', { responseType : 'text' });
-  }
-
-  getWorkerBoard(): Observable<any> {
-    return this.http.get(environment.API_URL + 'worker', { responseType : 'text' });
-  }
-
-  getReceptionistBoard(): Observable<any> {
-    return this.http.get(environment.API_URL + 'receptionist', { responseType : 'text' });
   }
 
   getAdminBoard(): Observable<any> {
@@ -48,6 +35,10 @@ export class UserService {
     });
     return roles[0];
   }
+
+  resetPassword(requestBody: ResetPasswordRequest): Observable<any> {
+    return this.http.post(environment.API_BASE_URL + 'api/password/change', requestBody);
+  }
 }
 
 export interface User {
@@ -63,4 +54,10 @@ export interface User {
 export interface Role {
   id : number,
   name : string
+}
+
+export interface ResetPasswordRequest {
+  resetToken: string,
+  password: string,
+  repeatPassword: string
 }

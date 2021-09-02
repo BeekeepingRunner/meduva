@@ -20,7 +20,12 @@ public class UserService {
 
     public User findByLogin(String login) {
         return userRepository.findByLogin(login)
-                .orElseThrow(() -> new RuntimeException("User not found with login " + login));
+                .orElseThrow(() -> new UserNotFoundException("User not found with login : " + login));
+    }
+
+    public User findByEmail(String email) {
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new UserNotFoundException("User not found with email : " + email));
     }
 
     public Boolean existsByLogin(String login) {

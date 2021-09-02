@@ -21,13 +21,10 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 
 import java.util.Arrays;
-import java.util.Collections;
 
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(
-        // securedEnabled = true,
-        // jsr250Enabled = true,
         prePostEnabled = true
 )
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
@@ -91,6 +88,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/api/auth/**").permitAll()
                 .antMatchers("/api/test/all").permitAll()
+                .antMatchers("/api/password/request").permitAll()
+                .antMatchers("/api/password/user").permitAll()
+                .antMatchers("/api/password/validate-reset-token").permitAll()
+                .antMatchers("/api/password/change").permitAll()
                 .antMatchers("/api/test/admin").hasAuthority("ROLE_ADMIN")
                 .anyRequest().authenticated();
         //.anyRequest().permitAll();

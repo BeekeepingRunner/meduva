@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import {Router, RouterModule, Routes} from "@angular/router";
-import {FormsModule} from "@angular/forms";
+import {RouterModule, Routes} from "@angular/router";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {HttpClientModule} from "@angular/common/http";
 import {MatSidenavModule} from "@angular/material/sidenav";
 
@@ -21,10 +21,16 @@ import {MatDividerModule} from "@angular/material/divider";
 import {MatButtonModule} from "@angular/material/button";
 import {MatTreeModule} from "@angular/material/tree";
 import {MatExpansionModule} from "@angular/material/expansion";
+import { PasswordResetEmailInputComponent } from './component/password-reset-email-input/password-reset-email-input.component';
+import { PasswordResetComponent } from './component/password-reset/password-reset.component';
+import {MatFormFieldModule} from "@angular/material/form-field";
+import {MatInputModule} from "@angular/material/input";
 
 const routes: Routes = [
   { path: 'home', component: HomeComponent },
   { path: 'login', component: LoginComponent },
+  { path: 'login/reset-password-email', component: PasswordResetEmailInputComponent },
+  { path: 'login/password-reset/:resetToken', component: PasswordResetComponent },
   { path: 'register', component: RegisterComponent },
   { path: 'profile', component: ProfileComponent },
   { path: 'admin', component: BoardAdminComponent },
@@ -39,12 +45,15 @@ const routes: Routes = [
     HomeComponent,
     ProfileComponent,
     BoardAdminComponent,
+    PasswordResetEmailInputComponent,
+    PasswordResetComponent,
   ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
     RouterModule.forRoot(routes),
     FormsModule,
+    ReactiveFormsModule,
     HttpClientModule,
     MatToolbarModule,
     MatIconModule,
@@ -54,6 +63,8 @@ const routes: Routes = [
     MatButtonModule,
     MatTreeModule,
     MatExpansionModule,
+    MatFormFieldModule,
+    MatInputModule,
   ],
   exports: [
     RouterModule
