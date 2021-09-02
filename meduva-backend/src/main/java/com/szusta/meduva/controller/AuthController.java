@@ -106,27 +106,36 @@ public class AuthController {
     @PostMapping("/signup")
     public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signupRequest) {
 
-        if (userService.existsByLogin(signupRequest.getLogin())) {
+        checkForExistingCredentials(signupRequest);
+        saveNewUser(signupRequest);
+
+        return ResponseEntity.ok(new MessageResponse("User registered successfully"));
+    }
+
+    private void checkForExistingCredentials(SignupRequest request) {
+
+        if (userService.existsByLogin(request.getLogin())) {
             throw new LoginAlreadyTakenException("Error: That login is already taken");
         }
-        if (userService.existsByEmail(signupRequest.getEmail())) {
+        if (userService.existsByEmail(request.getEmail())) {
             throw new EmailAlreadyInUseException("Error: That email is already in use");
         }
+    }
 
-        Set<Role> roles = processRequestRoles(signupRequest.getRole());
+    private void saveNewUser(SignupRequest request) {
+
+        Set<Role> roles = processRequestRoles(request.getRole());
 
         User user = new User(
-                signupRequest.getLogin(),
-                signupRequest.getEmail(),
-                encoder.encode(signupRequest.getPassword()),
-                signupRequest.getName(),
-                signupRequest.getSurname(),
-                signupRequest.getPhoneNumber());
+                request.getLogin(),
+                request.getEmail(),
+                encoder.encode(request.getPassword()),
+                request.getName(),
+                request.getSurname(),
+                request.getPhoneNumber());
 
         user.setRoles(roles);
         userService.save(user);
-
-        return ResponseEntity.ok(new MessageResponse("User registered successfully"));
     }
 
     private Set<Role> processRequestRoles(Set<String> requestRoles) {
