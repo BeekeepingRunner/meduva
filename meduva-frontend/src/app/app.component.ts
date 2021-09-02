@@ -1,5 +1,5 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
-import {JwtTokenStorageService, TokenUser} from "./service/token/jwt-token-storage.service";
+import {JwtTokenStorageService, TokenUserInfo} from "./service/token/jwt-token-storage.service";
 import {MatSidenav} from "@angular/material/sidenav";
 import {BreakpointObserver} from "@angular/cdk/layout";
 import {User, UserRole, UserService} from "./service/user.service";
@@ -35,12 +35,12 @@ export class AppComponent implements OnInit {
   }
 
   private setVisibleContent(): void {
-    let currentUser: TokenUser | null = this.tokenStorageService.getCurrentUser();
+    let currentUser: TokenUserInfo | null = this.tokenStorageService.getCurrentUser();
     let roles: UserRole[] = this.fetchRoles(currentUser);
     this.setVisibleOptionsFor(roles);
   }
 
-  private fetchRoles(currentUser: TokenUser | null): UserRole[] {
+  private fetchRoles(currentUser: TokenUserInfo | null): UserRole[] {
 
     let roles: UserRole[] = [];
     currentUser!.roles.forEach(role => {

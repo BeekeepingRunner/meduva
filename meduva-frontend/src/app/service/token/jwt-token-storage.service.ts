@@ -4,6 +4,7 @@ import {Role} from "../user.service";
 const TOKEN_KEY = 'auth-token';
 const USER_KEY = 'auth-user';
 
+// Enables to store logged in user data in sessionStorage
 @Injectable({
   providedIn: 'root'
 })
@@ -24,12 +25,12 @@ export class JwtTokenStorageService {
     return window.sessionStorage.getItem(TOKEN_KEY);
   }
 
-  public saveUser(user: any): void {
+  public saveUser(user: TokenUserInfo): void {
     window.sessionStorage.removeItem(USER_KEY);
     window.sessionStorage.setItem(USER_KEY, JSON.stringify(user));
   }
 
-  public getCurrentUser(): TokenUser | null {
+  public getCurrentUser(): TokenUserInfo | null {
     const user = window.sessionStorage.getItem(USER_KEY);
     if (user) {
       return JSON.parse(user);
@@ -39,7 +40,7 @@ export class JwtTokenStorageService {
   }
 }
 
-export interface TokenUser {
+export interface TokenUserInfo {
   accessToken: string,
   tokenType: string,
   refreshToken: string,
