@@ -1,5 +1,5 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
-import {TokenStorageService} from "./service/token/token-storage.service";
+import {JwtTokenStorageService} from "./service/token/jwt-token-storage.service";
 import {MatSidenav} from "@angular/material/sidenav";
 import {BreakpointObserver} from "@angular/cdk/layout";
 import {UserService} from "./service/user.service";
@@ -25,17 +25,18 @@ export class AppComponent implements OnInit {
 
   constructor(
     private observer: BreakpointObserver,
-    private tokenStorageService: TokenStorageService,
+    private tokenStorageService: JwtTokenStorageService,
     private userService: UserService,
     ) {
   }
 
   ngOnInit(): void {
     this.isLoggedIn = !!this.tokenStorageService.getToken();
-
     if (this.isLoggedIn) {
+
         let currentUser = this.tokenStorageService.getCurrentUser();
-        this.userService.getUserDetails(currentUser.id).subscribe(
+        console.log(currentUser);
+        this.userService.getUserDetails(currentUser!.id).subscribe(
           data => {
             this.fullName = data.name + ' ' + data.surname;
 

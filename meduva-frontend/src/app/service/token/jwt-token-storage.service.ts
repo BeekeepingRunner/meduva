@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import {Role} from "../user.service";
 
 const TOKEN_KEY = 'auth-token';
 const USER_KEY = 'auth-user';
@@ -6,7 +7,7 @@ const USER_KEY = 'auth-user';
 @Injectable({
   providedIn: 'root'
 })
-export class TokenStorageService {
+export class JwtTokenStorageService {
 
   constructor() { }
 
@@ -28,7 +29,7 @@ export class TokenStorageService {
     window.sessionStorage.setItem(USER_KEY, JSON.stringify(user));
   }
 
-  public getCurrentUser(): any {
+  public getCurrentUser(): TokenUser | null {
     const user = window.sessionStorage.getItem(USER_KEY);
     if (user) {
       return JSON.parse(user);
@@ -36,4 +37,14 @@ export class TokenStorageService {
       return null;
     }
   }
+}
+
+export interface TokenUser {
+  accessToken: string,
+  tokenType: string,
+  refreshToken: string,
+  id: number,
+  login: string,
+  email: string,
+  roles: string[]
 }

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {AuthService} from "../../service/auth.service";
-import {TokenStorageService} from "../../service/token/token-storage.service";
+import {JwtTokenStorageService} from "../../service/token/jwt-token-storage.service";
 import {Router} from "@angular/router";
 
 @Component({
@@ -20,7 +20,7 @@ export class LoginComponent implements OnInit {
 
   constructor(
     private authService: AuthService,
-    private tokenStorage: TokenStorageService,
+    private tokenStorage: JwtTokenStorageService,
     private router: Router
   ) { }
 
@@ -36,6 +36,7 @@ export class LoginComponent implements OnInit {
 
     this.authService.login(login, password).subscribe(
       data => {
+        console.log(data);
         this.tokenStorage.saveToken(data.accessToken);
         this.tokenStorage.saveUser(data);
 

@@ -1,6 +1,9 @@
 package com.szusta.meduva.controller;
 
-import com.szusta.meduva.exception.*;
+import com.szusta.meduva.exception.BadRequestRole;
+import com.szusta.meduva.exception.EmailAlreadyInUseException;
+import com.szusta.meduva.exception.LoginAlreadyTakenException;
+import com.szusta.meduva.exception.TokenRefreshException;
 import com.szusta.meduva.model.RefreshToken;
 import com.szusta.meduva.model.Role;
 import com.szusta.meduva.model.User;
@@ -19,7 +22,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
@@ -28,7 +30,6 @@ import javax.validation.Valid;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -64,7 +65,7 @@ public class AuthController {
 
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
         String jwt = jwtUtils.generateJwtTokenFrom(userDetails);
-        List<String> roles = getRolesString(userDetails);
+        Set<Role> roles = userService.getUser(userDetails.getId()).getRoles();
 
         // Not fully implemented yet !!!
         RefreshToken refreshToken = getRefreshTokenFrom(userDetails);
@@ -87,12 +88,6 @@ public class AuthController {
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
         return authentication;
-    }
-
-    private List<String> getRolesString(UserDetailsImpl userDetails) {
-        return userDetails.getAuthorities().stream()
-                .map(GrantedAuthority::getAuthority)
-                .collect(Collectors.toList());
     }
 
     private RefreshToken getRefreshTokenFrom(UserDetailsImpl userDetails) {
