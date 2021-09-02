@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import {JwtTokenStorageService} from "../../service/token/jwt-token-storage.service";
-import {Role, UserService} from "../../service/user.service";
+import {JwtTokenStorageService, TokenUserInfo} from "../../service/token/jwt-token-storage.service";
+import {Role, User, UserService} from "../../service/user.service";
 
 @Component({
   selector: 'app-profile',
@@ -9,8 +9,8 @@ import {Role, UserService} from "../../service/user.service";
 })
 export class ProfileComponent implements OnInit {
 
-  currentUser: any;
-  userDetails: any;
+  currentUser!: TokenUserInfo | null;
+  userDetails!: User;
   userRole!: Role;
   error!: string;
 
@@ -21,17 +21,22 @@ export class ProfileComponent implements OnInit {
 
   ngOnInit(): void {
     this.currentUser = this.token.getCurrentUser();
-    if (this.currentUser) {
-      this.userService.getUserDetails(this.currentUser.id).subscribe(
-        data => {
-          this.userDetails = data;
-          this.userRole = this.userService.getMasterRole(this.userDetails.roles);
-        },
-        err => {
-          this.error = err.getError();
-        }
-      );
+    if (this.currentUser != null) {
+      this.getUserDetails(this.currentUser.id);
     }
+  }
+
+  private getUserDetails(userId: number): void {
+
+    this.userService.getUserDetails(userId).subscribe(
+      (data: User) => {
+        this.userDetails = data;
+        this.userRole = this.userService.getMasterRole(this.userDetails.roles);
+      },
+      err => {
+        this.error = err.getError();
+      }
+    );
   }
 
 }
