@@ -19,6 +19,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
@@ -59,29 +60,44 @@ public class AuthController {
     @PostMapping("/signin")
     public ResponseEntity<?> loginUser(@RequestBody LoginRequest loginRequest) {
 
+        Authentication authentication = authenticateUser(loginRequest);
+
+        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+        String jwt = jwtUtils.generateJwtTokenFrom(userDetails);
+        List<String> roles = getRolesString(userDetails);
+
+        // Not fully implemented yet !!!
+        RefreshToken refreshToken = getRefreshTokenFrom(userDetails);
+
+        return ResponseEntity.ok(
+                new JwtResponse(
+                        jwt,
+                        refreshToken.getToken(),
+                        userDetails.getId(),
+                        userDetails.getUsername(),
+                        userDetails.getEmail(),
+                        roles));
+    }
+
+    private Authentication authenticateUser(LoginRequest loginRequest) {
+
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         loginRequest.getLogin(), loginRequest.getPassword()));
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+        return authentication;
+    }
 
-        String jwt = jwtUtils.generateJwtTokenFrom(userDetails);
-
-        List<String> roles = userDetails.getAuthorities().stream()
-                .map(item -> item.getAuthority())
+    private List<String> getRolesString(UserDetailsImpl userDetails) {
+        return userDetails.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.toList());
+    }
 
+    private RefreshToken getRefreshTokenFrom(UserDetailsImpl userDetails) {
         refreshTokenService.deleteByUserId(userDetails.getId());    // delete previous refresh tokens
-        RefreshToken refreshToken = refreshTokenService.createRefreshToken(userDetails.getId());
-
-        return ResponseEntity.ok(new JwtResponse(
-                jwt,
-                refreshToken.getToken(),
-                userDetails.getId(),
-                userDetails.getUsername(),
-                userDetails.getEmail(),
-                roles));
+        return refreshTokenService.createRefreshToken(userDetails.getId());
     }
 
     @PostMapping("/refreshtoken")
@@ -124,7 +140,7 @@ public class AuthController {
 
     private void saveNewUserFrom(SignupRequest request) {
 
-        Set<Role> roles = processRequestRoles(request.getRole());
+        Set<Role> roles = extractRequestRoles(request.getRoles());
 
         User user = new User(
                 request.getLogin(),
@@ -138,7 +154,7 @@ public class AuthController {
         userService.save(user);
     }
 
-    private Set<Role> processRequestRoles(Set<String> requestRoles) {
+    private Set<Role> extractRequestRoles(Set<String> requestRoles) {
 
         Set<Role> userRoles = new HashSet<>();
 
@@ -156,24 +172,20 @@ public class AuthController {
     }
 
     private void addRoles(Set<String> requestRoles, Set<Role> userRoles) {
-        
+
         requestRoles.forEach(role -> {
             switch (role) {
                 case "ROLE_ADMIN":
-                    Role adminRole = roleService.findByName("ROLE_ADMIN");
-                    userRoles.add(adminRole);
+                    userRoles.add(roleService.findByName("ROLE_ADMIN"));
                     break;
                 case "ROLE_RECEPTIONIST":
-                    Role receptionistRole = roleService.findByName("ROLE_RECEPTIONIST");
-                    userRoles.add(receptionistRole);
+                    userRoles.add(roleService.findByName("ROLE_RECEPTIONIST"));
                     break;
                 case "ROLE_WORKER":
-                    Role workerRole = roleService.findByName("ROLE_WORKER");
-                    userRoles.add(workerRole);
+                    userRoles.add(roleService.findByName("ROLE_WORKER"));
                     break;
                 case "ROLE_CLIENT":
-                    Role clientRole = roleService.findByName("ROLE_CLIENT");
-                    userRoles.add(clientRole);
+                    userRoles.add(roleService.findByName("ROLE_CLIENT"));
                     break;
                 default:
                     throw new BadRequestRole("Bad user role in request body");
