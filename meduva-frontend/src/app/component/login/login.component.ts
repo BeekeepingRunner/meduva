@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {AuthService} from "../../service/auth.service";
-import {TokenStorageService} from "../../service/token/token-storage.service";
+import {JwtTokenStorageService, TokenUserInfo} from "../../service/token/jwt-token-storage.service";
 import {Router} from "@angular/router";
 
 @Component({
@@ -20,34 +20,41 @@ export class LoginComponent implements OnInit {
 
   constructor(
     private authService: AuthService,
-    private tokenStorage: TokenStorageService,
+    private tokenStorage: JwtTokenStorageService,
     private router: Router
   ) { }
 
   ngOnInit(): void {
-    if (this.tokenStorage.getToken()) {
-      this.isLoggedIn = true;
+    if (this.hasJustLoggedIn()) {
       this.router.navigate(['/profile']);
     }
   }
 
-  onSubmit(): void {
+  hasJustLoggedIn(): boolean {
+    return !!this.tokenStorage.getToken();
+  }
+
+  tryToLogIn(): void {
     const { login, password } = this.form;
-
     this.authService.login(login, password).subscribe(
-      data => {
-        this.tokenStorage.saveToken(data.accessToken);
-        this.tokenStorage.saveUser(data);
 
-        this.isLoginFailed = false;
-        this.isLoggedIn = true;
-        this.reloadPage();
+      (userInfo: TokenUserInfo) => {
+        this.changeStateAfterLogin(userInfo);
+        this.reloadPage();  // so that the toolbar and sidebar updates
       },
       err => {
         this.errorMessage = err.error.message;
         this.isLoginFailed = true;
       }
     );
+  }
+
+  private changeStateAfterLogin(userInfo: TokenUserInfo): void {
+    this.tokenStorage.saveToken(userInfo.accessToken);
+    this.tokenStorage.saveUser(userInfo);
+
+    this.isLoginFailed = false;
+    this.isLoggedIn = true;
   }
 
   reloadPage(): void {

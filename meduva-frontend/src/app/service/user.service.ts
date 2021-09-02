@@ -11,11 +11,11 @@ export class UserService {
   constructor(private http: HttpClient) { }
 
   getPublicContent(): Observable<any> {
-    return this.http.get(environment.API_URL + 'all', { responseType : 'text' });
+    return this.http.get(environment.TEST_API_URL + 'all', { responseType : 'text' });
   }
 
   getAdminBoard(): Observable<any> {
-    return this.http.get(environment.API_URL + 'admin', { responseType : 'text' });
+    return this.http.get(environment.TEST_API_URL + 'admin', { responseType : 'text' });
   }
 
   getUserDetails(userId: number): Observable<User> {
@@ -54,6 +54,13 @@ export interface User {
 export interface Role {
   id : number,
   name : string
+}
+
+export enum UserRole {
+  ROLE_CLIENT = 1,
+  ROLE_WORKER,
+  ROLE_RECEPTIONIST,
+  ROLE_ADMIN
 }
 
 export interface ResetPasswordRequest {

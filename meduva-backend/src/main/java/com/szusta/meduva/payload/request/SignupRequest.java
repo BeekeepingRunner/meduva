@@ -33,6 +33,5 @@ public class SignupRequest {
     @Pattern(regexp = "^(\\+[0-9]{1,4})?[0-9]{6,12}$", message = "The number must contain between 6 and 12 digits (optionally with an area code at the beginning)")
     private String phoneNumber;
 
-    private Set<String> role;
-
+    private Set<String> roles;
 }

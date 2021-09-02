@@ -1,8 +1,8 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
-import {TokenStorageService} from "./service/token/token-storage.service";
+import {JwtTokenStorageService, TokenUserInfo} from "./service/token/jwt-token-storage.service";
 import {MatSidenav} from "@angular/material/sidenav";
 import {BreakpointObserver} from "@angular/cdk/layout";
-import {UserService} from "./service/user.service";
+import {UserRole} from "./service/user.service";
 
 @Component({
   selector: 'app-root',
@@ -15,40 +15,45 @@ export class AppComponent implements OnInit {
   sidenav!: MatSidenav;
 
   isLoggedIn = false;
-  roles: string[] = [];
 
   showClientOptions = false;
   showWorkerOptions = false;
   showReceptionistOptions = false;
   showAdminPanel = false;
-  fullName?: string;
 
   constructor(
     private observer: BreakpointObserver,
-    private tokenStorageService: TokenStorageService,
-    private userService: UserService,
+    private tokenStorageService: JwtTokenStorageService,
     ) {
   }
 
   ngOnInit(): void {
     this.isLoggedIn = !!this.tokenStorageService.getToken();
-
     if (this.isLoggedIn) {
-        let currentUser = this.tokenStorageService.getCurrentUser();
-        this.userService.getUserDetails(currentUser.id).subscribe(
-          data => {
-            this.fullName = data.name + ' ' + data.surname;
-
-            data.roles.forEach(role => {
-              this.roles.push(role.name);
-            });
-            this.showClientOptions = this.roles.includes('ROLE_CLIENT');
-            this.showWorkerOptions = this.roles.includes('ROLE_WORKER');
-            this.showReceptionistOptions = this.roles.includes('ROLE_RECEPTIONIST');
-            this.showAdminPanel = this.roles.includes('ROLE_ADMIN');
-          }
-        );
+      this.setVisibleContent();
     }
+  }
+
+  private setVisibleContent(): void {
+    let currentUser: TokenUserInfo | null = this.tokenStorageService.getCurrentUser();
+    let roles: UserRole[] = this.fetchRoles(currentUser);
+    this.setVisibleOptionsFor(roles);
+  }
+
+  private fetchRoles(currentUser: TokenUserInfo | null): UserRole[] {
+
+    let roles: UserRole[] = [];
+    currentUser!.roles.forEach(role => {
+      roles.push(role.id as UserRole);
+    });
+    return roles;
+  }
+
+  private setVisibleOptionsFor(roles: UserRole[]): void {
+    this.showClientOptions = roles.includes(UserRole.ROLE_CLIENT);
+    this.showWorkerOptions = roles.includes(UserRole.ROLE_WORKER);
+    this.showReceptionistOptions = roles.includes(UserRole.ROLE_RECEPTIONIST);
+    this.showAdminPanel = roles.includes(UserRole.ROLE_ADMIN);
   }
 
   // Responsible for closing and opening the side menu based on width of the browser's window

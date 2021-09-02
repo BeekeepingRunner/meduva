@@ -11,6 +11,14 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+/*
+Contains user information associated with authentication and authorization.
+It has all necessary information to build an Authentication object used by Spring Security.
+Also, objects of that class can be obtained from an Authentication object
+(Which itself is created based on user's username/login and password).
+
+Other business-specific user info can be stored in different convenient location.
+ */
 public class UserDetailsImpl implements UserDetails {
 
     private static final long serialVersionUID = 1L;
@@ -37,11 +45,11 @@ public class UserDetailsImpl implements UserDetails {
         this.authorities = authorities;
     }
 
+    // Builds UserDetails object from simple User, to further work with
+    // Spring Security and Authentication object later.
     public static UserDetailsImpl build(User user) {
 
-        List<GrantedAuthority> authorities = user.getRoles().stream()
-                .map(role -> new SimpleGrantedAuthority(role.getName()))
-                .collect(Collectors.toList());
+        List<GrantedAuthority> authorities = getGrantedAuthorities(user);
 
         return new UserDetailsImpl(
                 user.getId(),
@@ -50,6 +58,13 @@ public class UserDetailsImpl implements UserDetails {
                 user.getPassword(),
                 authorities
         );
+    }
+
+    private static List<GrantedAuthority> getGrantedAuthorities(User user) {
+
+        return user.getRoles().stream()
+                .map(role -> new SimpleGrantedAuthority(role.getName()))
+                .collect(Collectors.toList());
     }
 
     @Override

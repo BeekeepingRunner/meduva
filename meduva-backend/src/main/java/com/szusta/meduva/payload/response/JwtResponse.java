@@ -1,6 +1,8 @@
 package com.szusta.meduva.payload.response;
 
-import java.util.List;
+import com.szusta.meduva.model.Role;
+
+import java.util.Set;
 
 public class JwtResponse {
 
@@ -10,14 +12,14 @@ public class JwtResponse {
     private Long id;
     private String login;
     private String email;
-    private List<String> roles;
+    private Set<Role> roles;
 
     public JwtResponse(String token,
                        String refreshToken,
                        Long id,
                        String login,
                        String email,
-                       List<String> roles) {
+                       Set<Role> roles) {
         this.token = token;
         this.refreshToken = refreshToken;
         this.id = id;
@@ -74,7 +76,7 @@ public class JwtResponse {
         this.login = username;
     }
 
-    public List<String> getRoles() {
+    public Set<Role> getRoles() {
         return roles;
     }
 }

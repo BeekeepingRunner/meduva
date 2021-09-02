@@ -33,13 +33,6 @@ public class User {
     @Column(name = "phone_number")
     private String phoneNumber;
 
-    //private String salt;
-    //private boolean deleted;
-
-    //@Column(name = "session_id")
-    //private String sessionId;
-
-
     @ManyToMany(
             fetch = FetchType.LAZY,
             cascade = CascadeType.ALL

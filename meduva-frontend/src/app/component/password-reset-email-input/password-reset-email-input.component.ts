@@ -35,11 +35,11 @@ export class PasswordResetEmailInputComponent implements OnInit {
     this.resultInfo = 'Please, wait for a moment...';
 
     this.emailService.sendResetLinkMail(this.form.get('email')?.value).subscribe(
-      this.checkMailboxObserver
+      this.sentMailMessageObserver
     )
   }
 
-  checkMailboxObserver = {
+  sentMailMessageObserver = {
     next: (data: any) => {
       this.emailSent = true;
       this.resultInfo = 'Check your mailbox for password-reset link!';

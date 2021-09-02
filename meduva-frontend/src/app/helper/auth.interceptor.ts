@@ -1,24 +1,30 @@
 import {Injectable} from "@angular/core";
 import {HTTP_INTERCEPTORS, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest} from "@angular/common/http";
-import {TokenStorageService} from "../service/token/token-storage.service";
+import {JwtTokenStorageService} from "../service/token/jwt-token-storage.service";
 import {Observable} from "rxjs";
 
 const TOKEN_HEADER_KEY = 'Authorization';
+const TOKEN_PREFIX = 'Bearer ';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
 
-  constructor(private tokenService: TokenStorageService)
+  constructor(private tokenService: JwtTokenStorageService)
   {
   }
 
+  // Adds Authorization header to the request, with 'Bearer' prefix to the token
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
 
     let authReq = req;
-    const token = this.tokenService.getToken();
-    if (token != null) {
-      authReq = req.clone({ headers: req.headers.set(TOKEN_HEADER_KEY, 'Bearer ' + token) });
+    const tokenStr = this.tokenService.getToken();
+
+    if (tokenStr != null) {
+      authReq = req.clone({
+        headers: req.headers.set(TOKEN_HEADER_KEY, TOKEN_PREFIX + tokenStr)
+      });
     }
+
     return next.handle(authReq);
   }
 }

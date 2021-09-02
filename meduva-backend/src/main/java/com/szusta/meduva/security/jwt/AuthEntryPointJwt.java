@@ -11,6 +11,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+// Triggered anytime unauthenticated User requests a secured HTTP resource
+// and AuthenticationException is thrown.
 @Component
 public class AuthEntryPointJwt implements AuthenticationEntryPoint {
 
