@@ -46,5 +46,5 @@ export interface TokenUser {
   id: number,
   login: string,
   email: string,
-  roles: string[]
+  roles: Role[]
 }

@@ -56,6 +56,13 @@ export interface Role {
   name : string
 }
 
+export enum UserRole {
+  ROLE_CLIENT = 1,
+  ROLE_WORKER,
+  ROLE_RECEPTIONIST,
+  ROLE_ADMIN
+}
+
 export interface ResetPasswordRequest {
   resetToken: string,
   password: string,
