@@ -44,7 +44,7 @@ public class PasswordResetService {
 
     public PasswordResetToken createPasswordResetToken(User user) {
 
-        String token = jwtUtils.generateJwtToken(UserDetailsImpl.build(user));
+        String token = jwtUtils.generateJwtTokenFrom(UserDetailsImpl.build(user));
         PasswordResetToken resetToken = new PasswordResetToken(
                 user,
                 token,

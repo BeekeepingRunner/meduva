@@ -9,6 +9,9 @@ import org.springframework.stereotype.Component;
 
 import java.util.Date;
 
+/*
+Provides various JWT Utility functions.
+ */
 @Component
 public class JwtUtils {
 
@@ -20,7 +23,7 @@ public class JwtUtils {
     @Value("${meduva.app.jwtExpirationMs}")
     private int jwtExpirationMs;
 
-    public String generateJwtToken(UserDetailsImpl userPrincipal) {
+    public String generateJwtTokenFrom(UserDetailsImpl userPrincipal) {
 
         return Jwts.builder()
                 .setSubject((userPrincipal.getUsername()))
@@ -30,7 +33,7 @@ public class JwtUtils {
                 .compact();
     }
 
-    public String getUserNameFromJwtToken(String token) {
+    public String getUserNameFromJwt(String token) {
         return Jwts.parser().setSigningKey(jwtSecret).
                 parseClaimsJws(token)
                 .getBody().getSubject();

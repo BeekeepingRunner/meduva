@@ -73,7 +73,7 @@ public class AuthTokenFilter extends OncePerRequestFilter {
     private UsernamePasswordAuthenticationToken createAuthenticationFrom(
             HttpServletRequest request, String jwt) {
 
-        String username = jwtUtils.getUserNameFromJwtToken(jwt);
+        String username = jwtUtils.getUserNameFromJwt(jwt);
         UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 
         UsernamePasswordAuthenticationToken authentication =
