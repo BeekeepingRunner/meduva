@@ -64,6 +64,6 @@ public class JwtUtilsTest {
     public void generateJwtTokenTest() {
 
         String jwt = jwtUtils.generateJwtTokenFrom(userDetails);
-        assertEquals(true, jwtUtils.validateJwtToken(jwt));
+        assertTrue(jwtUtils.validateJwtToken(jwt));
     }
 }
