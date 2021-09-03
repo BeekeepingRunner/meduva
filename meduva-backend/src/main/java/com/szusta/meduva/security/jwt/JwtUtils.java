@@ -2,6 +2,8 @@ package com.szusta.meduva.security.jwt;
 
 import com.szusta.meduva.service.UserDetailsImpl;
 import io.jsonwebtoken.*;
+import lombok.Getter;
+import lombok.Setter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -13,6 +15,8 @@ import java.util.Date;
 Provides various JWT Utility functions.
  */
 @Component
+@Setter
+@Getter
 public class JwtUtils {
 
     private static final Logger logger = LoggerFactory.getLogger(JwtUtils.class);
