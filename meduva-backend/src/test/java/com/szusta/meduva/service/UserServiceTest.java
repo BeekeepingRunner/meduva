@@ -29,26 +29,34 @@ public class UserServiceTest {
     @DisplayName("existsByLogin test")
     public void existsByLoginTest() {
 
-        when(userRepository.existsByLogin("login")).thenReturn(true);
-        when(userRepository.existsByLogin("loginn")).thenReturn(false);
-        assertEquals(true, userService.existsByLogin("login"));
-        assertEquals(false, userService.existsByLogin("loginn"));
-        verify(userRepository, times(1)).existsByLogin("login");
-        verify(userRepository, times(1)).existsByLogin("loginn");
+        String goodLogin = "login";
+        String badLogin = "loginn";
+
+        when(userRepository.existsByLogin(goodLogin)).thenReturn(true);
+        when(userRepository.existsByLogin(badLogin)).thenReturn(false);
+
+        assertEquals(true, userService.existsByLogin(goodLogin));
+        assertEquals(false, userService.existsByLogin(badLogin));
+
+        verify(userRepository, times(1)).existsByLogin(goodLogin);
+        verify(userRepository, times(1)).existsByLogin(badLogin);
     }
 
     @Test
     @DisplayName("existsByEmail test")
     public void existsByEmailTest() {
 
-        when(userRepository.existsByEmail("email")).thenReturn(true);
-        when(userRepository.existsByEmail("liame")).thenReturn(false);
+        String goodEmail = "email";
+        String badEmail = "liame";
 
-        assertEquals(true, userService.existsByEmail("email"));
-        assertEquals(false, userService.existsByEmail("liame"));
+        when(userRepository.existsByEmail(goodEmail)).thenReturn(true);
+        when(userRepository.existsByEmail(badEmail)).thenReturn(false);
 
-        verify(userRepository, times(1)).existsByEmail("email");
-        verify(userRepository, times(1)).existsByEmail("liame");
+        assertEquals(true, userService.existsByEmail(goodEmail));
+        assertEquals(false, userService.existsByEmail(badEmail));
+
+        verify(userRepository, times(1)).existsByEmail(goodEmail);
+        verify(userRepository, times(1)).existsByEmail(badEmail);
     }
 
     @Test

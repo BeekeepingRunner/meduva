@@ -75,13 +75,13 @@ public class UserDetailServiceImplTest {
     @DisplayName("loadUserByUserName should throw UsernameNotFoundException")
     public void loadUserByUserNameShouldThrowException() {
 
-        String username = "login";
-        when(userRepository.findByLogin(username)).thenReturn(Optional.empty());
+        String badUsername = "login";
+        when(userRepository.findByLogin(badUsername)).thenReturn(Optional.empty());
 
         assertThrows(
                 UsernameNotFoundException.class,
-                () -> userDetailsService.loadUserByUsername(username));
+                () -> userDetailsService.loadUserByUsername(badUsername));
 
-        verify(userRepository, times(1)).findByLogin(username);
+        verify(userRepository, times(1)).findByLogin(badUsername);
     }
 }
