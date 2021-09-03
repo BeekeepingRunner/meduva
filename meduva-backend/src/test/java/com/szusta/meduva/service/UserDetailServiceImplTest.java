@@ -60,8 +60,8 @@ public class UserDetailServiceImplTest {
 
         UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 
-        assertEquals("login", userDetails.getUsername());
-        assertEquals("password", userDetails.getPassword());
+        assertEquals(user.getLogin(), userDetails.getUsername());
+        assertEquals(user.getPassword(), userDetails.getPassword());
 
         Collection<GrantedAuthority> grantedAuthorities = user.getRoles().stream()
                 .map(role -> new SimpleGrantedAuthority(role.getName()))
