@@ -27,6 +27,10 @@ export class UserService {
     return this.http.get<User[]>(environment.API_BASE_URL + 'api/user/all');
   }
 
+  getAllWorkers() : Observable<User[]> {
+    return this.http.get<User[]>(environment.API_BASE_URL + 'api/user/workers');
+  }
+
   // Returns the most significant role from list of given roles
   //
   getMasterRole(roles: Role[]) : Role {

@@ -33,4 +33,12 @@ export class UserListComponent implements OnInit {
     });
     return users;
   }
+
+  public getAllWorkers(): void {
+    this.userService.getAllWorkers().subscribe(
+      workers => {
+        this.users = this.setMasterRoles(workers);
+      }
+    );
+  }
 }
