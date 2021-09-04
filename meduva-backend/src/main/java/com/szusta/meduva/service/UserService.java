@@ -1,5 +1,6 @@
 package com.szusta.meduva.service;
 
+import com.szusta.meduva.exception.RoleNotFoundException;
 import com.szusta.meduva.exception.UserNotFoundException;
 import com.szusta.meduva.exception.WorkersNotFoundException;
 import com.szusta.meduva.model.ERole;
@@ -10,7 +11,9 @@ import com.szusta.meduva.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserService {
@@ -50,15 +53,20 @@ public class UserService {
         return userRepository.findAll();
     }
 
-    public List<User> findAllWorkers() {
+    public List<User> findAllUsersWithMinimumRole(ERole roleId) {
 
-        List<Long> workerRolesId = List.of(
-                ERole.ROLE_WORKER.getValue());
+        Optional<Role> role = roleRepository.findById(roleId.getValue());
+        if (role.isPresent()) {
+            return userRepository.findByRolesIn(Collections.singleton(role.get()))
+                    .orElseThrow(() -> new WorkersNotFoundException("Unable to find users with role" + role.get().getName()));
+        } else {
+            throw new RoleNotFoundException("Role not found with id: " + roleId);
+        }
+    }
 
-        List<Role> workerRoles = roleRepository.findAllById(workerRolesId);
-
-        return userRepository.findByRolesIn(workerRoles)
-                .orElseThrow(() -> new WorkersNotFoundException("Unable to find any worker"));
+    public List<User> findAllClientsWithAccount() {
+        return userRepository.findAllClientsWithAccount()
+                .orElseThrow(() -> new RuntimeException("Unable to fetch clients with accounts"));
     }
 
     public User getUser(Long id) {

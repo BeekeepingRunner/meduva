@@ -1,5 +1,6 @@
 package com.szusta.meduva.controller;
 
+import com.szusta.meduva.model.ERole;
 import com.szusta.meduva.model.User;
 import com.szusta.meduva.service.RoleService;
 import com.szusta.meduva.service.UserService;
@@ -36,6 +37,11 @@ public class UserController {
 
     @GetMapping("/workers")
     public List<User> getWorkers() {
-        return userService.findAllWorkers();
+        return userService.findAllUsersWithMinimumRole(ERole.ROLE_WORKER);
+    }
+
+    @GetMapping("/clients")
+    public List<User> getClientsWithAccount() {
+        return userService.findAllClientsWithAccount();
     }
 }

@@ -21,7 +21,7 @@ export class UserListComponent implements OnInit {
   }
 
   public getAllUsers(): void {
-    
+
     this.userService.getAllUsers().subscribe(
       users => {
         this.users = this.setMasterRoles(users);
@@ -44,5 +44,14 @@ export class UserListComponent implements OnInit {
       }
     );
     this.contentName = "Workers";
+  }
+
+  getAllClients() {
+    this.userService.getAllClientsWithAccount().subscribe(
+      clients => {
+        this.users = this.setMasterRoles(clients);
+      }
+    );
+    this.contentName = "Clients";
   }
 }
