@@ -21,3 +21,7 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 .wide-element {
   width: 100%;
 }
+
+.flex {
+  display: flex;
+}

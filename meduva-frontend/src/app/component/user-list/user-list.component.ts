@@ -8,6 +8,7 @@ import {User, UserService} from "../../service/user.service";
 })
 export class UserListComponent implements OnInit {
 
+  contentName = "Users";
   users: User[] = [];
   displayedColumns: string[] = ['name', 'surname', 'phoneNumber', 'email', 'role'];
 
@@ -20,11 +21,13 @@ export class UserListComponent implements OnInit {
   }
 
   public getAllUsers(): void {
+    
     this.userService.getAllUsers().subscribe(
       users => {
         this.users = this.setMasterRoles(users);
       }
     );
+    this.contentName = "Users";
   }
 
   private setMasterRoles(users: User[]) : User[] {
@@ -40,5 +43,6 @@ export class UserListComponent implements OnInit {
         this.users = this.setMasterRoles(workers);
       }
     );
+    this.contentName = "Workers";
   }
 }
