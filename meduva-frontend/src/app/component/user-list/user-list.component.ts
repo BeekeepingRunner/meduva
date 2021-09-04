@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import {User, UserService} from "../../service/user.service";
 
 @Component({
   selector: 'app-user-list',
@@ -7,9 +8,29 @@ import { Component, OnInit } from '@angular/core';
 })
 export class UserListComponent implements OnInit {
 
-  constructor() { }
+  users: User[] = [];
+  displayedColumns: string[] = ['name', 'surname', 'phoneNumber', 'email', 'role'];
+
+  constructor(
+    private userService: UserService,
+  ) { }
 
   ngOnInit(): void {
+    this.getAllUsers();
   }
 
+  public getAllUsers(): void {
+    this.userService.getAllUsers().subscribe(
+      users => {
+        this.users = this.setMasterRoles(users);
+      }
+    );
+  }
+
+  private setMasterRoles(users: User[]) : User[] {
+    users.forEach(user => {
+      user.masterRole = this.userService.getMasterRole(user.roles);
+    });
+    return users;
+  }
 }

@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {environment} from "../../environments/environment";
+import {map} from "rxjs/operators";
 
 @Injectable({
   providedIn: 'root'
@@ -20,6 +21,10 @@ export class UserService {
 
   getUserDetails(userId: number): Observable<User> {
     return this.http.get<User>(environment.API_BASE_URL + 'api/user/find/' + userId);
+  }
+
+  getAllUsers() : Observable<User[]> {
+    return this.http.get<User[]>(environment.API_BASE_URL + 'api/user/all');
   }
 
   // Returns the most significant role from list of given roles
@@ -48,7 +53,8 @@ export interface User {
   email: string,
   login: string,
   password: string,
-  roles: Role[]
+  roles: Role[],
+  masterRole: Role
 }
 
 export interface Role {

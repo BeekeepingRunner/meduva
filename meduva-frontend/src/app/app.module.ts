@@ -26,6 +26,7 @@ import { PasswordResetComponent } from './component/password-reset/password-rese
 import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatInputModule} from "@angular/material/input";
 import { UserListComponent } from './component/user-list/user-list.component';
+import {MatTableModule} from "@angular/material/table";
 
 const routes: Routes = [
   { path: 'home', component: HomeComponent },
@@ -68,6 +69,7 @@ const routes: Routes = [
     MatExpansionModule,
     MatFormFieldModule,
     MatInputModule,
+    MatTableModule,
   ],
   exports: [
     RouterModule
