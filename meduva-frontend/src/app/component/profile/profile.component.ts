@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {JwtTokenStorageService, TokenUserInfo} from "../../service/token/jwt-token-storage.service";
-import {Role, User, UserService} from "../../service/user.service";
+import {UserService} from "../../service/user.service";
+import {Role, User} from "../../model/user";
 
 @Component({
   selector: 'app-profile',
@@ -38,5 +39,4 @@ export class ProfileComponent implements OnInit {
       }
     );
   }
-
 }

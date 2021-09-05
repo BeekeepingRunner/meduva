@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import {User, UserService} from "../../service/user.service";
+import {UserService} from "../../service/user.service";
+import {User} from "../../model/user";
+import {JwtTokenStorageService} from "../../service/token/jwt-token-storage.service";
 
 @Component({
   selector: 'app-user-list',
@@ -13,6 +15,7 @@ export class UserListComponent implements OnInit {
   displayedColumns: string[] = ['name', 'surname', 'phoneNumber', 'email', 'role'];
 
   constructor(
+    private jwtTokenStorageService: JwtTokenStorageService,
     private userService: UserService,
   ) { }
 
@@ -23,11 +26,29 @@ export class UserListComponent implements OnInit {
   public getAllUsers(): void {
 
     this.userService.getAllUsers().subscribe(
-      users => {
-        this.users = this.setMasterRoles(users);
-      }
+      this.setUsersMasterRoles
     );
     this.contentName = "Users";
+  }
+
+  public getAllWorkers(): void {
+    this.userService.getAllWorkers().subscribe(
+      this.setUsersMasterRoles
+    );
+    this.contentName = "Workers";
+  }
+
+  getAllClients() {
+    this.userService.getAllClientsWithAccount().subscribe(
+      this.setUsersMasterRoles
+    );
+    this.contentName = "Clients";
+  }
+
+  setUsersMasterRoles = {
+    next: (users: any) => {
+      this.users = this.setMasterRoles(users);
+    }
   }
 
   private setMasterRoles(users: User[]) : User[] {
@@ -35,23 +56,5 @@ export class UserListComponent implements OnInit {
       user.masterRole = this.userService.getMasterRole(user.roles);
     });
     return users;
-  }
-
-  public getAllWorkers(): void {
-    this.userService.getAllWorkers().subscribe(
-      workers => {
-        this.users = this.setMasterRoles(workers);
-      }
-    );
-    this.contentName = "Workers";
-  }
-
-  getAllClients() {
-    this.userService.getAllClientsWithAccount().subscribe(
-      clients => {
-        this.users = this.setMasterRoles(clients);
-      }
-    );
-    this.contentName = "Clients";
   }
 }
