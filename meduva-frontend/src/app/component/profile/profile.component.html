@@ -1,36 +1,53 @@
-<div class="container" *ngIf="currentUser; else loggedOut">
-  <header class="jumbotron">
+<div class="container mat-elevation-z8" *ngIf="currentUser; else loggedOut">
+  <header>
     <h3>
-      <strong>{{ userDetails?.name }} {{ userDetails?.surname }}</strong> - Profile
+      <strong>{{ userDetails?.name }} {{ userDetails?.surname }}</strong>
     </h3>
   </header>
-  <p>
-    <strong>Login:</strong>
-    {{ userDetails?.login }}
-  </p>
-  <p>
-    <strong>Email:</strong>
-    {{ userDetails?.email }}
-  </p>
-  <p>
-    <strong>First name:</strong>
-    {{ userDetails?.name }}
-  </p>
-  <p>
-    <strong>Surname:</strong>
-    {{ userDetails?.surname }}
-  </p>
+  <br>
 
-  <p>
-    <strong>Phone number:</strong>
-    +{{ userDetails?.phoneNumber }}
-  </p>
-
-  <p>
-    <strong>Role: </strong>
-    <span>{{ userRole?.name | lowercase | slice : 5 }}</span>
-  </p>
-
+  <table>
+    <tr>
+      <td><strong>First name:</strong></td>
+      <td>{{ userDetails?.name }}</td>
+    </tr>
+    <tr>
+      <td><strong>Surname:</strong></td>
+      <td>{{ userDetails?.surname }}</td>
+    </tr>
+    <tr>
+      <td><strong>Phone number:</strong></td>
+      <td>+{{ userDetails?.phoneNumber }}</td>
+    </tr>
+    <tr>
+    <tr>
+      <td><strong>Login:</strong></td>
+      <td>{{ userDetails?.login }}</td>
+    </tr>
+    <tr class="button-row">
+      <td><button mat-icon-button color="primary">Edit profile</button></td>
+    </tr>
+    <br>
+    <tr>
+      <td><strong>Email:</strong></td>
+      <td>{{ userDetails?.email }}</td>
+    </tr>
+    <tr class="button-row">
+      <td><button mat-icon-button color="primary">Change email</button></td>
+    </tr>
+    <tr>
+      <td><strong>Password:</strong></td>
+      <td>********</td>
+    </tr>
+    <tr class="button-row">
+      <td><button mat-icon-button color="primary">Change password</button></td>
+    </tr>
+    <br>
+    <tr>
+      <td><strong>Role:</strong></td>
+      <td><span>{{ userRole?.name | lowercase | slice : 5 }}</span></td>
+    </tr>
+  </table>
 </div>
 
 <ng-template #loggedOut>
