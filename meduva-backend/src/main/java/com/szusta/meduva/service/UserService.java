@@ -2,7 +2,7 @@ package com.szusta.meduva.service;
 
 import com.szusta.meduva.exception.RoleNotFoundException;
 import com.szusta.meduva.exception.UserNotFoundException;
-import com.szusta.meduva.exception.WorkersNotFoundException;
+import com.szusta.meduva.exception.UsersWithMinRoleNotFound;
 import com.szusta.meduva.model.ERole;
 import com.szusta.meduva.model.Role;
 import com.szusta.meduva.model.User;
@@ -58,7 +58,7 @@ public class UserService {
         Optional<Role> role = roleRepository.findById(roleId.getValue());
         if (role.isPresent()) {
             return userRepository.findByRolesIn(Collections.singleton(role.get()))
-                    .orElseThrow(() -> new WorkersNotFoundException("Unable to find users with role" + role.get().getName()));
+                    .orElseThrow(() -> new UsersWithMinRoleNotFound("Unable to find users with role" + role.get().getName()));
         } else {
             throw new RoleNotFoundException("Role not found with id: " + roleId);
         }

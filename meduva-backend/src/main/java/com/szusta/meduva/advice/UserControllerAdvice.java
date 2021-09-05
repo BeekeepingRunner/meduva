@@ -2,7 +2,7 @@ package com.szusta.meduva.advice;
 
 import com.szusta.meduva.exception.ErrorMessage;
 import com.szusta.meduva.exception.UserNotFoundException;
-import com.szusta.meduva.exception.WorkersNotFoundException;
+import com.szusta.meduva.exception.UsersWithMinRoleNotFound;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -39,9 +39,9 @@ public class UserControllerAdvice {
         );
     }
 
-    @ExceptionHandler(value = WorkersNotFoundException.class)
+    @ExceptionHandler(value = UsersWithMinRoleNotFound.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ErrorMessage handleWorkersNotFoundException(WorkersNotFoundException ex, WebRequest request) {
+    public ErrorMessage handleUsersWithMinRoleNotFoundException(UsersWithMinRoleNotFound ex, WebRequest request) {
 
         return new ErrorMessage(
                 HttpStatus.NOT_FOUND.value(),
