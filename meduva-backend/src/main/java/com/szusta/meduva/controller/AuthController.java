@@ -94,25 +94,6 @@ public class AuthController {
         return refreshTokenService.createRefreshToken(userDetails.getId());
     }
 
-    @PostMapping("/refreshtoken")
-    // request should be @Valid
-    public ResponseEntity<?> refreshToken(@RequestBody RefreshTokenRequest request) {
-
-        String requestRefreshToken = request.getRefreshToken();
-
-        String outRefreshToken =  refreshTokenService.findByToken(requestRefreshToken)
-                .map(refreshTokenService::verifyExpiration)
-                .map(RefreshToken::getUser)
-                .map(user -> {
-                    String token = jwtUtils.generateJwtTokenFrom(UserDetailsImpl.build(user));
-                    return token;
-                })
-                .orElseThrow(() -> new TokenRefreshException(
-                        requestRefreshToken, "Refresh token is not in database!"));
-
-        return ResponseEntity.ok().body(outRefreshToken);
-    }
-
     @PostMapping("/signup")
     public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signupRequest) {
 
@@ -185,5 +166,29 @@ public class AuthController {
                     throw new BadRequestRole("Bad user role in request body");
             }
         });
+    }
+
+    @PostMapping("/validate-jwt")
+    public boolean validateUserJwt(@RequestBody String jwt) {
+        return jwtUtils.hasJwtExpired(jwt);
+    }
+
+    @PostMapping("/refreshtoken")
+    // request should be @Valid
+    public ResponseEntity<?> refreshToken(@RequestBody RefreshTokenRequest request) {
+
+        String requestRefreshToken = request.getRefreshToken();
+
+        String outRefreshToken =  refreshTokenService.findByToken(requestRefreshToken)
+                .map(refreshTokenService::verifyExpiration)
+                .map(RefreshToken::getUser)
+                .map(user -> {
+                    String token = jwtUtils.generateJwtTokenFrom(UserDetailsImpl.build(user));
+                    return token;
+                })
+                .orElseThrow(() -> new TokenRefreshException(
+                        requestRefreshToken, "Refresh token is not in database!"));
+
+        return ResponseEntity.ok().body(outRefreshToken);
     }
 }
