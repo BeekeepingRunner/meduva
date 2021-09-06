@@ -25,6 +25,8 @@ import { PasswordResetEmailInputComponent } from './component/password-reset-ema
 import { PasswordResetComponent } from './component/password-reset/password-reset.component';
 import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatInputModule} from "@angular/material/input";
+import { UserListComponent } from './component/user-list/user-list.component';
+import {MatTableModule} from "@angular/material/table";
 
 const routes: Routes = [
   { path: 'home', component: HomeComponent },
@@ -34,6 +36,7 @@ const routes: Routes = [
   { path: 'register', component: RegisterComponent },
   { path: 'profile', component: ProfileComponent },
   { path: 'admin', component: BoardAdminComponent },
+  { path: 'users', component: UserListComponent },
   { path: '', redirectTo: 'home', pathMatch: 'full' }
 ];
 
@@ -47,6 +50,7 @@ const routes: Routes = [
     BoardAdminComponent,
     PasswordResetEmailInputComponent,
     PasswordResetComponent,
+    UserListComponent,
   ],
   imports: [
     BrowserModule,
@@ -65,6 +69,7 @@ const routes: Routes = [
     MatExpansionModule,
     MatFormFieldModule,
     MatInputModule,
+    MatTableModule,
   ],
   exports: [
     RouterModule

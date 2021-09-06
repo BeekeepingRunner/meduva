@@ -28,7 +28,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -186,10 +185,5 @@ public class AuthController {
                     throw new BadRequestRole("Bad user role in request body");
             }
         });
-    }
-
-    @GetMapping("/user/search/all")
-    public List<User> getUsers() {
-        return userService.findAll();
     }
 }

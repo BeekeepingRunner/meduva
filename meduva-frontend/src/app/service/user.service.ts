@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {environment} from "../../environments/environment";
+import {ResetPasswordRequest, Role, User} from "../model/user";
 
 @Injectable({
   providedIn: 'root'
@@ -22,6 +23,18 @@ export class UserService {
     return this.http.get<User>(environment.API_BASE_URL + 'api/user/find/' + userId);
   }
 
+  getAllUsers() : Observable<User[]> {
+    return this.http.get<User[]>(environment.API_BASE_URL + 'api/user/all');
+  }
+
+  getAllWorkers() : Observable<User[]> {
+    return this.http.get<User[]>(environment.API_BASE_URL + 'api/user/workers');
+  }
+
+  getAllClientsWithAccount() : Observable<User[]> {
+    return this.http.get<User[]>(environment.API_BASE_URL + 'api/user/clients');
+  }
+
   // Returns the most significant role from list of given roles
   //
   getMasterRole(roles: Role[]) : Role {
@@ -39,32 +52,4 @@ export class UserService {
   resetPassword(requestBody: ResetPasswordRequest): Observable<any> {
     return this.http.post(environment.API_BASE_URL + 'api/password/change', requestBody);
   }
-}
-
-export interface User {
-  name: string,
-  surname: string,
-  phoneNumber: string,
-  email: string,
-  login: string,
-  password: string,
-  roles: Role[]
-}
-
-export interface Role {
-  id : number,
-  name : string
-}
-
-export enum UserRole {
-  ROLE_CLIENT = 1,
-  ROLE_WORKER,
-  ROLE_RECEPTIONIST,
-  ROLE_ADMIN
-}
-
-export interface ResetPasswordRequest {
-  resetToken: string,
-  password: string,
-  repeatPassword: string
 }

@@ -2,7 +2,7 @@ import {Component, OnInit, ViewChild} from '@angular/core';
 import {JwtTokenStorageService, TokenUserInfo} from "./service/token/jwt-token-storage.service";
 import {MatSidenav} from "@angular/material/sidenav";
 import {BreakpointObserver} from "@angular/cdk/layout";
-import {UserRole} from "./service/user.service";
+import {UserRole} from "./model/user";
 
 @Component({
   selector: 'app-root',

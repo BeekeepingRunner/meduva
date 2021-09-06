@@ -1,0 +1,23 @@
+th.mat-header-cell, td.mat-header-cell {
+  margin-right: 10px;
+  margin-left: 10px;
+}
+
+th.mat-header-cell {
+  color: #4f4c79;
+  font-size: medium;
+}
+
+table {
+  width: 90%;
+  max-width: 800px;
+  min-width: 600px;
+}
+
+button {
+  margin-right: 1px;
+}
+
+.mat-raised-button.mat-primary {
+  background-color: #4f4c79;
+}
