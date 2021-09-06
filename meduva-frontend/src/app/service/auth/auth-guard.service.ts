@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import {CanActivate, Router} from "@angular/router";
-import {AuthService} from "./auth.service";
 import {JwtTokenStorageService} from "../token/jwt-token-storage.service";
 
 @Injectable({
@@ -9,7 +8,6 @@ import {JwtTokenStorageService} from "../token/jwt-token-storage.service";
 export class AuthGuardService implements CanActivate {
 
   constructor(
-    public auth: AuthService,
     public jwtStorageService: JwtTokenStorageService,
     public router: Router
   ) { }

@@ -3,6 +3,7 @@ import {JwtTokenStorageService, TokenUserInfo} from "./service/token/jwt-token-s
 import {MatSidenav} from "@angular/material/sidenav";
 import {BreakpointObserver} from "@angular/cdk/layout";
 import {UserRole} from "./model/user";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-root',
@@ -24,7 +25,7 @@ export class AppComponent implements OnInit {
   constructor(
     private observer: BreakpointObserver,
     private tokenStorageService: JwtTokenStorageService,
-    ) {
+  ) {
   }
 
   ngOnInit(): void {
