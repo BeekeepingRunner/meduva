@@ -1,0 +1,56 @@
+<div class="centered-content">
+  <form class="basic-form" *ngIf="!isLoggedIn" (ngSubmit)="tryToLogIn()" [formGroup]="form">
+    <br><br>
+    <mat-form-field class="wide-element" appearance="outline">
+      <mat-label>Login:</mat-label>
+      <input matInput id="login" type="text" formControlName="login">
+      <mat-error *ngIf="form.controls.login.invalid &&
+                          (form.controls.login.dirty || form.controls.login.touched)">
+        Login is required
+      </mat-error>
+    </mat-form-field>
+
+    <br>
+    <!-- <mat-form-field class="wide-element" appearance="outline">
+      <mat-label>Password:</mat-label>
+      <input matInput id="password" type="password" formControlName="password">
+      <mat-error *ngIf="form.controls.password.invalid &&
+                          (form.controls.password.dirty || form.controls.password.touched)">
+        Password is required
+      </mat-error>
+    </mat-form-field> -->
+
+    <mat-form-field class="wide-element" appearance="outline">
+      <mat-label>Password:</mat-label>
+      <input matInput [type]="hide ? 'password' : 'text'" formControlName="password">
+      <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+        <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+      </button>
+      <mat-error *ngIf="form.controls.password.invalid &&
+                          (form.controls.password.dirty || form.controls.password.touched)">
+        Password is required
+      </mat-error>
+    </mat-form-field>
+
+    <!--
+    <button class="btn btn-primary btn-block">
+      Login
+    </button>
+    -->
+    <button mat-raised-button class="btn btn-block" color="accent" >Login</button>
+
+    <br><br>
+    <div
+      class="alert alert-danger"
+      role="alert"
+      *ngIf="isLoginFailed">
+      Login failed: {{ errorMessage }}
+    </div>
+
+
+  </form>
+
+
+
+
+</div>

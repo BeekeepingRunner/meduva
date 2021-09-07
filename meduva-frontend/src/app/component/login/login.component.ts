@@ -2,10 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import {AuthService} from "../../service/auth.service";
 import {JwtTokenStorageService, TokenUserInfo} from "../../service/token/jwt-token-storage.service";
 import {Router} from "@angular/router";
+import {FormBuilder, FormControl, Validators} from "@angular/forms";
 
 @Component({
   selector: 'app-login',
-  templateUrl: './login.component.html',
+  templateUrl: './login-copy.component.html',
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
@@ -18,13 +19,28 @@ export class LoginComponent implements OnInit {
   isLoginFailed = false;
   errorMessage = '';
 
+  hide = true;
+
   constructor(
     private authService: AuthService,
     private tokenStorage: JwtTokenStorageService,
-    private router: Router
+    private router: Router,
+    private formBuilder: FormBuilder
   ) { }
 
   ngOnInit(): void {
+
+    this.form = this.formBuilder.group({
+      login: new FormControl('', [
+                              Validators.required
+      ]),
+      password: new FormControl('', [
+                              Validators.required
+      ])
+
+    });
+
+
     if (this.hasJustLoggedIn()) {
       this.router.navigate(['/profile']);
     }
