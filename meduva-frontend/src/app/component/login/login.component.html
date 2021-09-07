@@ -1,47 +1,46 @@
-<div class="col-md-12">
-  <div class="card card-container">
-    <form
-      *ngIf="!isLoggedIn"
-      name="form"
-      (ngSubmit)="f.form.valid && tryToLogIn()"
-      #f="ngForm"
-      novalidate>
+<div class="centered-content">
+  <form class="basic-form" *ngIf="!isLoggedIn" (ngSubmit)="tryToLogIn()" [formGroup]="form">
+    <br><br>
+    <mat-form-field class="wide-element" appearance="outline">
+      <mat-label>Login:</mat-label>
+      <input matInput id="login" type="text" formControlName="login">
+      <mat-error *ngIf="form.controls.login.invalid &&
+                          (form.controls.login.dirty || form.controls.login.touched)">
+        Login is required
+      </mat-error>
+    </mat-form-field>
 
-      <div class="form-group">
-        <label>Login</label>
-        <input
-          type="text" class="form-control" name="login"
-          [(ngModel)]="form.login"
-          required
-          #login="ngModel"/>
-      </div>
+    <br>
 
-      <div class="form-group">
-        <label>Password</label>
-        <input
-          type="text" class="form-control" name="password"
-          [(ngModel)]="form.password"
-          required
-          #password="ngModel"/>
-      </div>
-
-      <div class="form-group">
-        <button class="btn btn-primary btn-block">
-          Login
-        </button>
-      </div>
-      <div class="form-group">
-        <div
-          class="alert alert-danger"
-          role="alert"
-          *ngIf="f.submitted && isLoginFailed">
-          Login failed: {{ errorMessage }}
-        </div>
-      </div>
-
-      <button mat-icon-button color="primary" routerLink='reset-password-email'>
-        I don't remember my password.
+    <mat-form-field class="wide-element" appearance="outline">
+      <mat-label>Password:</mat-label>
+      <input matInput [type]="hide ? 'password' : 'text'" formControlName="password">
+      <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+        <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
       </button>
-    </form>
-  </div>
+      <mat-error *ngIf="form.controls.password.invalid &&
+                          (form.controls.password.dirty || form.controls.password.touched)">
+        Password is required
+      </mat-error>
+    </mat-form-field>
+
+
+    <button class="btn btn-primary btn-block">
+      Login
+    </button>
+
+    <br><br>
+    <div
+      class="alert alert-danger"
+      role="alert"
+      *ngIf="isLoginFailed">
+      Login failed: {{ errorMessage }}
+    </div>
+
+
+  </form>
+
+
+
+
 </div>

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {AuthService} from "../../service/auth.service";
 import {JwtTokenStorageService, TokenUserInfo} from "../../service/token/jwt-token-storage.service";
 import {Router} from "@angular/router";
-import {FormBuilder, FormControl, Validators} from "@angular/forms";
+import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 
 @Component({
   selector: 'app-login',
@@ -11,10 +11,7 @@ import {FormBuilder, FormControl, Validators} from "@angular/forms";
 })
 export class LoginComponent implements OnInit {
 
-  form: any = {
-    login: null,
-    password: null
-  };
+  form!: FormGroup;
   isLoggedIn = false;
   isLoginFailed = false;
   errorMessage = '';
@@ -51,7 +48,9 @@ export class LoginComponent implements OnInit {
   }
 
   tryToLogIn(): void {
-    const { login, password } = this.form;
+    const login: string = this.form.controls.login.value;
+    const password: string = this.form.controls.password.value;
+
     this.authService.login(login, password).subscribe(
 
       (userInfo: TokenUserInfo) => {
