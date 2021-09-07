@@ -1,76 +1,79 @@
-<div class="col-md-12">
-  <div class="card card-container">
-    <form *ngIf="!isSuccessful"
-          name="form"
-          (ngSubmit)="f.form.valid && onSubmit()"
-          #f="ngForm"
-          novalidate>
+<div class="centered-content">
+  <form class="basic-form" *ngIf="!isSuccessful" (ngSubmit)="onSubmit()" [formGroup]="form">
+    <br><br>
+    <mat-form-field class="wide-element" appearance="outline">
+      <mat-label>Login:</mat-label>
+      <input matInput id="login" type="text" formControlName="login">
+      <mat-error *ngIf="form.controls.login.invalid &&
+                          (form.controls.login.dirty || form.controls.login.touched)">
+        Login is required
+      </mat-error>
+    </mat-form-field>
 
-      <div class="form-group">
-        <label>Login</label>
-        <input type="text" class="form-control" name="login"
-               [(ngModel)]="form.login"
-               required
-               #login="ngModel"
-               />
-      </div>
+    <mat-form-field class="wide-element" appearance="outline">
+      <mat-label>Password:</mat-label>
+      <input matInput id="password" [type]="hide ? 'password' : 'text'" formControlName="password">
 
-      <div class="form-group">
-        <label>Email</label>
-        <input type="email" class="form-control" name="email"
-               [(ngModel)]="form.email"
-               required email
-               #email="ngModel"
-        />
-      </div>
+      <button mat-icon-button type="button" matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+        <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+      </button>
+      <mat-error *ngIf="form.controls.password.invalid &&
+                          (form.controls.password.dirty || form.controls.password.touched)">
+        Password is required
+      </mat-error>
+    </mat-form-field>
 
-      <div class="form-group">
-        <label>Password</label>
-        <input type="text" class="form-control" name="password"
-               [(ngModel)]="form.password"
-               required
-               #password="ngModel"
-        />
-      </div>
+    <mat-form-field class="wide-element" appearance="outline">
+      <mat-label>Email:</mat-label>
+      <input matInput id="email" type="text" formControlName="email">
+      <mat-error *ngIf="form.controls.email.invalid &&
+                          (form.controls.email.dirty || form.controls.email.touched)">
+        Email is required
+      </mat-error>
+    </mat-form-field>
 
-      <div class="form-group">
-        <label>First name</label>
-        <input type="text" class="form-control" name="name"
-               [(ngModel)]="form.name"
-               required
-               #name="ngModel"
-        />
-      </div>
+    <mat-form-field class="wide-element" appearance="outline">
+      <mat-label>First name:</mat-label>
+      <input matInput id="name" type="text" formControlName="name">
+      <mat-error *ngIf="form.controls.name.invalid &&
+                          (form.controls.name.dirty || form.controls.name.touched)">
+        First name is required
+      </mat-error>
+    </mat-form-field>
 
-      <div class="form-group">
-        <label>Surname</label>
-        <input type="text" class="form-control" name="surname"
-               [(ngModel)]="form.surname"
-               required
-               #surname="ngModel"
-        />
-      </div>
+    <mat-form-field class="wide-element" appearance="outline">
+      <mat-label>Surname:</mat-label>
+      <input matInput id="surname" type="text" formControlName="surname">
+      <mat-error *ngIf="form.controls.surname.invalid &&
+                          (form.controls.surname.dirty || form.controls.surname.touched)">
+        Surname is required
+      </mat-error>
+    </mat-form-field>
 
-      <div class="form-group">
-        <label>Phone number</label>
-        <input type="text" class="form-control" name="phoneNumber"
-               [(ngModel)]="form.phoneNumber"
-               required
-               #phoneNumber="ngModel"
-        />
-      </div>
+    <mat-form-field class="wide-element" appearance="outline">
+      <mat-label>Phone number:</mat-label>
+      <input matInput id="phoneNumber" type="text" formControlName="phoneNumber">
+      <mat-error *ngIf="form.controls.phoneNumber.invalid &&
+                          (form.controls.phoneNumber.dirty || form.controls.phoneNumber.touched)">
+        Phone number is required
+      </mat-error>
+    </mat-form-field>
 
-      <div class="form-group">
-        <button class="btn btn-primary btn-block">Sign Up</button>
-      </div>
+    <button class="btn btn-primary btn-block" type="submit">Sign Up</button>
 
-      <div class="alert alert-warning" *ngIf="f.submitted && isSignUpFailed">
+    <br><br>
+    <div class="alert alert-warning" *ngIf="isSignUpFailed">
         Signup failed!<br />{{ errorMessage }}
-      </div>
-    </form>
+    </div>
 
-    <div class="alert alert-success" *ngIf="isSuccessful">
+  </form>
+
+  <div *ngIf="isSuccessful">
+    <div class="alert alert-success" >
       Your registration is successful!
     </div>
+
+    <button class="btn btn-primary btn-block" [routerLink]="['/login']">Log in!</button>
   </div>
+
 </div>
