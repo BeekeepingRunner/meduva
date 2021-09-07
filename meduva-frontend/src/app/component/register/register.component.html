@@ -12,7 +12,11 @@
 
     <mat-form-field class="wide-element" appearance="outline">
       <mat-label>Password:</mat-label>
-      <input matInput id="password" type="text" formControlName="password">
+      <input matInput id="password" [type]="hide ? 'password' : 'text'" formControlName="password">
+
+      <button mat-icon-button type="button" matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+        <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+      </button>
       <mat-error *ngIf="form.controls.password.invalid &&
                           (form.controls.password.dirty || form.controls.password.touched)">
         Password is required

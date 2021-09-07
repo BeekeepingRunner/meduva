@@ -11,6 +11,8 @@ export class RegisterComponent implements OnInit {
 
   form!: FormGroup;
 
+  hide: boolean = true;
+
   isSuccessful = false;
   isSignUpFailed = false;
   errorMessage = '';
