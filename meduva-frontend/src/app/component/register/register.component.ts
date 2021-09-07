@@ -42,11 +42,8 @@ export class RegisterComponent implements OnInit {
       phoneNumber: new FormControl('', [
                                     Validators.required
       ]),
-
-
       }
-
-    )
+    );
   }
 
   onSubmit(): void {
