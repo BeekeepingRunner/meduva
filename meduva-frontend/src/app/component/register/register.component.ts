@@ -25,22 +25,37 @@ export class RegisterComponent implements OnInit {
   ngOnInit(): void {
     this.form = this.formBuilder.group({
       login: new FormControl('', [
-                              Validators.required
+                              Validators.required,
+                              Validators.minLength(2),
+                              Validators.maxLength(20),
+                              Validators.pattern('^[^-\\s]+$')
+
       ]),
       email: new FormControl('', [
-                              Validators.required
+                              Validators.required,
+                              Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$')
       ]),
       password: new FormControl('', [
-                                Validators.required
+                                Validators.required,
+                                Validators.minLength(2),
+                                Validators.maxLength(20),
+                                Validators.pattern('^[^-\\t\\r\\n\\v\\f]+$')
       ]),
       name: new FormControl('', [
-                            Validators.required
+                            Validators.required,
+                            Validators.minLength(1),
+                            Validators.maxLength(30),
+                            Validators.pattern('^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.\'-]+$')
       ]),
       surname: new FormControl('', [
-                                Validators.required
+                                Validators.required,
+                                Validators.minLength(1),
+                                Validators.maxLength(30),
+                                Validators.pattern('^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.\'-]+$')
       ]),
       phoneNumber: new FormControl('', [
-                                    Validators.required
+                                    Validators.required,
+                                    Validators.pattern('^(\\+[0-9]{1,4})?[0-9]{6,12}$')
       ]),
       }
     );
