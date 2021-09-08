@@ -26,7 +26,7 @@ export class RegisterComponent implements OnInit {
     this.form = this.formBuilder.group({
       login: new FormControl('', [
                               Validators.required,
-                              Validators.minLength(2),
+                              Validators.minLength(5),
                               Validators.maxLength(20),
                               Validators.pattern('^[^-\\s]+$')
 
@@ -37,21 +37,25 @@ export class RegisterComponent implements OnInit {
       ]),
       password: new FormControl('', [
                                 Validators.required,
-                                Validators.minLength(2),
+                                Validators.minLength(8),
                                 Validators.maxLength(20),
-                                Validators.pattern('^[^-\\t\\r\\n\\v\\f]+$')
+                                Validators.pattern('^[^-\\t\\r\\n\\v\\f]+$'),
+                                Validators.pattern('^[^-\\s]+$')
       ]),
       name: new FormControl('', [
                             Validators.required,
                             Validators.minLength(1),
                             Validators.maxLength(30),
-                            Validators.pattern('^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.\'-]+$')
+                            Validators.pattern('^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.\'-]+$'),
+                            Validators.pattern('^[^-\\s]+$')
       ]),
       surname: new FormControl('', [
                                 Validators.required,
                                 Validators.minLength(1),
                                 Validators.maxLength(30),
-                                Validators.pattern('^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.\'-]+$')
+                                Validators.pattern('^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.\'-]+$'),
+                                Validators.pattern('^[^-\\s]+$')
+
       ]),
       phoneNumber: new FormControl('', [
                                     Validators.required,
@@ -60,6 +64,7 @@ export class RegisterComponent implements OnInit {
       }
     );
   }
+
 
   onSubmit(): void {
 

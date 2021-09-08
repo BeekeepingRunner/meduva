@@ -1,13 +1,24 @@
 <div class="centered-content">
   <form class="basic-form" *ngIf="!isSuccessful" (ngSubmit)="onSubmit()" [formGroup]="form">
     <br><br>
+
     <mat-form-field class="wide-element" appearance="outline">
       <mat-label>Login:</mat-label>
       <input matInput id="login" type="text" formControlName="login">
-      <mat-error *ngIf="form.controls.login.invalid &&
-                          (form.controls.login.dirty || form.controls.login.touched)">
-        Login is required
-      </mat-error>
+
+        <mat-error *ngIf="form.controls.login.invalid &&
+                            (form.controls.login.dirty || form.controls.login.touched)">
+
+            <mat-error *ngIf="form.controls.login.errors?.required">
+              Login is required
+            </mat-error>
+            <mat-error *ngIf="(form.controls.login.errors?.minlength || form.controls.login.errors?.maxlength) && !form.controls.login.errors?.pattern">
+              Login must be between 5 and 20 characters long
+            </mat-error>
+            <mat-error *ngIf="form.controls.login.errors?.pattern">
+              Login must not contain forbidden characters
+            </mat-error>
+        </mat-error>
     </mat-form-field>
 
     <mat-form-field class="wide-element" appearance="outline">
@@ -17,18 +28,35 @@
       <button mat-icon-button type="button" matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
         <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
       </button>
+
       <mat-error *ngIf="form.controls.password.invalid &&
                           (form.controls.password.dirty || form.controls.password.touched)">
-        Password is required
+
+          <mat-error *ngIf="form.controls.password.errors?.required">
+            Password is required
+          </mat-error>
+          <mat-error *ngIf="(form.controls.password.errors?.minlength || form.controls.password.errors?.maxlength) && !form.controls.password.errors?.pattern">
+            Password must be between 8 and 20 characters long
+          </mat-error>
+          <mat-error *ngIf="form.controls.password.errors?.pattern">
+            Password must not contain forbidden characters
+          </mat-error>
       </mat-error>
     </mat-form-field>
 
     <mat-form-field class="wide-element" appearance="outline">
       <mat-label>Email:</mat-label>
       <input matInput id="email" type="text" formControlName="email">
+
       <mat-error *ngIf="form.controls.email.invalid &&
                           (form.controls.email.dirty || form.controls.email.touched)">
-        Email is required
+        <mat-error *ngIf="form.controls.email.errors?.required ">
+          Email is required
+        </mat-error>
+        <mat-error *ngIf="form.controls.email.errors?.pattern">
+          Email must be in its correct format
+        </mat-error>
+
       </mat-error>
     </mat-form-field>
 
@@ -37,7 +65,16 @@
       <input matInput id="name" type="text" formControlName="name">
       <mat-error *ngIf="form.controls.name.invalid &&
                           (form.controls.name.dirty || form.controls.name.touched)">
-        First name is required
+        <mat-error *ngIf="form.controls.name.errors?.required ">
+          First name is required
+        </mat-error>
+        <mat-error *ngIf="(form.controls.name.errors?.minlength || form.controls.name.errors?.maxlength) && !form.controls.name.errors?.pattern">
+          First name must be between 1 and 30 characters long
+        </mat-error>
+        <mat-error *ngIf="form.controls.name.errors?.pattern">
+          First name must not contain forbidden characters
+        </mat-error>
+
       </mat-error>
     </mat-form-field>
 
@@ -46,7 +83,16 @@
       <input matInput id="surname" type="text" formControlName="surname">
       <mat-error *ngIf="form.controls.surname.invalid &&
                           (form.controls.surname.dirty || form.controls.surname.touched)">
-        Surname is required
+
+        <mat-error *ngIf="form.controls.surname.errors?.required ">
+          Surname is required
+        </mat-error>
+        <mat-error *ngIf="(form.controls.surname.errors?.minlength || form.controls.surname.errors?.maxlength) && !form.controls.surname.errors?.pattern">
+          Surname must be between 1 and 30 characters long
+        </mat-error>
+        <mat-error *ngIf="form.controls.surname.errors?.pattern">
+          Surname must not contain forbidden characters
+        </mat-error>
       </mat-error>
     </mat-form-field>
 
@@ -55,7 +101,13 @@
       <input matInput id="phoneNumber" type="text" formControlName="phoneNumber">
       <mat-error *ngIf="form.controls.phoneNumber.invalid &&
                           (form.controls.phoneNumber.dirty || form.controls.phoneNumber.touched)">
-        Phone number is required
+
+        <mat-error *ngIf="form.controls.phoneNumber.errors?.required ">
+          Phone number is required
+        </mat-error>
+        <mat-error *ngIf="form.controls.phoneNumber.errors?.pattern">
+          Phone number must contain between 6 and 12 digits
+        </mat-error>
       </mat-error>
     </mat-form-field>
 
