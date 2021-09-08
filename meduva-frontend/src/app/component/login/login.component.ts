@@ -47,6 +47,16 @@ export class LoginComponent implements OnInit {
     return !!this.tokenStorage.getToken();
   }
 
+  onSubmit(): void {
+    if(this.form.controls.login.invalid ||
+        this.form.controls.password.invalid){
+      this.errorMessage = "Login and password are required";
+      this.isLoginFailed = true;
+    } else {
+      this.tryToLogIn();
+    }
+  }
+
   tryToLogIn(): void {
     const login: string = this.form.controls.login.value;
     const password: string = this.form.controls.password.value;

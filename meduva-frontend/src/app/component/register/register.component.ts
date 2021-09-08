@@ -97,8 +97,10 @@ export class RegisterComponent implements OnInit {
 
       this.errorMessage = "Entered data must be correct";
       this.isSignUpFailed = true;
-    }else(
-      this.tryToSignUp()
-    )
+    }else{
+      this.tryToSignUp();
+    }
+
+
   }
 }
