@@ -29,7 +29,7 @@ export class LoginComponent implements OnInit {
 
     this.form = this.formBuilder.group({
       login: new FormControl('', [
-                              Validators.required
+                              Validators.required,
       ]),
       password: new FormControl('', [
                               Validators.required
@@ -45,6 +45,15 @@ export class LoginComponent implements OnInit {
 
   hasJustLoggedIn(): boolean {
     return !!this.tokenStorage.getToken();
+  }
+
+  onSubmit(): void {
+    if(this.form.invalid){
+      this.errorMessage = "Login and password are required";
+      this.isLoginFailed = true;
+    } else {
+      this.tryToLogIn();
+    }
   }
 
   tryToLogIn(): void {
