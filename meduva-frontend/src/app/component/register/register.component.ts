@@ -66,7 +66,7 @@ export class RegisterComponent implements OnInit {
   }
 
 
-  onSubmit(): void {
+  tryToSignUp(): void {
 
     const login: string = this.form.controls.login.value;
     const email: string = this.form.controls.email.value;
@@ -84,6 +84,21 @@ export class RegisterComponent implements OnInit {
         this.errorMessage = err.error.message;
         this.isSignUpFailed = true;
       }
+    )
+  }
+
+  onSubmit(){
+    if(this.form.controls.login.invalid ||
+      this.form.controls.email.invalid ||
+      this.form.controls.password.invalid ||
+      this.form.controls.name.invalid ||
+      this.form.controls.surname.invalid ||
+      this.form.controls.phoneNumber.invalid){
+
+      this.errorMessage = "Entered data must be correct";
+      this.isSignUpFailed = true;
+    }else(
+      this.tryToSignUp()
     )
   }
 }
