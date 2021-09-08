@@ -88,12 +88,7 @@ export class RegisterComponent implements OnInit {
   }
 
   onSubmit(){
-    if(this.form.controls.login.invalid ||
-      this.form.controls.email.invalid ||
-      this.form.controls.password.invalid ||
-      this.form.controls.name.invalid ||
-      this.form.controls.surname.invalid ||
-      this.form.controls.phoneNumber.invalid){
+    if(this.form.invalid){
 
       this.errorMessage = "Entered data must be correct";
       this.isSignUpFailed = true;

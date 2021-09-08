@@ -48,8 +48,7 @@ export class LoginComponent implements OnInit {
   }
 
   onSubmit(): void {
-    if(this.form.controls.login.invalid ||
-        this.form.controls.password.invalid){
+    if(this.form.invalid){
       this.errorMessage = "Login and password are required";
       this.isLoginFailed = true;
     } else {
