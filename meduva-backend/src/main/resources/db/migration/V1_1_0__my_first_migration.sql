@@ -10,7 +10,7 @@ CREATE TABLE IF NOT EXISTS user (
     password VARCHAR(256) NOT NULL,
     name varchar(30) NOT NULL,
     surname VARCHAR(30) NOT NULL,
-    phone_number VARCHAR(11) DEFAULT NULL,
+    phone_number VARCHAR(18) DEFAULT NULL,
     deleted TINYINT DEFAULT 0 NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=UTF8;
 
