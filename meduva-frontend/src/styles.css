@@ -25,3 +25,13 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 .flex {
   display: flex;
 }
+
+.btn-primary{
+  background-color: #4f4c79;
+  border-color: #4f4c79;
+}
+
+.btn-primary:hover{
+  background-color: #3d3b5e;
+  border-color: #3d3b5e;
+}

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {AuthService} from "../../service/auth/auth.service";
 import {JwtTokenStorageService, TokenUserInfo} from "../../service/token/jwt-token-storage.service";
 import {Router} from "@angular/router";
+import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 
 @Component({
   selector: 'app-login',
@@ -10,21 +11,33 @@ import {Router} from "@angular/router";
 })
 export class LoginComponent implements OnInit {
 
-  form: any = {
-    login: null,
-    password: null
-  };
+  form!: FormGroup;
   isLoggedIn = false;
   isLoginFailed = false;
   errorMessage = '';
 
+  hide = true;
+
   constructor(
     private authService: AuthService,
     private tokenStorage: JwtTokenStorageService,
-    private router: Router
+    private router: Router,
+    private formBuilder: FormBuilder
   ) { }
 
   ngOnInit(): void {
+
+    this.form = this.formBuilder.group({
+      login: new FormControl('', [
+                              Validators.required,
+      ]),
+      password: new FormControl('', [
+                              Validators.required
+      ])
+
+    });
+
+
     if (this.hasJustLoggedIn()) {
       this.router.navigate(['/profile']);
     }
@@ -34,8 +47,19 @@ export class LoginComponent implements OnInit {
     return !!this.tokenStorage.getToken();
   }
 
+  onSubmit(): void {
+    if(this.form.invalid){
+      this.errorMessage = "Login and password are required";
+      this.isLoginFailed = true;
+    } else {
+      this.tryToLogIn();
+    }
+  }
+
   tryToLogIn(): void {
-    const { login, password } = this.form;
+    const login: string = this.form.controls.login.value;
+    const password: string = this.form.controls.password.value;
+
     this.authService.login(login, password).subscribe(
 
       (userInfo: TokenUserInfo) => {
