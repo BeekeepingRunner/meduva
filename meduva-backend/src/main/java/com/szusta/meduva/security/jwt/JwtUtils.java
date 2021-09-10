@@ -62,6 +62,15 @@ public class JwtUtils {
         return false;
     }
 
+    public boolean hasJwtExpired(String authToken) {
+        try {
+            Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(authToken);
+            return false;
+        } catch (ExpiredJwtException e) {
+            return true;
+        }
+    }
+
     public int getJwtExpirationMs() {
         return jwtExpirationMs;
     }

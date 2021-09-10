@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {AuthService} from "../../service/auth.service";
+import {AuthService} from "../../service/auth/auth.service";
 import {JwtTokenStorageService, TokenUserInfo} from "../../service/token/jwt-token-storage.service";
 import {Router} from "@angular/router";
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";

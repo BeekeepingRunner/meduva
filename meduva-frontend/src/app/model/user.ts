@@ -15,7 +15,7 @@ export interface Role {
 }
 
 export enum UserRole {
-  ROLE_CLIENT = 1,
+  ROLE_CLIENT,
   ROLE_WORKER,
   ROLE_RECEPTIONIST,
   ROLE_ADMIN
@@ -25,7 +25,7 @@ export let roleNames: string[] = [
   'ROLE_CLIENT',
   'ROLE_WORKER',
   'ROLE_RECEPTIONIST',
-  'ROLE_ADNIM'
+  'ROLE_ADMIN'
 ];
 
 export interface ResetPasswordRequest {

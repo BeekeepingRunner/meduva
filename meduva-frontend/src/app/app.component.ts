@@ -24,7 +24,7 @@ export class AppComponent implements OnInit {
   constructor(
     private observer: BreakpointObserver,
     private tokenStorageService: JwtTokenStorageService,
-    ) {
+  ) {
   }
 
   ngOnInit(): void {
@@ -44,7 +44,8 @@ export class AppComponent implements OnInit {
 
     let roles: UserRole[] = [];
     currentUser!.roles.forEach(role => {
-      roles.push(role.id as UserRole);
+      // we have to subtract 1, because ids of roles from DB start from 1 and UserRole values from 0
+      roles.push((role.id - 1) as UserRole);
     });
     return roles;
   }

@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
 import {Role} from "../../model/user";
+import {HttpClient, HttpParams} from "@angular/common/http";
+import {environment} from "../../../environments/environment";
 
 const TOKEN_KEY = 'auth-token';
 const USER_KEY = 'auth-user';
@@ -10,7 +12,9 @@ const USER_KEY = 'auth-user';
 })
 export class JwtTokenStorageService {
 
-  constructor() { }
+  constructor(
+    private http: HttpClient,
+  ) { }
 
   signOut() : void {
     window.sessionStorage.clear();
@@ -29,6 +33,28 @@ export class JwtTokenStorageService {
     window.sessionStorage.removeItem(USER_KEY);
     window.sessionStorage.setItem(USER_KEY, JSON.stringify(user));
   }
+
+  public hasJwtExpired(): boolean {
+    const token: string | null = this.getToken();
+
+    if (token != null) {
+      let hasExpired: boolean = true;
+      this.http.post(environment.API_BASE_URL + 'api/auth/validate-jwt', token).subscribe(
+        data => {
+          hasExpired = !!data;
+        },
+        err => {
+          console.log(err);
+        }
+      );
+      return hasExpired;
+    }
+    else {
+      return true;
+    }
+  }
+
+
 
   public getCurrentUser(): TokenUserInfo | null {
     const user = window.sessionStorage.getItem(USER_KEY);

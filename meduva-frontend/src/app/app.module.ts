@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import {RouterModule, Routes} from "@angular/router";
+import {RouterModule} from "@angular/router";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {HttpClientModule} from "@angular/common/http";
 import {MatSidenavModule} from "@angular/material/sidenav";
@@ -27,18 +27,8 @@ import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatInputModule} from "@angular/material/input";
 import { UserListComponent } from './component/user-list/user-list.component';
 import {MatTableModule} from "@angular/material/table";
-
-const routes: Routes = [
-  { path: 'home', component: HomeComponent },
-  { path: 'login', component: LoginComponent },
-  { path: 'login/reset-password-email', component: PasswordResetEmailInputComponent },
-  { path: 'login/password-reset/:resetToken', component: PasswordResetComponent },
-  { path: 'register', component: RegisterComponent },
-  { path: 'profile', component: ProfileComponent },
-  { path: 'admin', component: BoardAdminComponent },
-  { path: 'users', component: UserListComponent },
-  { path: '', redirectTo: 'home', pathMatch: 'full' }
-];
+import {routes} from "./app.routes";
+import { AccessDeniedComponent } from './component/access-denied/access-denied.component';
 
 @NgModule({
   declarations: [
@@ -51,6 +41,7 @@ const routes: Routes = [
     PasswordResetEmailInputComponent,
     PasswordResetComponent,
     UserListComponent,
+    AccessDeniedComponent,
   ],
   imports: [
     BrowserModule,

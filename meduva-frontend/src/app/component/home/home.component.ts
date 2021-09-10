@@ -23,7 +23,7 @@ export class HomeComponent implements OnInit {
       err => {
         this.content = JSON.parse(err.error).message;
       }
-    )
+    );
   }
 
 }
