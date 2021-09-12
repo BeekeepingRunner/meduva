@@ -1,4 +1,69 @@
 <button mat-icon-button color="primary" routerLink='/services'>
   <- Back to services
 </button>
-<p>new-service works!</p>
+
+<h2>Add new service</h2>
+
+<form class="basic-form" (ngSubmit)="addService()" [formGroup]="form">
+
+  <br>
+  <mat-form-field class="wide-element" appearance="outline">
+    <mat-label>Service name:</mat-label>
+    <input matInput id="name" type="text" formControlName="name">
+
+    <mat-error *ngIf="form.controls.name.invalid &&
+                            (form.controls.name.dirty || form.controls.name.touched)">
+      <mat-error *ngIf="form.controls.name.errors?.required">
+        Name is required
+      </mat-error>
+    </mat-error>
+
+  </mat-form-field>
+
+  <mat-form-field class="wide-element" appearance="outline">
+    <mat-label>Description:</mat-label>
+    <textarea matInput
+              id="description" formControlName="description"
+              cdkTextareaAutosize
+              #autosize="cdkTextareaAutosize"
+              cdkAutosizeMinRows="1"
+              cdkAutosizeMaxRows="10"></textarea>
+  </mat-form-field>
+
+  <mat-form-field class="wide-element" appearance="outline">
+    <mat-label>Duration in minutes:</mat-label>
+    <input matInput id="durationInMin" formControlName="durationInMin"
+           type="number" step="15" min="15" placeholder="15">
+
+    <mat-error *ngIf="form.controls.durationInMin.invalid &&
+                            (form.controls.durationInMin.dirty || form.controls.durationInMin.touched)">
+      <!-- TODO: step validation -->
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field class="wide-element" appearance="outline">
+    <mat-label>Price:</mat-label>
+    <input matInput id="price" formControlName="price"
+           type="number" step="0.01" min="0.01">
+
+    <mat-error *ngIf="form.controls.price.invalid &&
+                            (form.controls.price.dirty || form.controls.price.touched)">
+      <!-- TODO: step validation -->
+    </mat-error>
+  </mat-form-field>
+
+  <button class="btn btn-primary btn-block" type="submit">Add service</button>
+
+  <br><br>
+  <div class="alert alert-warning" *ngIf="didAddingFail">
+    Signup failed!<br />{{ errorMessage }}
+  </div>
+  <br><br>
+  <div *ngIf="isSubmitted && !didAddingFail">
+    <div class="alert alert-success" >
+      You have successfully added new service!
+    </div>
+  </div>
+
+</form>
+
