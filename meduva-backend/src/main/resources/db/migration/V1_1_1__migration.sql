@@ -1,5 +1,6 @@
 CREATE TABLE IF NOT EXISTS service (
     id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
     description VARCHAR(3000) NOT NULL,
     duration_in_min INT DEFAULT NULL,
     price FLOAT NOT NULL,
