@@ -30,6 +30,7 @@ import {MatTableModule} from "@angular/material/table";
 import {routes} from "./app.routes";
 import { AccessDeniedComponent } from './component/access-denied/access-denied.component';
 import { ServicesComponent } from './component/services/services.component';
+import { NewServiceComponent } from './component/services/new-service/new-service.component';
 
 @NgModule({
   declarations: [
@@ -44,6 +45,7 @@ import { ServicesComponent } from './component/services/services.component';
     UserListComponent,
     AccessDeniedComponent,
     ServicesComponent,
+    NewServiceComponent,
   ],
   imports: [
     BrowserModule,
