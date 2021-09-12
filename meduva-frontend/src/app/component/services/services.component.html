@@ -1,6 +1,8 @@
 <div>
   <h2>Services</h2>
-  <button mat-icon-button color="primary">+ Add new service</button>
+  <button mat-icon-button color="primary" [routerLink]="['/services/add-service']">
+    + Add new service
+  </button>
   <div>
     <table mat-table [dataSource]="services" class="mat-elevation-z8">
 
