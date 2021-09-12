@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {User} from "../../model/user";
+import {Service, ServicesService} from "../../service/services.service";
 
 @Component({
   selector: 'app-services',
@@ -8,12 +8,25 @@ import {User} from "../../model/user";
 })
 export class ServicesComponent implements OnInit {
 
-  services: any;
+  services: Service[] = [];
   displayedColumns: string[] = ['name', 'duration', 'price'];
 
-  constructor() { }
+  constructor(
+    private servicesService: ServicesService
+  ) { }
 
   ngOnInit(): void {
+    this.getAllServices();
   }
 
+  getAllServices() {
+    this.servicesService.getAllServices().subscribe(
+      services => {
+        this.services = services
+      },
+      err => {
+        console.log(err);
+      }
+    )
+  }
 }

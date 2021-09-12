@@ -29,4 +29,5 @@ public class Service {
     @Column(name = "duration_in_min")
     private int durationInMin;
     private float price;
+    private boolean deleted;
 }
