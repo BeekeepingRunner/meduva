@@ -29,6 +29,7 @@ import { UserListComponent } from './component/user-list/user-list.component';
 import {MatTableModule} from "@angular/material/table";
 import {routes} from "./app.routes";
 import { AccessDeniedComponent } from './component/access-denied/access-denied.component';
+import { ServicesComponent } from './component/services/services.component';
 
 @NgModule({
   declarations: [
@@ -42,6 +43,7 @@ import { AccessDeniedComponent } from './component/access-denied/access-denied.c
     PasswordResetComponent,
     UserListComponent,
     AccessDeniedComponent,
+    ServicesComponent,
   ],
   imports: [
     BrowserModule,
