@@ -31,6 +31,7 @@ import {routes} from "./app.routes";
 import { AccessDeniedComponent } from './component/access-denied/access-denied.component';
 import { ServicesComponent } from './component/services/services.component';
 import { NewServiceComponent } from './component/services/new-service/new-service.component';
+import {CurrencyPipe} from "@angular/common";
 
 @NgModule({
   declarations: [
@@ -71,6 +72,7 @@ import { NewServiceComponent } from './component/services/new-service/new-servic
   ],
   providers: [
     authInterceptorProviders,
+    CurrencyPipe,
   ],
   bootstrap: [AppComponent]
 })

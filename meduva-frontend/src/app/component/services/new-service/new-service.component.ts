@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
+import {forbidValuesBetweenStep} from "../../../util/validator/number-step";
 
 @Component({
   selector: 'app-new-service',
@@ -19,10 +20,14 @@ export class NewServiceComponent implements OnInit {
 
   ngOnInit(): void {
     this.form = this.formBuilder.group({
-        name: new FormControl('', [Validators.required]),
+        name: new FormControl('', [
+          Validators.required
+        ]),
         description: new FormControl(''),
-        durationInMin: new FormControl(''),
-        price: new FormControl(''),
+        durationInMin: new FormControl('', [
+          forbidValuesBetweenStep(15)
+        ]),
+        price: new FormControl('', ),
       }
     );
   }
