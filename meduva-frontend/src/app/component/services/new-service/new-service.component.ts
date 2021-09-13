@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {forbidValuesBetweenStep} from "../../../util/validator/number-step";
+import {ServicesService} from "../../../service/services.service";
+import {Service} from "../../../model/service";
 
 @Component({
   selector: 'app-new-service',
@@ -16,6 +18,7 @@ export class NewServiceComponent implements OnInit {
 
   constructor(
     private formBuilder: FormBuilder,
+    private servicesService: ServicesService,
   ) { }
 
   ngOnInit(): void {
@@ -39,6 +42,22 @@ export class NewServiceComponent implements OnInit {
   }
 
   addService() {
-    console.log(this.form.controls.price.value);
+
+    let service: Service = {
+      name: this.form.controls.name.value,
+      description: this.form.controls.description.value,
+      durationInMin: this.form.controls.durationInMin.value,
+      price: this.form.controls.price.value,
+      deleted: false
+    };
+
+    this.servicesService.addNewService(service).subscribe(
+      data => {
+        console.log(data);
+      },
+      err => {
+        console.log(err);
+      }
+    )
   }
 }

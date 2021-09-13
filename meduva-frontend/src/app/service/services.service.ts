@@ -16,5 +16,9 @@ export class ServicesService {
   public getAllServices(): Observable<Service[]> {
     return this.httpClient.get<Service[]>(environment.API_BASE_URL + 'api/service/all');
   }
+
+  public addNewService(service: Service): Observable<Service> {
+    return this.httpClient.post<Service>(environment.API_BASE_URL + 'api/service', service);
+  }
 }
 
