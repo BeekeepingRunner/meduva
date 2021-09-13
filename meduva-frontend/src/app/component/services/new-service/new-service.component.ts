@@ -28,9 +28,12 @@ export class NewServiceComponent implements OnInit {
         ]),
         description: new FormControl(''),
         durationInMin: new FormControl('', [
+          Validators.required,
           forbidValuesBetweenStep(15)
         ]),
-        price: new FormControl('', ),
+        price: new FormControl('', [
+          Validators.required
+        ]),
       }
     );
   }
@@ -51,12 +54,17 @@ export class NewServiceComponent implements OnInit {
       deleted: false
     };
 
+    console.log(service);
+
     this.servicesService.addNewService(service).subscribe(
       data => {
-        console.log(data);
+        this.didAddingFail = false;
+        this.isSubmitted = true;
       },
       err => {
-        console.log(err);
+        this.didAddingFail = true;
+        this.errorMessage = err.error.message;
+        console.log(err)
       }
     )
   }

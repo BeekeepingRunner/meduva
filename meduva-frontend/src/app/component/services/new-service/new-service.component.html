@@ -40,6 +40,9 @@
       <mat-error *ngIf="form.controls.durationInMin.errors?.wrongValue">
         Time should be divisible by 15
       </mat-error>
+      <mat-error *ngIf="form.controls.durationInMin.errors?.required">
+        Duration is required
+      </mat-error>
     </mat-error>
   </mat-form-field>
 
@@ -52,6 +55,9 @@
     <mat-error *ngIf="form.controls.price.invalid &&
                             (form.controls.price.dirty || form.controls.price.touched)">
       <!-- TODO: improve -->
+      <mat-error *ngIf="form.controls.price.errors?.required">
+        Price is required
+      </mat-error>
     </mat-error>
   </mat-form-field>
 
@@ -59,7 +65,7 @@
 
   <br><br>
   <div class="alert alert-warning" *ngIf="didAddingFail">
-    Signup failed!<br />{{ errorMessage }}
+    Operation failed.<br />{{ errorMessage }}
   </div>
   <br><br>
   <div *ngIf="isSubmitted && !didAddingFail">
