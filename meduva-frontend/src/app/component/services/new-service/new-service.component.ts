@@ -32,7 +32,13 @@ export class NewServiceComponent implements OnInit {
     );
   }
 
-  addService() {
+  roundPrice() {
+    let price: number = this.form.controls.price.value;
+    price = Math.round(price * 100) / 100;
+    this.form.get('price')?.setValue(price);
+  }
 
+  addService() {
+    console.log(this.form.controls.price.value);
   }
 }

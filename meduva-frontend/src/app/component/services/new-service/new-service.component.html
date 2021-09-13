@@ -45,8 +45,10 @@
 
   <mat-form-field class="wide-element" appearance="outline">
     <mat-label>Price:</mat-label>
-    <input matInput type="number" id="price" formControlName="price" min="0.01" step="0.01"
-           value="{{ form.controls.price.value | number : '1.2-2' }}">
+    <input matInput id="price" formControlName="price"
+           type="number" min="0.01" step="0.01"
+           value="{{ form.controls.price.value | number : '1.2-2' }}"
+           (keyup.enter)="roundPrice()" (blur)="roundPrice()">
 
     <mat-error *ngIf="form.controls.price.invalid &&
                             (form.controls.price.dirty || form.controls.price.touched)">
