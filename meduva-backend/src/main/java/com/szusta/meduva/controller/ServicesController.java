@@ -1,10 +1,10 @@
 package com.szusta.meduva.controller;
 
 import com.szusta.meduva.model.Service;
+import com.szusta.meduva.payload.request.NewServiceRequest;
 import com.szusta.meduva.service.ServicesService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -19,8 +19,20 @@ public class ServicesController {
         this.servicesService = servicesService;
     }
 
-    @RequestMapping("/all")
+    @GetMapping("/all")
     public List<Service> getAllServices() {
         return this.servicesService.getAllServices();
+    }
+
+    @PostMapping
+    public Service saveNewService(@RequestBody NewServiceRequest request) {
+        Service service = new Service(
+                request.getName(),
+                request.getDescription(),
+                request.getDurationInMin(),
+                request.getPrice(),
+                request.isDeleted()
+        );
+        return this.servicesService.save(service);
     }
 }

@@ -55,7 +55,7 @@
     </mat-error>
   </mat-form-field>
 
-  <button class="btn btn-primary btn-block" type="submit">Add service</button>
+  <button class="btn btn-primary btn-block" type="submit" [disabled]="!form.valid">Add service</button>
 
   <br><br>
   <div class="alert alert-warning" *ngIf="didAddingFail">

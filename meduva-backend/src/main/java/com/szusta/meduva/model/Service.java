@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 
 @Entity
 @Table(
@@ -28,6 +29,18 @@ public class Service {
     private String description;
     @Column(name = "duration_in_min")
     private int durationInMin;
-    private float price;
+    private BigDecimal price;
     private boolean deleted;
+
+    public Service(String name,
+                   String description,
+                   int durationInMin,
+                   BigDecimal price,
+                   boolean deleted) {
+        this.name = name;
+        this.description = description;
+        this.durationInMin = durationInMin;
+        this.price = price;
+        this.deleted = deleted;
+    }
 }
