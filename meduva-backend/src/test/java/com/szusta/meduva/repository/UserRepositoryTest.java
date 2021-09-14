@@ -24,7 +24,7 @@ class UserRepositoryTest {
     private RoleRepository roleRepository;
 
     @Test
-    void findAllClientsWithAccount() {
+    void shouldFindUserWithClientRoleOnly() {
         // given
         User userClient = new User(
                 "login",
