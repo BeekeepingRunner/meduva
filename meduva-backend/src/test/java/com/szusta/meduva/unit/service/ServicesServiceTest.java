@@ -1,8 +1,9 @@
-package com.szusta.meduva.service;
+package com.szusta.meduva.unit.service;
 
 import com.szusta.meduva.exception.ServiceAlreadyExistsException;
 import com.szusta.meduva.model.Service;
 import com.szusta.meduva.repository.ServiceRepository;
+import com.szusta.meduva.service.ServicesService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;

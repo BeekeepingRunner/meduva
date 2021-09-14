@@ -1,7 +1,8 @@
-package com.szusta.meduva.service;
+package com.szusta.meduva.unit.service;
 
 import com.szusta.meduva.model.Role;
 import com.szusta.meduva.model.User;
+import com.szusta.meduva.service.UserDetailsImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.security.core.GrantedAuthority;
