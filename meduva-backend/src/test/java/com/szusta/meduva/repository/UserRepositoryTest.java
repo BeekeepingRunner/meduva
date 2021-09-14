@@ -26,7 +26,7 @@ class UserRepositoryTest {
     @Test
     void findAllClientsWithAccount() {
         // given
-        User user = new User(
+        User userClient = new User(
                 "login",
                 "email",
                 "password",
@@ -34,14 +34,29 @@ class UserRepositoryTest {
                 "surname",
                 "phoneNumber"
         );
-        user.setRoles(Set.of(roleRepository.getById(ERole.ROLE_CLIENT.getValue())));
-        userRepositoryUnderTest.save(user);
+        userClient.setRoles(Set.of(roleRepository.getById(ERole.ROLE_CLIENT.getValue())));
+        userClient = userRepositoryUnderTest.save(userClient);
+
+        User userWorker = new User(
+                "login2",
+                "email2",
+                "password2",
+                "name2",
+                "surname2",
+                "phoneNumber2"
+        );
+        userWorker.setRoles(Set.of(
+                roleRepository.getById(ERole.ROLE_CLIENT.getValue()),
+                roleRepository.getById(ERole.ROLE_WORKER.getValue())));
+        userWorker = userRepositoryUnderTest.save(userWorker);
 
         // when
         Optional<List<User>> clients =
                 userRepositoryUnderTest.findAllClientsWithAccount();
 
         // then
-        assertEquals(user, clients.get().get(0));
+        assertTrue(clients.isPresent());
+        assertEquals(1, clients.get().size());
+        assertEquals(userClient.getName(), clients.get().get(0).getName());
     }
 }

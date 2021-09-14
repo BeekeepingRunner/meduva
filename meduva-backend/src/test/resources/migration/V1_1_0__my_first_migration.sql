@@ -42,27 +42,3 @@ INSERT INTO role VALUES
 (2, "ROLE_WORKER"),
 (3, "ROLE_RECEPTIONIST"),
 (4, "ROLE_ADMIN");
-
--- hashed password is 1234 --
-INSERT INTO user VALUES
-(1, "john.doe@gmail.com", "sampleLogin", "$2a$10$9qx.WFyh9819GyUlQh0M5uj6JZo7FXETpDH5BWeMpJYKY91afWZ2y", "John", "Doe", "48123123123", 0),
-(2, "aaa.doe@gmail.com", "client", "$2a$10$9qx.WFyh9819GyUlQh0M5uj6JZo7FXETpDH5BWeMpJYKY91afWZ2y", "John", "Doe", "48123123123", 0),
-(3, "bbb.doe@gmail.com", "worker", "$2a$10$9qx.WFyh9819GyUlQh0M5uj6JZo7FXETpDH5BWeMpJYKY91afWZ2y", "John", "Doe", "48123123123", 0),
-(4, "ccc.doe@gmail.com", "receptionist", "$2a$10$9qx.WFyh9819GyUlQh0M5uj6JZo7FXETpDH5BWeMpJYKY91afWZ2y", "John", "Doe", "48123123123", 0),
-(5, "ddd.doe@gmail.com", "admin", "$2a$10$9qx.WFyh9819GyUlQh0M5uj6JZo7FXETpDH5BWeMpJYKY91afWZ2y", "John", "Doe", "48123123123", 0);
-
-INSERT INTO user_role VALUES
-(1, 1),
-(1, 2),
-(1, 3),
-(1, 4),
-(2, 1),
-(3, 1),
-(3, 2),
-(4, 1),
-(4, 2),
-(4, 3),
-(5, 1),
-(5, 2),
-(5, 3),
-(5, 4);
