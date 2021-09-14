@@ -119,4 +119,29 @@ public class UserServiceTest {
         verify(userRepository, times(1))
                 .findDistinctByRolesIn(Collections.singleton(workerRole));
     }
+
+    @Test
+    @DisplayName("test findAllClientsWithAccount() success")
+    public void testFindAllClientsWithAccount() {
+
+        User client = new User();
+        when(userRepository.findAllClientsWithAccount())
+                .thenReturn(Optional.of(List.of(client)));
+
+        userService.findAllClientsWithAccount();
+
+        verify(userRepository, times(1)).findAllClientsWithAccount();
+    }
+
+    @Test
+    @DisplayName("test findAllClientsWithAccount() exception")
+    public void shouldThrowRuntimeException() {
+
+        when(userRepository.findAllClientsWithAccount())
+                .thenThrow(RuntimeException.class);
+
+        assertThrows(RuntimeException.class, () -> userService.findAllClientsWithAccount());
+
+        verify(userRepository, times(1)).findAllClientsWithAccount();
+    }
 }
