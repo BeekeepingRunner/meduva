@@ -1,6 +1,11 @@
 package com.szusta.meduva.service;
 
 import com.szusta.meduva.exception.UserNotFoundException;
+import com.szusta.meduva.exception.UsersWithMinRoleNotFound;
+import com.szusta.meduva.model.ERole;
+import com.szusta.meduva.model.Role;
+import com.szusta.meduva.model.User;
+import com.szusta.meduva.repository.RoleRepository;
 import com.szusta.meduva.repository.UserRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -9,7 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
-import java.util.Optional;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -20,6 +25,8 @@ public class UserServiceTest {
 
     @MockBean
     UserRepository userRepository;
+    @MockBean
+    RoleRepository roleRepository;
 
     @Autowired
     @InjectMocks
@@ -73,5 +80,43 @@ public class UserServiceTest {
         verify(userRepository, times(1)).findById(1L);
         verify(userRepository, times(1)).findByLogin("login");
         verify(userRepository, times(1)).findByEmail("email");
+    }
+
+    @Test
+    public void findAllUsersWithMinimumRole() {
+        //given
+        User worker = new User();
+        List<User> users = new ArrayList<>();
+        users.add(worker);
+
+        Role clientRole = new Role(ERole.ROLE_CLIENT.getValue(), "ROLE_CLIENT");
+        Role workerRole = new Role(ERole.ROLE_WORKER.getValue(), "ROLE_WORKER");
+
+        when(roleRepository.findById(ERole.ROLE_WORKER.getValue()))
+                .thenReturn(Optional.of(workerRole));
+        when(userRepository.findDistinctByRolesIn(Collections.singleton(workerRole)))
+                .thenReturn(Optional.of(users));
+
+        when(roleRepository.findById(ERole.ROLE_CLIENT.getValue()))
+                .thenReturn(Optional.of(clientRole));
+        when(userRepository.findDistinctByRolesIn(Collections.singleton(clientRole)))
+                .thenThrow(UsersWithMinRoleNotFound.class);
+
+        // good scenario
+        List<User> outUsers = userService.findAllUsersWithMinimumRole(ERole.ROLE_WORKER);
+        assertEquals(1, outUsers.size());
+
+        // bad scenario
+        assertThrows(UsersWithMinRoleNotFound.class,
+                () -> userService.findAllUsersWithMinimumRole(ERole.ROLE_CLIENT));
+
+        verify(roleRepository, times(1))
+                .findById(ERole.ROLE_WORKER.getValue());
+        verify(roleRepository, times(1))
+                .findById(ERole.ROLE_CLIENT.getValue());
+        verify(userRepository, times(1))
+                .findDistinctByRolesIn(Collections.singleton(clientRole));
+        verify(userRepository, times(1))
+                .findDistinctByRolesIn(Collections.singleton(workerRole));
     }
 }

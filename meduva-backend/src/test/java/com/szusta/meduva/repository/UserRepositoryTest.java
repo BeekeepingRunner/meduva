@@ -3,6 +3,7 @@ package com.szusta.meduva.repository;
 import com.szusta.meduva.model.ERole;
 import com.szusta.meduva.model.Role;
 import com.szusta.meduva.model.User;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -59,4 +60,43 @@ class UserRepositoryTest {
         assertEquals(1, clients.get().size());
         assertEquals(userClient.getName(), clients.get().get(0).getName());
     }
+    @Test
+    void shouldFindUsersWithMinimumRoles() {
+        // given
+        User userClient = new User(
+                "login",
+                "email",
+                "password",
+                "name",
+                "surname",
+                "phoneNumber"
+        );
+        userClient.setRoles(Set.of(roleRepository.getById(ERole.ROLE_CLIENT.getValue())));
+        userClient = userRepositoryUnderTest.save(userClient);
+
+        User userWorker = new User(
+                "login2",
+                "email2",
+                "password2",
+                "name2",
+                "surname2",
+                "phoneNumber2"
+        );
+        userWorker.setRoles(Set.of(
+                roleRepository.getById(ERole.ROLE_CLIENT.getValue()),
+                roleRepository.getById(ERole.ROLE_WORKER.getValue())));
+        userWorker = userRepositoryUnderTest.save(userWorker);
+
+        // when
+        Optional<List<User>> users =
+                userRepositoryUnderTest.findDistinctByRolesIn(Set.of(
+                        roleRepository.getById(ERole.ROLE_CLIENT.getValue()),
+                        roleRepository.getById(ERole.ROLE_WORKER.getValue())));
+
+        // then
+        assertTrue(users.isPresent());
+        assertEquals(2, users.get().size());
+        assertEquals(userClient.getName(), users.get().get(0).getName());
+    }
+
 }
