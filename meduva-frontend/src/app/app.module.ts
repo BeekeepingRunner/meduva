@@ -32,6 +32,8 @@ import { AccessDeniedComponent } from './component/access-denied/access-denied.c
 import { ServicesComponent } from './component/services/services.component';
 import { NewServiceComponent } from './component/services/new-service/new-service.component';
 import {CurrencyPipe} from "@angular/common";
+import {MatCardModule} from "@angular/material/card";
+import {MatListModule} from "@angular/material/list";
 
 @NgModule({
   declarations: [
@@ -66,6 +68,8 @@ import {CurrencyPipe} from "@angular/common";
     MatFormFieldModule,
     MatInputModule,
     MatTableModule,
+    MatCardModule,
+    MatListModule,
   ],
   exports: [
     RouterModule
