@@ -57,7 +57,7 @@ public class UserService {
 
         Optional<Role> role = roleRepository.findById(roleId.getValue());
         if (role.isPresent()) {
-            return userRepository.findByRolesIn(Collections.singleton(role.get()))
+            return userRepository.findDistinctByRolesIn(Collections.singleton(role.get()))
                     .orElseThrow(() -> new UsersWithMinRoleNotFound("Unable to find users with role" + role.get().getName()));
         } else {
             throw new RoleNotFoundException("Role not found with id: " + roleId);

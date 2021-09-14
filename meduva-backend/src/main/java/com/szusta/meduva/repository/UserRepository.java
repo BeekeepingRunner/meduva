@@ -19,7 +19,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Boolean existsByLogin(String login);
     Boolean existsByEmail(String email);
 
-    Optional<List<User>> findByRolesIn(Collection<Role> roles);
+    Optional<List<User>> findDistinctByRolesIn(Collection<Role> roles);
 
     @Query("select distinct u, count(role) from User u join u.roles role group by u having count(role) = 1")
     Optional<List<User>> findAllClientsWithAccount();

@@ -1,17 +1,20 @@
-package com.szusta.meduva.service;
+package com.szusta.meduva.unit.service;
 
 import com.szusta.meduva.exception.PasswordResetTokenNotFoundException;
 import com.szusta.meduva.model.PasswordResetToken;
 import com.szusta.meduva.model.User;
 import com.szusta.meduva.repository.PasswordResetTokenRepository;
 import com.szusta.meduva.security.jwt.JwtUtils;
+import com.szusta.meduva.service.PasswordResetService;
+import com.szusta.meduva.service.UserService;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -22,18 +25,18 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
-@SpringBootTest
+@ExtendWith(MockitoExtension.class)
 public class PasswordResetServiceTest {
 
-    @MockBean
+    @Mock
     UserService userService;
-    @MockBean
+    @Mock
     JwtUtils jwtUtils;
-    @MockBean
+    @Mock
     PasswordResetTokenRepository passwordResetTokenRepository;
-    @MockBean
+    @Mock
     JavaMailSender javaMailSender;
-    @MockBean
+    @Mock
     PasswordEncoder passwordEncoder;
 
     @Autowired

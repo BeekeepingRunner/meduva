@@ -29,6 +29,9 @@ import { UserListComponent } from './component/user-list/user-list.component';
 import {MatTableModule} from "@angular/material/table";
 import {routes} from "./app.routes";
 import { AccessDeniedComponent } from './component/access-denied/access-denied.component';
+import { ServicesComponent } from './component/services/services.component';
+import { NewServiceComponent } from './component/services/new-service/new-service.component';
+import {CurrencyPipe} from "@angular/common";
 
 @NgModule({
   declarations: [
@@ -42,6 +45,8 @@ import { AccessDeniedComponent } from './component/access-denied/access-denied.c
     PasswordResetComponent,
     UserListComponent,
     AccessDeniedComponent,
+    ServicesComponent,
+    NewServiceComponent,
   ],
   imports: [
     BrowserModule,
@@ -67,6 +72,7 @@ import { AccessDeniedComponent } from './component/access-denied/access-denied.c
   ],
   providers: [
     authInterceptorProviders,
+    CurrencyPipe,
   ],
   bootstrap: [AppComponent]
 })

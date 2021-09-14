@@ -1,0 +1,1 @@
+INSERT INTO service VALUES (1, "service", "desc", 30, 100.00, 0);

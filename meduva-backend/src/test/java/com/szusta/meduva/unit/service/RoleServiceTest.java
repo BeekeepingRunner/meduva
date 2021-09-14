@@ -1,23 +1,25 @@
-package com.szusta.meduva.service;
+package com.szusta.meduva.unit.service;
 
 import com.szusta.meduva.exception.RoleNotFoundException;
 import com.szusta.meduva.model.Role;
 import com.szusta.meduva.repository.RoleRepository;
+import com.szusta.meduva.service.RoleService;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
-@SpringBootTest
+@ExtendWith(MockitoExtension.class)
 public class RoleServiceTest {
 
-    @MockBean
+    @Mock
     RoleRepository roleRepository;
 
     @Autowired
