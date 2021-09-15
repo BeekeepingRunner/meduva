@@ -1,6 +1,6 @@
 package com.szusta.meduva.unit.service;
 
-import com.szusta.meduva.exception.UserNotFoundException;
+import com.szusta.meduva.exception.notfound.UserNotFoundException;
 import com.szusta.meduva.exception.UsersWithMinRoleNotFound;
 import com.szusta.meduva.model.ERole;
 import com.szusta.meduva.model.Role;

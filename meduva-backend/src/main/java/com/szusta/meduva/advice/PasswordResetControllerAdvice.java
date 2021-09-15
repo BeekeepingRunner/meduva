@@ -1,9 +1,9 @@
 package com.szusta.meduva.advice;
 
 import com.szusta.meduva.exception.ErrorMessage;
-import com.szusta.meduva.exception.PasswordResetTokenNotFoundException;
+import com.szusta.meduva.exception.notfound.PasswordResetTokenNotFoundException;
 import com.szusta.meduva.exception.TokenRefreshException;
-import com.szusta.meduva.exception.UserNotFoundException;
+import com.szusta.meduva.exception.notfound.UserNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.mail.MailException;
 import org.springframework.web.bind.annotation.ExceptionHandler;

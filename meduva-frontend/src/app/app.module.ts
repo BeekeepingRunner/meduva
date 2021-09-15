@@ -32,6 +32,9 @@ import { AccessDeniedComponent } from './component/access-denied/access-denied.c
 import { ServicesComponent } from './component/services/services.component';
 import { NewServiceComponent } from './component/services/new-service/new-service.component';
 import {CurrencyPipe} from "@angular/common";
+import { ServiceDetailsComponent } from './component/services/service-details/service-details.component';
+import { ConfirmationDialogComponent } from './component/dialog/confirmation-dialog/confirmation-dialog.component';
+import {MatDialogModule} from "@angular/material/dialog";
 
 @NgModule({
   declarations: [
@@ -47,26 +50,29 @@ import {CurrencyPipe} from "@angular/common";
     AccessDeniedComponent,
     ServicesComponent,
     NewServiceComponent,
+    ServiceDetailsComponent,
+    ConfirmationDialogComponent,
   ],
-  imports: [
-    BrowserModule,
-    BrowserAnimationsModule,
-    RouterModule.forRoot(routes),
-    FormsModule,
-    ReactiveFormsModule,
-    HttpClientModule,
-    MatToolbarModule,
-    MatIconModule,
-    MatDividerModule,
-    MatSidenavModule,
-    MatCheckboxModule,
-    MatButtonModule,
-    MatTreeModule,
-    MatExpansionModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatTableModule,
-  ],
+    imports: [
+        BrowserModule,
+        BrowserAnimationsModule,
+        RouterModule.forRoot(routes),
+        FormsModule,
+        ReactiveFormsModule,
+        HttpClientModule,
+        MatToolbarModule,
+        MatIconModule,
+        MatDividerModule,
+        MatSidenavModule,
+        MatCheckboxModule,
+        MatButtonModule,
+        MatTreeModule,
+        MatExpansionModule,
+        MatFormFieldModule,
+        MatInputModule,
+        MatTableModule,
+        MatDialogModule,
+    ],
   exports: [
     RouterModule
   ],
