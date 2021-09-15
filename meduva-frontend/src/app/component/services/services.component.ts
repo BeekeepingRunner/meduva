@@ -24,10 +24,6 @@ export class ServicesComponent implements OnInit {
     this.servicesService.getAllServices().subscribe(
       services => {
         this.services = services;
-        console.log(services);
-      },
-      err => {
-        console.log(err);
       }
     )
   }

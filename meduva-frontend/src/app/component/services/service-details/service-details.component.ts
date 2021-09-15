@@ -31,9 +31,6 @@ export class ServiceDetailsComponent implements OnInit {
     this.servicesService.deleteById(this.service.id).subscribe(
       ifSuccess => {
         this.router.navigate(['/services']);
-      },
-      err => {
-        console.log(err);
       }
     );
   }

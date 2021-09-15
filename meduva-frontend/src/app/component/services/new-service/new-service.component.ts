@@ -45,7 +45,6 @@ export class NewServiceComponent implements OnInit {
   }
 
   addService() {
-
     let service: Service = {
       name: this.form.controls.name.value,
       description: this.form.controls.description.value,
@@ -53,8 +52,6 @@ export class NewServiceComponent implements OnInit {
       price: this.form.controls.price.value,
       deleted: false
     };
-
-    console.log(service);
 
     this.servicesService.addNewService(service).subscribe(
       data => {
