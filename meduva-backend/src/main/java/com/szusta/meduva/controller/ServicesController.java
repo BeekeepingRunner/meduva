@@ -6,6 +6,7 @@ import com.szusta.meduva.service.ServicesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.management.ServiceNotFoundException;
 import java.util.List;
 
 @RestController
@@ -20,8 +21,8 @@ public class ServicesController {
     }
 
     @GetMapping("/all")
-    public List<Service> getAllServices() {
-        return this.servicesService.getAllServices();
+    public List<Service> getAllUnDeletedServices() {
+        return this.servicesService.getAllUnDeletedServices();
     }
 
     @PostMapping
@@ -38,6 +39,6 @@ public class ServicesController {
 
     @DeleteMapping("/{id}")
     public void deleteService(@PathVariable Long id) {
-        this.servicesService.deleteById(id);
+        this.servicesService.markAsDeleted(id);
     }
 }
