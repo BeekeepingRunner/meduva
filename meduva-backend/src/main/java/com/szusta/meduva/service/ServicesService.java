@@ -32,10 +32,19 @@ public class ServicesService {
     }
 
     public Service save(Service service) {
-        if (this.serviceRepository.existsByName(service.getName())) {
+
+        String serviceName = service.getName();
+        if (this.serviceRepository.existsByName(serviceName) && isNotDeleted(serviceName)) {
             throw new ServiceAlreadyExistsException("Service already exists with name: " + service.getName());
-        }
-        return this.serviceRepository.save(service);
+        } else
+            return this.serviceRepository.save(service);
+    }
+
+    private boolean isNotDeleted(String serviceName) {
+        Service service = this.serviceRepository.findByName(serviceName)
+                .orElseThrow(() -> new ServiceNotFoundException("Service not found with name: " + serviceName));
+
+        return !service.isDeleted();
     }
 
     public void deleteById(Long id) {
