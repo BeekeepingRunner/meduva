@@ -11,6 +11,7 @@ import { RegisterComponent } from './component/register/register.component';
 import { HomeComponent } from './component/home/home.component';
 import { ProfileComponent } from './component/profile/profile.component';
 import { BoardAdminComponent } from './component/board-admin/board-admin.component';
+import { EditProfileComponent } from './component/edit-profile/edit-profile.component';
 
 import { authInterceptorProviders } from './helper/auth.interceptor';
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
@@ -35,6 +36,7 @@ import {CurrencyPipe} from "@angular/common";
 import {MatCardModule} from "@angular/material/card";
 import {MatListModule} from "@angular/material/list";
 
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -49,6 +51,7 @@ import {MatListModule} from "@angular/material/list";
     AccessDeniedComponent,
     ServicesComponent,
     NewServiceComponent,
+    EditProfileComponent
   ],
   imports: [
     BrowserModule,
