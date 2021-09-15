@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {ActivatedRoute} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 import {Service} from "../../../model/service";
 import {ServicesService} from "../../../service/services.service";
 
@@ -15,6 +15,7 @@ export class ServiceDetailsComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private servicesService: ServicesService,
+    private router: Router,
   ) { }
 
   ngOnInit(): void {
@@ -28,8 +29,8 @@ export class ServiceDetailsComponent implements OnInit {
 
   deleteService() {
     this.servicesService.deleteById(this.service.id).subscribe(
-      data => {
-        console.log(data);
+      ifSuccess => {
+        this.router.navigate(['/services']);
       },
       err => {
         console.log(err);

@@ -35,4 +35,9 @@ public class ServicesController {
         );
         return this.servicesService.save(service);
     }
+
+    @DeleteMapping("/{id}")
+    public void deleteService(@PathVariable Long id) {
+        this.servicesService.deleteById(id);
+    }
 }

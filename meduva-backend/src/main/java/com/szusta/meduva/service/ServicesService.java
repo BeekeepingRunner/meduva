@@ -27,4 +27,8 @@ public class ServicesService {
         }
         return this.serviceRepository.save(service);
     }
+
+    public void deleteById(Long id) {
+        this.serviceRepository.deleteById(id);
+    }
 }
