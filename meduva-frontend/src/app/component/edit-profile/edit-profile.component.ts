@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import {Role, User} from "../../model/user";
 import {TokenUserInfo} from "../../service/token/jwt-token-storage.service";
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
+import {UserService} from "../../service/user.service";
+import {ActivatedRoute} from "@angular/router";
 
 @Component({
   selector: 'app-edit-profile',
@@ -10,18 +12,40 @@ import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 })
 export class EditProfileComponent implements OnInit {
 
-  currentUser!: TokenUserInfo | null;
-  userDetails!: User;
-  userRole!: Role;
+  user!: User;
   error!: string;
   form!: FormGroup;
 
+  id!: number;
 
-  constructor(private formBuilder: FormBuilder) { }
+
+  constructor(private formBuilder: FormBuilder,
+              private userService: UserService,
+              private route: ActivatedRoute) { }
 
   ngOnInit(): void {
+
+    ////
+    this.id = this.route.snapshot.params.id;
+    this.userService.getUserDetails(this.id).subscribe(
+      (data: User) => {
+        this.user = data;
+        this.form.patchValue({
+          name: this.user.name,
+          surname: this.user.surname,
+          email: this.user.email,
+          phoneNumber: this.user.phoneNumber,
+          login: this.user.login
+        })
+      },
+      err => {
+        this.error = err.getError();
+      });
+
+    /////
+
     this.form = this.formBuilder.group({
-      login: new FormControl('', [
+      login: new FormControl( '', [
         Validators.required,
         Validators.minLength(5),
         Validators.maxLength(20),
@@ -51,8 +75,14 @@ export class EditProfileComponent implements OnInit {
         Validators.required,
         Validators.pattern('^(\\+[0-9]{1,4})?[0-9]{6,12}$')
       ]),
-      }
-    )
+      });
+
+
+
+
+
+
+
   }
 
 }

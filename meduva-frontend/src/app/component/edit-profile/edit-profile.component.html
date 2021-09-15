@@ -4,7 +4,7 @@
 
     <mat-form-field class="wide-element" appearance="outline">
       <mat-label>First name:</mat-label>
-      <input matInput id="name" type="text" formControlName="name">
+      <input matInput id="name" type="text" formControlName="name" >
       <mat-error *ngIf="form.controls.name.invalid &&
                           (form.controls.name.dirty || form.controls.name.touched)">
         <mat-error *ngIf="form.controls.name.errors?.required ">
@@ -22,7 +22,7 @@
 
     <mat-form-field class="wide-element" appearance="outline">
       <mat-label>Surname:</mat-label>
-      <input matInput id="surname" type="text" formControlName="surname">
+      <input matInput id="surname" type="text" formControlName="surname" >
       <mat-error *ngIf="form.controls.surname.invalid &&
                           (form.controls.surname.dirty || form.controls.surname.touched)">
 
@@ -40,7 +40,7 @@
 
     <mat-form-field class="wide-element" appearance="outline">
       <mat-label>Phone number:</mat-label>
-      <input matInput id="phoneNumber" type="text" formControlName="phoneNumber">
+      <input matInput id="phoneNumber" type="text" formControlName="phoneNumber" >
       <mat-error *ngIf="form.controls.phoneNumber.invalid &&
                           (form.controls.phoneNumber.dirty || form.controls.phoneNumber.touched)">
 
@@ -55,7 +55,7 @@
 
     <mat-form-field class="wide-element" appearance="outline">
       <mat-label>Login:</mat-label>
-      <input matInput id="login" type="text" formControlName="login">
+      <input matInput id="login" type="text" formControlName="login" >
 
       <mat-error *ngIf="form.controls.login.invalid &&
                             (form.controls.login.dirty || form.controls.login.touched)">
