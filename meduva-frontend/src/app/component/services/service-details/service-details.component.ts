@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
 import {Service} from "../../../model/service";
 import {ServicesService} from "../../../service/services.service";
+import {MatDialog} from "@angular/material/dialog";
+import {ConfirmationDialogComponent} from "../../dialog/confirmation-dialog/confirmation-dialog.component";
 
 @Component({
   selector: 'app-service-details',
@@ -16,6 +18,7 @@ export class ServiceDetailsComponent implements OnInit {
     private route: ActivatedRoute,
     private servicesService: ServicesService,
     private router: Router,
+    public dialog: MatDialog,
   ) { }
 
   ngOnInit(): void {
@@ -33,5 +36,17 @@ export class ServiceDetailsComponent implements OnInit {
         this.router.navigate(['/services']);
       }
     );
+  }
+
+  openConfirmationDialog(): void {
+    const confirmDialogRef = this.dialog.open(ConfirmationDialogComponent, {
+      data: { message: 'Do you want to delete this service?' }
+    });
+
+    confirmDialogRef.afterClosed().subscribe(confirmed => {
+      if (confirmed) {
+        this.deleteService();
+      }
+    });
   }
 }
