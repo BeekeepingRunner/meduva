@@ -107,7 +107,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/api/password/user").permitAll()
                 .antMatchers("/api/password/validate-reset-token").permitAll()
                 .antMatchers("/api/password/change").permitAll()
-                .antMatchers("/api/service/**").hasAuthority("ROLE_ADMIN")
+                .antMatchers("/api/service/{id}").hasAuthority("ROLE_ADMIN")
                 .antMatchers("/services").hasAuthority("ROLE_ADMIN")
                 .anyRequest().authenticated();
         //.anyRequest().permitAll();
