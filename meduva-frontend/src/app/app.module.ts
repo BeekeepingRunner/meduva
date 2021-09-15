@@ -32,6 +32,7 @@ import { AccessDeniedComponent } from './component/access-denied/access-denied.c
 import { ServicesComponent } from './component/services/services.component';
 import { NewServiceComponent } from './component/services/new-service/new-service.component';
 import {CurrencyPipe} from "@angular/common";
+import { ServiceDetailsComponent } from './component/services/service-details/service-details.component';
 
 @NgModule({
   declarations: [
@@ -47,6 +48,7 @@ import {CurrencyPipe} from "@angular/common";
     AccessDeniedComponent,
     ServicesComponent,
     NewServiceComponent,
+    ServiceDetailsComponent,
   ],
   imports: [
     BrowserModule,
