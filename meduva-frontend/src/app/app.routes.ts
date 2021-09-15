@@ -55,7 +55,7 @@ export const routes: Routes = [
     }
   },
   {
-    path: 'services/:id',
+    path: 'service/:id',
     component: ServiceDetailsComponent,
     canActivate: [RoleGuard],
     data: {

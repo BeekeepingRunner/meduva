@@ -22,12 +22,18 @@ export class ServiceDetailsComponent implements OnInit {
     this.servicesService.getById(serviceId).subscribe(
       service => {
         this.service = service;
-        console.log(service);
-      },
-      err => {
-
       }
     );
   }
 
+  deleteService() {
+    this.servicesService.deleteById(this.service.id).subscribe(
+      data => {
+        console.log(data);
+      },
+      err => {
+        console.log(err);
+      }
+    );
+  }
 }

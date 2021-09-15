@@ -28,5 +28,9 @@ export class ServicesService {
   public addNewService(service: Service): Observable<Service> {
     return this.httpClient.post<Service>(environment.API_BASE_URL + 'api/service', service);
   }
+
+  public deleteById(serviceId: number | undefined): Observable<any> {
+    return this.httpClient.delete(environment.API_BASE_URL + 'api/service/' + serviceId);
+  }
 }
 
