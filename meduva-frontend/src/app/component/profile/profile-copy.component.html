@@ -28,7 +28,7 @@
       <td>{{ userDetails?.login }}</td>
     </tr>
     <tr class="button-row">
-      <td><button mat-icon-button color="primary">Edit profile</button></td>
+      <td><button mat-icon-button color="primary" [routerLink]="['/profile/edit-profile']">Edit profile</button></td>
     </tr>
     <br>
     <tr>
@@ -44,7 +44,7 @@
       <td>********</td>
     </tr>
 
-    
+
     <tr class="button-row">
       <td><button mat-icon-button color="primary">Change password</button></td>
     </tr>
