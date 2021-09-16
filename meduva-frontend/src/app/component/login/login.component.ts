@@ -27,15 +27,7 @@ export class LoginComponent implements OnInit {
 
   ngOnInit(): void {
 
-    this.form = this.formBuilder.group({
-      login: new FormControl('', [
-                              Validators.required,
-      ]),
-      password: new FormControl('', [
-                              Validators.required
-      ])
-
-    });
+    this.buildForm();
 
 
     if (this.hasJustLoggedIn()) {
@@ -83,6 +75,18 @@ export class LoginComponent implements OnInit {
 
   reloadPage(): void {
     window.location.reload();
+  }
+
+  private buildForm(){
+    this.form = this.formBuilder.group({
+      login: new FormControl('', [
+        Validators.required,
+      ]),
+      password: new FormControl('', [
+        Validators.required
+      ])
+
+    });
   }
 
 }

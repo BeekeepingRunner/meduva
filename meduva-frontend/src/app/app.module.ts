@@ -11,6 +11,7 @@ import { RegisterComponent } from './component/register/register.component';
 import { HomeComponent } from './component/home/home.component';
 import { ProfileComponent } from './component/profile/profile.component';
 import { BoardAdminComponent } from './component/board-admin/board-admin.component';
+import { EditProfileComponent } from './component/edit-profile/edit-profile.component';
 
 import { authInterceptorProviders } from './helper/auth.interceptor';
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
@@ -32,6 +33,8 @@ import { AccessDeniedComponent } from './component/access-denied/access-denied.c
 import { ServicesComponent } from './component/services/services.component';
 import { NewServiceComponent } from './component/services/new-service/new-service.component';
 import {CurrencyPipe} from "@angular/common";
+import {MatCardModule} from "@angular/material/card";
+import {MatListModule} from "@angular/material/list";
 import { ServiceDetailsComponent } from './component/services/service-details/service-details.component';
 import { ConfirmationDialogComponent } from './component/dialog/confirmation-dialog/confirmation-dialog.component';
 import {MatDialogModule} from "@angular/material/dialog";
@@ -50,6 +53,7 @@ import {MatDialogModule} from "@angular/material/dialog";
     AccessDeniedComponent,
     ServicesComponent,
     NewServiceComponent,
+    EditProfileComponent,
     ServiceDetailsComponent,
     ConfirmationDialogComponent,
   ],
@@ -71,6 +75,8 @@ import {MatDialogModule} from "@angular/material/dialog";
     MatFormFieldModule,
     MatInputModule,
     MatTableModule,
+    MatCardModule,
+    MatListModule,
     MatDialogModule,
   ],
   exports: [
