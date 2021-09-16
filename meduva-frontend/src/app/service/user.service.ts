@@ -1,8 +1,12 @@
 import { Injectable } from '@angular/core';
-import {HttpClient} from "@angular/common/http";
+import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {environment} from "../../environments/environment";
 import {ResetPasswordRequest, Role, User} from "../model/user";
+
+const httpOptions = {
+  headers: new HttpHeaders({ 'Content-Type' : 'application/json' })
+};
 
 @Injectable({
   providedIn: 'root'
@@ -55,5 +59,19 @@ export class UserService {
 
   resetPassword(requestBody: ResetPasswordRequest): Observable<any> {
     return this.http.post(environment.API_BASE_URL + 'api/password/change', requestBody);
+  }
+
+  editUser(login: string,
+           name: string,
+           surname: string,
+           phoneNumber: string,
+           id: number){
+
+    return this.http.post( environment.API_BASE_URL+"api/user/edit/" + id, {
+      login,
+      name,
+      surname,
+      phoneNumber
+      }, httpOptions);
   }
 }

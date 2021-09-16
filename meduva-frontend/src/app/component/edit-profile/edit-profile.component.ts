@@ -4,6 +4,7 @@ import {TokenUserInfo} from "../../service/token/jwt-token-storage.service";
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {UserService} from "../../service/user.service";
 import {ActivatedRoute} from "@angular/router";
+import {environment} from "../../../environments/environment";
 
 @Component({
   selector: 'app-edit-profile',
@@ -15,6 +16,9 @@ export class EditProfileComponent implements OnInit {
   user!: User;
   error!: string;
   form!: FormGroup;
+  errorMessage!: string;
+  editFailed: boolean = false;
+  editSuccessful: boolean = false;
 
   id!: number;
 
@@ -79,5 +83,36 @@ export class EditProfileComponent implements OnInit {
       err => {
         this.error = err.getError();
       });
+  }
+
+    onSubmit(){
+    if(this.form.invalid){
+
+      this.errorMessage = "Entered data must be correct";
+      this.editFailed = true;
+    }else{
+      this.tryToSendUpdateRequest();
+    }
+  }
+
+  private tryToSendUpdateRequest(){
+    const login: string = this.form.controls.login.value;
+    const name: string = this.form.controls.name.value;
+    const surname: string = this.form.controls.surname.value;
+    const phoneNumber: string = this.form.controls.phoneNumber.value;
+
+    this.userService.editUser(login,name,surname,phoneNumber, this.id).subscribe(
+      data => {
+        this.editFailed = false;
+        this.editSuccessful = true;
+
+      },
+      err => {
+        this.errorMessage = err.error.message;
+        this.editFailed = true;
+      }
+    )
+
+
   }
 }
