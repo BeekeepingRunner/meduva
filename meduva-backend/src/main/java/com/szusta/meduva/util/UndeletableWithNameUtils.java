@@ -1,6 +1,7 @@
 package com.szusta.meduva.util;
 
 import com.szusta.meduva.model.Undeletable;
+import com.szusta.meduva.repository.undeletable.UndeletableRepository;
 import com.szusta.meduva.repository.undeletable.UndeletableWithNameRepository;
 
 import javax.persistence.EntityNotFoundException;
@@ -18,7 +19,7 @@ public class UndeletableWithNameUtils {
         }
     }
 
-    public static <T extends Undeletable> void markAsDeleted(UndeletableWithNameRepository<T> repo, Long idOfUndeletable) {
+    public static <T extends Undeletable> void markAsDeleted(UndeletableRepository<T> repo, Long idOfUndeletable) {
 
         T undeletable = repo.findById(idOfUndeletable)
                 .orElseThrow(() -> new EntityNotFoundException("Room not found with id : " + idOfUndeletable));
