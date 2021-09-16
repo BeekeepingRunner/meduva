@@ -6,8 +6,6 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface ServiceRepository extends UndeletableRepository<Service> {
+public interface ServiceRepository extends UndeletableWithNameRepository<Service> {
 
-    boolean existsByName(String name);
-    Optional<Service> findByName(String name);
 }

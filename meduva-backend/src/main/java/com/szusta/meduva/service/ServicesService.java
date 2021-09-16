@@ -1,9 +1,9 @@
 package com.szusta.meduva.service;
 
-import com.szusta.meduva.exception.ServiceAlreadyExistsException;
-import com.szusta.meduva.exception.notfound.ServiceNotFoundException;
+import com.szusta.meduva.exception.AlreadyExistsException;
 import com.szusta.meduva.model.Service;
 import com.szusta.meduva.repository.ServiceRepository;
+import com.szusta.meduva.util.UndeletableWithNameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.transaction.Transactional;
@@ -29,18 +29,10 @@ public class ServicesService {
 
     public Service save(Service service) {
 
-        String serviceName = service.getName();
-        if (this.serviceRepository.existsByName(serviceName) && isNotDeleted(serviceName)) {
-            throw new ServiceAlreadyExistsException("Service already exists with name: " + service.getName());
-        } else
+        if (UndeletableWithNameUtils.canBeSaved(this.serviceRepository, service.getName())) {
             return this.serviceRepository.save(service);
-    }
-
-    private boolean isNotDeleted(String serviceName) {
-        Service service = this.serviceRepository.findByName(serviceName)
-                .orElseThrow(() -> new ServiceNotFoundException("Service not found with name: " + serviceName));
-
-        return !service.isDeleted();
+        } else
+            throw new AlreadyExistsException("Room already exists with name: " + service.getName());
     }
 
     public void deleteById(Long id) {
@@ -49,10 +41,6 @@ public class ServicesService {
 
     @Transactional
     public void markAsDeleted(Long id) {
-        Service service = this.serviceRepository.findById(id)
-                .orElseThrow(() -> new ServiceNotFoundException("Service not found with id : " + id));
-
-        service.markAsDeleted();
-        this.serviceRepository.save(service);
+        UndeletableWithNameUtils.markAsDeleted(this.serviceRepository, id);
     }
 }
