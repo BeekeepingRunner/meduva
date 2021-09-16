@@ -14,15 +14,10 @@ import java.math.BigDecimal;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Room {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class Room extends Deletable {
 
     private String name;
     private String description;
-    private boolean deleted;
 
     public Room(String name,
                 String description,

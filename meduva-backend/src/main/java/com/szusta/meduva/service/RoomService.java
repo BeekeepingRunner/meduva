@@ -1,6 +1,7 @@
 package com.szusta.meduva.service;
 
 import com.szusta.meduva.exception.AlreadyExistsException;
+import com.szusta.meduva.model.Deletable;
 import com.szusta.meduva.model.Room;
 import com.szusta.meduva.repository.RoomRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @org.springframework.stereotype.Service
 public class RoomService {
@@ -25,10 +25,7 @@ public class RoomService {
     }
 
     public List<Room> findAllUnDeletedRooms() {
-        List<Room> rooms = this.roomRepository.findAll();
-        return rooms.stream()
-                .filter(room -> !room.isDeleted())
-                .collect(Collectors.toList());
+        return this.roomRepository.findAllUndeleted();
     }
 
     public Room save(Room room) {
@@ -56,7 +53,7 @@ public class RoomService {
         Room room = this.roomRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Room not found with id : " + id));
 
-        room.setDeleted(true);
+        room.markAsDeleted();
         this.roomRepository.save(room);
     }
 }
