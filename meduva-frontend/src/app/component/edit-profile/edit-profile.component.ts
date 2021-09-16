@@ -24,26 +24,11 @@ export class EditProfileComponent implements OnInit {
               private route: ActivatedRoute) { }
 
   ngOnInit(): void {
+    this.populateFormWithUserData();
+    this.buildForm();
+  }
 
-    ////
-    this.id = this.route.snapshot.params.id;
-    this.userService.getUserDetails(this.id).subscribe(
-      (data: User) => {
-        this.user = data;
-        this.form.patchValue({
-          name: this.user.name,
-          surname: this.user.surname,
-          email: this.user.email,
-          phoneNumber: this.user.phoneNumber,
-          login: this.user.login
-        })
-      },
-      err => {
-        this.error = err.getError();
-      });
-
-    /////
-
+  private buildForm(){
     this.form = this.formBuilder.group({
       login: new FormControl( '', [
         Validators.required,
@@ -75,14 +60,24 @@ export class EditProfileComponent implements OnInit {
         Validators.required,
         Validators.pattern('^(\\+[0-9]{1,4})?[0-9]{6,12}$')
       ]),
-      });
-
-
-
-
-
-
-
+    });
   }
 
+  private populateFormWithUserData(){
+    this.id = this.route.snapshot.params.id;
+    this.userService.getUserDetails(this.id).subscribe(
+      (data: User) => {
+        this.user = data;
+        this.form.patchValue({
+          name: this.user.name,
+          surname: this.user.surname,
+          email: this.user.email,
+          phoneNumber: this.user.phoneNumber,
+          login: this.user.login
+        })
+      },
+      err => {
+        this.error = err.getError();
+      });
+  }
 }
