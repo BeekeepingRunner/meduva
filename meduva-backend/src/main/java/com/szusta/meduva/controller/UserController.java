@@ -31,12 +31,12 @@ public class UserController {
     }
 
     @GetMapping("/all")
-    public List<User> getUsers() {
+    public List<User> findAllUsers() {
         return userService.findAll();
     }
 
     @GetMapping("/all/undeleted")
-    public List<User> getAllUndeletedUsers() {
+    public List<User> findAllUndeletedUsers() {
         return userService.findAllUndeleted();
     }
 

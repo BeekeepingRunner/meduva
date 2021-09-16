@@ -1,7 +1,6 @@
 package com.szusta.meduva.service;
 
 import com.szusta.meduva.exception.AlreadyExistsException;
-import com.szusta.meduva.exception.notfound.ServiceNotFoundException;
 import com.szusta.meduva.model.Room;
 import com.szusta.meduva.repository.RoomRepository;
 import org.springframework.beans.factory.annotation.Autowired;

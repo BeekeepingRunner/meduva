@@ -20,6 +20,10 @@ export class RoomService {
     return this.httpClient.get<Room[]>(environment.API_BASE_URL + 'api/room/all');
   }
 
+  public getAllUndeletedRooms(): Observable<Room[]> {
+    return this.httpClient.get<Room[]>(environment.API_BASE_URL + 'api/room/all/undeleted');
+  }
+
   public getById(roomId: number): Observable<Room> {
     return this.httpClient.get<Service>(environment.API_BASE_URL + 'rooms/' + roomId).pipe(
       map(room => trimJSON(room, ['_links']))

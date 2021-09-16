@@ -21,7 +21,7 @@ export class ServiceListComponent implements OnInit {
   }
 
   getAllServices() {
-    this.servicesService.getAllServices().subscribe(
+    this.servicesService.getAllUndeletedServices().subscribe(
       services => {
         this.services = services;
       }
