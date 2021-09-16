@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class UserService {
@@ -55,17 +54,11 @@ public class UserService {
     }
 
     public List<User> findAllUndeleted() {
-        List<User> users = this.userRepository.findAll();
-        return users.stream()
-                .filter(user -> !user.isDeleted())
-                .collect(Collectors.toList());
+        return this.userRepository.findAllUndeleted();
     }
 
     public List<User> findAllDeleted() {
-        List<User> users = this.userRepository.findAll();
-        return users.stream()
-                .filter(User::isDeleted)
-                .collect(Collectors.toList());
+        return this.userRepository.findAllDeleted();
     }
 
     public List<User> findAllUsersWithMinimumRole(ERole roleId) {

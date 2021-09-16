@@ -3,12 +3,11 @@ package com.szusta.meduva.service;
 import com.szusta.meduva.exception.AlreadyExistsException;
 import com.szusta.meduva.model.Room;
 import com.szusta.meduva.repository.RoomRepository;
+import com.szusta.meduva.util.UndeletableWithNameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @org.springframework.stereotype.Service
 public class RoomService {
@@ -25,26 +24,15 @@ public class RoomService {
     }
 
     public List<Room> findAllUnDeletedRooms() {
-        List<Room> rooms = this.roomRepository.findAll();
-        return rooms.stream()
-                .filter(room -> !room.isDeleted())
-                .collect(Collectors.toList());
+        return this.roomRepository.findAllUndeleted();
     }
 
     public Room save(Room room) {
 
-        String roomName = room.getName();
-        if (this.roomRepository.existsByName(roomName) && isNotDeleted(roomName)) {
-            throw new AlreadyExistsException("Room already exists with name: " + room.getName());
-        } else
+        if (UndeletableWithNameUtils.canBeSaved(this.roomRepository, room.getName())) {
             return this.roomRepository.save(room);
-    }
-
-    private boolean isNotDeleted(String roomName) {
-        Room room = this.roomRepository.findByName(roomName)
-                .orElseThrow(() -> new AlreadyExistsException("Room not found with name: " + roomName));
-
-        return !room.isDeleted();
+        } else
+            throw new AlreadyExistsException("Room already exists with name: " + room.getName());
     }
 
     public void deleteById(Long id) {
@@ -53,10 +41,6 @@ public class RoomService {
 
     @Transactional
     public void markAsDeleted(Long id) {
-        Room room = this.roomRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Room not found with id : " + id));
-
-        room.setDeleted(true);
-        this.roomRepository.save(room);
+        UndeletableWithNameUtils.markAsDeleted(this.roomRepository, id);
     }
 }

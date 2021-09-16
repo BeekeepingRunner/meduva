@@ -14,18 +14,13 @@ import java.math.BigDecimal;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Service {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class Service extends Undeletable {
 
     private String name;
     private String description;
     @Column(name = "duration_in_min")
     private int durationInMin;
     private BigDecimal price;
-    private boolean deleted;
 
     public Service(String name,
                    String description,
