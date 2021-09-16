@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import {ServicesService} from "../../service/services.service";
-import {Service} from "../../model/service";
+import {ServicesService} from "../../../service/services.service";
+import {Service} from "../../../model/service";
 
 @Component({
   selector: 'app-services',
-  templateUrl: './services.component.html',
-  styleUrls: ['./services.component.css']
+  templateUrl: './service-list.component.html',
+  styleUrls: ['./service-list.component.css']
 })
-export class ServicesComponent implements OnInit {
+export class ServiceListComponent implements OnInit {
 
   services: Service[] = [];
   displayedColumns: string[] = ['name', 'duration', 'price'];
@@ -21,7 +21,7 @@ export class ServicesComponent implements OnInit {
   }
 
   getAllServices() {
-    this.servicesService.getAllServices().subscribe(
+    this.servicesService.getAllUndeletedServices().subscribe(
       services => {
         this.services = services;
       }

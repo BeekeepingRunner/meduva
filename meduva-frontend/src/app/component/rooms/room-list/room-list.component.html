@@ -1,0 +1,19 @@
+<div>
+  <h2>Rooms</h2>
+  <button mat-icon-button color="primary">
+    + Add new Room
+  </button>
+  <div>
+    <table mat-table [dataSource]="rooms" class="mat-elevation-z8">
+
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef>Rooms</th>
+        <td mat-cell *matCellDef="let room"><b>{{ room.name }}</b></td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; let room; columns: displayedColumns;">
+      </tr>
+    </table>
+  </div>
+</div>

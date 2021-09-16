@@ -21,8 +21,13 @@ public class ServicesController {
     }
 
     @GetMapping("/all")
-    public List<Service> getAllUnDeletedServices() {
-        return this.servicesService.getAllUnDeletedServices();
+    public List<Service> findAllServices() {
+        return this.servicesService.findAllServices();
+    }
+
+    @GetMapping("/all/undeleted")
+    public List<Service> findAllUnDeletedServices() {
+        return this.servicesService.findAllUnDeletedServices();
     }
 
     @PostMapping

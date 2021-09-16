@@ -16,7 +16,7 @@ public class ServicesControllerAdvice {
 
     @ExceptionHandler(value = ServiceAlreadyExistsException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorMessage handleRoleNotFoundException(ServiceAlreadyExistsException ex, WebRequest request) {
+    public ErrorMessage handleServiceAlreadyExistsException(ServiceAlreadyExistsException ex, WebRequest request) {
 
         return new ErrorMessage(
                 HttpStatus.BAD_REQUEST.value(),
@@ -28,7 +28,7 @@ public class ServicesControllerAdvice {
 
     @ExceptionHandler(value = ServiceNotFoundException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorMessage handleRoleNotFoundException(ServiceNotFoundException ex, WebRequest request) {
+    public ErrorMessage handleServiceNotFoundException(ServiceNotFoundException ex, WebRequest request) {
 
         return new ErrorMessage(
                 HttpStatus.BAD_REQUEST.value(),
