@@ -9,12 +9,12 @@ import javax.persistence.*;
 import java.math.BigDecimal;
 
 @Entity
-@Table(name = "service")
+@Table(name = "room")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Service {
+public class Room {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,20 +22,13 @@ public class Service {
 
     private String name;
     private String description;
-    @Column(name = "duration_in_min")
-    private int durationInMin;
-    private BigDecimal price;
     private boolean deleted;
 
-    public Service(String name,
-                   String description,
-                   int durationInMin,
-                   BigDecimal price,
-                   boolean deleted) {
+    public Room(String name,
+                String description,
+                boolean deleted) {
         this.name = name;
         this.description = description;
-        this.durationInMin = durationInMin;
-        this.price = price;
         this.deleted = deleted;
     }
 }
