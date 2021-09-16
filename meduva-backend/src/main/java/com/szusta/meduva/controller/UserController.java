@@ -35,6 +35,11 @@ public class UserController {
         return userService.findAll();
     }
 
+    @GetMapping("/all/undeleted")
+    public List<User> getAllUndeletedUsers() {
+        return userService.findAllUndeleted();
+    }
+
     @GetMapping("/workers")
     public List<User> getWorkers() {
         return userService.findAllUsersWithMinimumRole(ERole.ROLE_WORKER);

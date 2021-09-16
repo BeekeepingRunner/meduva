@@ -27,6 +27,10 @@ export class UserService {
     return this.http.get<User[]>(environment.API_BASE_URL + 'api/user/all');
   }
 
+  getAllUndeletedUsers() : Observable<User[]> {
+    return this.http.get<User[]>(environment.API_BASE_URL + 'api/user/all/undeleted');
+  }
+
   getAllWorkers() : Observable<User[]> {
     return this.http.get<User[]>(environment.API_BASE_URL + 'api/user/workers');
   }
