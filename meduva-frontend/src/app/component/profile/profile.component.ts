@@ -6,7 +6,7 @@ import {Role, User} from "../../model/user";
 
 @Component({
   selector: 'app-profile',
-  templateUrl: './profile-copy.component.html',
+  templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.css']
 })
 export class ProfileComponent implements OnInit {
