@@ -11,7 +11,7 @@ import {BoardAdminComponent} from "./component/board-admin/board-admin.component
 import {UserListComponent} from "./component/user-list/user-list.component";
 import {roleNames, UserRole} from "./model/user";
 import {AccessDeniedComponent} from "./component/access-denied/access-denied.component";
-import {ServicesComponent} from "./component/services/services.component";
+import {ServiceListComponent} from "./component/services/service-list/service-list.component";
 import {NewServiceComponent} from "./component/services/new-service/new-service.component";
 import {EditProfileComponent} from "./component/edit-profile/edit-profile.component";
 import {ServiceDetailsComponent} from "./component/services/service-details/service-details.component";
@@ -57,7 +57,7 @@ export const routes: Routes = [
   },
   {
     path: 'services',
-    component: ServicesComponent,
+    component: ServiceListComponent,
     canActivate: [RoleGuard],
     data: {
       expectedRole: roleNames[UserRole.ROLE_ADMIN]

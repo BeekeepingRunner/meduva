@@ -22,7 +22,7 @@ public class ServicesController {
 
     @GetMapping("/all")
     public List<Service> getAllUnDeletedServices() {
-        return this.servicesService.getAllUnDeletedServices();
+        return this.servicesService.findAllUnDeletedServices();
     }
 
     @PostMapping

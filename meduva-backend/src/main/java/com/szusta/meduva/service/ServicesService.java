@@ -20,11 +20,11 @@ public class ServicesService {
         this.serviceRepository = serviceRepository;
     }
 
-    public List<Service> getAllServices() {
+    public List<Service> findAllServices() {
         return this.serviceRepository.findAll();
     }
 
-    public List<Service> getAllUnDeletedServices() {
+    public List<Service> findAllUnDeletedServices() {
         List<Service> services = this.serviceRepository.findAll();
         return services.stream()
                 .filter(service -> !service.isDeleted())
