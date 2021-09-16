@@ -32,6 +32,7 @@ public class User {
     private String surname;
     @Column(name = "phone_number")
     private String phoneNumber;
+    private boolean deleted;
 
     @ManyToMany(
             fetch = FetchType.LAZY,

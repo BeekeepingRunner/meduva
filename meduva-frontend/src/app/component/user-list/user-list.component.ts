@@ -20,12 +20,12 @@ export class UserListComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.getAllUsers();
+    this.getAllUndeletedUsers();
   }
 
-  public getAllUsers(): void {
+  public getAllUndeletedUsers(): void {
 
-    this.userService.getAllUsers().subscribe(
+    this.userService.getAllUndeletedUsers().subscribe(
       this.setUsersMasterRoles
     );
     this.contentName = "Users";
