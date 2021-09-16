@@ -1,4 +1,4 @@
-package com.szusta.meduva.repository;
+package com.szusta.meduva.repository.undeletable;
 
 import com.szusta.meduva.model.Undeletable;
 import org.springframework.data.repository.NoRepositoryBean;

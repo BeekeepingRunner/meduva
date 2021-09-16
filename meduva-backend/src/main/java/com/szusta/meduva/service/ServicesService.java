@@ -32,7 +32,7 @@ public class ServicesService {
         if (UndeletableWithNameUtils.canBeSaved(this.serviceRepository, service.getName())) {
             return this.serviceRepository.save(service);
         } else
-            throw new AlreadyExistsException("Room already exists with name: " + service.getName());
+            throw new AlreadyExistsException("Service already exists with name: " + service.getName());
     }
 
     public void deleteById(Long id) {

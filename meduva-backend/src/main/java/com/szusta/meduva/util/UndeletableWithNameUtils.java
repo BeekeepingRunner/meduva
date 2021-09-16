@@ -1,11 +1,9 @@
 package com.szusta.meduva.util;
 
-import com.szusta.meduva.model.Room;
 import com.szusta.meduva.model.Undeletable;
-import com.szusta.meduva.repository.UndeletableWithNameRepository;
+import com.szusta.meduva.repository.undeletable.UndeletableWithNameRepository;
 
 import javax.persistence.EntityNotFoundException;
-import javax.transaction.Transactional;
 
 public class UndeletableWithNameUtils {
 
