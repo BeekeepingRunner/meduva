@@ -7,21 +7,21 @@ import javax.persistence.EntityNotFoundException;
 
 public class UndeletableWithNameUtils {
 
-    public static <T extends Undeletable> boolean canBeSaved(UndeletableWithNameRepository<T> repo, String name) {
+    public static <T extends Undeletable> boolean canBeSaved(UndeletableWithNameRepository<T> repo, String nameOfUndeletable) {
 
-        if (repo.existsByName(name)) {
-            T undeletable = repo.findByName(name)
-                    .orElseThrow(() -> new EntityNotFoundException("Entity not found with name: " + name));
+        if (repo.existsByName(nameOfUndeletable)) {
+            T undeletable = repo.findByName(nameOfUndeletable)
+                    .orElseThrow(() -> new EntityNotFoundException("Entity not found with name: " + nameOfUndeletable));
             return undeletable.isDeleted();
         } else {
             return true;
         }
     }
 
-    public static <T extends Undeletable> void markAsDeleted(UndeletableWithNameRepository<T> repo, Long id) {
+    public static <T extends Undeletable> void markAsDeleted(UndeletableWithNameRepository<T> repo, Long idOfUndeletable) {
 
-        T undeletable = repo.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Room not found with id : " + id));
+        T undeletable = repo.findById(idOfUndeletable)
+                .orElseThrow(() -> new EntityNotFoundException("Room not found with id : " + idOfUndeletable));
 
         undeletable.markAsDeleted();
         repo.save(undeletable);
