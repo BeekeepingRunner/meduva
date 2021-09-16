@@ -3,6 +3,7 @@ import {JwtTokenStorageService, TokenUserInfo} from "../../service/token/jwt-tok
 import {UserService} from "../../service/user.service";
 import {Role, User} from "../../model/user";
 
+
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
