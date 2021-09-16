@@ -12,6 +12,8 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -32,7 +34,26 @@ class ServicesServiceTest {
     }
 
     @Test
-    void saveSuccess() {
+    void getAllUnDeletedServices() {
+        Service s1 = new Service();
+        s1.setDeleted(true);
+        Service s2 = new Service();
+        s1.setDeleted(false);
+
+        List<Service> services = new ArrayList<>();
+        services.add(s1);
+        services.add(s2);
+
+        when(serviceRepository.findAll()).thenReturn(services);
+        List<Service> undeletedServices = servicesServiceUnderTest.getAllUnDeletedServices();
+        undeletedServices.forEach(service -> {
+            assertFalse(service.isDeleted());
+        });
+        verify(serviceRepository, times(1)).findAll();
+    }
+
+    @Test
+    void saveSuccessWhenServiceDoesntExists() {
         Service service = new Service();
         service.setName("service");
 
@@ -51,16 +72,56 @@ class ServicesServiceTest {
     }
 
     @Test
-    void saveFail() {
+    void saveSuccessWhenServiceDoesExistsAndIsMarkedAsDeleted() {
         Service service = new Service();
         service.setName("service");
+        service.setDeleted(true);
 
         when(serviceRepository.existsByName(service.getName()))
                 .thenReturn(true);
+        when(serviceRepository.findByName(service.getName()))
+                .thenReturn(Optional.of(service));
+
+        when(serviceRepository.save(service)).thenReturn(service);
+
+        assertEquals(service, servicesServiceUnderTest.save(service));
+        ArgumentCaptor<Service> serviceArgumentCaptor = ArgumentCaptor.forClass(Service.class);
+
+        verify(serviceRepository, times(1)).existsByName(service.getName());
+        verify(serviceRepository, times(1)).save(serviceArgumentCaptor.capture());
+
+        Service capturedService = serviceArgumentCaptor.getValue();
+        assertEquals(service, capturedService);
+    }
+
+    @Test
+    void saveFail() {
+        Service service = new Service();
+        service.setName("service");
+        service.setDeleted(false);
+
+        when(serviceRepository.existsByName(service.getName()))
+                .thenReturn(true);
+        when(serviceRepository.findByName(service.getName()))
+                .thenReturn(Optional.of(service));
 
         assertThrows(ServiceAlreadyExistsException.class,
                 () -> servicesServiceUnderTest.save(service));
 
         verify(serviceRepository, times(1)).existsByName(service.getName());
+        verify(serviceRepository, never()).save(service);
+    }
+
+    @Test
+    void markAsDeleted() {
+        Service service = new Service();
+        service.setId(1L);
+        when(serviceRepository.findById(service.getId())).thenReturn(Optional.of(service));
+        when(serviceRepository.save(service)).thenReturn(service);
+
+        servicesServiceUnderTest.markAsDeleted(service.getId());
+
+        verify(serviceRepository, times(1)).findById(service.getId());
+        verify(serviceRepository, times(1)).save(service);
     }
 }

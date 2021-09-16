@@ -14,6 +14,7 @@ import {AccessDeniedComponent} from "./component/access-denied/access-denied.com
 import {ServicesComponent} from "./component/services/services.component";
 import {NewServiceComponent} from "./component/services/new-service/new-service.component";
 import {EditProfileComponent} from "./component/edit-profile/edit-profile.component";
+import {ServiceDetailsComponent} from "./component/services/service-details/service-details.component";
 
 export const routes: Routes = [
   { path: 'home', component: HomeComponent },
@@ -57,6 +58,14 @@ export const routes: Routes = [
   {
     path: 'services',
     component: ServicesComponent,
+    canActivate: [RoleGuard],
+    data: {
+      expectedRole: roleNames[UserRole.ROLE_ADMIN]
+    }
+  },
+  {
+    path: 'service/:id',
+    component: ServiceDetailsComponent,
     canActivate: [RoleGuard],
     data: {
       expectedRole: roleNames[UserRole.ROLE_ADMIN]

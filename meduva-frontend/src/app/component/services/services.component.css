@@ -21,3 +21,7 @@ button {
 .mat-raised-button.mat-primary {
   background-color: #4f4c79;
 }
+
+.mat-row:hover {
+  background-color: rgba(100,93,154,0.45);
+}

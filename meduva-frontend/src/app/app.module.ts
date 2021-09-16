@@ -35,7 +35,9 @@ import { NewServiceComponent } from './component/services/new-service/new-servic
 import {CurrencyPipe} from "@angular/common";
 import {MatCardModule} from "@angular/material/card";
 import {MatListModule} from "@angular/material/list";
-
+import { ServiceDetailsComponent } from './component/services/service-details/service-details.component';
+import { ConfirmationDialogComponent } from './component/dialog/confirmation-dialog/confirmation-dialog.component';
+import {MatDialogModule} from "@angular/material/dialog";
 
 @NgModule({
   declarations: [
@@ -51,7 +53,9 @@ import {MatListModule} from "@angular/material/list";
     AccessDeniedComponent,
     ServicesComponent,
     NewServiceComponent,
-    EditProfileComponent
+    EditProfileComponent,
+    ServiceDetailsComponent,
+    ConfirmationDialogComponent,
   ],
   imports: [
     BrowserModule,
@@ -73,6 +77,7 @@ import {MatListModule} from "@angular/material/list";
     MatTableModule,
     MatCardModule,
     MatListModule,
+    MatDialogModule,
   ],
   exports: [
     RouterModule

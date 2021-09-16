@@ -1,6 +1,6 @@
 package com.szusta.meduva.unit.service;
 
-import com.szusta.meduva.exception.PasswordResetTokenNotFoundException;
+import com.szusta.meduva.exception.notfound.PasswordResetTokenNotFoundException;
 import com.szusta.meduva.model.PasswordResetToken;
 import com.szusta.meduva.model.User;
 import com.szusta.meduva.repository.PasswordResetTokenRepository;

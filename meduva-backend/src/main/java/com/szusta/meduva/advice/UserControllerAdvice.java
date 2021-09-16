@@ -1,7 +1,7 @@
 package com.szusta.meduva.advice;
 
 import com.szusta.meduva.exception.ErrorMessage;
-import com.szusta.meduva.exception.UserNotFoundException;
+import com.szusta.meduva.exception.notfound.UserNotFoundException;
 import com.szusta.meduva.exception.UsersWithMinRoleNotFound;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
