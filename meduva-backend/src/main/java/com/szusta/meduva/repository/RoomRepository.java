@@ -6,7 +6,7 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface RoomRepository extends DeletableRepository<Room> {
+public interface RoomRepository extends UndeletableRepository<Room> {
 
     boolean existsByName(String name);
     Optional<Room> findByName(String name);

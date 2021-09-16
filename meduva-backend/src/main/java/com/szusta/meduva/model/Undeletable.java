@@ -1,15 +1,18 @@
 package com.szusta.meduva.model;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.*;
 
-@Entity
-@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public class Deletable {
+@MappedSuperclass
+@Getter
+@Setter
+public class Undeletable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
-
+    protected long id;
     protected boolean deleted;
 
     public boolean isDeleted() {

@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.transaction.Transactional;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @org.springframework.stereotype.Service
 public class ServicesService {
@@ -25,10 +24,7 @@ public class ServicesService {
     }
 
     public List<Service> findAllUnDeletedServices() {
-        List<Service> services = this.serviceRepository.findAll();
-        return services.stream()
-                .filter(service -> !service.isDeleted())
-                .collect(Collectors.toList());
+        return this.serviceRepository.findAllUndeleted();
     }
 
     public Service save(Service service) {
@@ -56,7 +52,7 @@ public class ServicesService {
         Service service = this.serviceRepository.findById(id)
                 .orElseThrow(() -> new ServiceNotFoundException("Service not found with id : " + id));
 
-        service.setDeleted(true);
+        service.markAsDeleted();
         this.serviceRepository.save(service);
     }
 }

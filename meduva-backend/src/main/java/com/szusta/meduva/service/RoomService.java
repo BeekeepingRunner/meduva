@@ -1,7 +1,6 @@
 package com.szusta.meduva.service;
 
 import com.szusta.meduva.exception.AlreadyExistsException;
-import com.szusta.meduva.model.Deletable;
 import com.szusta.meduva.model.Room;
 import com.szusta.meduva.repository.RoomRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +30,7 @@ public class RoomService {
     public Room save(Room room) {
 
         String roomName = room.getName();
+
         if (this.roomRepository.existsByName(roomName) && isNotDeleted(roomName)) {
             throw new AlreadyExistsException("Room already exists with name: " + room.getName());
         } else
