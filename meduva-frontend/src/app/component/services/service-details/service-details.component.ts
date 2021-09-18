@@ -30,14 +30,6 @@ export class ServiceDetailsComponent implements OnInit {
     );
   }
 
-  deleteService() {
-    this.servicesService.deleteById(this.service.id).subscribe(
-      ifSuccess => {
-        this.router.navigate(['/services']);
-      }
-    );
-  }
-
   openConfirmationDialog(): void {
     const confirmDialogRef = this.dialog.open(ConfirmationDialogComponent, {
       data: { message: 'Do you want to delete this service?' }
@@ -48,5 +40,13 @@ export class ServiceDetailsComponent implements OnInit {
         this.deleteService();
       }
     });
+  }
+
+  deleteService() {
+    this.servicesService.deleteById(this.service.id).subscribe(
+      ifSuccess => {
+        this.router.navigate(['/services']);
+      }
+    );
   }
 }

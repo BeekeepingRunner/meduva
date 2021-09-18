@@ -1,5 +1,6 @@
 package com.szusta.meduva.security;
 
+import com.szusta.meduva.model.Room;
 import com.szusta.meduva.model.Service;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.rest.core.config.RepositoryRestConfiguration;
@@ -12,6 +13,6 @@ public class RestConfig implements RepositoryRestConfigurer {
     @Override
     public void configureRepositoryRestConfiguration(RepositoryRestConfiguration config, CorsRegistry cors) {
 
-        config.exposeIdsFor(Service.class);
+        config.exposeIdsFor(Service.class, Room.class);
     }
 }
