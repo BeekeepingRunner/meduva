@@ -13,6 +13,8 @@ import {ConfirmationDialogComponent} from "../../dialog/confirmation-dialog/conf
 export class RoomDetailsComponent implements OnInit {
 
   room!: Room;
+  wasDeletionSuccessful: boolean = true;
+  errorMessage: string = '';
 
   constructor(
     private route: ActivatedRoute,
@@ -46,6 +48,10 @@ export class RoomDetailsComponent implements OnInit {
     this.roomService.deleteById(this.room.id).subscribe(
       ifSuccess => {
         this.router.navigate(['/rooms']);
+      },
+      err => {
+        this.wasDeletionSuccessful = false;
+        this.errorMessage = err.error.message;
       }
     );
   }

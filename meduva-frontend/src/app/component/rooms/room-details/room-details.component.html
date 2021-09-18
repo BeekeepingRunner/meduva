@@ -25,4 +25,8 @@
     <td><button mat-raised-button color="warn" (click)="openConfirmationDialog()">Delete room</button></td>
   </tr>
   <br>
+
+  <div class="alert alert-warning" *ngIf="!wasDeletionSuccessful">
+    Failed to delete this room.<br />{{ errorMessage }}
+  </div>
 </div>
