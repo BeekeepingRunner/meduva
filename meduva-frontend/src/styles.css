@@ -26,7 +26,7 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   display: flex;
 }
 
-.btn-primary, .mat-raised-button.mat-primary{
+.btn-primary, .mat-raised-button.mat-primary {
   background-color: #4f4c79;
   border-color: #4f4c79;
   color: white;
@@ -40,5 +40,6 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 button:focus, .btn-primary:focus {
   background-color: #4f4c79;
   border-color: #4f4c79;
+  color: white;
   outline: none;
 }
