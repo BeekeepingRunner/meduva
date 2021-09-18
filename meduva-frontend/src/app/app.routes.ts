@@ -16,6 +16,7 @@ import {NewServiceComponent} from "./component/services/new-service/new-service.
 import {EditProfileComponent} from "./component/edit-profile/edit-profile.component";
 import {ServiceDetailsComponent} from "./component/services/service-details/service-details.component";
 import {RoomListComponent} from "./component/rooms/room-list/room-list.component";
+import {NewRoomComponent} from "./component/rooms/new-room/new-room.component";
 
 export const routes: Routes = [
   { path: 'home', component: HomeComponent },
@@ -83,6 +84,14 @@ export const routes: Routes = [
   {
     path: 'rooms',
     component: RoomListComponent,
+    canActivate: [RoleGuard],
+    data: {
+      expectedRole: roleNames[UserRole.ROLE_ADMIN]
+    }
+  },
+  {
+    path: 'rooms/add-room',
+    component: NewRoomComponent,
     canActivate: [RoleGuard],
     data: {
       expectedRole: roleNames[UserRole.ROLE_ADMIN]

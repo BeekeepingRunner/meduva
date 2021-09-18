@@ -39,6 +39,7 @@ import { ServiceDetailsComponent } from './component/services/service-details/se
 import { ConfirmationDialogComponent } from './component/dialog/confirmation-dialog/confirmation-dialog.component';
 import {MatDialogModule} from "@angular/material/dialog";
 import { RoomListComponent } from './component/rooms/room-list/room-list.component';
+import { NewRoomComponent } from './component/rooms/new-room/new-room.component';
 
 @NgModule({
   declarations: [
@@ -58,6 +59,7 @@ import { RoomListComponent } from './component/rooms/room-list/room-list.compone
     ServiceDetailsComponent,
     ConfirmationDialogComponent,
     RoomListComponent,
+    NewRoomComponent,
   ],
   imports: [
     BrowserModule,

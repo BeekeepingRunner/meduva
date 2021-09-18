@@ -1,0 +1,46 @@
+<button mat-icon-button color="primary" routerLink='/rooms'>
+  <- Back to rooms
+</button>
+
+<h2>Add new Room</h2>
+
+<form class="basic-form" (ngSubmit)="addRoom()" [formGroup]="form">
+
+  <br>
+  <mat-form-field class="wide-element" appearance="outline">
+    <mat-label>Room name:</mat-label>
+    <input matInput id="name" type="text" formControlName="name">
+
+    <mat-error *ngIf="form.controls.name.invalid &&
+                            (form.controls.name.dirty || form.controls.name.touched)">
+      <mat-error *ngIf="form.controls.name.errors?.required">
+        Name is required
+      </mat-error>
+    </mat-error>
+
+  </mat-form-field>
+
+  <mat-form-field class="wide-element" appearance="outline">
+    <mat-label>Description:</mat-label>
+    <textarea matInput
+              id="description" formControlName="description"
+              cdkTextareaAutosize
+              #autosize="cdkTextareaAutosize"
+              cdkAutosizeMinRows="1"
+              cdkAutosizeMaxRows="10"></textarea>
+  </mat-form-field>
+
+  <button mat-raised-button class="btn btn-primary btn-block" type="submit" [disabled]="!form.valid">Add room</button>
+  <br>
+
+  <div class="alert alert-warning" *ngIf="didAddingFail">
+    Operation failed.<br />{{ errorMessage }}
+  </div>
+
+  <div *ngIf="isSubmitted && !didAddingFail">
+    <div class="alert alert-success" >
+      You have successfully added new Room!
+    </div>
+  </div>
+
+</form>

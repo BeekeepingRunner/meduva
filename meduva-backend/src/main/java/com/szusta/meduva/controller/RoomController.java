@@ -1,6 +1,7 @@
 package com.szusta.meduva.controller;
 
 import com.szusta.meduva.model.Room;
+import com.szusta.meduva.payload.request.NewRoomRequest;
 import com.szusta.meduva.service.RoomService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -26,6 +27,16 @@ public class RoomController {
     @GetMapping("/all/undeleted")
     public List<Room> findAllUnDeletedRooms() {
         return this.roomService.findAllUnDeletedRooms();
+    }
+
+    @PostMapping
+    public Room addRoom(@RequestBody NewRoomRequest request) {
+        Room room = new Room(
+                request.getName(),
+                request.getDescription(),
+                request.isDeleted()
+        );
+        return this.roomService.save(room);
     }
 
     @DeleteMapping("/{id}")
