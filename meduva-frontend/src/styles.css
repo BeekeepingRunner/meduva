@@ -35,3 +35,7 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   background-color: #3d3b5e;
   border-color: #3d3b5e;
 }
+
+button:focus {
+  outline: none;
+}
