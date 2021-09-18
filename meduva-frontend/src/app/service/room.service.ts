@@ -31,7 +31,7 @@ export class RoomService {
   }
 
   public addNewRoom(room: Room): Observable<Room> {
-    return this.httpClient.post<Service>(environment.API_BASE_URL + 'api/service', room);
+    return this.httpClient.post<Service>(environment.API_BASE_URL + 'api/room', room);
   }
 
   public deleteById(roomId: number | undefined): Observable<any> {
