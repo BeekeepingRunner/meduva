@@ -35,6 +35,6 @@ export class RoomService {
   }
 
   public deleteById(roomId: number | undefined): Observable<any> {
-    return this.httpClient.delete(environment.API_BASE_URL + 'api/service/' + roomId);
+    return this.httpClient.delete(environment.API_BASE_URL + 'api/room/' + roomId);
   }
 }

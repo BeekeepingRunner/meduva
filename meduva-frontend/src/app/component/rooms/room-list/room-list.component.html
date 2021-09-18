@@ -12,7 +12,8 @@
       </ng-container>
 
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row *matRowDef="let row; let room; columns: displayedColumns;">
+      <tr mat-row *matRowDef="let row; let room; columns: displayedColumns;"
+          [routerLink]="['/room/' + room.id]">
       </tr>
     </table>
   </div>
