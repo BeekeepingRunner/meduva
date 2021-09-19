@@ -4,7 +4,8 @@ th.mat-header-cell, td.mat-header-cell {
 }
 
 th.mat-header-cell {
-  color: #4f4c79;
+  color: white;
+  background-color: #4f4c79;
 }
 
 table {
