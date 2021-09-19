@@ -1,46 +1,43 @@
 package com.szusta.meduva.service;
 
 import com.szusta.meduva.exception.AlreadyExistsException;
-import com.szusta.meduva.model.Room;
-import com.szusta.meduva.repository.RoomRepository;
+import com.szusta.meduva.model.EquipmentModel;
+import com.szusta.meduva.repository.EquipmentModelRepository;
 import com.szusta.meduva.util.UndeletableWithNameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
 
-@org.springframework.stereotype.Service
-public class RoomService {
+@Service
+public class EquipmentService {
 
-    private RoomRepository roomRepository;
+    private EquipmentModelRepository equipmentModelRepository;
 
     @Autowired
-    public RoomService(RoomRepository roomRepository) {
-        this.roomRepository = roomRepository;
+    public EquipmentService(EquipmentModelRepository equipmentModelRepository) {
+        this.equipmentModelRepository = equipmentModelRepository;
     }
 
-    public List<Room> findAllRooms() {
-        return this.roomRepository.findAll();
+    public List<EquipmentModel> findAllEquipmentModels() {
+        return this.equipmentModelRepository.findAll();
     }
 
-    public List<Room> findAllUnDeletedRooms() {
-        return this.roomRepository.findAllUndeleted();
+    public List<EquipmentModel> findAllUndeletedEquipmentModels() {
+        return this.equipmentModelRepository.findAllUndeleted();
     }
 
-    public Room save(Room room) {
+    public EquipmentModel save(EquipmentModel model) {
 
-        if (UndeletableWithNameUtils.canBeSaved(this.roomRepository, room.getName())) {
-            return this.roomRepository.save(room);
+        if (UndeletableWithNameUtils.canBeSaved(this.equipmentModelRepository, model.getName())) {
+            return this.equipmentModelRepository.save(model);
         } else
-            throw new AlreadyExistsException("Room already exists with name: " + room.getName());
-    }
-
-    public void deleteById(Long id) {
-        this.roomRepository.deleteById(id);
+            throw new AlreadyExistsException("Equipment model already exists with name: " + model.getName());
     }
 
     @Transactional
-    public void markAsDeleted(Long id) {
-        UndeletableWithNameUtils.markAsDeleted(this.roomRepository, id);
+    public void markModelAsDeleted(Long id) {
+        UndeletableWithNameUtils.markAsDeleted(this.equipmentModelRepository, id);
     }
 }
