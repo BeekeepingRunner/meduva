@@ -38,6 +38,7 @@ public class EquipmentService {
 
     @Transactional
     public void markModelAsDeleted(Long id) {
-        UndeletableWithNameUtils.markAsDeleted(this.equipmentModelRepository, id);
+        // TODO: mark all equipment items tied with this model as deleted
+        // UndeletableWithNameUtils.markAsDeleted(this.equipmentModelRepository, id);
     }
 }

@@ -25,7 +25,7 @@ public class ServicesController {
     }
 
     @GetMapping("/all/undeleted")
-    public List<Service> findAllUnDeletedServices() {
+    public List<Service> findAllUndeletedServices() {
         return this.servicesService.findAllUndeletedServices();
     }
 
