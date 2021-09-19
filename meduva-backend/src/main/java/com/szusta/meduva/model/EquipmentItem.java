@@ -1,31 +1,30 @@
 package com.szusta.meduva.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.Entity;
-import javax.persistence.OneToMany;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import java.util.Set;
 
 @Entity
-@Table(name = "equipment_model")
+@Table(name = "equipment_item")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class EquipmentModel extends Undeletable {
+public class EquipmentItem extends Undeletable {
 
     private String name;
 
-    @OneToMany(mappedBy = "equipmentModel")
-    @JsonIgnore
-    private Set<EquipmentItem> equipmentItems;
+    @ManyToOne
+    @JoinColumn(name = "equipment_model_id", nullable = false)
+    private EquipmentModel equipmentModel;
 
-    public EquipmentModel(String name, boolean deleted) {
+    public EquipmentItem(String name, boolean deleted) {
         this.name = name;
         this.deleted = deleted;
     }

@@ -19,3 +19,11 @@ CREATE TABLE IF NOT EXISTS equipment_model (
     name VARCHAR(100) NOT NULL,
     deleted TINYINT DEFAULT 0 NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=UTF8;
+
+CREATE TABLE IF NOT EXISTS equipment_item (
+    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    deleted TINYINT DEFAULT 0 NOT NULL,
+    equipment_model_id INT NOT NULL,
+    FOREIGN KEY (equipment_model_id) REFERENCES equipment_model (id)
+) ENGINE=InnoDB DEFAULT CHARSET=UTF8;
