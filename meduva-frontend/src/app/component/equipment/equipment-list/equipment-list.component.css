@@ -5,7 +5,6 @@ th.mat-header-cell, td.mat-header-cell {
 
 th.mat-header-cell {
   color: #4f4c79;
-  font-size: medium;
 }
 
 table {
@@ -14,10 +13,25 @@ table {
   min-width: 450px;
 }
 
+.item-table {
+  width: 100%;
+}
+
 button {
   margin-right: 1px;
 }
 
 .mat-row:hover {
   background-color: rgba(100,93,154,0.45);
+}
+
+.model-name {
+  padding-top: 15px;
+  padding-bottom: 15px;
+  border-bottom: #e0e0e0 1px solid;
+  border-top: #e0e0e0 1px solid;
+}
+
+td.mat-cell:last-of-type {
+  padding-right: 0;
 }

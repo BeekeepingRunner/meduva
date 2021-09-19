@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {EquipmentModel} from "../../../model/equipment-model";
+import {EquipmentModel} from "../../../model/equipment";
 import {EquipmentService} from "../../../service/equipment.service";
 
 @Component({
@@ -10,22 +10,32 @@ import {EquipmentService} from "../../../service/equipment.service";
 export class EquipmentListComponent implements OnInit {
 
   models: EquipmentModel[] = [];
-  displayedColumns: string[] = ['name'];
+  modelTableColumns: string[] = ['name'];
+  itemTableColumns: string[] = ['name'];
 
   constructor(
     private equipmentService: EquipmentService,
   ) { }
 
   ngOnInit(): void {
+    this.getModels();
+  }
+
+  private getModels() {
     this.equipmentService.getAllUndeletedEquipmentModels().subscribe(
       models => {
-        this.models = models
-        console.log(models);
+        this.models = this.excludeDeletedItems(models);
       },
       err => {
         console.log(err);
       }
-    )
+    );
   }
 
+  private excludeDeletedItems(models: EquipmentModel[]): EquipmentModel[] {
+    models.forEach(model => {
+      model.items = model.items.filter(item => !item.deleted);
+    });
+    return models;
+  }
 }

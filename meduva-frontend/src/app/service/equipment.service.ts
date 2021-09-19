@@ -6,7 +6,7 @@ import {environment} from "../../environments/environment";
 import {Service} from "../model/service";
 import {map} from "rxjs/operators";
 import {trimJSON} from "../util/json/trim";
-import {EquipmentModel} from "../model/equipment-model";
+import {EquipmentModel} from "../model/equipment";
 
 @Injectable({
   providedIn: 'root'
@@ -22,7 +22,7 @@ export class EquipmentService {
   }
 
   /*
-  public getModelById(modelId: number): Observable<EquipmentModel> {
+  public getModelById(modelId: number): Observable<Equipment> {
     return this.httpClient.get<Service>(environment.API_BASE_URL + 'rooms/' + roomId).pipe(
       map(room => trimJSON(room, ['_links']))
     );

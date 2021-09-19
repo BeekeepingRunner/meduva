@@ -1,5 +1,6 @@
 package com.szusta.meduva.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,6 +23,7 @@ public class EquipmentItem extends Undeletable {
 
     @ManyToOne
     @JoinColumn(name = "equipment_model_id", nullable = false)
+    @JsonIgnore
     private EquipmentModel equipmentModel;
 
     public EquipmentItem(String name, boolean deleted) {
