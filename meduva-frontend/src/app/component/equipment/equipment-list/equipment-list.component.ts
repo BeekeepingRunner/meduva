@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import {EquipmentModel} from "../../../model/equipment-model";
+import {EquipmentService} from "../../../service/equipment.service";
 
 @Component({
   selector: 'app-equipment-list',
@@ -7,12 +9,23 @@ import { Component, OnInit } from '@angular/core';
 })
 export class EquipmentListComponent implements OnInit {
 
-  models: any;
+  models: EquipmentModel[] = [];
   displayedColumns: string[] = ['name'];
 
-  constructor() { }
+  constructor(
+    private equipmentService: EquipmentService,
+  ) { }
 
   ngOnInit(): void {
+    this.equipmentService.getAllUndeletedEquipmentModels().subscribe(
+      models => {
+        this.models = models
+        console.log(models);
+      },
+      err => {
+        console.log(err);
+      }
+    )
   }
 
 }
