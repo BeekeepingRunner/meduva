@@ -26,7 +26,7 @@ public class RoomController {
 
     @GetMapping("/all/undeleted")
     public List<Room> findAllUnDeletedRooms() {
-        return this.roomService.findAllUnDeletedRooms();
+        return this.roomService.findAllUndeletedRooms();
     }
 
     @PostMapping

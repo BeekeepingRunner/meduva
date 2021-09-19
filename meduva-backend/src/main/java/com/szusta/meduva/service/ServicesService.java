@@ -23,7 +23,7 @@ public class ServicesService {
         return this.serviceRepository.findAll();
     }
 
-    public List<Service> findAllUnDeletedServices() {
+    public List<Service> findAllUndeletedServices() {
         return this.serviceRepository.findAllUndeleted();
     }
 

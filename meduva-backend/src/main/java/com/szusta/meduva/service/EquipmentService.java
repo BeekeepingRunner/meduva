@@ -5,12 +5,11 @@ import com.szusta.meduva.model.Room;
 import com.szusta.meduva.repository.RoomRepository;
 import com.szusta.meduva.util.UndeletableWithNameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
 
-@Service
+@org.springframework.stereotype.Service
 public class RoomService {
 
     private RoomRepository roomRepository;
@@ -24,7 +23,7 @@ public class RoomService {
         return this.roomRepository.findAll();
     }
 
-    public List<Room> findAllUndeletedRooms() {
+    public List<Room> findAllUnDeletedRooms() {
         return this.roomRepository.findAllUndeleted();
     }
 

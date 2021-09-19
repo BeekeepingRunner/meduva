@@ -45,7 +45,7 @@ class ServicesServiceTest {
         services.add(s2);
 
         when(serviceRepository.findAll()).thenReturn(services);
-        List<Service> undeletedServices = servicesServiceUnderTest.findAllUnDeletedServices();
+        List<Service> undeletedServices = servicesServiceUnderTest.findAllUndeletedServices();
         undeletedServices.forEach(service -> {
             assertFalse(service.isDeleted());
         });

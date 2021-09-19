@@ -6,7 +6,6 @@ import com.szusta.meduva.service.ServicesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import javax.management.ServiceNotFoundException;
 import java.util.List;
 
 @RestController
@@ -27,7 +26,7 @@ public class ServicesController {
 
     @GetMapping("/all/undeleted")
     public List<Service> findAllUnDeletedServices() {
-        return this.servicesService.findAllUnDeletedServices();
+        return this.servicesService.findAllUndeletedServices();
     }
 
     @PostMapping
