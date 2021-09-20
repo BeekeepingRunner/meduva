@@ -9,7 +9,7 @@ export interface ItemRoom {
 export interface NewModelRequest {
   modelName: string,
   itemCount: number,
-  serviceId: number,
+  servicesIds: number[],
   itemRooms: ItemRoom[]
 }
 
@@ -44,12 +44,14 @@ export class NewModelComponent implements OnInit {
   //  1. check if model with given name already exists
   saveModelWithItems() {
 
+    // TODO: populate arrays with appropriate key-value pairs
     let itemRooms: ItemRoom[] = [];
+    let servicesIds: number[] = [];
 
     let newModelReuqest: NewModelRequest = {
       modelName: this.modelFormGroup.controls.modelName.value,
       itemCount: this.modelFormGroup.controls.itemCount.value,
-      serviceId: 0,
+      servicesIds: servicesIds,
       itemRooms: itemRooms
     };
 
