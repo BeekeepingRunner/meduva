@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {Service} from "../../../model/service";
 import {ServicesService} from "../../../service/services.service";
+import {Room} from "../../../model/room";
+import {RoomService} from "../../../service/room.service";
 
 export interface ItemRoom {
   itemId: number,
@@ -32,9 +34,14 @@ export class NewModelComponent implements OnInit {
   servicesIds: number[] = [];
   serviceSelectionError: string = '';
 
+  itemNames: string[] = [];
+  rooms: Room[] = [];
+  selectedRooms: Room[] = [];
+
   constructor(
     private formBuilder: FormBuilder,
     private servicesService: ServicesService,
+    private roomService: RoomService,
   ) { }
 
   ngOnInit(): void {
@@ -61,6 +68,15 @@ export class NewModelComponent implements OnInit {
     );
   }
 
+  createItemNames(): void {
+    let itemCount: number = this.modelFormGroup.controls.itemCount.value;
+    let modelName: string = this.modelFormGroup.controls.modelName.value;
+    for(let i = 1; i <= itemCount; i++) {
+      this.itemNames.push(modelName + '_' + i);
+    }
+    console.log(this.itemNames);
+  }
+
   saveSelectedServicesIds(): void {
     this.servicesIds = [];
     this.selectedServices.forEach(selectedService => {
@@ -78,6 +94,15 @@ export class NewModelComponent implements OnInit {
       this.serviceSelectionError = 'You have to select at least one service';
       return false;
     }
+  }
+
+  fetchRooms() {
+    this.roomService.getAllUndeletedRooms().subscribe(
+      rooms => {
+        this.rooms = rooms;
+        console.log(rooms);
+      }
+    );
   }
 
   // TODO:
