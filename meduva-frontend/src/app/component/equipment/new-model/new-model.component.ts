@@ -30,6 +30,7 @@ export class NewModelComponent implements OnInit {
   selectedServices: Service[] = [];
   compareFunction = (o1: any, o2: any) => o1.id === o2.id;
   servicesIds: number[] = [];
+  serviceSelectionError: string = '';
 
   constructor(
     private formBuilder: FormBuilder,
@@ -67,6 +68,16 @@ export class NewModelComponent implements OnInit {
         this.servicesIds.push(selectedService.id)
       }
     });
+  }
+
+  IsAtLeastOneServiceSelected(): boolean {
+    if (this.selectedServices.length > 0) {
+      this.serviceSelectionError = '';
+      return true;
+    } else {
+      this.serviceSelectionError = 'You have to select at least one service';
+      return false;
+    }
   }
 
   // TODO:

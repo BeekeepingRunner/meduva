@@ -1,7 +1,9 @@
-<mat-stepper [linear]="isLinear" #stepper>
+<mat-stepper [linear]="isLinear" orientation="vertical" #stepper>
+
   <mat-step [stepControl]="modelFormGroup">
     <form [formGroup]="modelFormGroup">
       <ng-template matStepLabel>Create new equipment model</ng-template>
+      <br>
       <mat-form-field appearance="fill">
         <mat-label>Model name</mat-label>
         <input matInput formControlName="modelName" required>
@@ -16,18 +18,34 @@
       </div>
     </form>
   </mat-step>
-  <!-- temporary step -->
-  <mat-step label="Connect model with services">
+
+  <mat-step label="Connect model with services" [completed]="IsAtLeastOneServiceSelected()">
+    <br>
+    <h3>Select services:</h3>
     <mat-selection-list #selectionListServices [(ngModel)]="selectedServices" [compareWith]="compareFunction">
       <mat-list-option *ngFor="let service of services" [value]="service">
         {{ service.name }}
       </mat-list-option>
     </mat-selection-list>
+    <br>
+    <div>
+      <button mat-button matStepperPrevious>Back</button>
+      <button mat-button matStepperNext (click)="saveSelectedServicesIds()">Next</button>
+    </div>
+    <br>
+    <div *ngIf="serviceSelectionError" class="alert alert-warning">
+      <p>{{ serviceSelectionError }}</p>
+    </div>
+  </mat-step>
+
+  <mat-step label="Place items in rooms">
+    <br>
     <div>
       <button mat-button matStepperPrevious>Back</button>
       <button mat-button matStepperNext (click)="saveSelectedServicesIds()">Next</button>
     </div>
   </mat-step>
+
   <!-- temporary step -->
   <mat-step>
     <ng-template matStepLabel>Done</ng-template>
