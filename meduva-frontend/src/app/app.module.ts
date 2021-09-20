@@ -43,6 +43,7 @@ import { NewRoomComponent } from './component/rooms/new-room/new-room.component'
 import { RoomDetailsComponent } from './component/rooms/room-details/room-details.component';
 import { EquipmentListComponent } from './component/equipment/equipment-list/equipment-list.component';
 import { NewModelComponent } from './component/equipment/new-model/new-model.component';
+import {MatStepperModule} from "@angular/material/stepper";
 
 @NgModule({
   declarations: [
@@ -88,6 +89,7 @@ import { NewModelComponent } from './component/equipment/new-model/new-model.com
     MatCardModule,
     MatListModule,
     MatDialogModule,
+    MatStepperModule,
   ],
   exports: [
     RouterModule
