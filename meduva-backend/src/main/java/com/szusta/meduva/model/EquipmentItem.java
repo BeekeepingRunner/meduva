@@ -26,6 +26,10 @@ public class EquipmentItem extends Undeletable {
     @JsonIgnore
     private EquipmentModel equipmentModel;
 
+    @ManyToOne
+    @JoinColumn(name = "room_id")
+    private Room room;
+
     public EquipmentItem(String name, boolean deleted) {
         this.name = name;
         this.deleted = deleted;

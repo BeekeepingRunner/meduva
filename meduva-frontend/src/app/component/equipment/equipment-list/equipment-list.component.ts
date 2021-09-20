@@ -11,7 +11,7 @@ export class EquipmentListComponent implements OnInit {
 
   models: EquipmentModel[] = [];
   modelTableColumns: string[] = ['name'];
-  itemTableColumns: string[] = ['name'];
+  itemTableColumns: string[] = ['name', 'room'];
 
   constructor(
     private equipmentService: EquipmentService,

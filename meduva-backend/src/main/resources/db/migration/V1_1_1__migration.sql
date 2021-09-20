@@ -25,5 +25,7 @@ CREATE TABLE IF NOT EXISTS equipment_item (
     name VARCHAR(100) NOT NULL,
     deleted TINYINT DEFAULT 0 NOT NULL,
     equipment_model_id INT NOT NULL,
-    FOREIGN KEY (equipment_model_id) REFERENCES equipment_model (id)
+    room_id INT NOT NULL,
+    FOREIGN KEY (equipment_model_id) REFERENCES equipment_model (id),
+    FOREIGN KEY (room_id) REFERENCES room (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=UTF8;
