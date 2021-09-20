@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
+import {Service} from "../../../model/service";
+import {ServicesService} from "../../../service/services.service";
 
 export interface ItemRoom {
   itemId: number,
@@ -24,8 +26,14 @@ export class NewModelComponent implements OnInit {
   secondFormGroup: any;
   isLinear: boolean = true;
 
+  services: Service[] = [];
+  selectedServices: Service[] = [];
+  compareFunction = (o1: any, o2: any) => o1.id === o2.id;
+  servicesIds: number[] = [];
+
   constructor(
     private formBuilder: FormBuilder,
+    private servicesService: ServicesService,
   ) { }
 
   ngOnInit(): void {
@@ -37,6 +45,27 @@ export class NewModelComponent implements OnInit {
         Validators.required,
         Validators.min(1)
       ])
+    });
+  }
+
+  fetchServices(): void {
+    this.servicesService.getAllUndeletedServices().subscribe(
+      services => {
+        this.services = services;
+        console.log(services);
+      },
+      err => {
+        console.log(err);
+      }
+    );
+  }
+
+  saveSelectedServicesIds(): void {
+    this.servicesIds = [];
+    this.selectedServices.forEach(selectedService => {
+      if (selectedService.id != null) {
+        this.servicesIds.push(selectedService.id)
+      }
     });
   }
 

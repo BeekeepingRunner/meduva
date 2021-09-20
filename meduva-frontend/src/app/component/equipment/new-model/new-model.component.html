@@ -12,23 +12,21 @@
         <input matInput type="number" step="1" min="1" formControlName="itemCount" required>
       </mat-form-field>
       <div>
-        <button mat-button matStepperNext>Next</button>
+        <button mat-button matStepperNext (click)="fetchServices()">Next</button>
       </div>
     </form>
   </mat-step>
   <!-- temporary step -->
-  <mat-step [stepControl]="secondFormGroup" label="Connect model with services">
-    <form [formGroup]="secondFormGroup">
-      <mat-form-field appearance="fill">
-        <mat-label>Address</mat-label>
-        <input matInput formControlName="secondCtrl" placeholder="Ex. 1 Main St, New York, NY"
-               required>
-      </mat-form-field>
-      <div>
-        <button mat-button matStepperPrevious>Back</button>
-        <button mat-button matStepperNext>Next</button>
-      </div>
-    </form>
+  <mat-step label="Connect model with services">
+    <mat-selection-list #selectionListServices [(ngModel)]="selectedServices" [compareWith]="compareFunction">
+      <mat-list-option *ngFor="let service of services" [value]="service">
+        {{ service.name }}
+      </mat-list-option>
+    </mat-selection-list>
+    <div>
+      <button mat-button matStepperPrevious>Back</button>
+      <button mat-button matStepperNext (click)="saveSelectedServicesIds()">Next</button>
+    </div>
   </mat-step>
   <!-- temporary step -->
   <mat-step>
