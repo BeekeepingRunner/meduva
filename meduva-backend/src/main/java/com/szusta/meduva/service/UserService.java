@@ -1,8 +1,6 @@
 package com.szusta.meduva.service;
 
-import com.szusta.meduva.exception.notfound.RoleNotFoundException;
-import com.szusta.meduva.exception.notfound.UserNotFoundException;
-import com.szusta.meduva.exception.UsersWithMinRoleNotFound;
+import com.szusta.meduva.exception.EntityRecordNotFoundException;
 import com.szusta.meduva.model.ERole;
 import com.szusta.meduva.model.Role;
 import com.szusta.meduva.model.User;
@@ -29,12 +27,12 @@ public class UserService {
 
     public User findByLogin(String login) {
         return userRepository.findByLogin(login)
-                .orElseThrow(() -> new UserNotFoundException("User not found with login : " + login));
+                .orElseThrow(() -> new EntityRecordNotFoundException("User not found with login : " + login));
     }
 
     public User findByEmail(String email) {
         return userRepository.findByEmail(email)
-                .orElseThrow(() -> new UserNotFoundException("User not found with email : " + email));
+                .orElseThrow(() -> new EntityRecordNotFoundException("User not found with email : " + email));
     }
 
     public Boolean existsByLogin(String login) {
@@ -66,9 +64,9 @@ public class UserService {
         Optional<Role> role = roleRepository.findById(roleId.getValue());
         if (role.isPresent()) {
             return userRepository.findDistinctByRolesIn(Collections.singleton(role.get()))
-                    .orElseThrow(() -> new UsersWithMinRoleNotFound("Unable to find users with role" + role.get().getName()));
+                    .orElseThrow(() -> new EntityRecordNotFoundException("Unable to find users with role" + role.get().getName()));
         } else {
-            throw new RoleNotFoundException("Role not found with id: " + roleId);
+            throw new EntityRecordNotFoundException("Role not found with id : " + roleId);
         }
     }
 
@@ -79,6 +77,6 @@ public class UserService {
 
     public User getUser(Long id) {
         return userRepository.findById(id)
-                .orElseThrow(() -> new UserNotFoundException("user not found with id : " + id));
+                .orElseThrow(() -> new EntityRecordNotFoundException("user not found with id : " + id));
     }
 }

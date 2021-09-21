@@ -3,12 +3,12 @@ package com.szusta.meduva.exception;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-@ResponseStatus(HttpStatus.FORBIDDEN)
-public class EmailAlreadyInUseException extends RuntimeException {
+@ResponseStatus(HttpStatus.NOT_FOUND)
+public class EntityRecordNotFoundException extends RuntimeException {
 
     public static final long serialVersionUID = 1L;
 
-    public EmailAlreadyInUseException(String message) {
+    public EntityRecordNotFoundException(String message) {
         super(message);
     }
 }

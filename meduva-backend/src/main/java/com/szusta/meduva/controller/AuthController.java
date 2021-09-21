@@ -1,9 +1,7 @@
 package com.szusta.meduva.controller;
 
-import com.szusta.meduva.exception.BadRequestRole;
-import com.szusta.meduva.exception.EmailAlreadyInUseException;
-import com.szusta.meduva.exception.LoginAlreadyTakenException;
-import com.szusta.meduva.exception.TokenRefreshException;
+import com.szusta.meduva.exception.*;
+import com.szusta.meduva.exception.EntityRecordNotFoundException;
 import com.szusta.meduva.model.RefreshToken;
 import com.szusta.meduva.model.Role;
 import com.szusta.meduva.model.User;
@@ -106,10 +104,10 @@ public class AuthController {
     private void checkForExistingCredentials(SignupRequest request) {
 
         if (userService.existsByLogin(request.getLogin())) {
-            throw new LoginAlreadyTakenException("Error: That login is already taken");
+            throw new AlreadyExistsException("That login is already taken : " + request.getLogin());
         }
         if (userService.existsByEmail(request.getEmail())) {
-            throw new EmailAlreadyInUseException("Error: That email is already in use");
+            throw new AlreadyExistsException("Email is already in use : " + request.getEmail());
         }
     }
 
@@ -163,7 +161,7 @@ public class AuthController {
                     userRoles.add(roleService.findByName("ROLE_CLIENT"));
                     break;
                 default:
-                    throw new BadRequestRole("Bad user role in request body");
+                    throw new BadRequestRoleException("Bad user role in request body");
             }
         });
     }
@@ -186,8 +184,7 @@ public class AuthController {
                     String token = jwtUtils.generateJwtTokenFrom(UserDetailsImpl.build(user));
                     return token;
                 })
-                .orElseThrow(() -> new TokenRefreshException(
-                        requestRefreshToken, "Refresh token is not in database!"));
+                .orElseThrow(() -> new EntityRecordNotFoundException("Refresh token is not in database!"));
 
         return ResponseEntity.ok().body(outRefreshToken);
     }

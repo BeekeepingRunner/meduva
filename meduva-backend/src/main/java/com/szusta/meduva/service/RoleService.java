@@ -1,6 +1,6 @@
 package com.szusta.meduva.service;
 
-import com.szusta.meduva.exception.notfound.RoleNotFoundException;
+import com.szusta.meduva.exception.EntityRecordNotFoundException;
 import com.szusta.meduva.model.Role;
 import com.szusta.meduva.repository.RoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +18,6 @@ public class RoleService {
 
     public Role findByName(String name) {
         return roleRepository.findByName(name)
-                .orElseThrow(() -> new RoleNotFoundException("Error: Role not found:" + name));
+                .orElseThrow(() -> new EntityRecordNotFoundException("Role not found with name :" + name));
     }
 }
