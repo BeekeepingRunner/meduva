@@ -14,7 +14,7 @@
         <input matInput type="number" step="1" min="1" formControlName="itemCount" required>
       </mat-form-field>
       <div>
-        <button mat-button matStepperNext (click)="fetchServices();createItemNames()">Next</button>
+        <button mat-button matStepperNext (click)="fetchServices();createEquipmentItems()">Next</button>
       </div>
     </form>
   </mat-step>
@@ -40,23 +40,14 @@
 
   <mat-step label="Place items in rooms">
 
-    <div *ngFor="let eqItemName of itemNames">
-      <!-- TODO: make it drop-down selection list -->
-      <h4>{{ eqItemName }}</h4>
-      <mat-selection-list #roomList [multiple]="false" [compareWith]="compareFunction">
-        <mat-list-option *ngFor="let room of rooms" [value]="room">
-          {{ room.name }}
-        </mat-list-option>
-      </mat-selection-list>
-      <p>
-        Option selected: {{roomList.selectedOptions.selected[0]?.value}}
-      </p>
-    </div>
-
+    <app-room-select *ngIf="eqItems.length"
+      [eqItems]="eqItems"
+      [rooms]="rooms">
+    </app-room-select>
     <br>
     <div>
       <button mat-button matStepperPrevious>Back</button>
-      <button mat-button matStepperNext (click)="saveSelectedServicesIds()">Next</button>
+      <button mat-button matStepperNext (click)="saveSelectedRooms()">Next</button>
     </div>
   </mat-step>
 

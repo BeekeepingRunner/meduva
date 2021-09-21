@@ -1,0 +1,16 @@
+<h5>Select room for <b>{{ data.message }}</b></h5>
+
+<mat-selection-list #roomList [multiple]="false"
+                    [compareWith]="compareFunction"
+                    [(ngModel)]="selectedRoom">
+  <mat-list-option *ngFor="let room of rooms" [value]="room">
+    {{ room.name }}
+  </mat-list-option>
+</mat-selection-list>
+
+<br>
+<p>Selected: <b>{{roomList.selectedOptions.selected[0]?.value.name}}</b></p>
+
+<div mat-dialog-actions>
+  <button mat-button [mat-dialog-close]="selectedRoom" cdkFocusInitial>Ok</button>
+</div>

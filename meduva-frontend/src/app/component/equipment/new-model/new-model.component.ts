@@ -1,20 +1,18 @@
-import { Component, OnInit } from '@angular/core';
+import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {Service} from "../../../model/service";
 import {ServicesService} from "../../../service/services.service";
 import {Room} from "../../../model/room";
 import {RoomService} from "../../../service/room.service";
+import {EquipmentItem} from "../../../model/equipment";
+import {RoomSelectComponent} from "./room-select/room-select.component";
 
-export interface ItemRoom {
-  itemId: number,
-  roomId: number
-}
 
 export interface NewModelRequest {
   modelName: string,
   itemCount: number,
   servicesIds: number[],
-  itemRooms: ItemRoom[]
+  roomIds: number[]
 }
 
 @Component({
@@ -22,10 +20,9 @@ export interface NewModelRequest {
   templateUrl: './new-model.component.html',
   styleUrls: ['./new-model.component.css']
 })
-export class NewModelComponent implements OnInit {
+export class NewModelComponent implements OnInit, AfterViewInit {
 
   modelFormGroup!: FormGroup;
-  secondFormGroup: any;
   isLinear: boolean = true;
 
   services: Service[] = [];
@@ -34,9 +31,11 @@ export class NewModelComponent implements OnInit {
   servicesIds: number[] = [];
   serviceSelectionError: string = '';
 
-  itemNames: string[] = [];
+  eqItems: EquipmentItem[] = [];
   rooms: Room[] = [];
-  selectedRooms: Room[] = [];
+  @ViewChild(RoomSelectComponent)
+  private roomSelectComponent!: RoomSelectComponent;
+  selectedRoomIds: number[] = [];
 
   constructor(
     private formBuilder: FormBuilder,
@@ -68,13 +67,18 @@ export class NewModelComponent implements OnInit {
     );
   }
 
-  createItemNames(): void {
+  createEquipmentItems(): void {
     let itemCount: number = this.modelFormGroup.controls.itemCount.value;
     let modelName: string = this.modelFormGroup.controls.modelName.value;
-    for(let i = 1; i <= itemCount; i++) {
-      this.itemNames.push(modelName + '_' + i);
+
+    for(let i = 1; i <= itemCount; i++)
+    {
+      let eqItem: EquipmentItem = {
+        name: modelName + '_' + i,
+        room: undefined
+      }
+      this.eqItems.push(eqItem);
     }
-    console.log(this.itemNames);
   }
 
   saveSelectedServicesIds(): void {
@@ -105,19 +109,23 @@ export class NewModelComponent implements OnInit {
     );
   }
 
+  ngAfterViewInit() {
+
+  }
+
+  saveSelectedRooms() {
+    this.selectedRoomIds = this.roomSelectComponent.selectedRoomIds;
+  }
+
   // TODO:
   //  1. check if model with given name already exists
   saveModelWithItems() {
 
-    // TODO: populate arrays with appropriate key-value pairs
-    let itemRooms: ItemRoom[] = [];
-    let servicesIds: number[] = [];
-
     let newModelReuqest: NewModelRequest = {
       modelName: this.modelFormGroup.controls.modelName.value,
       itemCount: this.modelFormGroup.controls.itemCount.value,
-      servicesIds: servicesIds,
-      itemRooms: itemRooms
+      servicesIds: this.servicesIds,
+      roomIds: this.selectedRoomIds
     };
 
     // TODO: send request
