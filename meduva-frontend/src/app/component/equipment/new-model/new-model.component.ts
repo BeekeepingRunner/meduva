@@ -23,7 +23,6 @@ export interface NewModelRequest {
 export class NewModelComponent implements OnInit {
 
   modelFormGroup!: FormGroup;
-  isLinear: boolean = true;
 
   services: Service[] = [];
   selectedServices: Service[] = [];
@@ -70,8 +69,16 @@ export class NewModelComponent implements OnInit {
 
   createEquipmentItems(): void {
     let itemCount: number = this.modelFormGroup.controls.itemCount.value;
-    let modelName: string = this.modelFormGroup.controls.modelName.value;
+    if (itemCount > 0) {
+      this.generateItems(itemCount);
+    }
+  }
 
+  private generateItems(itemCount: number): void {
+    let modelName: string = this.modelFormGroup.controls.modelName.value;
+    modelName = this.prepareModelName(modelName);
+
+    this.eqItems = [];
     for(let i = 1; i <= itemCount; i++)
     {
       let eqItem: EquipmentItem = {
@@ -81,6 +88,10 @@ export class NewModelComponent implements OnInit {
       this.eqItems.push(eqItem);
     }
     console.log(this.eqItems);
+  }
+
+  private prepareModelName(modelName: string): string {
+    return modelName.split(' ').join('_');
   }
 
   saveSelectedServicesIds(): void {
@@ -117,7 +128,7 @@ export class NewModelComponent implements OnInit {
 
   areAllItemsDisplaced(): boolean {
     let eqItemCount: number = this.modelFormGroup.controls.itemCount.value;
-    if (this.selectedRoomIds.length == eqItemCount) {
+    if (this.selectedRoomIds.length == eqItemCount && eqItemCount > 0) {
       this.roomSelectionError = '';
       return true;
     } else {

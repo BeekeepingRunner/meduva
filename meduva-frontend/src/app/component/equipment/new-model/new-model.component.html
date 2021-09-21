@@ -1,4 +1,4 @@
-<mat-stepper [linear]="isLinear" orientation="vertical" #stepper>
+<mat-stepper [linear]="true" orientation="vertical" #stepper>
 
   <mat-step [stepControl]="modelFormGroup">
     <form [formGroup]="modelFormGroup">
@@ -6,7 +6,8 @@
       <br>
       <mat-form-field appearance="fill">
         <mat-label>Model name</mat-label>
-        <input matInput formControlName="modelName" required>
+        <input matInput formControlName="modelName" required
+               (blur)="createEquipmentItems()">
       </mat-form-field>
       <br>
       <mat-form-field appearance="fill">
@@ -19,7 +20,8 @@
     </form>
   </mat-step>
 
-  <mat-step label="Connect model with services" [completed]="IsAtLeastOneServiceSelected()">
+  <mat-step label="Connect model with services"
+            [completed]="IsAtLeastOneServiceSelected()">
     <br>
     <h3>Select services:</h3>
     <mat-selection-list #selectionListServices [(ngModel)]="selectedServices" [compareWith]="compareFunction">
@@ -38,7 +40,8 @@
     </div>
   </mat-step>
 
-  <mat-step label="Place items in rooms" [completed]="areAllItemsDisplaced()">
+  <mat-step label="Place items in rooms"
+            [completed]="areAllItemsDisplaced()">
 
     <app-room-select *ngIf="eqItems.length"
       [eqItems]="eqItems"
@@ -58,7 +61,7 @@
   <!-- temporary step -->
   <mat-step>
     <ng-template matStepLabel>Done</ng-template>
-    <p>You are now done.</p>
+    <p>Everything is ready.</p>
     <div>
       <button mat-button matStepperPrevious>Back</button>
       <button mat-button (click)="stepper.reset()">Reset</button>
