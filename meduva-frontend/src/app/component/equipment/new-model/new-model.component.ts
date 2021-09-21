@@ -20,7 +20,7 @@ export interface NewModelRequest {
   templateUrl: './new-model.component.html',
   styleUrls: ['./new-model.component.css']
 })
-export class NewModelComponent implements OnInit, AfterViewInit {
+export class NewModelComponent implements OnInit {
 
   modelFormGroup!: FormGroup;
   isLinear: boolean = true;
@@ -30,6 +30,7 @@ export class NewModelComponent implements OnInit, AfterViewInit {
   compareFunction = (o1: any, o2: any) => o1.id === o2.id;
   servicesIds: number[] = [];
   serviceSelectionError: string = '';
+  roomSelectionError: string = '';
 
   eqItems: EquipmentItem[] = [];
   rooms: Room[] = [];
@@ -74,11 +75,12 @@ export class NewModelComponent implements OnInit, AfterViewInit {
     for(let i = 1; i <= itemCount; i++)
     {
       let eqItem: EquipmentItem = {
-        name: modelName + '_' + i,
-        room: undefined
+        id: i,
+        name: modelName + '_' + i
       }
       this.eqItems.push(eqItem);
     }
+    console.log(this.eqItems);
   }
 
   saveSelectedServicesIds(): void {
@@ -109,12 +111,19 @@ export class NewModelComponent implements OnInit, AfterViewInit {
     );
   }
 
-  ngAfterViewInit() {
-
-  }
-
   saveSelectedRooms() {
     this.selectedRoomIds = this.roomSelectComponent.selectedRoomIds;
+  }
+
+  areAllItemsDisplaced(): boolean {
+    let eqItemCount: number = this.modelFormGroup.controls.itemCount.value;
+    if (this.selectedRoomIds.length == eqItemCount) {
+      this.roomSelectionError = '';
+      return true;
+    } else {
+      this.roomSelectionError = 'You have to dispose all equipment items';
+      return false;
+    }
   }
 
   // TODO:
@@ -128,6 +137,7 @@ export class NewModelComponent implements OnInit, AfterViewInit {
       roomIds: this.selectedRoomIds
     };
 
+    console.log(newModelReuqest);
     // TODO: send request
   }
 }

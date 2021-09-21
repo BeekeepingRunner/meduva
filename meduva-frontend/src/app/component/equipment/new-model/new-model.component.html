@@ -38,7 +38,7 @@
     </div>
   </mat-step>
 
-  <mat-step label="Place items in rooms">
+  <mat-step label="Place items in rooms" [completed]="areAllItemsDisplaced()">
 
     <app-room-select *ngIf="eqItems.length"
       [eqItems]="eqItems"
@@ -48,6 +48,10 @@
     <div>
       <button mat-button matStepperPrevious>Back</button>
       <button mat-button matStepperNext (click)="saveSelectedRooms()">Next</button>
+    </div>
+    <br>
+    <div *ngIf="roomSelectionError" class="alert alert-warning">
+      <p>{{ roomSelectionError }}</p>
     </div>
   </mat-step>
 

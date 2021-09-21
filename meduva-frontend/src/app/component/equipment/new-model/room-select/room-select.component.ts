@@ -15,13 +15,14 @@ export class RoomSelectComponent implements OnInit {
   @Input() rooms!: Room[];
   displayedColumns: string[] = ['itemName', 'room', 'buttons'];
 
-  selectedRoomIds: number[] = [];
+  selectedRoomIds!: Array<number>;
 
   constructor(
     public dialog: MatDialog,
   ) { }
 
   ngOnInit(): void {
+    this.selectedRoomIds = new Array<number>(this.rooms.length);
   }
 
   openRoomSelectionDialog(item: EquipmentItem) {
@@ -30,7 +31,11 @@ export class RoomSelectComponent implements OnInit {
     });
 
     roomSelectionDialogRef.afterClosed().subscribe(room => {
-      item.room = room[0];
+      let selectedRoom: Room = room[0];
+      item.room = selectedRoom;
+      // @ts-ignore
+      this.selectedRoomIds[item.id - 1] = selectedRoom.id;
+      console.log(this.selectedRoomIds);
     });
   }
 }
