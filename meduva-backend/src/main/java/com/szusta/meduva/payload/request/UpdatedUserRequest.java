@@ -10,10 +10,6 @@ import javax.validation.constraints.Size;
 @Setter
 public class UpdatedUserRequest {
 
-    @Size(min = 5, max = 20, message = "Login must contain between 5 and 20 characters")
-    @Pattern(regexp = "^[^-\\s]+$", message = "Login must not contain forbidden characters")
-    private String login;
-
     @Size(min=1, max=30, message = "Firstname must contain between 1 and 30 letters")
     @Pattern(regexp = "^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]+$", message = "Only unicode letters are allowed")
     private String name;

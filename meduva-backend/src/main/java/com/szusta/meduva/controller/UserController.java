@@ -54,7 +54,6 @@ public class UserController {
 
         User user = userService.getUser(id);
 
-        user.setLogin(request.getLogin());
         user.setName(request.getName());
         user.setSurname(request.getSurname());
         user.setPhoneNumber(request.getPhoneNumber());

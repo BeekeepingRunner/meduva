@@ -61,14 +61,12 @@ export class UserService {
     return this.http.post(environment.API_BASE_URL + 'api/password/change', requestBody);
   }
 
-  editUser(login: string,
-           name: string,
+  editUser(name: string,
            surname: string,
            phoneNumber: string,
            id: number){
 
     return this.http.post( environment.API_BASE_URL+"api/user/edit/" + id, {
-      login,
       name,
       surname,
       phoneNumber

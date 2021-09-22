@@ -34,17 +34,6 @@ export class EditProfileComponent implements OnInit {
 
   private buildForm(){
     this.form = this.formBuilder.group({
-      login: new FormControl( '', [
-        Validators.required,
-        Validators.minLength(5),
-        Validators.maxLength(20),
-        Validators.pattern('^[^-\\s]+$')
-
-      ]),
-      email: new FormControl('', [
-        Validators.required,
-        Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$')
-      ]),
       name: new FormControl('', [
         Validators.required,
         Validators.minLength(1),
@@ -75,9 +64,7 @@ export class EditProfileComponent implements OnInit {
         this.form.patchValue({
           name: this.user.name,
           surname: this.user.surname,
-          email: this.user.email,
           phoneNumber: this.user.phoneNumber,
-          login: this.user.login
         })
       },
       err => {
@@ -96,12 +83,11 @@ export class EditProfileComponent implements OnInit {
   }
 
   private tryToSendUpdateRequest(){
-    const login: string = this.form.controls.login.value;
     const name: string = this.form.controls.name.value;
     const surname: string = this.form.controls.surname.value;
     const phoneNumber: string = this.form.controls.phoneNumber.value;
 
-    this.userService.editUser(login,name,surname,phoneNumber, this.id).subscribe(
+    this.userService.editUser(name,surname,phoneNumber, this.id).subscribe(
       data => {
         this.editFailed = false;
         this.editSuccessful = true;
