@@ -122,8 +122,8 @@ export class NewModelComponent implements OnInit {
     );
   }
 
-  saveSelectedRooms() {
-    this.selectedRoomIds = this.roomSelectComponent.selectedRoomIds;
+  onRoomSelected($event: Array<number>) {
+    this.selectedRoomIds = $event;
   }
 
   areAllItemsDisplaced(): boolean {

@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnInit, Output, EventEmitter} from '@angular/core';
 import {Room} from "../../../../model/room";
 import {EquipmentItem} from "../../../../model/equipment";
 import {MatDialog} from "@angular/material/dialog";
@@ -11,10 +11,11 @@ import {RoomSelectionDialogComponent} from "../../../dialog/room-selection-dialo
 })
 export class RoomSelectComponent implements OnInit {
 
-  @Input() eqItems!: EquipmentItem[];
-  @Input() rooms!: Room[];
   displayedColumns: string[] = ['itemName', 'room', 'buttons'];
 
+  @Input() eqItems!: EquipmentItem[];
+  @Input() rooms!: Room[];
+  @Output() selectedIdsEmmitter = new EventEmitter<Array<number>>();
   selectedRoomIds!: Array<number>;
 
   constructor(
@@ -35,6 +36,7 @@ export class RoomSelectComponent implements OnInit {
       item.room = selectedRoom;
       // @ts-ignore
       this.selectedRoomIds[item.id - 1] = selectedRoom.id;
+      this.selectedIdsEmmitter.emit(this.selectedRoomIds);
       console.log(this.selectedRoomIds);
     });
   }

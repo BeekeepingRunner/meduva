@@ -45,12 +45,13 @@
 
     <app-room-select *ngIf="eqItems.length"
       [eqItems]="eqItems"
-      [rooms]="rooms">
+      [rooms]="rooms"
+      (selectedIdsEmmitter)="onRoomSelected($event)">
     </app-room-select>
     <br>
     <div>
       <button mat-button matStepperPrevious>Back</button>
-      <button mat-button matStepperNext (click)="saveSelectedRooms()">Next</button>
+      <button mat-button matStepperNext>Next</button>
     </div>
     <br>
     <div *ngIf="roomSelectionError" class="alert alert-warning">
@@ -64,7 +65,6 @@
     <p>Everything is ready.</p>
     <div>
       <button mat-button matStepperPrevious>Back</button>
-      <button mat-button (click)="stepper.reset()">Reset</button>
       <button mat-button (click)="saveModelWithItems()">Save</button>
     </div>
   </mat-step>
