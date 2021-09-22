@@ -7,6 +7,7 @@ import {RoomService} from "../../../service/room.service";
 import {EquipmentItem} from "../../../model/equipment";
 import {RoomSelectComponent} from "./room-select/room-select.component";
 import {EquipmentService} from "../../../service/equipment.service";
+import {Router} from "@angular/router";
 
 
 export interface NewModelRequest {
@@ -43,6 +44,7 @@ export class NewModelComponent implements OnInit {
     private servicesService: ServicesService,
     private roomService: RoomService,
     private equipmentService: EquipmentService,
+    private router: Router,
   ) { }
 
   ngOnInit(): void {
@@ -61,7 +63,6 @@ export class NewModelComponent implements OnInit {
     this.servicesService.getAllUndeletedServices().subscribe(
       services => {
         this.services = services;
-        console.log(services);
       },
       err => {
         console.log(err);
@@ -89,7 +90,6 @@ export class NewModelComponent implements OnInit {
       }
       this.eqItems.push(eqItem);
     }
-    console.log(this.eqItems);
   }
 
   private prepareModelName(modelName: string): string {
@@ -119,7 +119,6 @@ export class NewModelComponent implements OnInit {
     this.roomService.getAllUndeletedRooms().subscribe(
       rooms => {
         this.rooms = rooms;
-        console.log(rooms);
       }
     );
   }
@@ -150,10 +149,12 @@ export class NewModelComponent implements OnInit {
       selectedRoomsIds: this.selectedRoomsIds
     };
 
-    console.log(newModelReuqest);
     this.equipmentService.saveNewModel(newModelReuqest).subscribe(
       data => {
-        console.log(data);
+        this.router.navigate(['/equipment']);
+      },
+      err => {
+        // TODO: do something with error
       }
     );
   }
