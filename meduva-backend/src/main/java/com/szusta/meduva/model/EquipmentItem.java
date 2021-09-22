@@ -22,7 +22,7 @@ public class EquipmentItem extends Undeletable {
     private String name;
 
     @ManyToOne
-    @JoinColumn(name = "equipment_model_id", nullable = false)
+    @JoinColumn(name = "equipment_model_id")
     @JsonIgnore
     private EquipmentModel equipmentModel;
 

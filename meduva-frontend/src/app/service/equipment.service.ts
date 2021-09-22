@@ -7,6 +7,7 @@ import {Service} from "../model/service";
 import {map} from "rxjs/operators";
 import {trimJSON} from "../util/json/trim";
 import {EquipmentModel} from "../model/equipment";
+import {NewModelRequest} from "../component/equipment/new-model/new-model.component";
 
 @Injectable({
   providedIn: 'root'
@@ -36,4 +37,8 @@ export class EquipmentService {
     return this.httpClient.delete(environment.API_BASE_URL + 'api/room/' + roomId);
   }
    */
+
+  saveNewModel(newModelReuqest: NewModelRequest): Observable<any> {
+    return this.httpClient.post(environment.API_BASE_URL + 'api/equipment/model/new', newModelReuqest);
+  }
 }

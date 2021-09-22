@@ -1,6 +1,7 @@
 package com.szusta.meduva.service;
 
 import com.szusta.meduva.exception.AlreadyExistsException;
+import com.szusta.meduva.exception.EntityRecordNotFoundException;
 import com.szusta.meduva.model.Service;
 import com.szusta.meduva.repository.ServiceRepository;
 import com.szusta.meduva.util.UndeletableWithNameUtils;
@@ -25,6 +26,11 @@ public class ServicesService {
 
     public List<Service> findAllUndeletedServices() {
         return this.serviceRepository.findAllUndeleted();
+    }
+
+    public Service findById(Long serviceId) {
+        return this.serviceRepository.findById(serviceId)
+                .orElseThrow(() -> new EntityRecordNotFoundException("Service not found with id : " + serviceId));
     }
 
     public Service save(Service service) {

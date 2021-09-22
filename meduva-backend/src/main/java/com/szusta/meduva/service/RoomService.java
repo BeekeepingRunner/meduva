@@ -1,6 +1,7 @@
 package com.szusta.meduva.service;
 
 import com.szusta.meduva.exception.AlreadyExistsException;
+import com.szusta.meduva.exception.EntityRecordNotFoundException;
 import com.szusta.meduva.model.Room;
 import com.szusta.meduva.repository.RoomRepository;
 import com.szusta.meduva.util.UndeletableWithNameUtils;
@@ -26,6 +27,11 @@ public class RoomService {
 
     public List<Room> findAllUndeletedRooms() {
         return this.roomRepository.findAllUndeleted();
+    }
+
+    public Room findById(Long id) {
+        return this.roomRepository.findById(id)
+                .orElseThrow(() -> new EntityRecordNotFoundException("Room not found with id : " + id));
     }
 
     public Room save(Room room) {

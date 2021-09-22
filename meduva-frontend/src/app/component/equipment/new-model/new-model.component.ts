@@ -6,13 +6,14 @@ import {Room} from "../../../model/room";
 import {RoomService} from "../../../service/room.service";
 import {EquipmentItem} from "../../../model/equipment";
 import {RoomSelectComponent} from "./room-select/room-select.component";
+import {EquipmentService} from "../../../service/equipment.service";
 
 
 export interface NewModelRequest {
   modelName: string,
   itemCount: number,
   servicesIds: number[],
-  roomIds: number[]
+  selectedRoomsIds: number[]
 }
 
 @Component({
@@ -35,12 +36,13 @@ export class NewModelComponent implements OnInit {
   rooms: Room[] = [];
   @ViewChild(RoomSelectComponent)
   private roomSelectComponent!: RoomSelectComponent;
-  selectedRoomIds: number[] = [];
+  selectedRoomsIds: number[] = [];
 
   constructor(
     private formBuilder: FormBuilder,
     private servicesService: ServicesService,
     private roomService: RoomService,
+    private equipmentService: EquipmentService,
   ) { }
 
   ngOnInit(): void {
@@ -123,12 +125,12 @@ export class NewModelComponent implements OnInit {
   }
 
   onRoomSelected($event: Array<number>) {
-    this.selectedRoomIds = $event;
+    this.selectedRoomsIds = $event;
   }
 
   areAllItemsDisplaced(): boolean {
     let eqItemCount: number = this.modelFormGroup.controls.itemCount.value;
-    if (this.selectedRoomIds.length == eqItemCount && eqItemCount > 0) {
+    if (this.selectedRoomsIds.length == eqItemCount && eqItemCount > 0) {
       this.roomSelectionError = '';
       return true;
     } else {
@@ -145,10 +147,14 @@ export class NewModelComponent implements OnInit {
       modelName: this.modelFormGroup.controls.modelName.value,
       itemCount: this.modelFormGroup.controls.itemCount.value,
       servicesIds: this.servicesIds,
-      roomIds: this.selectedRoomIds
+      selectedRoomsIds: this.selectedRoomsIds
     };
 
     console.log(newModelReuqest);
-    // TODO: send request
+    this.equipmentService.saveNewModel(newModelReuqest).subscribe(
+      data => {
+        console.log(data);
+      }
+    );
   }
 }
