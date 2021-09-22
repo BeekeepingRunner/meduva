@@ -30,7 +30,7 @@ import { UserListComponent } from './component/user-list/user-list.component';
 import {MatTableModule} from "@angular/material/table";
 import {routes} from "./app.routes";
 import { AccessDeniedComponent } from './component/access-denied/access-denied.component';
-import { ServicesComponent } from './component/services/services.component';
+import { ServiceListComponent } from './component/services/service-list/service-list.component';
 import { NewServiceComponent } from './component/services/new-service/new-service.component';
 import {CurrencyPipe} from "@angular/common";
 import {MatCardModule} from "@angular/material/card";
@@ -38,6 +38,9 @@ import {MatListModule} from "@angular/material/list";
 import { ServiceDetailsComponent } from './component/services/service-details/service-details.component';
 import { ConfirmationDialogComponent } from './component/dialog/confirmation-dialog/confirmation-dialog.component';
 import {MatDialogModule} from "@angular/material/dialog";
+import { RoomListComponent } from './component/rooms/room-list/room-list.component';
+import { NewRoomComponent } from './component/rooms/new-room/new-room.component';
+import { RoomDetailsComponent } from './component/rooms/room-details/room-details.component';
 
 @NgModule({
   declarations: [
@@ -51,11 +54,14 @@ import {MatDialogModule} from "@angular/material/dialog";
     PasswordResetComponent,
     UserListComponent,
     AccessDeniedComponent,
-    ServicesComponent,
+    ServiceListComponent,
     NewServiceComponent,
     EditProfileComponent,
     ServiceDetailsComponent,
     ConfirmationDialogComponent,
+    RoomListComponent,
+    NewRoomComponent,
+    RoomDetailsComponent,
   ],
   imports: [
     BrowserModule,

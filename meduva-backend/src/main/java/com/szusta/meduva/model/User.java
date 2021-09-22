@@ -18,11 +18,7 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class User {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class User extends Undeletable {
 
     private String login;
     private String email;
@@ -32,7 +28,6 @@ public class User {
     private String surname;
     @Column(name = "phone_number")
     private String phoneNumber;
-    private boolean deleted;
 
     @ManyToMany(
             fetch = FetchType.LAZY,
@@ -59,6 +54,4 @@ public class User {
         this.surname = surname;
         this.phoneNumber = phoneNumber;
     }
-
-
 }

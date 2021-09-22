@@ -11,10 +11,13 @@ import {BoardAdminComponent} from "./component/board-admin/board-admin.component
 import {UserListComponent} from "./component/user-list/user-list.component";
 import {roleNames, UserRole} from "./model/user";
 import {AccessDeniedComponent} from "./component/access-denied/access-denied.component";
-import {ServicesComponent} from "./component/services/services.component";
+import {ServiceListComponent} from "./component/services/service-list/service-list.component";
 import {NewServiceComponent} from "./component/services/new-service/new-service.component";
 import {EditProfileComponent} from "./component/edit-profile/edit-profile.component";
 import {ServiceDetailsComponent} from "./component/services/service-details/service-details.component";
+import {RoomListComponent} from "./component/rooms/room-list/room-list.component";
+import {NewRoomComponent} from "./component/rooms/new-room/new-room.component";
+import {RoomDetailsComponent} from "./component/rooms/room-details/room-details.component";
 
 export const routes: Routes = [
   { path: 'home', component: HomeComponent },
@@ -57,7 +60,7 @@ export const routes: Routes = [
   },
   {
     path: 'services',
-    component: ServicesComponent,
+    component: ServiceListComponent,
     canActivate: [RoleGuard],
     data: {
       expectedRole: roleNames[UserRole.ROLE_ADMIN]
@@ -74,6 +77,30 @@ export const routes: Routes = [
   {
     path: 'services/add-service',
     component: NewServiceComponent,
+    canActivate: [RoleGuard],
+    data: {
+      expectedRole: roleNames[UserRole.ROLE_ADMIN]
+    }
+  },
+  {
+    path: 'rooms',
+    component: RoomListComponent,
+    canActivate: [RoleGuard],
+    data: {
+      expectedRole: roleNames[UserRole.ROLE_ADMIN]
+    }
+  },
+  {
+    path: 'rooms/add-room',
+    component: NewRoomComponent,
+    canActivate: [RoleGuard],
+    data: {
+      expectedRole: roleNames[UserRole.ROLE_ADMIN]
+    }
+  },
+  {
+    path: 'room/:id',
+    component: RoomDetailsComponent,
     canActivate: [RoleGuard],
     data: {
       expectedRole: roleNames[UserRole.ROLE_ADMIN]

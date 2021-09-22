@@ -1,5 +1,6 @@
 package com.szusta.meduva.advice;
 
+import com.szusta.meduva.exception.AlreadyExistsException;
 import com.szusta.meduva.exception.ErrorMessage;
 import com.szusta.meduva.exception.notfound.RoleNotFoundException;
 import org.springframework.http.HttpStatus;
@@ -19,6 +20,18 @@ public class RoleControllerAdvice {
 
         return new ErrorMessage(
                 HttpStatus.NOT_FOUND.value(),
+                new Date(),
+                ex.getMessage(),
+                request.getDescription(false)
+        );
+    }
+
+    @ExceptionHandler(value = AlreadyExistsException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorMessage handleAlreadyExistsException(AlreadyExistsException ex, WebRequest request) {
+
+        return new ErrorMessage(
+                HttpStatus.BAD_REQUEST.value(),
                 new Date(),
                 ex.getMessage(),
                 request.getDescription(false)

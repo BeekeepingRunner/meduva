@@ -1,5 +1,6 @@
 package com.szusta.meduva.advice;
 
+import com.szusta.meduva.exception.AlreadyExistsException;
 import com.szusta.meduva.exception.ErrorMessage;
 import com.szusta.meduva.exception.ServiceAlreadyExistsException;
 import com.szusta.meduva.exception.notfound.ServiceNotFoundException;
@@ -16,7 +17,7 @@ public class ServicesControllerAdvice {
 
     @ExceptionHandler(value = ServiceAlreadyExistsException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorMessage handleRoleNotFoundException(ServiceAlreadyExistsException ex, WebRequest request) {
+    public ErrorMessage handleServiceAlreadyExistsException(ServiceAlreadyExistsException ex, WebRequest request) {
 
         return new ErrorMessage(
                 HttpStatus.BAD_REQUEST.value(),
@@ -28,7 +29,19 @@ public class ServicesControllerAdvice {
 
     @ExceptionHandler(value = ServiceNotFoundException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorMessage handleRoleNotFoundException(ServiceNotFoundException ex, WebRequest request) {
+    public ErrorMessage handleServiceNotFoundException(ServiceNotFoundException ex, WebRequest request) {
+
+        return new ErrorMessage(
+                HttpStatus.BAD_REQUEST.value(),
+                new Date(),
+                ex.getMessage(),
+                request.getDescription(false)
+        );
+    }
+
+    @ExceptionHandler(value = AlreadyExistsException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorMessage handleAlreadyExistsException(AlreadyExistsException ex, WebRequest request) {
 
         return new ErrorMessage(
                 HttpStatus.BAD_REQUEST.value(),

@@ -19,6 +19,10 @@ export class ServicesService {
     return this.httpClient.get<Service[]>(environment.API_BASE_URL + 'api/service/all');
   }
 
+  public getAllUndeletedServices(): Observable<Service[]> {
+    return this.httpClient.get<Service[]>(environment.API_BASE_URL + 'api/service/all/undeleted');
+  }
+
   public getById(serviceId: number): Observable<Service> {
     return this.httpClient.get<Service>(environment.API_BASE_URL + 'services/' + serviceId).pipe(
       map(service => trimJSON(service, ['_links']))

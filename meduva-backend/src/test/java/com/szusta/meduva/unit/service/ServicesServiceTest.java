@@ -29,7 +29,7 @@ class ServicesServiceTest {
     @Test
     void getAllServices() {
         when(serviceRepository.findAll()).thenReturn(new ArrayList<>());
-        servicesServiceUnderTest.getAllServices();
+        servicesServiceUnderTest.findAllServices();
         verify(serviceRepository, times(1)).findAll();
     }
 
@@ -45,7 +45,7 @@ class ServicesServiceTest {
         services.add(s2);
 
         when(serviceRepository.findAll()).thenReturn(services);
-        List<Service> undeletedServices = servicesServiceUnderTest.getAllUnDeletedServices();
+        List<Service> undeletedServices = servicesServiceUnderTest.findAllUnDeletedServices();
         undeletedServices.forEach(service -> {
             assertFalse(service.isDeleted());
         });
