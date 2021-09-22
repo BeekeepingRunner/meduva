@@ -6,9 +6,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 @Entity
 @Table(name = "equipment_model")
@@ -32,7 +31,7 @@ public class EquipmentModel extends Undeletable {
             joinColumns = @JoinColumn(name = "model_id"),
             inverseJoinColumns = @JoinColumn(name = "service_id")
     )
-    private Set<Service> services = new HashSet<>();
+    private List<Service> services = new ArrayList<>();
 
     public EquipmentModel(String name, boolean deleted) {
         this.name = name;

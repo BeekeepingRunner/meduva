@@ -33,6 +33,10 @@ public class ServicesService {
                 .orElseThrow(() -> new EntityRecordNotFoundException("Service not found with id : " + serviceId));
     }
 
+    public List<Service> findWithIds(List<Long> servicesIds) {
+        return serviceRepository.findAllById(servicesIds);
+    }
+
     public Service save(Service service) {
 
         if (UndeletableWithNameUtils.canBeSaved(this.serviceRepository, service.getName())) {
