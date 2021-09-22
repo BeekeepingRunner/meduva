@@ -42,6 +42,10 @@ public class EquipmentService {
         return this.equipmentModelRepository.findAllUndeleted();
     }
 
+    public boolean doesModelExistByName(String modelName) {
+        return this.equipmentModelRepository.existsByName(modelName);
+    }
+
     @Transactional
     public EquipmentModel createModelWithItems(NewEqModelRequest eqModelRequest) {
 

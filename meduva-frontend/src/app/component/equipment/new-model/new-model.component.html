@@ -1,6 +1,6 @@
 <mat-stepper [linear]="true" orientation="vertical" #stepper>
 
-  <mat-step [stepControl]="modelFormGroup">
+  <mat-step [stepControl]="modelFormGroup" [completed]="isModelNameAvailable()">
     <form [formGroup]="modelFormGroup">
       <ng-template matStepLabel>Create new equipment model</ng-template>
       <br>

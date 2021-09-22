@@ -41,4 +41,8 @@ export class EquipmentService {
   saveNewModel(newModelReuqest: NewModelRequest): Observable<any> {
     return this.httpClient.post(environment.API_BASE_URL + 'api/equipment/model/new', newModelReuqest);
   }
+
+  async isModelNameAvailable(modelName: string): Promise<any> {
+    return this.httpClient.get(environment.API_BASE_URL + '/api/equipment/model/doesExistWithName/' + modelName).toPromise();
+  }
 }

@@ -59,6 +59,18 @@ export class NewModelComponent implements OnInit {
     });
   }
 
+  async isModelNameAvailable(): Promise<boolean> {
+    let modelName = this.modelFormGroup.controls.modelName.value;
+
+    return await this.equipmentService.isModelNameAvailable(modelName).then(function () {
+      return true;
+    });
+  }
+
+  isAvailable(modelName: string) {
+
+  }
+
   fetchServices(): void {
     this.servicesService.getAllUndeletedServices().subscribe(
       services => {

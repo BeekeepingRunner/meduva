@@ -35,6 +35,11 @@ public class EquipmentController {
         return equipmentService.createModelWithItems(eqModelRequest);
     }
 
+    @GetMapping("/model/doesExistWithName/{modelName}")
+    public boolean doesExist(@PathVariable String modelName) {
+        return equipmentService.doesModelExistByName(modelName);
+    }
+
     @DeleteMapping("model/{id}")
     public void deleteModel(@PathVariable Long id) {
         this.equipmentService.markModelAsDeleted(id);
