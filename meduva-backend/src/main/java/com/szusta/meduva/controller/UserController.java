@@ -2,14 +2,13 @@ package com.szusta.meduva.controller;
 
 import com.szusta.meduva.model.ERole;
 import com.szusta.meduva.model.User;
+import com.szusta.meduva.payload.request.UpdatedUserRequest;
 import com.szusta.meduva.service.RoleService;
 import com.szusta.meduva.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -48,5 +47,17 @@ public class UserController {
     @GetMapping("/clients")
     public List<User> getClientsWithAccount() {
         return userService.findAllClientsWithAccount();
+    }
+
+    @PostMapping("/edit/{id}")
+    public User editUser(@PathVariable Long id, @Valid @RequestBody UpdatedUserRequest request){
+
+        User user = userService.getUser(id);
+
+        user.setName(request.getName());
+        user.setSurname(request.getSurname());
+        user.setPhoneNumber(request.getPhoneNumber());
+
+        return userService.save(user);
     }
 }

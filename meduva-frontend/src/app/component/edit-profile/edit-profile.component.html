@@ -1,6 +1,9 @@
 <mat-card class="col-md-6 card container-fluid ">
-  <form class="basic-form container-fluid " [formGroup]="form">
-    <br><br>
+  <form class="basic-form container-fluid " (ngSubmit)="onSubmit()" [formGroup]="form">
+    <br>
+    <strong>Edit profile:</strong>
+    <br>
+
 
     <mat-form-field class="wide-element" appearance="outline">
       <mat-label>First name:</mat-label>
@@ -53,26 +56,23 @@
       </mat-error>
     </mat-form-field>
 
-    <mat-form-field class="wide-element" appearance="outline">
-      <mat-label>Login:</mat-label>
-      <input matInput id="login" type="text" formControlName="login" >
-
-      <mat-error *ngIf="form.controls.login.invalid &&
-                            (form.controls.login.dirty || form.controls.login.touched)">
-
-        <mat-error *ngIf="form.controls.login.errors?.required">
-          Login is required
-        </mat-error>
-        <mat-error *ngIf="(form.controls.login.errors?.minlength || form.controls.login.errors?.maxlength) && !form.controls.login.errors?.pattern">
-          Login must be between 5 and 20 characters long
-        </mat-error>
-        <mat-error *ngIf="form.controls.login.errors?.pattern">
-          Login must not contain forbidden characters
-        </mat-error>
-      </mat-error>
-    </mat-form-field>
 
     <button class="btn btn-primary btn-block" type="submit">Edit profile</button>
+
+    <br>
+    <div
+      class="alert alert-success"
+      role="alert"
+      *ngIf="editSuccessful">
+      Profile edited successfully
+    </div>
+
+    <div
+      class="alert alert-danger"
+      role="alert"
+      *ngIf="editFailed">
+      Edit failed: {{ errorMessage }}
+    </div>
 
   </form>
 
