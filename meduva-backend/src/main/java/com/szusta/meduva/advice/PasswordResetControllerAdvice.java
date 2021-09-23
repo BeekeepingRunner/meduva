@@ -1,9 +1,7 @@
 package com.szusta.meduva.advice;
 
 import com.szusta.meduva.exception.ErrorMessage;
-import com.szusta.meduva.exception.notfound.PasswordResetTokenNotFoundException;
-import com.szusta.meduva.exception.TokenRefreshException;
-import com.szusta.meduva.exception.notfound.UserNotFoundException;
+import com.szusta.meduva.exception.EntityRecordNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.mail.MailException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -18,7 +16,7 @@ public class PasswordResetControllerAdvice {
 
     @ExceptionHandler(value = MailException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public ErrorMessage handleMailException(TokenRefreshException ex, WebRequest request) {
+    public ErrorMessage handleMailException(MailException ex, WebRequest request) {
 
         return new ErrorMessage(
                 HttpStatus.INTERNAL_SERVER_ERROR.value(),
@@ -28,26 +26,14 @@ public class PasswordResetControllerAdvice {
         );
     }
 
-    @ExceptionHandler(value = UserNotFoundException.class)
+    @ExceptionHandler(value = EntityRecordNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ErrorMessage handleUserNotFoundException(UserNotFoundException ex, WebRequest request) {
+    public ErrorMessage handleEntityRecordNotFoundException(EntityRecordNotFoundException ex, WebRequest request) {
 
         return new ErrorMessage(
                 HttpStatus.NOT_FOUND.value(),
                 new Date(),
                 ex.getMessage(),
-                request.getDescription(false)
-        );
-    }
-
-    @ExceptionHandler(value = PasswordResetTokenNotFoundException.class)
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ErrorMessage handlePasswordResetTokenNotFoundException(PasswordResetTokenNotFoundException ex, WebRequest request) {
-
-        return new ErrorMessage(
-                HttpStatus.NOT_FOUND.value(),
-                new Date(),
-                "Password reset token not found.",
                 request.getDescription(false)
         );
     }

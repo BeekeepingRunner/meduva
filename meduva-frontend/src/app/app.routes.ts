@@ -18,6 +18,9 @@ import {ServiceDetailsComponent} from "./component/services/service-details/serv
 import {RoomListComponent} from "./component/rooms/room-list/room-list.component";
 import {NewRoomComponent} from "./component/rooms/new-room/new-room.component";
 import {RoomDetailsComponent} from "./component/rooms/room-details/room-details.component";
+import {EquipmentListComponent} from "./component/equipment/equipment-list/equipment-list.component";
+import {NewModelComponent} from "./component/equipment/new-model/new-model.component";
+import {ModelDetailsComponent} from "./component/equipment/model-details/model-details.component";
 
 export const routes: Routes = [
   { path: 'home', component: HomeComponent },
@@ -101,6 +104,30 @@ export const routes: Routes = [
   {
     path: 'room/:id',
     component: RoomDetailsComponent,
+    canActivate: [RoleGuard],
+    data: {
+      expectedRole: roleNames[UserRole.ROLE_ADMIN]
+    }
+  },
+  {
+    path: 'equipment',
+    component: EquipmentListComponent,
+    canActivate: [RoleGuard],
+    data: {
+      expectedRole: roleNames[UserRole.ROLE_ADMIN]
+    }
+  },
+  {
+    path: 'equipment/model/:id',
+    component: ModelDetailsComponent,
+    canActivate: [RoleGuard],
+    data: {
+      expectedRole: roleNames[UserRole.ROLE_ADMIN]
+    }
+  },
+  {
+    path: 'equipment/add-model',
+    component: NewModelComponent,
     canActivate: [RoleGuard],
     data: {
       expectedRole: roleNames[UserRole.ROLE_ADMIN]

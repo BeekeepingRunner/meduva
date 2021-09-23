@@ -1,5 +1,6 @@
 package com.szusta.meduva.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -7,6 +8,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.Collection;
 
 @Entity
 @Table(name = "service")
@@ -21,6 +23,14 @@ public class Service extends Undeletable {
     @Column(name = "duration_in_min")
     private int durationInMin;
     private BigDecimal price;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JsonIgnore
+    Collection<EquipmentModel> equipmentModels;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JsonIgnore
+    Collection<Room> rooms;
 
     public Service(String name,
                    String description,

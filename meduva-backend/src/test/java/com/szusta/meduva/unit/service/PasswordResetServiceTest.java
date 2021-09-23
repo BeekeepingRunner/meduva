@@ -1,6 +1,6 @@
 package com.szusta.meduva.unit.service;
 
-import com.szusta.meduva.exception.notfound.PasswordResetTokenNotFoundException;
+import com.szusta.meduva.exception.EntityRecordNotFoundException;
 import com.szusta.meduva.model.PasswordResetToken;
 import com.szusta.meduva.model.User;
 import com.szusta.meduva.repository.PasswordResetTokenRepository;
@@ -75,7 +75,7 @@ public class PasswordResetServiceTest {
                 Optional.of(new PasswordResetToken(user, "token", new Date())));
 
         assertEquals(user, passwordResetService.getUserFromResetToken("token"));
-        assertThrows(PasswordResetTokenNotFoundException.class, () -> {
+        assertThrows(EntityRecordNotFoundException.class, () -> {
             passwordResetService.getUserFromResetToken("badToken");
         });
     }

@@ -1,6 +1,6 @@
 package com.szusta.meduva.unit.service;
 
-import com.szusta.meduva.exception.notfound.RoleNotFoundException;
+import com.szusta.meduva.exception.EntityRecordNotFoundException;
 import com.szusta.meduva.model.Role;
 import com.szusta.meduva.repository.RoleRepository;
 import com.szusta.meduva.service.RoleService;
@@ -38,7 +38,7 @@ public class RoleServiceTest {
                 .thenReturn(Optional.empty());
 
         roleService.findByName(goodName);
-        assertThrows(RoleNotFoundException.class, () -> roleService.findByName(badName));
+        assertThrows(EntityRecordNotFoundException.class, () -> roleService.findByName(badName));
 
         verify(roleRepository, times(1)).findByName(goodName);
         verify(roleRepository, times(1)).findByName(badName);

@@ -1,6 +1,6 @@
 package com.szusta.meduva.unit.service;
 
-import com.szusta.meduva.exception.ServiceAlreadyExistsException;
+import com.szusta.meduva.exception.AlreadyExistsException;
 import com.szusta.meduva.model.Service;
 import com.szusta.meduva.repository.ServiceRepository;
 import com.szusta.meduva.service.ServicesService;
@@ -45,7 +45,7 @@ class ServicesServiceTest {
         services.add(s2);
 
         when(serviceRepository.findAll()).thenReturn(services);
-        List<Service> undeletedServices = servicesServiceUnderTest.findAllUnDeletedServices();
+        List<Service> undeletedServices = servicesServiceUnderTest.findAllUndeletedServices();
         undeletedServices.forEach(service -> {
             assertFalse(service.isDeleted());
         });
@@ -105,7 +105,7 @@ class ServicesServiceTest {
         when(serviceRepository.findByName(service.getName()))
                 .thenReturn(Optional.of(service));
 
-        assertThrows(ServiceAlreadyExistsException.class,
+        assertThrows(AlreadyExistsException.class,
                 () -> servicesServiceUnderTest.save(service));
 
         verify(serviceRepository, times(1)).existsByName(service.getName());

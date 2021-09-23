@@ -1,11 +1,15 @@
 package com.szusta.meduva.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "room")
@@ -17,6 +21,22 @@ public class Room extends Undeletable {
 
     private String name;
     private String description;
+
+    @OneToMany(mappedBy = "room")
+    @JsonIgnore
+    private Set<EquipmentItem> equipmentItems;
+
+    @ManyToMany(
+            fetch = FetchType.LAZY,
+            cascade = CascadeType.ALL
+    )
+    @JoinTable(
+            name = "room_service",
+            joinColumns = @JoinColumn(name = "room_id"),
+            inverseJoinColumns = @JoinColumn(name = "service_id")
+    )
+    @JsonIgnore
+    private List<Service> services = new ArrayList<>();
 
     public Room(String name,
                 String description,
