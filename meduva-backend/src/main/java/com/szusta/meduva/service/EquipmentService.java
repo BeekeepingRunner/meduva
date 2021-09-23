@@ -55,11 +55,14 @@ public class EquipmentService {
         String modelName = eqModelRequest.getModelName();
         EquipmentModel eqModel = createModelWithServices(modelName, services);
 
+        // connect rooms with services and save
+        List<Long> roomsIds = eqModelRequest.getSelectedRoomsIds();
+        List<Room> rooms = roomService.findWithIdsInOrder(roomsIds);
+        rooms = connectRoomsWithServices(rooms, services);
+
         // create items and connect them with rooms
         int itemCount = eqModelRequest.getItemCount();
         List<EquipmentItem> eqItems = createItemsWithNames(itemCount, modelName);
-        List<Long> roomsIds = eqModelRequest.getSelectedRoomsIds();
-        List<Room> rooms = roomService.findWithIdsInOrder(roomsIds);
         eqItems = connectItemsWithRooms(eqItems, rooms);
 
         // connect model with items and save
@@ -72,6 +75,14 @@ public class EquipmentService {
         EquipmentModel eqModel = new EquipmentModel(modelName, false);
         eqModel.setServices(services);
         return equipmentModelRepository.save(eqModel);
+    }
+
+    private List<Room> connectRoomsWithServices(List<Room> rooms, List<Service> services) {
+        for (Room room : rooms) {
+            room.setServices(services);
+            room = roomService.update(room);
+        }
+        return rooms;
     }
 
     private List<EquipmentItem> createItemsWithNames(int itemCount, String modelName) {

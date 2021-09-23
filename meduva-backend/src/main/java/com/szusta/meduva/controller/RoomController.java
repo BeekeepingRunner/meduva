@@ -36,7 +36,7 @@ public class RoomController {
                 request.getDescription(),
                 request.isDeleted()
         );
-        return this.roomService.save(room);
+        return this.roomService.saveNewRoom(room);
     }
 
     @DeleteMapping("/{id}")

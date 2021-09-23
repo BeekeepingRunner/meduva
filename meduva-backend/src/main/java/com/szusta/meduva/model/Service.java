@@ -28,6 +28,10 @@ public class Service extends Undeletable {
     @JsonIgnore
     Collection<EquipmentModel> equipmentModels;
 
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JsonIgnore
+    Collection<Room> rooms;
+
     public Service(String name,
                    String description,
                    int durationInMin,

@@ -46,12 +46,16 @@ public class RoomService {
         return rooms;
     }
 
-    public Room save(Room room) {
+    public Room saveNewRoom(Room room) {
 
         if (UndeletableWithNameUtils.canBeSaved(this.roomRepository, room.getName())) {
             return this.roomRepository.save(room);
         } else
             throw new AlreadyExistsException("Room already exists with name: " + room.getName());
+    }
+
+    public Room update(Room room) {
+        return this.roomRepository.save(room);
     }
 
     public void deleteById(Long id) {
@@ -62,4 +66,5 @@ public class RoomService {
     public void markAsDeleted(Long id) {
         UndeletableWithNameUtils.markAsDeleted(this.roomRepository, id);
     }
+
 }
