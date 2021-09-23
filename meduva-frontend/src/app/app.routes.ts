@@ -36,7 +36,7 @@ export const routes: Routes = [
     }
   },
   {
-    path: 'profile/edit-profile/:id',
+    path: 'profile/edit-profile',
     component: EditProfileComponent,
     canActivate: [RoleGuard],
     data: {
@@ -44,7 +44,7 @@ export const routes: Routes = [
     }
   },
   {
-    path: 'profile/edit-email',
+    path: 'profile/edit-email/:id',
     component: EditEmailComponent,
     canActivate: [RoleGuard],
     data: {
