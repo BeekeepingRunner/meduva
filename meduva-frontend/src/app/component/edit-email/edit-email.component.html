@@ -18,7 +18,7 @@
       </mat-error>
     </mat-form-field>
 
-    <button class="btn btn-primary btn-block" type="submit">Change email</button>
+    <button [disabled]="!form.valid" class="btn btn-primary btn-block" type="submit">Change email</button>
 
   </form>
 </mat-card>
