@@ -36,7 +36,7 @@ export const routes: Routes = [
     }
   },
   {
-    path: 'profile/edit-profile',
+    path: 'profile/edit-profile/:id',
     component: EditProfileComponent,
     canActivate: [RoleGuard],
     data: {
