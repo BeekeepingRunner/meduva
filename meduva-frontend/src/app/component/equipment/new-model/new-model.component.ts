@@ -1,9 +1,6 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {
   FormBuilder,
-  FormControl,
-  FormGroup,
-  Validators
 } from "@angular/forms";
 import {ServicesService} from "../../../service/services.service";
 import {RoomService} from "../../../service/room.service";
@@ -27,9 +24,8 @@ export interface NewModelRequest {
 })
 export class NewModelComponent implements OnInit {
 
-  modelFormGroup!: FormGroup;
-  modelNameAvailable: boolean = false;
-  modelNotAvailableErr: string = '';
+  modelName: string = '';
+  isFormValid: boolean = false;
 
   selectedServicesIds: number[] = [];
   serviceSelectionError: string = '';
@@ -49,65 +45,18 @@ export class NewModelComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.modelFormGroup = this.formBuilder.group({
-      modelName : new FormControl('', [
-        Validators.required
-      ]),
-      itemCount: new FormControl('', [
-        Validators.required,
-        Validators.min(1),
-      ])
-    });
   }
 
-  setModelAvailability(): void {
-    let modelName = this.modelFormGroup.controls.modelName.value;
-
-    this.equipmentService.doesModelExistByName(modelName).subscribe(
-      doesExist => {
-        this.modelNameAvailable = !doesExist;
-      },
-      err => {
-        this.modelNameAvailable = false;
-        console.log(err);
-      }
-    );
+  onModelNameInput($event: string) {
+    this.modelName = $event;
   }
 
-  isModelNameAvailable(): boolean {
-    if (this.modelNameAvailable) {
-      this.modelNotAvailableErr = '';
-      return true;
-    } else {
-      this.modelNotAvailableErr = 'Model with given name already exists';
-      return false;
-    }
+  onItemsGeneration($event: EquipmentItem[]) {
+    this.eqItems = $event;
   }
 
-  createEquipmentItems(): void {
-    let itemCount: number = this.modelFormGroup.controls.itemCount.value;
-    if (itemCount > 0) {
-      this.generateItems(itemCount);
-    }
-  }
-
-  private generateItems(itemCount: number): void {
-    let modelName: string = this.modelFormGroup.controls.modelName.value;
-    modelName = this.prepareModelName(modelName);
-
-    this.eqItems = [];
-    for(let i = 1; i <= itemCount; i++)
-    {
-      let eqItem: EquipmentItem = {
-        id: i,
-        name: modelName + '_' + i
-      }
-      this.eqItems.push(eqItem);
-    }
-  }
-
-  private prepareModelName(modelName: string): string {
-    return modelName.split(' ').join('_');
+  onModelFormSubmitted($event: boolean) {
+    this.isFormValid = $event;
   }
 
   onServicesSelected($event: number[]) {
@@ -129,7 +78,7 @@ export class NewModelComponent implements OnInit {
   }
 
   areAllItemsDisplaced(): boolean {
-    let eqItemCount: number = this.modelFormGroup.controls.itemCount.value;
+    let eqItemCount: number = this.eqItems.length;
     if (this.selectedRoomsIds.length == eqItemCount && eqItemCount > 0) {
       this.roomSelectionError = '';
       return true;
@@ -141,8 +90,8 @@ export class NewModelComponent implements OnInit {
 
   saveModelWithItems() {
     let newModelReuqest: NewModelRequest = {
-      modelName: this.modelFormGroup.controls.modelName.value,
-      itemCount: this.modelFormGroup.controls.itemCount.value,
+      modelName: this.modelName,
+      itemCount: this.eqItems.length,
       servicesIds: this.selectedServicesIds,
       selectedRoomsIds: this.selectedRoomsIds
     };

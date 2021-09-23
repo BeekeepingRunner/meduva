@@ -1,26 +1,13 @@
 <mat-stepper [linear]="true" orientation="vertical" #stepper>
 
-  <mat-step [completed]="this.modelFormGroup.valid && isModelNameAvailable()">
-    <form [formGroup]="modelFormGroup">
-      <ng-template matStepLabel>Create new equipment model</ng-template>
-      <br>
-      <mat-form-field appearance="fill">
-        <mat-label>Model name</mat-label>
-        <input matInput formControlName="modelName" required
-               (blur)="setModelAvailability(); createEquipmentItems();">
-      </mat-form-field>
-      <div *ngIf="modelNotAvailableErr" class="alert alert-warning">
-        <p>{{ modelNotAvailableErr }}</p>
-      </div>
-      <br>
-      <mat-form-field appearance="fill">
-        <mat-label>Item count</mat-label>
-        <input matInput type="number" step="1" min="1" formControlName="itemCount" required>
-      </mat-form-field>
-      <div>
-        <button mat-button matStepperNext (click)="createEquipmentItems();">Next</button>
-      </div>
-    </form>
+  <mat-step [completed]="isFormValid">
+    <app-model-form (modelNameEmitter)="onModelNameInput($event)"
+                    (eqItemsEmitter)="onItemsGeneration($event)"
+                    (stepCompletionEmitter)="onModelFormSubmitted($event)">
+    </app-model-form>
+    <div>
+      <button mat-button matStepperNext>Next</button>
+    </div>
   </mat-step>
 
   <mat-step label="Connect model with services"
@@ -56,7 +43,6 @@
     </div>
   </mat-step>
 
-  <!-- temporary step -->
   <mat-step>
     <ng-template matStepLabel>Done</ng-template>
     <p>Everything is ready.</p>
