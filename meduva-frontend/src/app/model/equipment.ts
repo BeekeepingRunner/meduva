@@ -1,4 +1,5 @@
 import {Room} from "./room";
+import {Service} from "./service";
 
 export interface EquipmentItem {
   id?: number,
@@ -11,5 +12,6 @@ export interface EquipmentModel {
   id?: number,
   name: string,
   items: EquipmentItem[],
+  services: Service[],
   deleted: boolean
 }

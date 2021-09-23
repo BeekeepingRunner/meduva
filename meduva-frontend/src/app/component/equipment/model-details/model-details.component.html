@@ -4,8 +4,36 @@
   </button>
   <br><br>
 
-  <p>Equipment model:</p>
-  <h3>{{ model?.name }}</h3>
+  <h4>{{ model?.name }}</h4>
+  <span style="font-size: smaller">Equipment Model</span>
+  <br><br>
+
+  <table mat-table [dataSource]="modelServices" class="mat-elevation-z8">
+
+    <ng-container matColumnDef="title">
+      <th mat-header-cell *matHeaderCellDef>Performed Services:</th>
+      <td mat-cell *matCellDef="let service"><b>{{ service.name }}</b></td>
+    </ng-container>
+    <tr mat-header-row *matHeaderRowDef="serviceTableColumns"></tr>
+    <tr mat-row *matRowDef="let row; let service; columns: serviceTableColumns;"
+        [routerLink]="['/service/' + service.id]">
+    </tr>
+  </table>
+  <br>
+
+  <table mat-table [dataSource]="model.items" class="mat-elevation-z8">
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef>Item</th>
+      <td mat-cell *matCellDef="let item"><b>{{ item.name }}</b></td>
+    </ng-container>
+    <ng-container matColumnDef="room">
+      <th mat-header-cell *matHeaderCellDef>Room</th>
+      <td mat-cell *matCellDef="let item">{{ item.room.name }}</td>
+    </ng-container>
+    <tr mat-header-row *matHeaderRowDef="itemTableColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: itemTableColumns;">
+    </tr>
+  </table>
 
   <br>
   <tr class="button-row">

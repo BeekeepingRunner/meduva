@@ -1,0 +1,20 @@
+table {
+  width: 90%;
+  max-width: 600px;
+  min-width: 450px;
+}
+
+th.mat-header-cell, td.mat-header-cell {
+  margin-right: 10px;
+  margin-left: 10px;
+}
+
+th.mat-header-cell {
+  color: white;
+  background-color: #4f4c79;
+  font-size: medium;
+}
+
+.mat-row:hover {
+  background-color: rgba(100,93,154,0.45);
+}

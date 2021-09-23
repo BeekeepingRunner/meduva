@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {EquipmentModel} from "../../../model/equipment";
 import {ActivatedRoute} from "@angular/router";
 import {EquipmentService} from "../../../service/equipment.service";
+import {Service} from "../../../model/service";
 
 @Component({
   selector: 'app-model-details',
@@ -11,6 +12,9 @@ import {EquipmentService} from "../../../service/equipment.service";
 export class ModelDetailsComponent implements OnInit {
 
   model!: EquipmentModel;
+  modelServices: Service[] = [];
+  serviceTableColumns: string[] = ['title'];
+  itemTableColumns: string[] = ['name', 'room'];
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -22,6 +26,8 @@ export class ModelDetailsComponent implements OnInit {
     this.equipmentService.getModelById(modelId).subscribe(
       model => {
         this.model = model;
+        this.modelServices = model.services;
+        console.log(model);
       },
       err => {
         console.log(err);
