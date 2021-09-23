@@ -41,6 +41,7 @@ import {MatDialogModule} from "@angular/material/dialog";
 import { RoomListComponent } from './component/rooms/room-list/room-list.component';
 import { NewRoomComponent } from './component/rooms/new-room/new-room.component';
 import { RoomDetailsComponent } from './component/rooms/room-details/room-details.component';
+import { EditEmailComponent } from './component/edit-email/edit-email.component';
 
 @NgModule({
   declarations: [
@@ -62,6 +63,7 @@ import { RoomDetailsComponent } from './component/rooms/room-details/room-detail
     RoomListComponent,
     NewRoomComponent,
     RoomDetailsComponent,
+    EditEmailComponent,
   ],
   imports: [
     BrowserModule,
