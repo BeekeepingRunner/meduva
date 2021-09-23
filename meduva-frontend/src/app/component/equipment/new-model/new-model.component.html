@@ -1,6 +1,7 @@
 <mat-stepper [linear]="true" orientation="vertical" #stepper>
 
-  <mat-step [completed]="isFormValid">
+  <mat-step label="Define new model"
+            [completed]="isFormValid">
     <app-model-form (modelNameEmitter)="onModelNameInput($event)"
                     (eqItemsEmitter)="onItemsGeneration($event)"
                     (stepCompletionEmitter)="onModelFormSubmitted($event)">
