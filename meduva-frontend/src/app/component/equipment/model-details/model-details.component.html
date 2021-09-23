@@ -21,7 +21,7 @@
   </table>
   <br>
 
-  <table mat-table [dataSource]="model.items" class="mat-elevation-z8">
+  <table mat-table [dataSource]="modelItems" class="mat-elevation-z8">
     <ng-container matColumnDef="name">
       <th mat-header-cell *matHeaderCellDef>Item</th>
       <td mat-cell *matCellDef="let item"><b>{{ item.name }}</b></td>

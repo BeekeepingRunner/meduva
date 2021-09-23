@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {EquipmentModel} from "../../../model/equipment";
+import {EquipmentItem, EquipmentModel} from "../../../model/equipment";
 import {ActivatedRoute} from "@angular/router";
 import {EquipmentService} from "../../../service/equipment.service";
 import {Service} from "../../../model/service";
@@ -13,6 +13,8 @@ export class ModelDetailsComponent implements OnInit {
 
   model!: EquipmentModel;
   modelServices: Service[] = [];
+  modelItems: EquipmentItem[] = [];
+
   serviceTableColumns: string[] = ['title'];
   itemTableColumns: string[] = ['name', 'room'];
 
@@ -27,7 +29,7 @@ export class ModelDetailsComponent implements OnInit {
       model => {
         this.model = model;
         this.modelServices = model.services;
-        console.log(model);
+        this.modelItems = model.items;
       },
       err => {
         console.log(err);
