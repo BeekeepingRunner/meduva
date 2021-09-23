@@ -1,11 +1,8 @@
-import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {
-  AbstractControl,
   FormBuilder,
   FormControl,
   FormGroup,
-  ValidationErrors,
-  ValidatorFn,
   Validators
 } from "@angular/forms";
 import {Service} from "../../../model/service";
@@ -38,16 +35,15 @@ export class NewModelComponent implements OnInit {
 
   services: Service[] = [];
   selectedServices: Service[] = [];
-  compareFunction = (o1: any, o2: any) => o1.id === o2.id;
   servicesIds: number[] = [];
   serviceSelectionError: string = '';
-  roomSelectionError: string = '';
 
   eqItems: EquipmentItem[] = [];
   rooms: Room[] = [];
   @ViewChild(RoomSelectComponent)
   private roomSelectComponent!: RoomSelectComponent;
   selectedRoomsIds: number[] = [];
+  roomSelectionError: string = '';
 
   constructor(
     private formBuilder: FormBuilder,
@@ -130,6 +126,11 @@ export class NewModelComponent implements OnInit {
     return modelName.split(' ').join('_');
   }
 
+  onServicesSelected($event: Service[]) {
+    this.selectedServices = $event;
+    console.log(this.selectedServices);
+  }
+
   saveSelectedServicesIds(): void {
     this.servicesIds = [];
     this.selectedServices.forEach(selectedService => {
@@ -172,10 +173,7 @@ export class NewModelComponent implements OnInit {
     }
   }
 
-  // TODO:
-  //  1. check if model with given name already exists
   saveModelWithItems() {
-
     let newModelReuqest: NewModelRequest = {
       modelName: this.modelFormGroup.controls.modelName.value,
       itemCount: this.modelFormGroup.controls.itemCount.value,

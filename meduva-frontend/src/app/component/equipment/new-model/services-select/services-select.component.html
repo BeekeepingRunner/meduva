@@ -1,0 +1,9 @@
+<h3>Select services:</h3>
+<mat-selection-list #selectionListServices
+                    [(ngModel)]="selectedServices"
+                    [compareWith]="compareFunction"
+                    (selectionChange)="emitServices()">
+  <mat-list-option *ngFor="let service of services" [value]="service">
+    {{ service.name }}
+  </mat-list-option>
+</mat-selection-list>

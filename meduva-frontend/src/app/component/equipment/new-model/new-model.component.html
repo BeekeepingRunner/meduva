@@ -26,13 +26,10 @@
   <mat-step label="Connect model with services"
             [completed]="IsAtLeastOneServiceSelected()">
     <br>
-    <h3>Select services:</h3>
-    <mat-selection-list #selectionListServices [(ngModel)]="selectedServices" [compareWith]="compareFunction">
-      <mat-list-option *ngFor="let service of services" [value]="service">
-        {{ service.name }}
-      </mat-list-option>
-    </mat-selection-list>
-    <br>
+    <app-services-select
+      [services]="services"
+      (selectedServicesEmmitter)="onServicesSelected($event)">
+    </app-services-select>
     <div>
       <button mat-button matStepperPrevious>Back</button>
       <button mat-button matStepperNext (click)="saveSelectedServicesIds(); fetchRooms()">Next</button>

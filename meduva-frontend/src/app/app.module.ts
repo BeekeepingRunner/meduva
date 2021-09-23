@@ -46,6 +46,7 @@ import { NewModelComponent } from './component/equipment/new-model/new-model.com
 import {MatStepperModule} from "@angular/material/stepper";
 import { RoomSelectComponent } from './component/equipment/new-model/room-select/room-select.component';
 import { RoomSelectionDialogComponent } from './component/dialog/room-selection-dialog/room-selection-dialog.component';
+import { ServicesSelectComponent } from './component/equipment/new-model/services-select/services-select.component';
 
 @NgModule({
   declarations: [
@@ -71,6 +72,7 @@ import { RoomSelectionDialogComponent } from './component/dialog/room-selection-
     NewModelComponent,
     RoomSelectComponent,
     RoomSelectionDialogComponent,
+    ServicesSelectComponent,
   ],
   imports: [
     BrowserModule,
