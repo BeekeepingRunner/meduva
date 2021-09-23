@@ -14,9 +14,9 @@ export class RoomSelectComponent implements OnInit {
 
   displayedColumns: string[] = ['itemName', 'room', 'buttons'];
 
-  rooms: Room[] = [];
   @Input() eqItems!: EquipmentItem[];
   @Output() selectedIdsEmitter = new EventEmitter<Array<number>>();
+  rooms: Room[] = [];
   selectedRoomIds!: Array<number>;
 
   constructor(

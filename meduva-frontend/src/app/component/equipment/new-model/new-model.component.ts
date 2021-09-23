@@ -5,7 +5,6 @@ import {
   FormGroup,
   Validators
 } from "@angular/forms";
-import {Service} from "../../../model/service";
 import {ServicesService} from "../../../service/services.service";
 import {RoomService} from "../../../service/room.service";
 import {EquipmentItem} from "../../../model/equipment";
@@ -32,7 +31,6 @@ export class NewModelComponent implements OnInit {
   modelNameAvailable: boolean = false;
   modelNotAvailableErr: string = '';
 
-  services: Service[] = [];
   selectedServicesIds: number[] = [];
   serviceSelectionError: string = '';
 
@@ -126,7 +124,7 @@ export class NewModelComponent implements OnInit {
     }
   }
 
-  onRoomSelected($event: Array<number>) {
+  onRoomsSelected($event: Array<number>) {
     this.selectedRoomsIds = $event;
   }
 

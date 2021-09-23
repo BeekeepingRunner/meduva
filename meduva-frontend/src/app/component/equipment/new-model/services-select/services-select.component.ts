@@ -10,8 +10,8 @@ import {ServicesService} from "../../../../service/services.service";
 export class ServicesSelectComponent implements OnInit {
 
   services: Service[] = [];
-  @Output() selectedServicesIdsEmmitter = new EventEmitter<number[]>();
   selectedServices: Service[] = [];
+  @Output() selectedServicesIdsEmmitter = new EventEmitter<number[]>();
 
   compareFunction = (o1: any, o2: any) => o1.id === o2.id;
 
@@ -34,7 +34,7 @@ export class ServicesSelectComponent implements OnInit {
     );
   }
 
-  emitServicesIds() {
+  emitSelectedServicesIds() {
     let selectedServicesIds: number[] = [];
     this.selectedServices.forEach(service => {
       if (service.id != null) {
