@@ -30,7 +30,8 @@
       </ng-container>
 
       <tr mat-header-row *matHeaderRowDef="modelTableColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: modelTableColumns;">
+      <tr mat-row *matRowDef="let row; let model; columns: modelTableColumns;"
+        [routerLink]="[ '/equipment/model/' + model.id ]">
       </tr>
     </table>
   </div>
