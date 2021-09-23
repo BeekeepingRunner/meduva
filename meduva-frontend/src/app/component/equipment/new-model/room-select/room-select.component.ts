@@ -3,6 +3,7 @@ import {Room} from "../../../../model/room";
 import {EquipmentItem} from "../../../../model/equipment";
 import {MatDialog} from "@angular/material/dialog";
 import {RoomSelectionDialogComponent} from "../../../dialog/room-selection-dialog/room-selection-dialog.component";
+import {RoomService} from "../../../../service/room.service";
 
 @Component({
   selector: 'app-room-select',
@@ -13,17 +14,27 @@ export class RoomSelectComponent implements OnInit {
 
   displayedColumns: string[] = ['itemName', 'room', 'buttons'];
 
+  rooms: Room[] = [];
   @Input() eqItems!: EquipmentItem[];
-  @Input() rooms!: Room[];
-  @Output() selectedIdsEmmitter = new EventEmitter<Array<number>>();
+  @Output() selectedIdsEmitter = new EventEmitter<Array<number>>();
   selectedRoomIds!: Array<number>;
 
   constructor(
     public dialog: MatDialog,
+    private roomService: RoomService
   ) { }
 
   ngOnInit(): void {
-    this.selectedRoomIds = new Array<number>(this.rooms.length);
+    this.selectedRoomIds = new Array<number>();
+    this.fetchRooms();
+  }
+
+  fetchRooms() {
+    this.roomService.getAllUndeletedRooms().subscribe(
+      rooms => {
+        this.rooms = rooms;
+      }
+    );
   }
 
   openRoomSelectionDialog(item: EquipmentItem) {
@@ -36,8 +47,7 @@ export class RoomSelectComponent implements OnInit {
       item.room = selectedRoom;
       // @ts-ignore
       this.selectedRoomIds[item.id - 1] = selectedRoom.id;
-      this.selectedIdsEmmitter.emit(this.selectedRoomIds);
-      console.log(this.selectedRoomIds);
+      this.selectedIdsEmitter.emit(this.selectedRoomIds);
     });
   }
 }

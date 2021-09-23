@@ -1,5 +1,6 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {Service} from "../../../../model/service";
+import {ServicesService} from "../../../../service/services.service";
 
 @Component({
   selector: 'app-services-select',
@@ -8,19 +9,38 @@ import {Service} from "../../../../model/service";
 })
 export class ServicesSelectComponent implements OnInit {
 
-  @Input() services!: Service[];
-  @Output() selectedServicesEmmitter = new EventEmitter<Service[]>();
+  services: Service[] = [];
+  @Output() selectedServicesIdsEmmitter = new EventEmitter<number[]>();
   selectedServices: Service[] = [];
 
   compareFunction = (o1: any, o2: any) => o1.id === o2.id;
 
-  constructor() { }
+  constructor(
+    private servicesService: ServicesService,
+  ) { }
 
   ngOnInit(): void {
+    this.fetchServices();
   }
 
-  emitServices() {
-    console.log(this.selectedServices);
-    this.selectedServicesEmmitter.emit(this.selectedServices);
+  fetchServices(): void {
+    this.servicesService.getAllUndeletedServices().subscribe(
+      services => {
+        this.services = services;
+      },
+      err => {
+        console.log(err);
+      }
+    );
+  }
+
+  emitServicesIds() {
+    let selectedServicesIds: number[] = [];
+    this.selectedServices.forEach(service => {
+      if (service.id != null) {
+        selectedServicesIds.push(service.id);
+      }
+    })
+    this.selectedServicesIdsEmmitter.emit(selectedServicesIds);
   }
 }

@@ -7,7 +7,6 @@ import {
 } from "@angular/forms";
 import {Service} from "../../../model/service";
 import {ServicesService} from "../../../service/services.service";
-import {Room} from "../../../model/room";
 import {RoomService} from "../../../service/room.service";
 import {EquipmentItem} from "../../../model/equipment";
 import {RoomSelectComponent} from "./room-select/room-select.component";
@@ -34,12 +33,10 @@ export class NewModelComponent implements OnInit {
   modelNotAvailableErr: string = '';
 
   services: Service[] = [];
-  selectedServices: Service[] = [];
-  servicesIds: number[] = [];
+  selectedServicesIds: number[] = [];
   serviceSelectionError: string = '';
 
   eqItems: EquipmentItem[] = [];
-  rooms: Room[] = [];
   @ViewChild(RoomSelectComponent)
   private roomSelectComponent!: RoomSelectComponent;
   selectedRoomsIds: number[] = [];
@@ -89,17 +86,6 @@ export class NewModelComponent implements OnInit {
     }
   }
 
-  fetchServices(): void {
-    this.servicesService.getAllUndeletedServices().subscribe(
-      services => {
-        this.services = services;
-      },
-      err => {
-        console.log(err);
-      }
-    );
-  }
-
   createEquipmentItems(): void {
     let itemCount: number = this.modelFormGroup.controls.itemCount.value;
     if (itemCount > 0) {
@@ -126,36 +112,18 @@ export class NewModelComponent implements OnInit {
     return modelName.split(' ').join('_');
   }
 
-  onServicesSelected($event: Service[]) {
-    this.selectedServices = $event;
-    console.log(this.selectedServices);
-  }
-
-  saveSelectedServicesIds(): void {
-    this.servicesIds = [];
-    this.selectedServices.forEach(selectedService => {
-      if (selectedService.id != null) {
-        this.servicesIds.push(selectedService.id)
-      }
-    });
+  onServicesSelected($event: number[]) {
+    this.selectedServicesIds = $event;
   }
 
   IsAtLeastOneServiceSelected(): boolean {
-    if (this.selectedServices.length > 0) {
+    if (this.selectedServicesIds.length > 0) {
       this.serviceSelectionError = '';
       return true;
     } else {
       this.serviceSelectionError = 'You have to select at least one service';
       return false;
     }
-  }
-
-  fetchRooms() {
-    this.roomService.getAllUndeletedRooms().subscribe(
-      rooms => {
-        this.rooms = rooms;
-      }
-    );
   }
 
   onRoomSelected($event: Array<number>) {
@@ -177,7 +145,7 @@ export class NewModelComponent implements OnInit {
     let newModelReuqest: NewModelRequest = {
       modelName: this.modelFormGroup.controls.modelName.value,
       itemCount: this.modelFormGroup.controls.itemCount.value,
-      servicesIds: this.servicesIds,
+      servicesIds: this.selectedServicesIds,
       selectedRoomsIds: this.selectedRoomsIds
     };
 

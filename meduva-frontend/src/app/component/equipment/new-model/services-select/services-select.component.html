@@ -2,7 +2,7 @@
 <mat-selection-list #selectionListServices
                     [(ngModel)]="selectedServices"
                     [compareWith]="compareFunction"
-                    (selectionChange)="emitServices()">
+                    (selectionChange)="emitServicesIds()">
   <mat-list-option *ngFor="let service of services" [value]="service">
     {{ service.name }}
   </mat-list-option>
