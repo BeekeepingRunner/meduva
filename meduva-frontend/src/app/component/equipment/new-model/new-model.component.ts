@@ -1,5 +1,13 @@
 import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
-import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
+import {
+  AbstractControl,
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  ValidationErrors,
+  ValidatorFn,
+  Validators
+} from "@angular/forms";
 import {Service} from "../../../model/service";
 import {ServicesService} from "../../../service/services.service";
 import {Room} from "../../../model/room";
@@ -25,6 +33,8 @@ export interface NewModelRequest {
 export class NewModelComponent implements OnInit {
 
   modelFormGroup!: FormGroup;
+  modelNameAvailable: boolean = false;
+  modelNotAvailableErr: string = '';
 
   services: Service[] = [];
   selectedServices: Service[] = [];
@@ -54,21 +64,33 @@ export class NewModelComponent implements OnInit {
       ]),
       itemCount: new FormControl('', [
         Validators.required,
-        Validators.min(1)
+        Validators.min(1),
       ])
     });
   }
 
-  async isModelNameAvailable(): Promise<boolean> {
+  setModelAvailability(): void {
     let modelName = this.modelFormGroup.controls.modelName.value;
 
-    return await this.equipmentService.isModelNameAvailable(modelName).then(function () {
-      return true;
-    });
+    this.equipmentService.doesModelExistByName(modelName).subscribe(
+      doesExist => {
+        this.modelNameAvailable = !doesExist;
+      },
+      err => {
+        this.modelNameAvailable = false;
+        console.log(err);
+      }
+    );
   }
 
-  isAvailable(modelName: string) {
-
+  isModelNameAvailable(): boolean {
+    if (this.modelNameAvailable) {
+      this.modelNotAvailableErr = '';
+      return true;
+    } else {
+      this.modelNotAvailableErr = 'Model with given name already exists';
+      return false;
+    }
   }
 
   fetchServices(): void {
