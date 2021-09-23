@@ -22,17 +22,11 @@ export class EquipmentService {
     return this.httpClient.get<EquipmentModel[]>(environment.API_BASE_URL + 'api/equipment/models/all/undeleted');
   }
 
+  public getModelById(modelId: number): Observable<EquipmentModel> {
+    return this.httpClient.get<EquipmentModel>(environment.API_BASE_URL + 'api/equipment/model/' + modelId);
+  }
+
   /*
-  public getModelById(modelId: number): Observable<Equipment> {
-    return this.httpClient.get<Service>(environment.API_BASE_URL + 'rooms/' + roomId).pipe(
-      map(room => trimJSON(room, ['_links']))
-    );
-  }
-
-  public addNewRoom(room: Room): Observable<Room> {
-    return this.httpClient.post<Service>(environment.API_BASE_URL + 'api/room', room);
-  }
-
   public deleteById(roomId: number | undefined): Observable<any> {
     return this.httpClient.delete(environment.API_BASE_URL + 'api/room/' + roomId);
   }

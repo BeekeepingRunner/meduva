@@ -62,7 +62,7 @@ export class ModelFormComponent implements OnInit {
 
   generateItems(): void {
     this.modelName = this.modelFormGroup.controls.modelName.value;
-    this.modelName = this.prepareModelName(this.modelName);
+    let itemBaseName = this.modelName.split(' ').join('_');
     let itemCount: number = this.modelFormGroup.controls.itemCount.value;
 
     this.eqItems = [];
@@ -70,14 +70,10 @@ export class ModelFormComponent implements OnInit {
     {
       let eqItem: EquipmentItem = {
         id: i,
-        name: this.modelName + '_' + i
+        name: itemBaseName + '_' + i
       }
       this.eqItems.push(eqItem);
     }
-  }
-
-  private prepareModelName(modelName: string): string {
-    return modelName.split(' ').join('_');
   }
 
   completeStep(): void {

@@ -1,1 +1,19 @@
-<p>model-details works!</p>
+<div class="container mat-elevation-z8">
+  <button mat-icon-button color="primary" routerLink='/equipment'>
+    <- Back to equipment
+  </button>
+  <br><br>
+
+  <p>Equipment model:</p>
+  <h3>{{ model?.name }}</h3>
+
+  <br>
+  <tr class="button-row">
+    <td><button mat-raised-button color="primary">Change model name</button></td>
+  </tr>
+  <br>
+  <tr class="button-row">
+    <td><button mat-raised-button color="warn" (click)="openConfirmationDialog()">Delete model</button></td>
+  </tr>
+  <br>
+</div>

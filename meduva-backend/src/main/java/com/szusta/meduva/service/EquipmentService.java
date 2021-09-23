@@ -1,5 +1,6 @@
 package com.szusta.meduva.service;
 
+import com.szusta.meduva.exception.EntityRecordNotFoundException;
 import com.szusta.meduva.model.EquipmentItem;
 import com.szusta.meduva.model.EquipmentModel;
 import com.szusta.meduva.model.Room;
@@ -40,6 +41,11 @@ public class EquipmentService {
 
     public List<EquipmentModel> findAllUndeletedEquipmentModels() {
         return this.equipmentModelRepository.findAllUndeleted();
+    }
+
+    public EquipmentModel findModelById(Long id) {
+        return this.equipmentModelRepository.findById(id)
+                .orElseThrow(() -> new EntityRecordNotFoundException("Equipment model not found with id : " + id));
     }
 
     public boolean doesModelExistByName(String modelName) {

@@ -25,9 +25,14 @@ public class EquipmentController {
         return this.equipmentService.findAllEquipmentModels();
     }
 
-    @GetMapping("models/all/undeleted")
+    @GetMapping("/models/all/undeleted")
     public List<EquipmentModel> findAllUndeletedEquipmentModels() {
         return this.equipmentService.findAllUndeletedEquipmentModels();
+    }
+
+    @GetMapping("/model/{id}")
+    public EquipmentModel findModelById(@PathVariable Long id) {
+        return this.equipmentService.findModelById(id);
     }
 
     @PostMapping("/model/new")
