@@ -3,7 +3,6 @@ package com.szusta.meduva.service;
 import com.szusta.meduva.exception.AlreadyExistsException;
 import com.szusta.meduva.exception.EntityRecordNotFoundException;
 import com.szusta.meduva.model.Service;
-import com.szusta.meduva.repository.EquipmentItemRepository;
 import com.szusta.meduva.repository.ServiceRepository;
 import com.szusta.meduva.service.entityconnections.ServiceToEqModelService;
 import com.szusta.meduva.util.UndeletableWithNameUtils;
@@ -19,15 +18,12 @@ public class ServicesService {
 
     private ServiceRepository serviceRepository;
     private ServiceToEqModelService serviceToEqModelService;
-    private EquipmentItemRepository equipmentItemRepository;
 
     @Autowired
     public ServicesService(ServiceRepository serviceRepository,
-                           ServiceToEqModelService serviceToEqModelService,
-                           EquipmentService equipmentService) {
+                           ServiceToEqModelService serviceToEqModelService) {
         this.serviceRepository = serviceRepository;
         this.serviceToEqModelService = serviceToEqModelService;
-        this.equipmentItemRepository = equipmentItemRepository;
     }
 
     public List<Service> findAllServices() {
@@ -41,10 +37,6 @@ public class ServicesService {
     public Service findById(Long serviceId) {
         return this.serviceRepository.findById(serviceId)
                 .orElseThrow(() -> new EntityRecordNotFoundException("Service not found with id : " + serviceId));
-    }
-
-    public List<Service> findWithIds(List<Long> servicesIds) {
-        return serviceRepository.findAllById(servicesIds);
     }
 
     public Service save(Service service) {
@@ -65,9 +57,7 @@ public class ServicesService {
                 .orElseThrow(() -> new EntityNotFoundException("Service not found with id : " + id));
 
         serviceToEqModelService.deactivateModelsWithLastService(service);
-
-        service.setEquipmentModel(Collections.emptyList());
-
+        service.setEquipmentModel(Collections.emptyList()); // won't that connection be useful in the future though?
         service.markAsDeleted();
         serviceRepository.save(service);
     }

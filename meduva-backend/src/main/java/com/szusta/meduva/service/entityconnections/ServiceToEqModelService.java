@@ -31,6 +31,15 @@ public class ServiceToEqModelService {
         this.serviceRepository = serviceRepository;
     }
 
+    public List<Service> findAllById(List<Long> servicesIds) {
+        return serviceRepository.findAllById(servicesIds);
+    }
+
+    public EquipmentModel connectServicesToTheModel(EquipmentModel model, List<Service> services) {
+        model.setServices(services);
+        return this.equipmentModelRepository.save(model);
+    }
+
     public void deactivateModelsWithLastService(Service service) {
 
         List<EquipmentModel> models = service.getEquipmentModel();
