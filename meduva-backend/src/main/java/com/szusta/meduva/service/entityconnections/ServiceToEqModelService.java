@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @org.springframework.stereotype.Service
 public class ServiceToEqModelService {
@@ -33,25 +34,30 @@ public class ServiceToEqModelService {
     public void deactivateModelsWithLastService(Service service) {
 
         List<EquipmentModel> models = service.getEquipmentModel();
+        List<EquipmentModel> modelsToDeactivate = getModelsToDeactivate(models);
+        List<EquipmentModel> deactivatedModels = deactivateModels(modelsToDeactivate);
+        deactivateItems(deactivatedModels);
+    }
 
-        // deactivate models only
+    private List<EquipmentModel> getModelsToDeactivate(List<EquipmentModel> models) {
         List<EquipmentModel> modelsToDeactivate = new ArrayList<>();
         models.forEach(model -> {
             if (model.getServices().size() == 1) {
                 modelsToDeactivate.add(model);
             }
         });
-        modelsToDeactivate.forEach(model -> {
+        return modelsToDeactivate;
+    }
+
+    private List<EquipmentModel> deactivateModels(List<EquipmentModel> modelsToDeactivate) {
+        return modelsToDeactivate.stream().map(model -> {
             model.deactivate();
-            equipmentModelRepository.save(model);
-        });
+            return equipmentModelRepository.save(model);
+        }).collect(Collectors.toList());
+    }
 
-        // prepare map of models and their items
-        // Map<EquipmentModel, EquipmentItem> modelItemMap = new HashMap<>();
-
-        // deactivate items of deactivated models
-        modelsToDeactivate.forEach(deactivatedModel -> {
-
+    private void deactivateItems(List<EquipmentModel> deactivatedModels) {
+        deactivatedModels.forEach(deactivatedModel -> {
             List<EquipmentItem> equipmentItems = deactivatedModel.getItems();
             equipmentItems.forEach(item -> {
                 item.deactivate();
