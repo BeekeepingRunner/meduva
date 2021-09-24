@@ -8,6 +8,7 @@ import com.szusta.meduva.model.Service;
 import com.szusta.meduva.payload.request.NewEqModelRequest;
 import com.szusta.meduva.repository.EquipmentItemRepository;
 import com.szusta.meduva.repository.EquipmentModelRepository;
+import com.szusta.meduva.repository.ServiceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.transaction.Transactional;
@@ -19,19 +20,19 @@ public class EquipmentService {
 
     private EquipmentModelRepository equipmentModelRepository;
     private EquipmentItemRepository equipmentItemRepository;
-    private ServicesService servicesService;
+    private ServiceRepository serviceRepository;
     private RoomService roomService;
 
     @Autowired
     public EquipmentService(
             EquipmentModelRepository equipmentModelRepository,
             EquipmentItemRepository equipmentItemRepository,
-            ServicesService servicesService,
+            ServiceRepository serviceRepository,
             RoomService roomService
     ) {
         this.equipmentModelRepository = equipmentModelRepository;
         this.equipmentItemRepository = equipmentItemRepository;
-        this.servicesService = servicesService;
+        this.serviceRepository = serviceRepository;
         this.roomService = roomService;
     }
 
@@ -57,7 +58,7 @@ public class EquipmentService {
 
         // connect services to new model
         List<Long> servicesIds = eqModelRequest.getServicesIds();
-        List<Service> services = servicesService.findWithIds(servicesIds);
+        List<Service> services = serviceRepository.findAllById(servicesIds);
         String modelName = eqModelRequest.getModelName();
         EquipmentModel eqModel = createModelWithServices(modelName, services);
 

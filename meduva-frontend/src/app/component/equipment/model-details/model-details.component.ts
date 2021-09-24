@@ -19,7 +19,7 @@ export class ModelDetailsComponent implements OnInit {
   modelItems: EquipmentItem[] = [];
 
   serviceTableColumns: string[] = ['title'];
-  itemTableColumns: string[] = ['name', 'room'];
+  itemTableColumns: string[] = ['name', 'room', 'status'];
 
   constructor(
     private activatedRoute: ActivatedRoute,

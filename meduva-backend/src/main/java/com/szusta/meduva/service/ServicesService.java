@@ -2,10 +2,10 @@ package com.szusta.meduva.service;
 
 import com.szusta.meduva.exception.AlreadyExistsException;
 import com.szusta.meduva.exception.EntityRecordNotFoundException;
-import com.szusta.meduva.model.EquipmentModel;
 import com.szusta.meduva.model.Service;
-import com.szusta.meduva.repository.EquipmentModelRepository;
+import com.szusta.meduva.repository.EquipmentItemRepository;
 import com.szusta.meduva.repository.ServiceRepository;
+import com.szusta.meduva.service.entityconnections.ServiceToEqModelService;
 import com.szusta.meduva.util.UndeletableWithNameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -18,13 +18,16 @@ import java.util.List;
 public class ServicesService {
 
     private ServiceRepository serviceRepository;
-    private EquipmentModelRepository equipmentModelRepository;
+    private ServiceToEqModelService serviceToEqModelService;
+    private EquipmentItemRepository equipmentItemRepository;
 
     @Autowired
     public ServicesService(ServiceRepository serviceRepository,
-                           EquipmentModelRepository equipmentModelRepository) {
+                           ServiceToEqModelService serviceToEqModelService,
+                           EquipmentService equipmentService) {
         this.serviceRepository = serviceRepository;
-        this.equipmentModelRepository = equipmentModelRepository;
+        this.serviceToEqModelService = serviceToEqModelService;
+        this.equipmentItemRepository = equipmentItemRepository;
     }
 
     public List<Service> findAllServices() {
@@ -61,21 +64,11 @@ public class ServicesService {
         Service service = serviceRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Service not found with id : " + id));
 
-        List<EquipmentModel> eqModels = service.getEquipmentModel();
-        deactivateModelsWithLastService(eqModels);
+        serviceToEqModelService.deactivateModelsWithLastService(service);
 
         service.setEquipmentModel(Collections.emptyList());
 
         service.markAsDeleted();
         serviceRepository.save(service);
-    }
-
-    private void deactivateModelsWithLastService(List<EquipmentModel> models) {
-        models.forEach(model -> {
-            if (model.getServices().size() == 1) {
-                model.deactivate();
-                this.equipmentModelRepository.save(model);
-            }
-        });
     }
 }
