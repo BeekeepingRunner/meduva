@@ -49,6 +49,7 @@ import { RoomSelectionDialogComponent } from './component/dialog/room-selection-
 import { ServicesSelectComponent } from './component/equipment/new-model/services-select/services-select.component';
 import { ModelFormComponent } from './component/equipment/new-model/model-form/model-form.component';
 import { ModelDetailsComponent } from './component/equipment/model-details/model-details.component';
+import { FeedbackDialogComponent } from './component/dialog/feedback-dialog/feedback-dialog.component';
 
 @NgModule({
   declarations: [
@@ -77,6 +78,7 @@ import { ModelDetailsComponent } from './component/equipment/model-details/model
     ServicesSelectComponent,
     ModelFormComponent,
     ModelDetailsComponent,
+    FeedbackDialogComponent,
   ],
   imports: [
     BrowserModule,

@@ -26,14 +26,12 @@ export class EquipmentService {
     return this.httpClient.get<EquipmentModel>(environment.API_BASE_URL + 'api/equipment/model/' + modelId);
   }
 
-  /*
-  public deleteById(roomId: number | undefined): Observable<any> {
-    return this.httpClient.delete(environment.API_BASE_URL + 'api/room/' + roomId);
+  public deleteModelById(modelId: number | undefined): Observable<any> {
+    return this.httpClient.delete(environment.API_BASE_URL + 'api/equipment/model/' + modelId);
   }
-   */
 
-  saveNewModel(newModelReuqest: NewModelRequest): Observable<any> {
-    return this.httpClient.post(environment.API_BASE_URL + 'api/equipment/model/new', newModelReuqest);
+  saveNewModel(newModelReuqest: NewModelRequest): Observable<EquipmentModel> {
+    return this.httpClient.post<EquipmentModel>(environment.API_BASE_URL + 'api/equipment/model/new', newModelReuqest);
   }
 
   doesModelExistByName(modelName: string): Observable<any> {

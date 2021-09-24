@@ -30,7 +30,7 @@ export class ServiceDetailsComponent implements OnInit {
     );
   }
 
-  openConfirmationDialog(): void {
+  openDeleteConfirmDialog(): void {
     const confirmDialogRef = this.dialog.open(ConfirmationDialogComponent, {
       data: { message: 'Do you want to delete this service?' }
     });
