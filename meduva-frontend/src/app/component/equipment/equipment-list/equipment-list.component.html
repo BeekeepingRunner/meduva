@@ -11,7 +11,8 @@
         <th mat-header-cell *matHeaderCellDef>Equipment models</th>
         <td mat-cell style="font-size: large" *matCellDef="let model">
           <div class="model-name">
-            <b>{{ model.name }}</b>
+            <b>{{ model.name }} </b>
+            <span *ngIf="!model.active" style="color: red"> INACTIVE</span>
           </div>
           <table mat-table [dataSource]="model.items" class="item-table">
             <ng-container matColumnDef="name">

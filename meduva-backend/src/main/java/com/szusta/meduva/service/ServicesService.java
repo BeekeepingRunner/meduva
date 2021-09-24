@@ -2,22 +2,29 @@ package com.szusta.meduva.service;
 
 import com.szusta.meduva.exception.AlreadyExistsException;
 import com.szusta.meduva.exception.EntityRecordNotFoundException;
+import com.szusta.meduva.model.EquipmentModel;
 import com.szusta.meduva.model.Service;
+import com.szusta.meduva.repository.EquipmentModelRepository;
 import com.szusta.meduva.repository.ServiceRepository;
 import com.szusta.meduva.util.UndeletableWithNameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
+import java.util.Collections;
 import java.util.List;
 
 @org.springframework.stereotype.Service
 public class ServicesService {
 
     private ServiceRepository serviceRepository;
+    private EquipmentModelRepository equipmentModelRepository;
 
     @Autowired
-    public ServicesService(ServiceRepository serviceRepository) {
+    public ServicesService(ServiceRepository serviceRepository,
+                           EquipmentModelRepository equipmentModelRepository) {
         this.serviceRepository = serviceRepository;
+        this.equipmentModelRepository = equipmentModelRepository;
     }
 
     public List<Service> findAllServices() {
@@ -51,6 +58,24 @@ public class ServicesService {
 
     @Transactional
     public void markAsDeleted(Long id) {
-        UndeletableWithNameUtils.markAsDeleted(this.serviceRepository, id);
+        Service service = serviceRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Service not found with id : " + id));
+
+        List<EquipmentModel> eqModels = service.getEquipmentModel();
+        deactivateModelsWithLastService(eqModels);
+
+        service.setEquipmentModel(Collections.emptyList());
+
+        service.markAsDeleted();
+        serviceRepository.save(service);
+    }
+
+    private void deactivateModelsWithLastService(List<EquipmentModel> models) {
+        models.forEach(model -> {
+            if (model.getServices().size() == 1) {
+                model.deactivate();
+                this.equipmentModelRepository.save(model);
+            }
+        });
     }
 }

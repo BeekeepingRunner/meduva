@@ -64,7 +64,7 @@ public class RoomService {
 
     @Transactional
     public void markAsDeleted(Long id) {
-        UndeletableWithNameUtils.markAsDeleted(this.roomRepository, id);
+        UndeletableWithNameUtils.markAsDeletedOnly(this.roomRepository, id);
     }
 
 }

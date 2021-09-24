@@ -78,7 +78,7 @@ public class EquipmentService {
     }
 
     private EquipmentModel createModelWithServices(String modelName, List<Service> services) {
-        EquipmentModel eqModel = new EquipmentModel(modelName, false);
+        EquipmentModel eqModel = new EquipmentModel(modelName, true, false);
         eqModel.setServices(services);
         return equipmentModelRepository.save(eqModel);
     }
@@ -96,7 +96,7 @@ public class EquipmentService {
         for (int i = 0; i < itemCount; ++i) {
             // modelName_id, where id >= 1
             String itemName = modelName + "_" + (i + 1);
-            eqItems.add(new EquipmentItem(itemName, false));
+            eqItems.add(new EquipmentItem(itemName, true, false));
         }
         return eqItems;
     }

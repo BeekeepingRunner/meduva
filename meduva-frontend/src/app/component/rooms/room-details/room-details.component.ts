@@ -4,6 +4,7 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {MatDialog} from "@angular/material/dialog";
 import {RoomService} from "../../../service/room.service";
 import {ConfirmationDialogComponent} from "../../dialog/confirmation-dialog/confirmation-dialog.component";
+import {FeedbackDialogComponent} from "../../dialog/feedback-dialog/feedback-dialog.component";
 
 @Component({
   selector: 'app-room-details',
@@ -47,11 +48,23 @@ export class RoomDetailsComponent implements OnInit {
   private deleteRoom() {
     this.roomService.deleteById(this.room.id).subscribe(
       ifSuccess => {
-        this.router.navigate(['/rooms']);
+        this.openFeedbackDialog();
       },
       err => {
         this.wasDeletionSuccessful = false;
         this.errorMessage = err.error.message;
+      }
+    );
+  }
+
+  private openFeedbackDialog() {
+    const feedbackDialogRef = this.dialog.open(FeedbackDialogComponent, {
+      data: { message: 'Room ' + this.room.name + ' has been deleted.' }
+    });
+
+    feedbackDialogRef.afterClosed().subscribe(
+      acknowledged => {
+        this.router.navigate(['/rooms']);
       }
     );
   }

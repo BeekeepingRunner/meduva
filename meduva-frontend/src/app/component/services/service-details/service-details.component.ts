@@ -4,6 +4,7 @@ import {Service} from "../../../model/service";
 import {ServicesService} from "../../../service/services.service";
 import {MatDialog} from "@angular/material/dialog";
 import {ConfirmationDialogComponent} from "../../dialog/confirmation-dialog/confirmation-dialog.component";
+import {FeedbackDialogComponent} from "../../dialog/feedback-dialog/feedback-dialog.component";
 
 @Component({
   selector: 'app-service-details',
@@ -45,8 +46,21 @@ export class ServiceDetailsComponent implements OnInit {
   deleteService() {
     this.servicesService.deleteById(this.service.id).subscribe(
       ifSuccess => {
+        this.openFeedbackDialog();
+      }
+    );
+  }
+
+  private openFeedbackDialog() {
+    const feedbackDialogRef = this.dialog.open(FeedbackDialogComponent, {
+      data: { message: 'Service ' + this.service.name + ' has been deleted.' }
+    });
+
+    feedbackDialogRef.afterClosed().subscribe(
+      acknowledged => {
         this.router.navigate(['/services']);
       }
     );
   }
+
 }

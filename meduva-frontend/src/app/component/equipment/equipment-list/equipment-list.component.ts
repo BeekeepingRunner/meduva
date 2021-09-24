@@ -25,6 +25,7 @@ export class EquipmentListComponent implements OnInit {
     this.equipmentService.getAllUndeletedEquipmentModels().subscribe(
       models => {
         this.models = this.excludeDeletedItems(models);
+        console.log(this.models);
       },
       err => {
         console.log(err);
