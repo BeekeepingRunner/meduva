@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @org.springframework.stereotype.Service
@@ -106,7 +107,23 @@ public class EquipmentService {
 
     @Transactional
     public void markModelAsDeleted(Long id) {
-        // TODO: mark all equipment items tied with this model as deleted
-        // UndeletableWithNameUtils.markAsDeleted(this.equipmentModelRepository, id);
+        EquipmentModel model = equipmentModelRepository.findById(id)
+                .orElseThrow(() -> new EntityRecordNotFoundException("Equipment model not found with id : " + id));
+
+        markModelItemsAsDeleted(model);
+        model.setServices(Collections.emptyList());
+        model.deactivate();
+        model.markAsDeleted();
+        equipmentModelRepository.save(model);
+    }
+
+    private void markModelItemsAsDeleted(EquipmentModel model) {
+        List<EquipmentItem> itemsToDelete = model.getItems();
+        itemsToDelete.forEach(item -> {
+            // item.setRoom(null) <- will be that necessary?
+            item.deactivate();
+            item.markAsDeleted();
+            equipmentItemRepository.save(item);
+        });
     }
 }

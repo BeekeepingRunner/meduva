@@ -8,8 +8,8 @@ import com.szusta.meduva.repository.EquipmentModelRepository;
 import com.szusta.meduva.repository.ServiceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import javax.transaction.Transactional;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -73,11 +73,5 @@ public class ServiceToEqModelService {
                 this.equipmentItemRepository.save(item);
             });
         });
-    }
-
-    @Transactional
-    public void markModelAsDeleted(Long id) {
-        // TODO: mark all equipment items tied with this model as deleted
-        // UndeletableWithNameUtils.markAsDeleted(this.equipmentModelRepository, id);
     }
 }
