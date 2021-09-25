@@ -3,6 +3,7 @@ package com.szusta.meduva.service.entityconnections;
 import com.szusta.meduva.exception.EntityRecordNotFoundException;
 import com.szusta.meduva.model.EquipmentItem;
 import com.szusta.meduva.model.Room;
+import com.szusta.meduva.repository.EquipmentItemRepository;
 import com.szusta.meduva.repository.RoomRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,10 +15,13 @@ import java.util.List;
 public class RoomToEqItemService {
 
     private RoomRepository roomRepository;
+    private EquipmentItemRepository equipmentItemRepository;
 
     @Autowired
-    public RoomToEqItemService(RoomRepository roomRepository) {
+    public RoomToEqItemService(RoomRepository roomRepository,
+                               EquipmentItemRepository equipmentItemRepository) {
         this.roomRepository = roomRepository;
+        this.equipmentItemRepository = equipmentItemRepository;
     }
 
     public List<Room> findRoomsByIdsInOrder(List<Long> roomsIds) {
@@ -39,5 +43,14 @@ public class RoomToEqItemService {
             ++i;
         }
         return items;
+    }
+
+    public void disconnectItems(Room room) {
+        List<EquipmentItem> items = room.getEquipmentItems();
+        items.forEach(item -> {
+            item.deactivate();
+            item.setRoom(null);  // TODO: fix problems
+            equipmentItemRepository.save(item);
+        });
     }
 }
