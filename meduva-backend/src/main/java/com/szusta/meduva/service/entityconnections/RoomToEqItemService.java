@@ -49,7 +49,7 @@ public class RoomToEqItemService {
         List<EquipmentItem> items = room.getEquipmentItems();
         items.forEach(item -> {
             item.deactivate();
-            item.setRoom(null);  // TODO: fix problems
+            item.setRoom(null);
             equipmentItemRepository.save(item);
         });
     }
