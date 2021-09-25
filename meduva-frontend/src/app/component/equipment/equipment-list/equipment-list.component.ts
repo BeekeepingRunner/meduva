@@ -11,7 +11,7 @@ export class EquipmentListComponent implements OnInit {
 
   models: EquipmentModel[] = [];
   modelTableColumns: string[] = ['name'];
-  itemTableColumns: string[] = ['name', 'room'];
+  itemTableColumns: string[] = ['name', 'room', 'status'];
 
   constructor(
     private equipmentService: EquipmentService,
@@ -25,6 +25,7 @@ export class EquipmentListComponent implements OnInit {
     this.equipmentService.getAllUndeletedEquipmentModels().subscribe(
       models => {
         this.models = this.excludeDeletedItems(models);
+        console.log(this.models);
       },
       err => {
         console.log(err);

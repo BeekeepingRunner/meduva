@@ -9,7 +9,6 @@ import lombok.Setter;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 @Entity
 @Table(name = "room")
@@ -24,7 +23,7 @@ public class Room extends Undeletable {
 
     @OneToMany(mappedBy = "room")
     @JsonIgnore
-    private Set<EquipmentItem> equipmentItems;
+    private List<EquipmentItem> equipmentItems;
 
     @ManyToMany(
             fetch = FetchType.LAZY,

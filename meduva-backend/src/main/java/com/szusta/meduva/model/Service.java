@@ -8,7 +8,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
-import java.util.Collection;
+import java.util.List;
 
 @Entity
 @Table(name = "service")
@@ -26,11 +26,11 @@ public class Service extends Undeletable {
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JsonIgnore
-    Collection<EquipmentModel> equipmentModels;
+    List<EquipmentModel> equipmentModel;
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JsonIgnore
-    Collection<Room> rooms;
+    List<Room> rooms;
 
     public Service(String name,
                    String description,

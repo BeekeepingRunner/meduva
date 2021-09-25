@@ -11,6 +11,7 @@ export interface EquipmentItem {
 export interface EquipmentModel {
   id?: number,
   name: string,
+  active: boolean,
   items: EquipmentItem[],
   services: Service[],
   deleted: boolean

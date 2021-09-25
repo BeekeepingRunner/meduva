@@ -47,3 +47,7 @@ button:focus, .btn-primary:focus {
 .mat-icon-button.mat-primary:focus {
   background-color: unset;
 }
+
+.alarm-info {
+  color: red;
+}

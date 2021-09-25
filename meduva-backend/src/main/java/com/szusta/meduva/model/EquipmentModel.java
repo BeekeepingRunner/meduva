@@ -15,7 +15,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class EquipmentModel extends Undeletable {
+public class EquipmentModel extends Activable {
 
     private String name;
 
@@ -28,13 +28,14 @@ public class EquipmentModel extends Undeletable {
     )
     @JoinTable(
             name = "service_equipment_model",
-            joinColumns = @JoinColumn(name = "model_id"),
+            joinColumns = @JoinColumn(name = "equipment_model_id"),
             inverseJoinColumns = @JoinColumn(name = "service_id")
     )
     private List<Service> services = new ArrayList<>();
 
-    public EquipmentModel(String name, boolean deleted) {
+    public EquipmentModel(String name, boolean isActive, boolean deleted) {
         this.name = name;
+        this.isActive = isActive;
         this.deleted = deleted;
     }
 }
