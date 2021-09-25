@@ -52,9 +52,9 @@ public class ServicesService {
     }
 
     @Transactional
-    public void markAsDeleted(Long id) {
-        Service service = serviceRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Service not found with id : " + id));
+    public void markAsDeleted(Long serviceId) {
+        Service service = serviceRepository.findById(serviceId)
+                .orElseThrow(() -> new EntityNotFoundException("Service not found with id : " + serviceId));
 
         serviceToEqModelService.deactivateModelsWithLastService(service);
         service.setEquipmentModel(Collections.emptyList()); // won't that connection be useful in the future though?
