@@ -1,6 +1,6 @@
 package com.szusta.meduva.controller;
 
-import com.szusta.meduva.model.ERole;
+import com.szusta.meduva.model.role.ERole;
 import com.szusta.meduva.model.User;
 import com.szusta.meduva.payload.request.UpdatedUserRequest;
 import com.szusta.meduva.service.RoleService;

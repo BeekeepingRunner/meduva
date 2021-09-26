@@ -1,6 +1,6 @@
 package com.szusta.meduva.payload.response;
 
-import com.szusta.meduva.model.Role;
+import com.szusta.meduva.model.role.Role;
 
 import java.util.Set;
 

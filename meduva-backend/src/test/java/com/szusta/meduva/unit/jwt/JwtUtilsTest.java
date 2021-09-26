@@ -1,6 +1,6 @@
 package com.szusta.meduva.unit.jwt;
 
-import com.szusta.meduva.model.Role;
+import com.szusta.meduva.model.role.Role;
 import com.szusta.meduva.model.User;
 import com.szusta.meduva.security.jwt.JwtUtils;
 import com.szusta.meduva.service.UserDetailsImpl;

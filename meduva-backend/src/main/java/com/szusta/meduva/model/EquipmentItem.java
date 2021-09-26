@@ -1,6 +1,7 @@
 package com.szusta.meduva.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.szusta.meduva.model.common.Activable;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

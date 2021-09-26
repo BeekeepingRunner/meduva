@@ -1,4 +1,4 @@
-package com.szusta.meduva.model;
+package com.szusta.meduva.model.common;
 
 import lombok.Getter;
 import lombok.Setter;

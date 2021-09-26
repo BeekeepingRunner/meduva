@@ -1,11 +1,9 @@
 package com.szusta.meduva.jpa.repository;
 
-import com.szusta.meduva.model.ERole;
-import com.szusta.meduva.model.Role;
+import com.szusta.meduva.model.role.ERole;
 import com.szusta.meduva.model.User;
 import com.szusta.meduva.repository.RoleRepository;
 import com.szusta.meduva.repository.UserRepository;
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;

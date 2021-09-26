@@ -1,4 +1,4 @@
-package com.szusta.meduva.model;
+package com.szusta.meduva.model.role;
 
 public enum ERole {
     ROLE_CLIENT(1L),

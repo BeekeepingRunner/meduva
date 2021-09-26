@@ -1,6 +1,7 @@
-package com.szusta.meduva.model;
+package com.szusta.meduva.model.role;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.szusta.meduva.model.User;
 import lombok.*;
 
 import javax.persistence.*;

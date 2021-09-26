@@ -1,5 +1,6 @@
 package com.szusta.meduva.model;
 
+import com.szusta.meduva.model.common.Undeletable;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

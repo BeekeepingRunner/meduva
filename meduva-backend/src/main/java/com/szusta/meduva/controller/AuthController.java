@@ -3,7 +3,7 @@ package com.szusta.meduva.controller;
 import com.szusta.meduva.exception.*;
 import com.szusta.meduva.exception.EntityRecordNotFoundException;
 import com.szusta.meduva.model.RefreshToken;
-import com.szusta.meduva.model.Role;
+import com.szusta.meduva.model.role.Role;
 import com.szusta.meduva.model.User;
 import com.szusta.meduva.payload.request.LoginRequest;
 import com.szusta.meduva.payload.request.RefreshTokenRequest;
