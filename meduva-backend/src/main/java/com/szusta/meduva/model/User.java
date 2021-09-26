@@ -1,9 +1,11 @@
 package com.szusta.meduva.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -39,6 +41,10 @@ public class User extends Undeletable {
             inverseJoinColumns = @JoinColumn(name = "role_id")
     )
     private Set<Role> roles = new HashSet<>();
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JsonIgnore
+    List<Visit> visits;
 
     public User(String login, String email, String password) {
         this.login = login;
