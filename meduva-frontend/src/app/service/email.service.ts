@@ -1,6 +1,11 @@
 import { Injectable } from '@angular/core';
-import {HttpClient} from "@angular/common/http";
+import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {environment} from "../../environments/environment";
+import {Observable} from "rxjs";
+
+const httpOptions = {
+  headers: new HttpHeaders({ 'Content-Type' : 'application/json' })
+};
 
 @Injectable({
   providedIn: 'root'
@@ -11,5 +16,9 @@ export class EmailService {
 
   sendResetLinkMail(email: string) {
     return this.http.post(environment.API_BASE_URL + 'api/password/request', email);
+  }
+
+  sendEmailResetLinkMail(id: number, email: string){
+    return this.http.post(environment.API_BASE_URL + 'api/email/request', {email, id}, httpOptions);
   }
 }
