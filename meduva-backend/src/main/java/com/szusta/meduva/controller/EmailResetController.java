@@ -30,7 +30,8 @@ public class EmailResetController {
 
     @PostMapping("/request")
     public ResponseEntity<MessageResponse> sendEmailResetLink(@RequestBody final int id, @RequestBody final String email){
-        
+        User user = this.userService.findById(id);
+        emailResetService.deletePreviousResetTokens(user);
 
     }
 }
