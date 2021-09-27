@@ -102,6 +102,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     // TODO: finish permitting endpoint access for users with specific roles
     private void authorizeRequests(HttpSecurity http) throws Exception {
         http.authorizeRequests()
+                .antMatchers("/api/greetings").permitAll()
                 .antMatchers("/api/auth/**").permitAll()
                 .antMatchers("/api/test/all").permitAll()
                 .antMatchers("/api/password/request").permitAll()
