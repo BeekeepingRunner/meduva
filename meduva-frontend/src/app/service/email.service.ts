@@ -19,6 +19,9 @@ export class EmailService {
   }
 
   sendEmailResetLinkMail(id: number, email: string){
-    return this.http.post(environment.API_BASE_URL + 'api/email/request', {email, id}, httpOptions);
+    console.log('api/email/request/' + id);
+    console.log(email);
+    return this.http.post(environment.API_BASE_URL + 'api/email/request/' + id, email);
+
   }
 }

@@ -7,10 +7,7 @@ import com.szusta.meduva.service.EmailResetService;
 import com.szusta.meduva.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/email")
@@ -28,10 +25,13 @@ public class EmailResetController {
         this.userService = userService;
     }
 
-    @PostMapping("/request")
-    public ResponseEntity<MessageResponse> sendEmailResetLink(@RequestBody final int id, @RequestBody final String email){
+    @PostMapping("/request/{id}")
+    public ResponseEntity<MessageResponse> sendEmailResetLink(@PathVariable final Integer id, @RequestBody final String email){
         User user = this.userService.findById(id);
         emailResetService.deletePreviousResetTokens(user);
+        EmailResetToken emailResetToken = this.emailResetService.createEmailResetToken(user);
+        emailResetService.sendEmailResetMail(email, emailResetToken);
 
+        return ResponseEntity.ok(new MessageResponse("Email reset link has been sent to your email"));
     }
 }
