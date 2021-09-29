@@ -13,6 +13,7 @@ export class EditEmailComponent implements OnInit {
   form!: FormGroup;
   submitted: boolean = false;
   emailSent: boolean = false;
+  sendFailed: boolean = false;
   resultInfo: string = '';
   id!: number;
 
@@ -48,7 +49,7 @@ export class EditEmailComponent implements OnInit {
     },
     error: (err: any) => {
       this.resultInfo = err.error.message;
-      this.emailSent = false;
+      this.sendFailed = true;
     }
   }
 

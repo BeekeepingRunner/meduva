@@ -31,7 +31,7 @@
     <div
       class="alert alert-danger"
       role="alert"
-      *ngIf="submitted && !emailSent">
+      *ngIf="submitted && sendFailed">
       Sending failed: {{ resultInfo }}
     </div>
 
