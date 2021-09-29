@@ -1,5 +1,7 @@
 package com.szusta.meduva.service;
 
+import com.szusta.meduva.exception.notfound.EmailResetTokenNotFoundException;
+import com.szusta.meduva.exception.notfound.PasswordResetTokenNotFoundException;
 import com.szusta.meduva.model.EmailResetToken;
 import com.szusta.meduva.model.PasswordResetToken;
 import com.szusta.meduva.model.User;
@@ -64,6 +66,11 @@ public class EmailResetService {
     }
 
     private String getResetLink(String token) {
-        return baseURL + "" + token;
+        return baseURL + "/new-email-activation/" + token;
+    }
+
+    public EmailResetToken getEmailResetToken(String token){
+        return emailResetTokenRepository.findByToken(token)
+                .orElseThrow(() -> new EmailResetTokenNotFoundException("Email reset token not found"));
     }
 }

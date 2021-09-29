@@ -111,6 +111,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/services").hasAuthority("ROLE_ADMIN")
                 .antMatchers("/api/user/edit/{id}").hasAuthority("ROLE_CLIENT")
                 .antMatchers("/api/email/request/{id}").hasAuthority("ROLE_CLIENT")
+                .antMatchers("/api/email/validate-email-reset-token").permitAll()
                 .anyRequest().authenticated();
         //.anyRequest().permitAll();
     }

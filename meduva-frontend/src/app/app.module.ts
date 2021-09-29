@@ -42,6 +42,7 @@ import { RoomListComponent } from './component/rooms/room-list/room-list.compone
 import { NewRoomComponent } from './component/rooms/new-room/new-room.component';
 import { RoomDetailsComponent } from './component/rooms/room-details/room-details.component';
 import { EditEmailComponent } from './component/edit-email/edit-email.component';
+import { ActivateNewEmailComponent } from './component/activate-new-email/activate-new-email.component';
 
 @NgModule({
   declarations: [
@@ -64,6 +65,7 @@ import { EditEmailComponent } from './component/edit-email/edit-email.component'
     NewRoomComponent,
     RoomDetailsComponent,
     EditEmailComponent,
+    ActivateNewEmailComponent,
   ],
   imports: [
     BrowserModule,
