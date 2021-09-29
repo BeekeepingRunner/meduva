@@ -25,8 +25,8 @@ public class RoomController {
     }
 
     @GetMapping("/all/undeleted")
-    public List<Room> findAllUnDeletedRooms() {
-        return this.roomService.findAllUnDeletedRooms();
+    public List<Room> findAllUndeletedRooms() {
+        return this.roomService.findAllUndeletedRooms();
     }
 
     @PostMapping
@@ -36,7 +36,7 @@ public class RoomController {
                 request.getDescription(),
                 request.isDeleted()
         );
-        return this.roomService.save(room);
+        return this.roomService.saveNewRoom(room);
     }
 
     @DeleteMapping("/{id}")

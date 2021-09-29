@@ -1,6 +1,6 @@
 package com.szusta.meduva.service;
 
-import com.szusta.meduva.exception.notfound.PasswordResetTokenNotFoundException;
+import com.szusta.meduva.exception.EntityRecordNotFoundException;
 import com.szusta.meduva.model.PasswordResetToken;
 import com.szusta.meduva.model.User;
 import com.szusta.meduva.repository.PasswordResetTokenRepository;
@@ -77,14 +77,14 @@ public class PasswordResetService {
     public User getUserFromResetToken(String resetToken) {
 
         PasswordResetToken storedResetToken = passwordResetTokenRepository.findByToken(resetToken)
-                .orElseThrow(() -> new PasswordResetTokenNotFoundException("Password reset token not found"));
+                .orElseThrow(() -> new EntityRecordNotFoundException("Can't get user from password because it is not found : " + resetToken));
 
         return storedResetToken.getUser();
     }
 
     public PasswordResetToken getResetToken(String token) {
         return passwordResetTokenRepository.findByToken(token)
-                .orElseThrow(() -> new PasswordResetTokenNotFoundException("Password reset token not found"));
+                .orElseThrow(() -> new EntityRecordNotFoundException("Password reset token not found : " + token));
     }
 
     public void resetPassword(String resetToken, String newPassword) {

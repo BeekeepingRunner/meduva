@@ -1,19 +1,15 @@
 package com.szusta.meduva.advice;
 
 import com.szusta.meduva.exception.*;
-import org.springframework.beans.propertyeditors.StringTrimmerEditor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.context.request.WebRequest;
 
 import java.util.ArrayList;
@@ -47,9 +43,9 @@ public class AuthControllerAdvice {
         );
     }
 
-    @ExceptionHandler(value = LoginAlreadyTakenException.class)
+    @ExceptionHandler(value = AlreadyExistsException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorMessage handleLoginAlreadyTakenException(LoginAlreadyTakenException ex, WebRequest request) {
+    public ErrorMessage handleAlreadyExistsException(AlreadyExistsException ex, WebRequest request) {
 
         return new ErrorMessage(
                 HttpStatus.BAD_REQUEST.value(),
@@ -59,21 +55,9 @@ public class AuthControllerAdvice {
         );
     }
 
-    @ExceptionHandler(value = EmailAlreadyInUseException.class)
+    @ExceptionHandler(value = BadRequestRoleException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorMessage handleEmailAlreadyInUseException(EmailAlreadyInUseException ex, WebRequest request) {
-
-        return new ErrorMessage(
-                HttpStatus.BAD_REQUEST.value(),
-                new Date(),
-                ex.getMessage(),
-                request.getDescription(false)
-        );
-    }
-
-    @ExceptionHandler(value = BadRequestRole.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorMessage handleBadRequestRoleException(BadRequestRole ex, WebRequest request) {
+    public ErrorMessage handleBadRequestRoleException(BadRequestRoleException ex, WebRequest request) {
 
         return new ErrorMessage(
                 HttpStatus.BAD_REQUEST.value(),

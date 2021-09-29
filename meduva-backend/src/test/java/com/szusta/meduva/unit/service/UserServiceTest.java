@@ -1,7 +1,6 @@
 package com.szusta.meduva.unit.service;
 
-import com.szusta.meduva.exception.notfound.UserNotFoundException;
-import com.szusta.meduva.exception.UsersWithMinRoleNotFound;
+import com.szusta.meduva.exception.EntityRecordNotFoundException;
 import com.szusta.meduva.model.ERole;
 import com.szusta.meduva.model.Role;
 import com.szusta.meduva.model.User;
@@ -16,7 +15,10 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -75,9 +77,9 @@ public class UserServiceTest {
         when(userRepository.findByLogin("login")).thenReturn(Optional.empty());
         when(userRepository.findByEmail("email")).thenReturn(Optional.empty());
 
-        assertThrows(UserNotFoundException.class, () -> userService.getUser(1L));
-        assertThrows(UserNotFoundException.class, () -> userService.findByLogin("login"));
-        assertThrows(UserNotFoundException.class, () -> userService.findByEmail("email"));
+        assertThrows(EntityRecordNotFoundException.class, () -> userService.getUser(1L));
+        assertThrows(EntityRecordNotFoundException.class, () -> userService.findByLogin("login"));
+        assertThrows(EntityRecordNotFoundException.class, () -> userService.findByEmail("email"));
 
         verify(userRepository, times(1)).findById(1L);
         verify(userRepository, times(1)).findByLogin("login");
@@ -102,14 +104,14 @@ public class UserServiceTest {
         when(roleRepository.findById(ERole.ROLE_CLIENT.getValue()))
                 .thenReturn(Optional.of(clientRole));
         when(userRepository.findDistinctByRolesIn(Collections.singleton(clientRole)))
-                .thenThrow(UsersWithMinRoleNotFound.class);
+                .thenThrow(EntityRecordNotFoundException.class);
 
         // good scenario
         List<User> outUsers = userService.findAllUsersWithMinimumRole(ERole.ROLE_WORKER);
         assertEquals(1, outUsers.size());
 
         // bad scenario
-        assertThrows(UsersWithMinRoleNotFound.class,
+        assertThrows(EntityRecordNotFoundException.class,
                 () -> userService.findAllUsersWithMinimumRole(ERole.ROLE_CLIENT));
 
         verify(roleRepository, times(1))

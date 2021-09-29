@@ -99,6 +99,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
     }
 
+    // TODO: finish permitting endpoint access for users with specific roles
     private void authorizeRequests(HttpSecurity http) throws Exception {
         http.authorizeRequests()
                 .antMatchers("/api/auth/**").permitAll()

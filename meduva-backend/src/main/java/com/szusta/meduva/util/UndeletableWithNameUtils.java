@@ -19,7 +19,7 @@ public class UndeletableWithNameUtils {
         }
     }
 
-    public static <T extends Undeletable> void markAsDeleted(UndeletableRepository<T> repo, Long idOfUndeletable) {
+    public static <T extends Undeletable> void markAsDeletedOnly(UndeletableRepository<T> repo, Long idOfUndeletable) {
 
         T undeletable = repo.findById(idOfUndeletable)
                 .orElseThrow(() -> new EntityNotFoundException("Room not found with id : " + idOfUndeletable));

@@ -12,6 +12,8 @@ import { HomeComponent } from './component/home/home.component';
 import { ProfileComponent } from './component/profile/profile.component';
 import { BoardAdminComponent } from './component/board-admin/board-admin.component';
 import { EditProfileComponent } from './component/edit-profile/edit-profile.component';
+import { EditEmailComponent } from './component/edit-email/edit-email.component';
+import { ActivateNewEmailComponent } from './component/activate-new-email/activate-new-email.component';
 
 import { authInterceptorProviders } from './helper/auth.interceptor';
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
@@ -41,8 +43,16 @@ import {MatDialogModule} from "@angular/material/dialog";
 import { RoomListComponent } from './component/rooms/room-list/room-list.component';
 import { NewRoomComponent } from './component/rooms/new-room/new-room.component';
 import { RoomDetailsComponent } from './component/rooms/room-details/room-details.component';
-import { EditEmailComponent } from './component/edit-email/edit-email.component';
-import { ActivateNewEmailComponent } from './component/activate-new-email/activate-new-email.component';
+import { EquipmentListComponent } from './component/equipment/equipment-list/equipment-list.component';
+import { NewModelComponent } from './component/equipment/new-model/new-model.component';
+import {MatStepperModule} from "@angular/material/stepper";
+import { RoomSelectComponent } from './component/equipment/new-model/room-select/room-select.component';
+import { RoomSelectionDialogComponent } from './component/dialog/room-selection-dialog/room-selection-dialog.component';
+import { ServicesSelectComponent } from './component/equipment/new-model/services-select/services-select.component';
+import { ModelFormComponent } from './component/equipment/new-model/model-form/model-form.component';
+import { ModelDetailsComponent } from './component/equipment/model-details/model-details.component';
+import { FeedbackDialogComponent } from './component/dialog/feedback-dialog/feedback-dialog.component';
+
 
 @NgModule({
   declarations: [
@@ -54,6 +64,8 @@ import { ActivateNewEmailComponent } from './component/activate-new-email/activa
     BoardAdminComponent,
     PasswordResetEmailInputComponent,
     PasswordResetComponent,
+    EditEmailComponent,
+    ActivateNewEmailComponent,
     UserListComponent,
     AccessDeniedComponent,
     ServiceListComponent,
@@ -64,8 +76,14 @@ import { ActivateNewEmailComponent } from './component/activate-new-email/activa
     RoomListComponent,
     NewRoomComponent,
     RoomDetailsComponent,
-    EditEmailComponent,
-    ActivateNewEmailComponent,
+    EquipmentListComponent,
+    NewModelComponent,
+    RoomSelectComponent,
+    RoomSelectionDialogComponent,
+    ServicesSelectComponent,
+    ModelFormComponent,
+    ModelDetailsComponent,
+    FeedbackDialogComponent,
   ],
   imports: [
     BrowserModule,
@@ -88,6 +106,7 @@ import { ActivateNewEmailComponent } from './component/activate-new-email/activa
     MatCardModule,
     MatListModule,
     MatDialogModule,
+    MatStepperModule,
   ],
   exports: [
     RouterModule

@@ -1,0 +1,53 @@
+<div class="container mat-elevation-z8">
+  <button mat-icon-button color="primary" routerLink='/equipment'>
+    <- Back to equipment
+  </button>
+  <br><br>
+
+  <h4>{{ model?.name }} <span *ngIf="!model.active" class="alarm-info">INACTIVE</span></h4>
+  <span style="font-size: smaller">Equipment Model</span>
+  <br><br>
+
+  <table mat-table [dataSource]="modelServices" class="mat-elevation-z8">
+
+    <ng-container matColumnDef="title">
+      <th mat-header-cell *matHeaderCellDef>Performed Services:</th>
+      <td mat-cell *matCellDef="let service"><b>{{ service.name }}</b></td>
+    </ng-container>
+    <tr mat-header-row *matHeaderRowDef="serviceTableColumns"></tr>
+    <tr mat-row *matRowDef="let row; let service; columns: serviceTableColumns;"
+        [routerLink]="['/service/' + service.id]">
+    </tr>
+  </table>
+  <br>
+
+  <table mat-table [dataSource]="modelItems" class="mat-elevation-z8">
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef>Item</th>
+      <td mat-cell *matCellDef="let item"><b>{{ item.name }}</b></td>
+    </ng-container>
+    <ng-container matColumnDef="room">
+      <th mat-header-cell *matHeaderCellDef>Room</th>
+      <td mat-cell *matCellDef="let item">{{ item.room.name }}</td>
+    </ng-container>
+    <ng-container matColumnDef="status">
+      <th mat-header-cell *matHeaderCellDef></th>
+      <td mat-cell *matCellDef="let item" style="font-size: medium">
+        <span class="alarm-info" *ngIf="!item.active">INACTIVE</span>
+      </td>
+    </ng-container>
+    <tr mat-header-row *matHeaderRowDef="itemTableColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: itemTableColumns;">
+    </tr>
+  </table>
+
+  <br>
+  <tr class="button-row">
+    <td><button mat-raised-button color="primary">Change model name</button></td>
+  </tr>
+  <br>
+  <tr class="button-row">
+    <td><button mat-raised-button color="warn" (click)="openDeleteConfirmDialog()">Delete model</button></td>
+  </tr>
+  <br>
+</div>

@@ -1,0 +1,26 @@
+<form [formGroup]="modelFormGroup">
+  <ng-template matStepLabel>Create new equipment model</ng-template>
+  <br>
+
+  <mat-form-field appearance="fill">
+    <mat-label>Model name</mat-label>
+    <input matInput formControlName="modelName" required>
+  </mat-form-field>
+  <div *ngIf="modelNotAvailableErr" class="alert alert-warning">
+    <p>{{ modelNotAvailableErr }}</p>
+  </div>
+  <br>
+
+  <mat-form-field appearance="fill">
+    <mat-label>Item count</mat-label>
+    <input matInput type="number" step="1" min="1" formControlName="itemCount" required>
+  </mat-form-field>
+  <br>
+  <button mat-raised-button color="primary" type="button"
+          [disabled]="this.modelFormGroup.invalid"
+          (click)="validateForm()">Save</button>
+
+  <div *ngIf="successMessage" class="alert alert-success">
+    <p>{{ successMessage }}</p>
+  </div>
+</form>
