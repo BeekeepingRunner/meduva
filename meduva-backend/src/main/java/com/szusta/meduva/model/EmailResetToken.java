@@ -29,13 +29,18 @@ public class EmailResetToken {
     @Column(name = "expiry_date", nullable = false)
     private Date expiryDate;
 
+    @Column(name="new_email", nullable = false)
+    private String email;
+
     public EmailResetToken(
             User user,
             String token,
-            Date expiryDate
+            Date expiryDate,
+            String email
     ) {
         this.user = user;
         this.token = token;
         this.expiryDate = expiryDate;
+        this.email = email;
     }
 }

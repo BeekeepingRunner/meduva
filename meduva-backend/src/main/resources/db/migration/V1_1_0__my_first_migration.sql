@@ -42,6 +42,7 @@ CREATE TABLE IF NOT EXISTS email_reset_token (
     token VARCHAR(256) NOT NULL,
     expiry_date TIMESTAMP NOT NULL,
     user_id INT NOT NULL,
+    new_email VARCHAR(40) NOT NULL,
     FOREIGN KEY (user_id) REFERENCES user (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=UTF8;
 

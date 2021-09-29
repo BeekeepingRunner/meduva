@@ -40,12 +40,13 @@ public class EmailResetService {
         this.emailResetTokenRepository.deleteByUser(user);
     }
 
-    public EmailResetToken createEmailResetToken(User user){
+    public EmailResetToken createEmailResetToken(User user, String newEmail){
         String token = jwtUtils.generateJwtTokenFrom(UserDetailsImpl.build(user));
         EmailResetToken resetToken = new EmailResetToken(
                 user,
                 token,
-                new Date(new Date().getTime() + jwtUtils.getJwtExpirationMs()));
+                new Date(new Date().getTime() + jwtUtils.getJwtExpirationMs()),
+                newEmail);
         return emailResetTokenRepository.save(resetToken);
     }
 

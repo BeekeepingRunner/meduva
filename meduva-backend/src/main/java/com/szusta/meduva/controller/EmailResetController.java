@@ -29,7 +29,7 @@ public class EmailResetController {
     public ResponseEntity<MessageResponse> sendEmailResetLink(@PathVariable final Integer id, @RequestBody final String email){
         User user = this.userService.findById(id);
         emailResetService.deletePreviousResetTokens(user);
-        EmailResetToken emailResetToken = this.emailResetService.createEmailResetToken(user);
+        EmailResetToken emailResetToken = this.emailResetService.createEmailResetToken(user, email);
         emailResetService.sendEmailResetMail(email, emailResetToken);
 
         return ResponseEntity.ok(new MessageResponse("Email reset link has been sent to your email"));
