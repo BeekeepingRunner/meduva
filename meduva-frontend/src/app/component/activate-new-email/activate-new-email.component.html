@@ -1,1 +1,17 @@
-<p>activate-new-email works!</p>
+<mat-card class="col-md-6 card container-fluid " >
+  <div *ngIf="responseReceived">
+    <div
+      class="alert alert-success"
+      role="alert"
+      *ngIf="isTokenValid">
+      Email changed successfully. Please Log in.
+    </div>
+
+    <div
+      class="alert alert-danger"
+      role="alert"
+      *ngIf="!isTokenValid">
+      Email activation error: {{errorMsg}}
+    </div>
+  </div>
+</mat-card>

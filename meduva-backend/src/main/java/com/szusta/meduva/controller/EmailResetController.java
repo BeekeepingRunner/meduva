@@ -54,8 +54,8 @@ public class EmailResetController {
     private void changePassword(EmailResetToken storedEmailResetToken){
         User user = storedEmailResetToken.getUser();
         String newEmail = storedEmailResetToken.getEmail();
-
         user.setEmail(newEmail);
+        this.emailResetService.deletePreviousResetTokens(user);
 
         this.userService.save(user);
     }

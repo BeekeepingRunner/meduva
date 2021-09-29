@@ -11,6 +11,7 @@ export class ActivateNewEmailComponent implements OnInit {
 
   emailToken: string = '';
   isTokenValid: boolean = false;
+  responseReceived: boolean = false;
 
   errorMsg: string = '';
 
@@ -28,9 +29,11 @@ export class ActivateNewEmailComponent implements OnInit {
     this.resetTokenService.validateEmailResetToken(this.emailToken).subscribe(
       data => {
         this.isTokenValid = true;
+        this.responseReceived = true;
       },
       err => {
         this.isTokenValid = false;
+        this.responseReceived = true;
         this.errorMsg = err.error.message;
       }
     );
