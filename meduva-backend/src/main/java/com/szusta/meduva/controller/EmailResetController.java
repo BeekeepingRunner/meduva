@@ -55,7 +55,7 @@ public class EmailResetController {
         User user = storedEmailResetToken.getUser();
         String newEmail = storedEmailResetToken.getEmail();
         user.setEmail(newEmail);
-        //this.emailResetService.deletePreviousResetTokens(user);
+        this.emailResetService.deletePreviousResetTokens(user);
 
         this.userService.save(user);
     }
