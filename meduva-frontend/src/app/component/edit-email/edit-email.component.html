@@ -21,6 +21,9 @@
     <button [disabled]="!form.valid" class="btn btn-primary btn-block" type="submit">Change email</button>
 
     <br>
+    <div *ngIf="submitted && !emailSent">
+      Please wait a moment...
+    </div>
     <div
       class="alert alert-success"
       role="alert"
