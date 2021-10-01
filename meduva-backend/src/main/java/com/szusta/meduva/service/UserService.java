@@ -37,7 +37,7 @@ public class UserService {
 
     public User findById(int id){
         return userRepository.findById(id)
-                .orElseThrow(() -> new UserNotFoundException("User not found with id: " + id));
+                .orElseThrow(() -> new EntityRecordNotFoundException("User not found with id: " + id));
     }
 
     public Boolean existsByLogin(String login) {
