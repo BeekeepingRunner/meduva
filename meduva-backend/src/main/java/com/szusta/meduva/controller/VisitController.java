@@ -1,63 +1,28 @@
 package com.szusta.meduva.controller;
 
-import com.szusta.meduva.model.role.ERole;
-import com.szusta.meduva.model.User;
-import com.szusta.meduva.payload.request.UpdatedUserRequest;
-import com.szusta.meduva.service.RoleService;
-import com.szusta.meduva.service.UserService;
+import com.szusta.meduva.payload.Term;
+import com.szusta.meduva.service.VisitService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/user")
-public class UserController {
+@RequestMapping("/api/visit")
+public class VisitController {
 
-    UserService userService;
-    RoleService roleService;
+    VisitService visitService;
 
     @Autowired
-    public UserController(UserService userService, RoleService roleService) {
-        this.userService = userService;
-        this.roleService = roleService;
+    public VisitController(VisitService visitService) {
+        this.visitService = visitService;
     }
 
-    @GetMapping("/find/{id}")
-    public User getUser(@PathVariable Long id) {
-        return userService.getUser(id);
-    }
-
-    @GetMapping("/all")
-    public List<User> findAllUsers() {
-        return userService.findAll();
-    }
-
-    @GetMapping("/all/undeleted")
-    public List<User> findAllUndeletedUsers() {
-        return userService.findAllUndeleted();
-    }
-
-    @GetMapping("/workers")
-    public List<User> getWorkers() {
-        return userService.findAllUsersWithMinimumRole(ERole.ROLE_WORKER);
-    }
-
-    @GetMapping("/clients")
-    public List<User> getClientsWithAccount() {
-        return userService.findAllClientsWithAccount();
-    }
-
-    @PostMapping("/edit/{id}")
-    public User editUser(@PathVariable Long id, @Valid @RequestBody UpdatedUserRequest request){
-
-        User user = userService.getUser(id);
-
-        user.setName(request.getName());
-        user.setSurname(request.getSurname());
-        user.setPhoneNumber(request.getPhoneNumber());
-
-        return userService.save(user);
+    @GetMapping("/terms-for-service/{serviceId}")
+    public List<Term> getTermsForService(@PathVariable Long serviceId) {
+        return visitService.getTermsForService(serviceId);
     }
 }
