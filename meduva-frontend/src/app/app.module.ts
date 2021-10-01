@@ -12,6 +12,8 @@ import { HomeComponent } from './component/home/home.component';
 import { ProfileComponent } from './component/profile/profile.component';
 import { BoardAdminComponent } from './component/board-admin/board-admin.component';
 import { EditProfileComponent } from './component/edit-profile/edit-profile.component';
+import { EditEmailComponent } from './component/edit-email/edit-email.component';
+import { ActivateNewEmailComponent } from './component/activate-new-email/activate-new-email.component';
 
 import { authInterceptorProviders } from './helper/auth.interceptor';
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
@@ -51,6 +53,7 @@ import { ModelFormComponent } from './component/equipment/new-model/model-form/m
 import { ModelDetailsComponent } from './component/equipment/model-details/model-details.component';
 import { FeedbackDialogComponent } from './component/dialog/feedback-dialog/feedback-dialog.component';
 
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -61,6 +64,8 @@ import { FeedbackDialogComponent } from './component/dialog/feedback-dialog/feed
     BoardAdminComponent,
     PasswordResetEmailInputComponent,
     PasswordResetComponent,
+    EditEmailComponent,
+    ActivateNewEmailComponent,
     UserListComponent,
     AccessDeniedComponent,
     ServiceListComponent,
