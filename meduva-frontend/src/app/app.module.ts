@@ -50,6 +50,8 @@ import { ServicesSelectComponent } from './component/equipment/new-model/service
 import { ModelFormComponent } from './component/equipment/new-model/model-form/model-form.component';
 import { ModelDetailsComponent } from './component/equipment/model-details/model-details.component';
 import { FeedbackDialogComponent } from './component/dialog/feedback-dialog/feedback-dialog.component';
+import { CalendarModule, DateAdapter } from 'angular-calendar';
+import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 
 @NgModule({
   declarations: [
@@ -102,6 +104,7 @@ import { FeedbackDialogComponent } from './component/dialog/feedback-dialog/feed
     MatListModule,
     MatDialogModule,
     MatStepperModule,
+    CalendarModule.forRoot({ provide: DateAdapter, useFactory: adapterFactory }),
   ],
   exports: [
     RouterModule
