@@ -60,4 +60,8 @@ public class UserController {
 
         return userService.save(user);
     }
+    @DeleteMapping("/{id}")
+    public void deleteUser(@PathVariable Long id) {
+        this.userService.markAsDeleted(id);
+    }
 }

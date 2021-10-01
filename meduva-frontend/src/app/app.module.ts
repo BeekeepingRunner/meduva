@@ -11,6 +11,7 @@ import { RegisterComponent } from './component/register/register.component';
 import { HomeComponent } from './component/home/home.component';
 import { ProfileComponent } from './component/profile/profile.component';
 import { BoardAdminComponent } from './component/board-admin/board-admin.component';
+import { SpecyficUserComponent} from "./component/specyfic-user-profile/specyfic-user.component";
 import { EditProfileComponent } from './component/edit-profile/edit-profile.component';
 
 import { authInterceptorProviders } from './helper/auth.interceptor';
@@ -28,6 +29,7 @@ import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatInputModule} from "@angular/material/input";
 import { UserListComponent } from './component/user-list/user-list.component';
 import {MatTableModule} from "@angular/material/table";
+
 import {routes} from "./app.routes";
 import { AccessDeniedComponent } from './component/access-denied/access-denied.component';
 import { ServiceListComponent } from './component/services/service-list/service-list.component';
@@ -50,6 +52,8 @@ import { ServicesSelectComponent } from './component/equipment/new-model/service
 import { ModelFormComponent } from './component/equipment/new-model/model-form/model-form.component';
 import { ModelDetailsComponent } from './component/equipment/model-details/model-details.component';
 import { FeedbackDialogComponent } from './component/dialog/feedback-dialog/feedback-dialog.component';
+import {EditRoleComponent} from "./component/edit-role/edit-role.component";
+
 
 @NgModule({
   declarations: [
@@ -62,6 +66,7 @@ import { FeedbackDialogComponent } from './component/dialog/feedback-dialog/feed
     PasswordResetEmailInputComponent,
     PasswordResetComponent,
     UserListComponent,
+    SpecyficUserComponent,
     AccessDeniedComponent,
     ServiceListComponent,
     NewServiceComponent,
@@ -79,6 +84,7 @@ import { FeedbackDialogComponent } from './component/dialog/feedback-dialog/feed
     ModelFormComponent,
     ModelDetailsComponent,
     FeedbackDialogComponent,
+    EditRoleComponent,
   ],
   imports: [
     BrowserModule,

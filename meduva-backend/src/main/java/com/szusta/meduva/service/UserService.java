@@ -9,6 +9,8 @@ import com.szusta.meduva.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityNotFoundException;
+import javax.transaction.Transactional;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -78,6 +80,15 @@ public class UserService {
     public User getUser(Long id) {
         return userRepository.findById(id)
                 .orElseThrow(() -> new EntityRecordNotFoundException("user not found with id : " + id));
+    }
+
+    @Transactional
+    public void markAsDeleted(Long userId) {
+        com.szusta.meduva.model.User user = userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("User not found with id : " + userId));
+
+        user.markAsDeleted();
+        userRepository.save(user);
     }
 
 }

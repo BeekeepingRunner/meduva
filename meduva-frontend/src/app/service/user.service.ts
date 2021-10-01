@@ -72,4 +72,8 @@ export class UserService {
       phoneNumber
       }, httpOptions);
   }
+
+  public deleteById(userId: number | undefined): Observable<any> {
+    return this.http.delete(environment.API_BASE_URL + 'api/user/' + userId);
+  }
 }

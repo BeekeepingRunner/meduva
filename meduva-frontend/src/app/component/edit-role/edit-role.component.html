@@ -1,0 +1,42 @@
+<mat-card class="col-md-6 card container-fluid ">
+  <form class="basic-form container-fluid " (ngSubmit)="onSubmit()" [formGroup]="form">
+    <br>
+    <strong>Edit role:</strong>
+    <br><br>
+
+
+    <mat-form-field class="wide-element" appearance="outline">
+      <mat-label>First name:</mat-label>
+      <input matInput id="name" type="text" formControlName="name" >
+      <mat-error *ngIf="form.controls.name.invalid &&
+                          (form.controls.name.dirty || form.controls.name.touched)">
+        <mat-error *ngIf="form.controls.name.errors?.required ">
+          Role is required
+        </mat-error>
+
+      </mat-error>
+    </mat-form-field>
+
+
+
+    <button class="btn btn-primary btn-block" type="submit">Edit role</button>
+
+    <br>
+    <div
+      class="alert alert-success"
+      role="alert"
+      *ngIf="editSuccessful">
+      Role edited successfully
+    </div>
+
+    <div
+      class="alert alert-danger"
+      role="alert"
+      *ngIf="editFailed">
+      Edit failed: {{ errorMessage }}
+    </div>
+
+  </form>
+
+
+</mat-card>

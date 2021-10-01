@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {UserService} from "../../service/user.service";
 import {User} from "../../model/user";
 import {JwtTokenStorageService} from "../../service/token/jwt-token-storage.service";
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-user-list',
@@ -12,11 +13,12 @@ export class UserListComponent implements OnInit {
 
   contentName = "Users";
   users: User[] = [];
-  displayedColumns: string[] = ['name', 'surname', 'phoneNumber', 'email', 'role'];
+  displayedColumns: string[] = ['id','name', 'surname', 'phoneNumber', 'email', 'role'];
 
   constructor(
     private jwtTokenStorageService: JwtTokenStorageService,
     private userService: UserService,
+    private router: Router,
   ) { }
 
   ngOnInit(): void {
@@ -56,5 +58,9 @@ export class UserListComponent implements OnInit {
       user.masterRole = this.userService.getMasterRole(user.roles);
     });
     return users;
+  }
+
+  getClientDetails(id: number): void{
+    this.router.navigate(['/specyfic-user/'+id]);
   }
 }

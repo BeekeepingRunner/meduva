@@ -20,4 +20,5 @@ button {
 
 .mat-row:hover {
   background-color: rgba(100,93,154,0.45);
+  cursor: pointer;
 }
