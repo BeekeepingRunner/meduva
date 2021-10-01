@@ -45,7 +45,7 @@ export class EditEmailComponent implements OnInit {
   sentMailMessageObserver = {
     next: (data: any) => {
       this.emailSent = true;
-      this.resultInfo = 'Check your mailbox for password-reset link!';
+      this.resultInfo = 'Check your mailbox for email-reset link!';
     },
     error: (err: any) => {
       this.resultInfo = err.error.message;

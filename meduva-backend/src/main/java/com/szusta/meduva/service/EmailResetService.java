@@ -1,9 +1,7 @@
 package com.szusta.meduva.service;
 
 import com.szusta.meduva.exception.notfound.EmailResetTokenNotFoundException;
-import com.szusta.meduva.exception.notfound.PasswordResetTokenNotFoundException;
 import com.szusta.meduva.model.EmailResetToken;
-import com.szusta.meduva.model.PasswordResetToken;
 import com.szusta.meduva.model.User;
 import com.szusta.meduva.repository.EmailResetTokenRepository;
 import com.szusta.meduva.security.jwt.JwtUtils;
