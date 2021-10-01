@@ -33,12 +33,12 @@
   <mat-form-field class="wide-element" appearance="outline">
     <mat-label>Duration in minutes:</mat-label>
     <input matInput id="durationInMin" formControlName="durationInMin"
-           type="number" step="15" min="15" placeholder="15">
+           type="number" step="30" min="30" placeholder="30">
 
     <mat-error *ngIf="form.controls.durationInMin.invalid &&
                             (form.controls.durationInMin.dirty || form.controls.durationInMin.touched)">
       <mat-error *ngIf="form.controls.durationInMin.errors?.wrongValue">
-        Time should be divisible by 15
+        Time should be divisible by 30
       </mat-error>
       <mat-error *ngIf="form.controls.durationInMin.errors?.required">
         Duration is required

@@ -29,7 +29,7 @@ export class NewServiceComponent implements OnInit {
         description: new FormControl(''),
         durationInMin: new FormControl('', [
           Validators.required,
-          forbidValuesBetweenStep(15)
+          forbidValuesBetweenStep(30)
         ]),
         price: new FormControl('', [
           Validators.required
