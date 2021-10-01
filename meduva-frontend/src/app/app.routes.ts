@@ -21,6 +21,7 @@ import {RoomDetailsComponent} from "./component/rooms/room-details/room-details.
 import {EquipmentListComponent} from "./component/equipment/equipment-list/equipment-list.component";
 import {NewModelComponent} from "./component/equipment/new-model/new-model.component";
 import {ModelDetailsComponent} from "./component/equipment/model-details/model-details.component";
+import {ChooseServiceComponent} from "./component/visit/choose-service/choose-service.component";
 
 export const routes: Routes = [
   { path: 'home', component: HomeComponent },
@@ -131,6 +132,14 @@ export const routes: Routes = [
     canActivate: [RoleGuard],
     data: {
       expectedRole: roleNames[UserRole.ROLE_ADMIN]
+    }
+  },
+  {
+    path: 'visit/choose-service',
+    component: ChooseServiceComponent,
+    canActivate: [RoleGuard],
+    data: {
+      expectedRole: roleNames[UserRole.ROLE_CLIENT]
     }
   },
   { path: '', redirectTo: 'home', pathMatch: 'full' }

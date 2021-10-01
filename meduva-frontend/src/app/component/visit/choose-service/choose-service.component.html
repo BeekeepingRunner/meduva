@@ -1,0 +1,24 @@
+<div>
+  <h2>Choose service</h2>
+  <div>
+    <table mat-table [dataSource]="services" class="mat-elevation-z8">
+
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef>Name</th>
+        <td mat-cell *matCellDef="let service"><b>{{ service.name }}</b></td>
+      </ng-container>
+      <ng-container matColumnDef="duration">
+        <th mat-header-cell *matHeaderCellDef>Duration</th>
+        <td mat-cell *matCellDef="let service">{{ service.durationInMin }} min.</td>
+      </ng-container>
+      <ng-container matColumnDef="price">
+        <th mat-header-cell *matHeaderCellDef>Price</th>
+        <td mat-cell *matCellDef="let service">{{ service.price | currency : 'USD' }}</td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; let service; columns: displayedColumns;">
+      </tr>
+    </table>
+  </div>
+</div>

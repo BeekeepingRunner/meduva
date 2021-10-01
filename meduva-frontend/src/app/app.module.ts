@@ -52,6 +52,7 @@ import { ModelDetailsComponent } from './component/equipment/model-details/model
 import { FeedbackDialogComponent } from './component/dialog/feedback-dialog/feedback-dialog.component';
 import { CalendarModule, DateAdapter } from 'angular-calendar';
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
+import { ChooseServiceComponent } from './component/visit/choose-service/choose-service.component';
 
 @NgModule({
   declarations: [
@@ -81,6 +82,7 @@ import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
     ModelFormComponent,
     ModelDetailsComponent,
     FeedbackDialogComponent,
+    ChooseServiceComponent,
   ],
   imports: [
     BrowserModule,
