@@ -18,10 +18,10 @@
       </mat-error>
     </mat-form-field>
 
-    <button [disabled]="!form.valid" class="btn btn-primary btn-block" type="submit">Change email</button>
+    <button [disabled]="!form.valid || emailSent" class="btn btn-primary btn-block" type="submit">Change email</button>
 
     <br>
-    <div *ngIf="submitted && !emailSent">
+      <div *ngIf="submitted && !emailSent && !sendFailed">
       Please wait a moment...
     </div>
     <div
