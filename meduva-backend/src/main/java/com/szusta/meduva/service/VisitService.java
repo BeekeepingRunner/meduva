@@ -28,18 +28,13 @@ public class VisitService {
         Calendar calendar = Calendar.getInstance();
 
         // 1. get first potential term (YYYY-MM-DD-hh-mm-ss) - 00:00:00 on the first day of the current week
-
-        //
-
-        // 2. start checking subsequent terms ending at (00:00:00 on the first day of the current week - durationInMinutes)
+        // and start checking subsequent terms ending at (00:00:00 on the first day of the current week - durationInMinutes)
         // (30-min intervals)
 
-        // 2.1 get appropriate datetime
+        // 1.1 get appropriate datetime
 
-        // 2.2 check if there are any room and equipment that is free on the interval that starts at previously mentioned
+        // 1.2 check if there are any room and equipment that is free on the interval that starts at previously mentioned
         // datetime and ends at (datetime + serviceDurationInMinutes).
-
-        // ==2.
 
         return new ArrayList<>();
     }

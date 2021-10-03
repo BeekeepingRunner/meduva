@@ -3,7 +3,12 @@ package com.szusta.meduva.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.szusta.meduva.model.common.Undeletable;
 import com.szusta.meduva.model.role.Role;
-import lombok.*;
+import com.szusta.meduva.model.schedule.visit.Visit;
+import com.szusta.meduva.model.schedule.WorkerSchedule;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -47,6 +52,10 @@ public class User extends Undeletable {
     @ManyToMany(fetch = FetchType.LAZY)
     @JsonIgnore
     List<Visit> visits;
+
+    @OneToMany(mappedBy = "user")
+    @JsonIgnore
+    private List<WorkerSchedule> workerSchedules;
 
     public User(String login, String email, String password) {
         this.login = login;

@@ -1,6 +1,10 @@
-package com.szusta.meduva.model;
+package com.szusta.meduva.model.schedule.visit;
 
-import com.szusta.meduva.model.common.Undeletable;
+import com.szusta.meduva.model.EquipmentItem;
+import com.szusta.meduva.model.Room;
+import com.szusta.meduva.model.Service;
+import com.szusta.meduva.model.User;
+import com.szusta.meduva.model.schedule.Schedule;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,18 +21,13 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Visit extends Undeletable {
+public class Visit extends Schedule {
 
-    @Column(name = "time_from")
-    private Date timeFrom;
-    @Column(name = "time_to")
-    private Date timeTo;
-
-    private String description;
-    private boolean booked;
-    private boolean cancelled = false;
-    private boolean done = false;
     private boolean paid = false;
+
+    @ManyToOne
+    @JoinColumn(name = "visit_status_id")
+    private VisitStatus visitStatus;
 
     @ManyToOne
     @JoinColumn(name = "service_id")

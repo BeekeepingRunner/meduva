@@ -2,12 +2,14 @@ package com.szusta.meduva.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.szusta.meduva.model.common.Activable;
+import com.szusta.meduva.model.schedule.EquipmentSchedule;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "equipment_item")
@@ -27,6 +29,10 @@ public class EquipmentItem extends Activable {
     @ManyToOne
     @JoinColumn(name = "room_id")
     private Room room;
+
+    @OneToMany(mappedBy = "equipmentItem")
+    @JsonIgnore
+    private List<EquipmentSchedule> equipmentSchedules;
 
     public EquipmentItem(String name, boolean isActive, boolean deleted) {
         this.name = name;

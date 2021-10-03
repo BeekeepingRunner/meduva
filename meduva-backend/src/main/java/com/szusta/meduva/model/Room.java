@@ -2,6 +2,7 @@ package com.szusta.meduva.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.szusta.meduva.model.common.Undeletable;
+import com.szusta.meduva.model.schedule.RoomSchedule;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -37,6 +38,10 @@ public class Room extends Undeletable {
     )
     @JsonIgnore
     private List<Service> services = new ArrayList<>();
+
+    @OneToMany(mappedBy = "room")
+    @JsonIgnore
+    private List<RoomSchedule> roomSchedules;
 
     public Room(String name,
                 String description,
