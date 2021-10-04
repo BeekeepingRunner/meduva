@@ -72,4 +72,11 @@ public class EmailResetService {
         return emailResetTokenRepository.findByToken(token)
                 .orElseThrow(() -> new EntityRecordNotFoundException("Email reset token not found : " + token));
     }
+
+    public void tryToSendEmailResetLink(User user, String email){
+        this.deletePreviousResetTokens(user);
+        EmailResetToken emailResetToken = this.createEmailResetToken(user, email);
+        this.sendEmailResetMail(email, emailResetToken);
+    }
+
 }

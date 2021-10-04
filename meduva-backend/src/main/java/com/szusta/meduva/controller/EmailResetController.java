@@ -35,9 +35,7 @@ public class EmailResetController {
                     .body(new MessageResponse("Email is already in use"));
         }else{
             User user = this.userService.findById(id);
-            emailResetService.deletePreviousResetTokens(user);
-            EmailResetToken emailResetToken = this.emailResetService.createEmailResetToken(user, email);
-            emailResetService.sendEmailResetMail(email, emailResetToken);
+            this.emailResetService.tryToSendEmailResetLink(user, email);
             return ResponseEntity.ok(new MessageResponse("Email reset link has been sent to your email"));
         }
 
