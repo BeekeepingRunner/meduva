@@ -46,6 +46,7 @@ export class EditEmailComponent implements OnInit {
     next: (data: any) => {
       this.emailSent = true;
       this.resultInfo = 'Check your mailbox for email-reset link!';
+      this.sendFailed=false;
     },
     error: (err: any) => {
       this.resultInfo = err.error.message;

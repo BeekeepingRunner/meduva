@@ -30,12 +30,15 @@ public class EmailResetController {
 
     @PostMapping("/request/{id}")
     public ResponseEntity<MessageResponse> sendEmailResetLink(@PathVariable final Integer id, @RequestBody final String email){
-        User user = this.userService.findById(id);
-        emailResetService.deletePreviousResetTokens(user);
-        EmailResetToken emailResetToken = this.emailResetService.createEmailResetToken(user, email);
-        emailResetService.sendEmailResetMail(email, emailResetToken);
+        if(userService.existsByEmail(email)){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new MessageResponse("Email is already in use"));
+        }else{
+            User user = this.userService.findById(id);
+            this.emailResetService.tryToSendEmailResetLink(user, email);
+            return ResponseEntity.ok(new MessageResponse("Email reset link has been sent to your email"));
+        }
 
-        return ResponseEntity.ok(new MessageResponse("Email reset link has been sent to your email"));
     }
 
     @PostMapping("/validate-email-reset-token")
