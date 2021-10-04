@@ -2,7 +2,7 @@ package com.szusta.meduva.service;
 
 import com.szusta.meduva.model.Service;
 import com.szusta.meduva.payload.Term;
-import com.szusta.meduva.repository.VisitRepository;
+import com.szusta.meduva.repository.schedule.VisitRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;

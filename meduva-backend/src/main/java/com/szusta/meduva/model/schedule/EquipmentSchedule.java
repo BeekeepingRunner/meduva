@@ -1,6 +1,6 @@
 package com.szusta.meduva.model.schedule;
 
-import com.szusta.meduva.model.EquipmentItem;
+import com.szusta.meduva.model.equipment.EquipmentItem;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

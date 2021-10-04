@@ -1,13 +1,13 @@
 package com.szusta.meduva.service;
 
 import com.szusta.meduva.exception.EntityRecordNotFoundException;
-import com.szusta.meduva.model.EquipmentItem;
-import com.szusta.meduva.model.EquipmentModel;
+import com.szusta.meduva.model.equipment.EquipmentItem;
+import com.szusta.meduva.model.equipment.EquipmentModel;
 import com.szusta.meduva.model.Room;
 import com.szusta.meduva.model.Service;
 import com.szusta.meduva.payload.request.NewEqModelRequest;
-import com.szusta.meduva.repository.EquipmentItemRepository;
-import com.szusta.meduva.repository.EquipmentModelRepository;
+import com.szusta.meduva.repository.equipment.EquipmentItemRepository;
+import com.szusta.meduva.repository.equipment.EquipmentModelRepository;
 import com.szusta.meduva.service.entityconnections.RoomToEqItemService;
 import com.szusta.meduva.service.entityconnections.ServiceToEqModelService;
 import com.szusta.meduva.service.entityconnections.ServiceToRoomService;

@@ -1,6 +1,7 @@
-package com.szusta.meduva.model;
+package com.szusta.meduva.model.equipment;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.szusta.meduva.model.Room;
 import com.szusta.meduva.model.common.Activable;
 import com.szusta.meduva.model.schedule.EquipmentSchedule;
 import lombok.AllArgsConstructor;

@@ -1,5 +1,6 @@
-package com.szusta.meduva.model;
+package com.szusta.meduva.model.equipment;
 
+import com.szusta.meduva.model.Service;
 import com.szusta.meduva.model.common.Activable;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

@@ -1,15 +1,14 @@
 package com.szusta.meduva.service.entityconnections;
 
-import com.szusta.meduva.model.EquipmentItem;
-import com.szusta.meduva.model.EquipmentModel;
+import com.szusta.meduva.model.equipment.EquipmentItem;
+import com.szusta.meduva.model.equipment.EquipmentModel;
 import com.szusta.meduva.model.Service;
-import com.szusta.meduva.repository.EquipmentItemRepository;
-import com.szusta.meduva.repository.EquipmentModelRepository;
+import com.szusta.meduva.repository.equipment.EquipmentItemRepository;
+import com.szusta.meduva.repository.equipment.EquipmentModelRepository;
 import com.szusta.meduva.repository.ServiceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 

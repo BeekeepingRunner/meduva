@@ -1,6 +1,6 @@
 package com.szusta.meduva.model.schedule.visit;
 
-import com.szusta.meduva.model.EquipmentItem;
+import com.szusta.meduva.model.equipment.EquipmentItem;
 import com.szusta.meduva.model.Room;
 import com.szusta.meduva.model.Service;
 import com.szusta.meduva.model.User;

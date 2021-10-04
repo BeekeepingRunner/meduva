@@ -1,6 +1,6 @@
-package com.szusta.meduva.repository;
+package com.szusta.meduva.repository.equipment;
 
-import com.szusta.meduva.model.EquipmentModel;
+import com.szusta.meduva.model.equipment.EquipmentModel;
 import com.szusta.meduva.repository.undeletable.UndeletableWithNameRepository;
 import org.springframework.stereotype.Repository;
 

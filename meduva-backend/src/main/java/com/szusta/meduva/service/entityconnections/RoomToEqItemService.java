@@ -1,9 +1,9 @@
 package com.szusta.meduva.service.entityconnections;
 
 import com.szusta.meduva.exception.EntityRecordNotFoundException;
-import com.szusta.meduva.model.EquipmentItem;
+import com.szusta.meduva.model.equipment.EquipmentItem;
 import com.szusta.meduva.model.Room;
-import com.szusta.meduva.repository.EquipmentItemRepository;
+import com.szusta.meduva.repository.equipment.EquipmentItemRepository;
 import com.szusta.meduva.repository.RoomRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
