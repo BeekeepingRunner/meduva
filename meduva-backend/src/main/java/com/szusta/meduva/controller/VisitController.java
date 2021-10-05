@@ -23,6 +23,6 @@ public class VisitController {
 
     @GetMapping("/terms-for-service/{serviceId}")
     public List<Term> getTermsForService(@PathVariable Long serviceId) {
-        return visitService.getTermsForService(serviceId);
+        return visitService.getTermsForCurrentWorker(serviceId);
     }
 }

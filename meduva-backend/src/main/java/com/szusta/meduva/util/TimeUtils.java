@@ -5,7 +5,6 @@ import java.util.Calendar;
 public class TimeUtils {
 
     public static int MINUTE_OFFSET = 30;
-    public static int DAYS_RANGE = 30;
 
     public static Calendar roundToNextHalfHour(Calendar calendar) {
         Calendar toRoundCalendar = (Calendar) calendar.clone();
@@ -17,9 +16,9 @@ public class TimeUtils {
         return toRoundCalendar;
     }
 
-    public static boolean hasThirtyDaysPassedBetween(Calendar now, Calendar someday) {
+    public static boolean hasNDaysPassedBetween(Calendar now, Calendar someday, int days) {
         Calendar tempSomeday = (Calendar) someday.clone();
-        tempSomeday.add(Calendar.DAY_OF_MONTH, -DAYS_RANGE);
+        tempSomeday.add(Calendar.DAY_OF_MONTH, -days);
         return now.before(tempSomeday);
     }
 }

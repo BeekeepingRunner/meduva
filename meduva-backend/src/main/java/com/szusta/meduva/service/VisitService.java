@@ -1,6 +1,7 @@
 package com.szusta.meduva.service;
 
 import com.szusta.meduva.exception.EntityRecordNotFoundException;
+import com.szusta.meduva.model.Room;
 import com.szusta.meduva.model.Service;
 import com.szusta.meduva.payload.Term;
 import com.szusta.meduva.repository.ServiceRepository;
@@ -27,27 +28,32 @@ public class VisitService {
     }
 
     // Checks subsequent time-intervals in range of several days, starting from now.
-    public List<Term> getTermsForService(Long serviceId) {
+    public List<Term> getTermsForCurrentWorker(Long serviceId) {
 
         Service service = serviceRepository.findById(serviceId)
                 .orElseThrow(() -> new EntityRecordNotFoundException("Service not found with id : " + serviceId));
-        int serviceDurationInMinutes = service.getDurationInMin();
+
+        // TODO: find rooms with necessary equpiment
+        List<Room> availableRooms = new ArrayList<>();
+        //...
 
         Calendar now = Calendar.getInstance();
-        // temp
+        // temp for testing ===
         now.add(Calendar.MONTH, 1);
-        //
+        //=========
         Calendar currentlyCheckedTime = TimeUtils.roundToNextHalfHour(now);
 
+        // check subsequent terms starting from now
         List<Term> possibleTerms = new ArrayList<>();
         do {
-            // check if there are any room and equipment that is free (curr. employee too) in checked time
-            Optional<Term> term = scheduleChecker.getTermForCurrentWorker(service, currentlyCheckedTime);
+            Optional<Term> term = scheduleChecker.getTermForCurrentWorker(service, availableRooms, currentlyCheckedTime);
             term.ifPresent(possibleTerms::add);
+
             // proceed to the next interval
             currentlyCheckedTime.add(Calendar.MINUTE, TimeUtils.MINUTE_OFFSET);
 
-        } while (!TimeUtils.hasThirtyDaysPassedBetween(now, currentlyCheckedTime));
+        } while (!TimeUtils.hasNDaysPassedBetween(now, currentlyCheckedTime, 30));
+        //
 
         System.out.println(possibleTerms);
         return possibleTerms;
