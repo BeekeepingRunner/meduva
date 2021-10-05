@@ -11,6 +11,16 @@ import java.util.Date;
 @Setter
 public class Term {
 
-    Date start;
-    Date end;
+    Date startTime;
+    Date endTime;
+
+    String serviceName;
+    String workerName;
+    String roomName;
+    String eqItemCode;
+
+    public Term(Date startTime, Date endTime) {
+        this.startTime = startTime;
+        this.endTime = endTime;
+    }
 }

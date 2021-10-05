@@ -1,72 +1,55 @@
 package com.szusta.meduva.service;
 
+import com.szusta.meduva.exception.EntityRecordNotFoundException;
 import com.szusta.meduva.model.Service;
 import com.szusta.meduva.payload.Term;
+import com.szusta.meduva.repository.ServiceRepository;
 import com.szusta.meduva.repository.schedule.VisitRepository;
+import com.szusta.meduva.util.TimeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @org.springframework.stereotype.Service
 public class VisitService {
 
     private VisitRepository visitRepository;
-    private ServicesService servicesService;
+    private ServiceRepository serviceRepository;
+    private ScheduleChecker scheduleChecker;
 
     @Autowired
     public VisitService(VisitRepository visitRepository,
-                        ServicesService servicesService) {
+                        ServiceRepository serviceRepository,
+                        ScheduleChecker scheduleChecker) {
         this.visitRepository = visitRepository;
-        this.servicesService = servicesService;
+        this.serviceRepository = serviceRepository;
+        this.scheduleChecker = scheduleChecker;
     }
 
+    // Checks subsequent time-intervals in range of several days, starting from now.
     public List<Term> getTermsForService(Long serviceId) {
 
-        Service service = servicesService.findById(serviceId);
+        Service service = serviceRepository.findById(serviceId)
+                .orElseThrow(() -> new EntityRecordNotFoundException("Service not found with id : " + serviceId));
         int serviceDurationInMinutes = service.getDurationInMin();
-        System.out.println(serviceDurationInMinutes);
 
-        // === get first potential term (YYYY-MM-DD-hh-mm-ss)
-        // and start checking subsequent terms ending at (00:00:00 on the day 30 days after now)
-        // (30-min intervals)
-
-        // get current time
         Calendar now = Calendar.getInstance();
+        // temp
+        now.add(Calendar.MONTH, 1);
+        //
+        Calendar currentlyCheckedTime = TimeUtils.roundToNextHalfHour(now);
 
-        // round it to the nearest half-hour interval to start checking from it
-        Calendar currentlyCheckedTime = (Calendar) now.clone();
-        int currMinutes = currentlyCheckedTime.get(Calendar.MINUTE);
-        int mod = currMinutes % 30;
-        currentlyCheckedTime.add(Calendar.MINUTE, mod < 15 ? -mod : (30 - mod));
-        currentlyCheckedTime.set(Calendar.SECOND, 0);
-        currentlyCheckedTime.set(Calendar.MILLISECOND, 0);
-
+        List<Term> possibleTerms = new ArrayList<>();
         do {
-            // get time interval to check
-            Date currentCheckStart = currentlyCheckedTime.getTime();
-            Calendar temp = (Calendar) currentlyCheckedTime.clone();
-            temp.add(Calendar.MINUTE, serviceDurationInMinutes);
-            Date currentCheckEnd = temp.getTime();
-
-            // check if there are any room and equipment that is free in that interval
-            System.out.println(currentCheckStart);
-            System.out.println(currentCheckEnd);
-            System.out.println();
-
+            // check if there are any room and equipment that is free (curr. employee too) in checked time
+            Optional<Term> term = scheduleChecker.getTermForCurrentWorker(service, currentlyCheckedTime);
+            term.ifPresent(possibleTerms::add);
             // proceed to the next interval
-            currentlyCheckedTime.add(Calendar.MINUTE, 30);
+            currentlyCheckedTime.add(Calendar.MINUTE, TimeUtils.MINUTE_OFFSET);
 
-        } while (!hasThirtyDaysPassedBetween(now, currentlyCheckedTime));
+        } while (!TimeUtils.hasThirtyDaysPassedBetween(now, currentlyCheckedTime));
 
-        return new ArrayList<>();
-    }
-
-    private boolean hasThirtyDaysPassedBetween(Calendar now, Calendar someday) {
-        Calendar tempSomeday = (Calendar) someday.clone();
-        tempSomeday.add(Calendar.DAY_OF_MONTH, -30);
-        return now.before(tempSomeday);
+        System.out.println(possibleTerms);
+        return possibleTerms;
     }
 }
