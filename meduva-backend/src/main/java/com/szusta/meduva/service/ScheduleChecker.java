@@ -1,9 +1,9 @@
 package com.szusta.meduva.service;
 
 import com.szusta.meduva.exception.EntityRecordNotFoundException;
-import com.szusta.meduva.model.Room;
 import com.szusta.meduva.model.Service;
 import com.szusta.meduva.model.User;
+import com.szusta.meduva.model.equipment.EquipmentItem;
 import com.szusta.meduva.model.schedule.Schedule;
 import com.szusta.meduva.payload.Term;
 import com.szusta.meduva.repository.RoomRepository;
@@ -46,7 +46,7 @@ public class ScheduleChecker {
         this.workerScheduleRepository = workerScheduleRepository;
     }
 
-    public Optional<Term> getTermForCurrentWorker(Service service, List<Room> availableRooms, Calendar currentlyCheckedTime) {
+    public Optional<Term> getTermForCurrentWorker(Service service, List<EquipmentItem> suitableEqItems, Calendar currentlyCheckedTime) {
 
         Date currentCheckStart = currentlyCheckedTime.getTime();
         Date currentCheckEnd = getIntervalEnd(currentlyCheckedTime, service.getDurationInMin());
@@ -56,7 +56,7 @@ public class ScheduleChecker {
                 (List<Schedule>) workerScheduleRepository.findAnyBetween(currentCheckStart, currentCheckEnd, workerId);
 
         if (existingWorkerEvents.isEmpty()) {
-            // TODO: check for free room and equipment_item in it
+            // TODO: check for free equipment Items
             // ..
             Term term = new Term(currentCheckStart, currentCheckEnd);
             return Optional.of(term);

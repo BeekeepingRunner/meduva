@@ -3,6 +3,7 @@ package com.szusta.meduva.service;
 import com.szusta.meduva.exception.EntityRecordNotFoundException;
 import com.szusta.meduva.model.Room;
 import com.szusta.meduva.model.Service;
+import com.szusta.meduva.model.equipment.EquipmentItem;
 import com.szusta.meduva.payload.Term;
 import com.szusta.meduva.repository.ServiceRepository;
 import com.szusta.meduva.repository.schedule.VisitRepository;
@@ -33,8 +34,8 @@ public class VisitService {
         Service service = serviceRepository.findById(serviceId)
                 .orElseThrow(() -> new EntityRecordNotFoundException("Service not found with id : " + serviceId));
 
-        // TODO: find rooms with necessary equpiment
-        List<Room> availableRooms = new ArrayList<>();
+        // TODO: find suitable equipmentItems
+        List<EquipmentItem> suitableEqItems = new ArrayList<>();
         //...
 
         Calendar now = Calendar.getInstance();
@@ -46,7 +47,7 @@ public class VisitService {
         // check subsequent terms starting from now
         List<Term> possibleTerms = new ArrayList<>();
         do {
-            Optional<Term> term = scheduleChecker.getTermForCurrentWorker(service, availableRooms, currentlyCheckedTime);
+            Optional<Term> term = scheduleChecker.getTermForCurrentWorker(service, suitableEqItems, currentlyCheckedTime);
             term.ifPresent(possibleTerms::add);
 
             // proceed to the next interval
