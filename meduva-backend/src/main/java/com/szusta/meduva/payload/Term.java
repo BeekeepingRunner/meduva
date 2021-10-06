@@ -17,7 +17,7 @@ public class Term {
     String serviceName;
     String workerName;
     String roomName;
-    String eqItemCode;
+    String eqItemName;
 
     public Term(Date startTime, Date endTime) {
         this.startTime = startTime;

@@ -20,6 +20,6 @@ import javax.persistence.Table;
 public class EquipmentSchedule extends Schedule {
 
     @ManyToOne
-    @JoinColumn(name = "equipment_id")
+    @JoinColumn(name = "equipment_item_id")
     private EquipmentItem equipmentItem;
 }

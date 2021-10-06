@@ -32,13 +32,16 @@ public class VisitService {
     }
 
     // Checks subsequent time-intervals in range of several days, starting from now.
+    // Returns empty list if there are no available Terms.
     public List<Term> getTermsForCurrentWorker(Long serviceId) {
 
         Service service = serviceRepository.findById(serviceId)
                 .orElseThrow(() -> new EntityRecordNotFoundException("Service not found with id : " + serviceId));
 
         List<EquipmentItem> suitableEqItems = itemRepository.findAllSuitableForService(serviceId);
-        suitableEqItems.forEach(item -> System.out.println(item.getName()));
+        if (suitableEqItems.isEmpty()) {
+            return Collections.emptyList();
+        }
 
         Calendar now = Calendar.getInstance();
         // temp for testing ===============
@@ -56,9 +59,7 @@ public class VisitService {
             currentlyCheckedTime.add(Calendar.MINUTE, TimeUtils.MINUTE_OFFSET);
 
         } while (!TimeUtils.hasNDaysPassedBetween(now, currentlyCheckedTime, 30));
-        //
 
-        System.out.println(possibleTerms);
         return possibleTerms;
     }
 }

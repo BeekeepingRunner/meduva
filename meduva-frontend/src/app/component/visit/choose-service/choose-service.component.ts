@@ -27,7 +27,7 @@ export class ChooseServiceComponent implements OnInit {
   getTermsForService(serviceId: number): void {
     this.servicesService.getTermsForService(serviceId).subscribe(
       data => {
-        // TODO: process data
+        console.log(data);
       }
     );
   }

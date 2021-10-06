@@ -26,5 +26,5 @@ public interface WorkerScheduleRepository extends UndeletableRepository<WorkerSc
         +   ")",
         nativeQuery = true
     )
-    List<? super WorkerSchedule> findAnyBetween(Date currentCheckStart, Date currentCheckEnd, Long workerId);
+    List<? super WorkerSchedule> findAnyBetween(Date start, Date end, Long workerId);
 }
