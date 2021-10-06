@@ -13,6 +13,8 @@ import { ProfileComponent } from './component/profile/profile.component';
 import { BoardAdminComponent } from './component/board-admin/board-admin.component';
 import { SpecificUserComponent} from "./component/specific-user-profile/specific-user.component";
 import { EditProfileComponent } from './component/edit-profile/edit-profile.component';
+import { EditEmailComponent } from './component/edit-email/edit-email.component';
+import { ActivateNewEmailComponent } from './component/activate-new-email/activate-new-email.component';
 
 import { authInterceptorProviders } from './helper/auth.interceptor';
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
@@ -56,6 +58,7 @@ import {EditRoleComponent} from "./component/edit-role/edit-role.component";
 import {MatSelectModule} from "@angular/material/select";
 
 
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -66,6 +69,8 @@ import {MatSelectModule} from "@angular/material/select";
     BoardAdminComponent,
     PasswordResetEmailInputComponent,
     PasswordResetComponent,
+    EditEmailComponent,
+    ActivateNewEmailComponent,
     UserListComponent,
     SpecificUserComponent,
     AccessDeniedComponent,

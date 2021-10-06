@@ -1,0 +1,42 @@
+<mat-card class="col-md-6 card container-fluid " >
+  <form class="basic-form container-fluid " (ngSubmit)="onSubmit()" [formGroup]="form">
+    <br>
+    <strong>Edit profile:</strong>
+    <br>
+
+    <mat-form-field class="wide-element" appearance="outline">
+      <mat-label>Email:</mat-label>
+      <input matInput id="email" type="text" formControlName="email" >
+      <mat-error *ngIf="form.controls.email.invalid &&
+                          (form.controls.email.dirty || form.controls.email.touched)">
+        <mat-error *ngIf="form.controls.email.errors?.required ">
+          Email is required
+        </mat-error>
+        <mat-error *ngIf="form.controls.email.errors?.pattern">
+          Email must be in its correct format
+        </mat-error>
+      </mat-error>
+    </mat-form-field>
+
+    <button [disabled]="!form.valid || emailSent" class="btn btn-primary btn-block" type="submit">Change email</button>
+
+    <br>
+      <div *ngIf="submitted && !emailSent && !sendFailed">
+      Please wait a moment...
+    </div>
+    <div
+      class="alert alert-success"
+      role="alert"
+      *ngIf="submitted && emailSent">
+      {{ resultInfo }}
+    </div>
+
+    <div
+      class="alert alert-danger"
+      role="alert"
+      *ngIf="submitted && sendFailed">
+      Sending failed: {{ resultInfo }}
+    </div>
+
+  </form>
+</mat-card>

@@ -35,6 +35,11 @@ public class UserService {
                 .orElseThrow(() -> new EntityRecordNotFoundException("User not found with email : " + email));
     }
 
+    public User findById(long id){
+        return userRepository.findById(id)
+                .orElseThrow(() -> new EntityRecordNotFoundException("User not found with id: " + id));
+    }
+
     public Boolean existsByLogin(String login) {
         return userRepository.existsByLogin(login);
     }
