@@ -1,9 +1,11 @@
 package com.szusta.meduva.service;
 
 import com.szusta.meduva.exception.EntityRecordNotFoundException;
+import com.szusta.meduva.model.Room;
 import com.szusta.meduva.model.Service;
 import com.szusta.meduva.model.equipment.EquipmentItem;
 import com.szusta.meduva.payload.Term;
+import com.szusta.meduva.repository.RoomRepository;
 import com.szusta.meduva.repository.ServiceRepository;
 import com.szusta.meduva.repository.equipment.EquipmentItemRepository;
 import com.szusta.meduva.repository.schedule.VisitRepository;
@@ -18,16 +20,19 @@ public class VisitService {
     private VisitRepository visitRepository;
     private ServiceRepository serviceRepository;
     private EquipmentItemRepository itemRepository;
+    private RoomRepository roomRepository;
     private ScheduleChecker scheduleChecker;
 
     @Autowired
     public VisitService(VisitRepository visitRepository,
                         ServiceRepository serviceRepository,
                         EquipmentItemRepository itemRepository,
+                        RoomRepository roomRepository,
                         ScheduleChecker scheduleChecker) {
         this.visitRepository = visitRepository;
         this.serviceRepository = serviceRepository;
         this.itemRepository = itemRepository;
+        this.roomRepository = roomRepository;
         this.scheduleChecker = scheduleChecker;
     }
 
@@ -38,8 +43,14 @@ public class VisitService {
         Service service = serviceRepository.findById(serviceId)
                 .orElseThrow(() -> new EntityRecordNotFoundException("Service not found with id : " + serviceId));
 
-        List<EquipmentItem> suitableEqItems = itemRepository.findAllSuitableForService(serviceId);
-        if (suitableEqItems.isEmpty()) {
+        List<Room> suitableRooms = roomRepository.findAllSuitableForService(serviceId);
+        if (suitableRooms.isEmpty()) {
+            return Collections.emptyList();
+        }
+
+        // In the future, we'll have to differentiate between "itemless" service, and one that
+        // requires items, but hasn't any assigned to it.
+        if (!doesRequiredEquipmentExist(serviceId)) {
             return Collections.emptyList();
         }
 
@@ -52,7 +63,7 @@ public class VisitService {
         // check subsequent terms starting from now
         List<Term> possibleTerms = new ArrayList<>();
         do {
-            Optional<Term> term = scheduleChecker.getTermForCurrentWorker(service, suitableEqItems, currentlyCheckedTime);
+            Optional<Term> term = scheduleChecker.getTermForCurrentWorker(service, suitableRooms, currentlyCheckedTime);
             term.ifPresent(possibleTerms::add);
 
             // proceed to the next interval
@@ -61,5 +72,10 @@ public class VisitService {
         } while (!TimeUtils.hasNDaysPassedBetween(now, currentlyCheckedTime, 30));
 
         return possibleTerms;
+    }
+
+    private boolean doesRequiredEquipmentExist(Long serviceId) {
+        List<EquipmentItem> suitableEqItems = itemRepository.findAllSuitableForService(serviceId);
+        return !suitableEqItems.isEmpty();
     }
 }

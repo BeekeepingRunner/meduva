@@ -1,5 +1,6 @@
 package com.szusta.meduva.service;
 
+import com.szusta.meduva.model.Room;
 import com.szusta.meduva.model.Service;
 import com.szusta.meduva.model.User;
 import com.szusta.meduva.model.equipment.EquipmentItem;
@@ -43,7 +44,7 @@ public class ScheduleChecker {
         this.workerScheduleRepository = workerScheduleRepository;
     }
 
-    public Optional<Term> getTermForCurrentWorker(Service service, List<EquipmentItem> suitableEqItems, Calendar currentlyCheckedTime) {
+    public Optional<Term> getTermForCurrentWorker(Service service, List<Room> suitableRooms, Calendar currentlyCheckedTime) {
 
         Date currentCheckStart = currentlyCheckedTime.getTime();
         Date currentCheckEnd = getIntervalEnd(currentlyCheckedTime, service.getDurationInMin());
@@ -53,13 +54,33 @@ public class ScheduleChecker {
 
         if (isWorkerFree(currentCheckStart, currentCheckEnd, worker)) {
 
-            // get first available eqItem
-            EquipmentItem availableEqItem = new EquipmentItem();
-            for (EquipmentItem suitableItem : suitableEqItems) {
-                if (isEqItemFree(currentCheckStart, currentCheckEnd, suitableItem)) {
-                    availableEqItem = suitableItem;
+            // get first available room
+            Room availableRoom = null;
+            for (Room room : suitableRooms) {
+                if (isRoomFree(currentCheckStart, currentCheckEnd, room)) {
+                    availableRoom = room;
                     break;
                 }
+            }
+            if (availableRoom == null) {
+                return Optional.empty();
+            }
+
+            // TODO: if it's "itemless" service - don't check item schedules
+
+            // get first available eqItem in available room
+            List<EquipmentItem> suitableEqItems =
+                    equipmentItemRepository.findAllSuitableForServiceInRoom(service.getId(), availableRoom.getId());
+
+            EquipmentItem availableEqItem = null;
+            for (EquipmentItem item : suitableEqItems) {
+                if (isEqItemFree(currentCheckStart, currentCheckEnd, item)) {
+                    availableEqItem = item;
+                    break;
+                }
+            }
+            if (availableEqItem == null) {
+                return Optional.empty();
             }
 
             // create term
@@ -81,10 +102,19 @@ public class ScheduleChecker {
         return temp.getTime();
     }
 
+    // TODO: refactor - code repetition
+    //
+
     public boolean isWorkerFree(Date start, Date end, User worker) {
         List<Schedule> existingWorkerEvents =
                 (List<Schedule>) workerScheduleRepository.findAnyBetween(start, end, worker.getId());
         return existingWorkerEvents.isEmpty();
+    }
+
+    private boolean isRoomFree(Date start, Date end, Room room) {
+        List<Schedule> existingRoomEvents =
+                (List<Schedule>) roomScheduleRepository.findAnyBetween(start, end, room.getId());
+        return existingRoomEvents.isEmpty();
     }
 
     public boolean isEqItemFree(Date start, Date end, EquipmentItem suitableItem) {
