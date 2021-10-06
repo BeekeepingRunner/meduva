@@ -36,7 +36,7 @@
 
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
       <!-- <tr mat-row *matRowDef="let row; let user; columns: displayedColumns;" class="element-row" (click)="getClientDetails(user.id)" ></tr> -->
-      <tr mat-row *matRowDef="let row; let user; columns: displayedColumns;" class="element-row" [routerLink]="['/specyfic-user/' + user.id]"></tr>
+      <tr mat-row *matRowDef="let row; let user; columns: displayedColumns;" class="element-row" [routerLink]="['/specific-user/' + user.id]"></tr>
     </table>
   </div>
 </div>

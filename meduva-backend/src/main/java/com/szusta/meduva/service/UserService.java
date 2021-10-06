@@ -11,9 +11,7 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class UserService {
@@ -89,6 +87,21 @@ public class UserService {
 
         user.markAsDeleted();
         userRepository.save(user);
+    }
+
+    public User changeUserRole(Long userId, Long roleId){
+
+        User user = userRepository.findById(userId).orElseThrow(()-> new EntityRecordNotFoundException("User not found with id : " + userId));
+        Set<Role> roleSet= new HashSet<>();
+        for(Long i=1L; i<=roleId; i++){
+            Role role = roleRepository.findById(i).orElseThrow(()-> new EntityRecordNotFoundException("Role not found with id : " + roleId));
+            roleSet.add(role);
+        }
+
+        user.setRoles(roleSet);
+
+        return userRepository.save(user);
+
     }
 
 }

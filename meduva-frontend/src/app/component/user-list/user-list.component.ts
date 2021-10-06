@@ -61,6 +61,6 @@ export class UserListComponent implements OnInit {
   }
 
   getClientDetails(id: number): void{
-    this.router.navigate(['/specyfic-user/'+id]);
+    this.router.navigate(['/specific-user/'+id]);
   }
 }

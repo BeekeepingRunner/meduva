@@ -5,7 +5,6 @@ import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {UserService} from "../../service/user.service";
 import {ActivatedRoute} from "@angular/router";
 import {environment} from "../../../environments/environment";
-import {MatSelectModule} from '@angular/material/select';
 
 @Component({
   selector: 'app-edit-role',
@@ -20,14 +19,10 @@ export class EditRoleComponent implements OnInit {
   errorMessage!: string;
   editFailed: boolean = false;
   editSuccessful: boolean = false;
-  roles: Role[] = [
-    {id: 0, name: 'Client'},
-    {id: 1, name: 'Worker'},
-    {id: 2, name: 'Recepcionist'},
-    {id: 3, name: 'Admin'}
-  ];
+  roles: Role[] = [];
 
-  id!: number;
+
+id!: number;
 
 
   constructor(private formBuilder: FormBuilder,
@@ -37,28 +32,14 @@ export class EditRoleComponent implements OnInit {
   ngOnInit(): void {
     this.populateFormWithUserData();
     this.buildForm();
+    this.createArrayforSelect();
+
   }
 
   private buildForm(){
     this.form = this.formBuilder.group({
-      name: new FormControl('', [
+      role: new FormControl('', [
         Validators.required,
-        Validators.minLength(1),
-        Validators.maxLength(30),
-        Validators.pattern('^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.\'-]+$'),
-        Validators.pattern('^[^-\\s]+$')
-      ]),
-      surname: new FormControl('', [
-        Validators.required,
-        Validators.minLength(1),
-        Validators.maxLength(30),
-        Validators.pattern('^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.\'-]+$'),
-        Validators.pattern('^[^-\\s]+$')
-
-      ]),
-      phoneNumber: new FormControl('', [
-        Validators.required,
-        Validators.pattern('^(\\+[0-9]{1,4})?[0-9]{6,12}$')
       ]),
     });
   }
@@ -68,11 +49,6 @@ export class EditRoleComponent implements OnInit {
     this.userService.getUserDetails(this.id).subscribe(
       (data: User) => {
         this.user = data;
-        this.form.patchValue({
-          name: this.user.name,
-          surname: this.user.surname,
-          phoneNumber: this.user.phoneNumber,
-        })
       },
       err => {
         this.error = err.getError();
@@ -82,7 +58,7 @@ export class EditRoleComponent implements OnInit {
     onSubmit(){
     if(this.form.invalid){
 
-      this.errorMessage = "Entered data must be correct";
+      this.errorMessage = "Role must be selected";
       this.editFailed = true;
     }else{
       this.tryToSendUpdateRequest();
@@ -90,11 +66,9 @@ export class EditRoleComponent implements OnInit {
   }
 
   private tryToSendUpdateRequest(){
-    const name: string = this.form.controls.name.value;
-    const surname: string = this.form.controls.surname.value;
-    const phoneNumber: string = this.form.controls.phoneNumber.value;
+    const roleId: number = this.form.controls.role.value;
 
-    this.userService.editUser(name,surname,phoneNumber, this.id).subscribe(
+    this.userService.editRole(roleId, this.id).subscribe(
       data => {
         this.editFailed = false;
         this.editSuccessful = true;
@@ -106,6 +80,15 @@ export class EditRoleComponent implements OnInit {
       }
     )
 
-
   }
+
+  private createArrayforSelect(){
+
+    for (const [propertyKey, propertyValue] of Object.entries(UserRole)) {
+      if (!Number.isNaN(Number(propertyKey))) {
+        continue;
+      }
+      this.roles.push({ id: Number(propertyValue)+1, name: propertyKey });
+    }
+}
 }

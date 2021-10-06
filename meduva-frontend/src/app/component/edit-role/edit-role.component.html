@@ -4,16 +4,19 @@
     <strong>Edit role:</strong>
     <br><br>
 
-
     <mat-form-field class="wide-element" appearance="outline">
-      <mat-label>First name:</mat-label>
-      <input matInput id="name" type="text" formControlName="name" >
-      <mat-error *ngIf="form.controls.name.invalid &&
-                          (form.controls.name.dirty || form.controls.name.touched)">
-        <mat-error *ngIf="form.controls.name.errors?.required ">
-          Role is required
-        </mat-error>
+      <mat-label>Choose user role</mat-label>
+      <mat-select formControlName="role" id="role" required>
+        <mat-option *ngFor="let role of roles" [value]="role.id">
+          {{role.name | lowercase | slice : 5 }}
+        </mat-option>
+      </mat-select>
+      <mat-error *ngIf="form.controls.role.invalid &&
+                          (form.controls.role.dirty || form.controls.role.touched)">
 
+        <mat-error *ngIf="form.controls.role.errors?.required ">
+          Pick the role
+        </mat-error>
       </mat-error>
     </mat-form-field>
 

@@ -8,11 +8,11 @@ import {MatDialog} from "@angular/material/dialog";
 import {FeedbackDialogComponent} from "../dialog/feedback-dialog/feedback-dialog.component";
 
 @Component({
-  selector: 'app-specyfic-user',
-  templateUrl: './specyfic-user.component.html',
-  styleUrls: ['./specyfic-user.component.css']
+  selector: 'app-specific-user',
+  templateUrl: './specific-user.component.html',
+  styleUrls: ['./specific-user.component.css']
 })
-export class SpecyficUserComponent implements OnInit {
+export class SpecificUserComponent implements OnInit {
 
   userId!: number;
   userDetails!: User;

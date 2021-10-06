@@ -11,7 +11,7 @@ import { RegisterComponent } from './component/register/register.component';
 import { HomeComponent } from './component/home/home.component';
 import { ProfileComponent } from './component/profile/profile.component';
 import { BoardAdminComponent } from './component/board-admin/board-admin.component';
-import { SpecyficUserComponent} from "./component/specyfic-user-profile/specyfic-user.component";
+import { SpecificUserComponent} from "./component/specific-user-profile/specific-user.component";
 import { EditProfileComponent } from './component/edit-profile/edit-profile.component';
 
 import { authInterceptorProviders } from './helper/auth.interceptor';
@@ -53,6 +53,7 @@ import { ModelFormComponent } from './component/equipment/new-model/model-form/m
 import { ModelDetailsComponent } from './component/equipment/model-details/model-details.component';
 import { FeedbackDialogComponent } from './component/dialog/feedback-dialog/feedback-dialog.component';
 import {EditRoleComponent} from "./component/edit-role/edit-role.component";
+import {MatSelectModule} from "@angular/material/select";
 
 
 @NgModule({
@@ -66,7 +67,7 @@ import {EditRoleComponent} from "./component/edit-role/edit-role.component";
     PasswordResetEmailInputComponent,
     PasswordResetComponent,
     UserListComponent,
-    SpecyficUserComponent,
+    SpecificUserComponent,
     AccessDeniedComponent,
     ServiceListComponent,
     NewServiceComponent,
@@ -108,6 +109,7 @@ import {EditRoleComponent} from "./component/edit-role/edit-role.component";
     MatListModule,
     MatDialogModule,
     MatStepperModule,
+    MatSelectModule,
   ],
   exports: [
     RouterModule
