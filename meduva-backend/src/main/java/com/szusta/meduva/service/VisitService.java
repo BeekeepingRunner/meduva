@@ -1,11 +1,11 @@
 package com.szusta.meduva.service;
 
 import com.szusta.meduva.exception.EntityRecordNotFoundException;
-import com.szusta.meduva.model.Room;
 import com.szusta.meduva.model.Service;
 import com.szusta.meduva.model.equipment.EquipmentItem;
 import com.szusta.meduva.payload.Term;
 import com.szusta.meduva.repository.ServiceRepository;
+import com.szusta.meduva.repository.equipment.EquipmentItemRepository;
 import com.szusta.meduva.repository.schedule.VisitRepository;
 import com.szusta.meduva.util.TimeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,14 +17,17 @@ public class VisitService {
 
     private VisitRepository visitRepository;
     private ServiceRepository serviceRepository;
+    private EquipmentItemRepository itemRepository;
     private ScheduleChecker scheduleChecker;
 
     @Autowired
     public VisitService(VisitRepository visitRepository,
                         ServiceRepository serviceRepository,
+                        EquipmentItemRepository itemRepository,
                         ScheduleChecker scheduleChecker) {
         this.visitRepository = visitRepository;
         this.serviceRepository = serviceRepository;
+        this.itemRepository = itemRepository;
         this.scheduleChecker = scheduleChecker;
     }
 
@@ -34,9 +37,8 @@ public class VisitService {
         Service service = serviceRepository.findById(serviceId)
                 .orElseThrow(() -> new EntityRecordNotFoundException("Service not found with id : " + serviceId));
 
-        // TODO: find suitable equipmentItems
-        List<EquipmentItem> suitableEqItems = new ArrayList<>();
-        //...
+        List<EquipmentItem> suitableEqItems = itemRepository.findAllSuitableForService(serviceId);
+        suitableEqItems.forEach(item -> System.out.println(item.getName()));
 
         Calendar now = Calendar.getInstance();
         // temp for testing ===
