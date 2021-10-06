@@ -55,31 +55,18 @@ public class ScheduleChecker {
         if (isWorkerFree(currentCheckStart, currentCheckEnd, worker)) {
 
             // get first available room
-            Room availableRoom = null;
-            for (Room room : suitableRooms) {
-                if (isRoomFree(currentCheckStart, currentCheckEnd, room)) {
-                    availableRoom = room;
-                    break;
-                }
-            }
-            if (availableRoom == null) {
+            Optional<Room> availableRoom = getFirstAvailableRoom(suitableRooms, currentCheckStart, currentCheckEnd);
+            if (availableRoom.isEmpty()) {
                 return Optional.empty();
             }
 
             // TODO: if it's "itemless" service - don't check item schedules
-
             // get first available eqItem in available room
             List<EquipmentItem> suitableEqItems =
-                    equipmentItemRepository.findAllSuitableForServiceInRoom(service.getId(), availableRoom.getId());
-
-            EquipmentItem availableEqItem = null;
-            for (EquipmentItem item : suitableEqItems) {
-                if (isEqItemFree(currentCheckStart, currentCheckEnd, item)) {
-                    availableEqItem = item;
-                    break;
-                }
-            }
-            if (availableEqItem == null) {
+                    equipmentItemRepository.findAllSuitableForServiceInRoom(service.getId(), availableRoom.get().getId());
+            Optional<EquipmentItem> availableEqItem =
+                    getFirstAvailableEqItem(suitableEqItems, currentCheckStart, currentCheckEnd);
+            if (availableEqItem.isEmpty()) {
                 return Optional.empty();
             }
 
@@ -87,8 +74,8 @@ public class ScheduleChecker {
             Term term = new Term(currentCheckStart, currentCheckEnd);
             term.setServiceName(service.getName());
             term.setWorkerName(worker.getName() + " " + worker.getSurname());
-            term.setRoomName(availableEqItem.getRoom().getName());
-            term.setEqItemName(availableEqItem.getName());
+            term.setRoomName(availableEqItem.get().getRoom().getName());
+            term.setEqItemName(availableEqItem.get().getName());
 
             return Optional.of(term);
         } else {
@@ -104,6 +91,24 @@ public class ScheduleChecker {
 
     // TODO: refactor - code repetition
     //
+
+    private Optional<Room> getFirstAvailableRoom(List<Room> suitableRooms, Date currentCheckStart, Date currentCheckEnd) {
+        for (Room room : suitableRooms) {
+            if (isRoomFree(currentCheckStart, currentCheckEnd, room)) {
+                return Optional.of(room);
+            }
+        }
+        return Optional.empty();
+    }
+
+    private Optional<EquipmentItem> getFirstAvailableEqItem(List<EquipmentItem> suitableEqItems, Date currentCheckStart, Date currentCheckEnd) {
+        for (EquipmentItem item : suitableEqItems) {
+            if (isEqItemFree(currentCheckStart, currentCheckEnd, item)) {
+                return Optional.of(item);
+            }
+        }
+        return Optional.empty();
+    }
 
     public boolean isWorkerFree(Date start, Date end, User worker) {
         List<Schedule> existingWorkerEvents =
