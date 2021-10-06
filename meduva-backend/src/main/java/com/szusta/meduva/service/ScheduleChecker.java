@@ -52,10 +52,8 @@ public class ScheduleChecker {
         Date currentCheckEnd = getIntervalEnd(currentlyCheckedTime, service.getDurationInMin());
 
         Long workerId = getCurrentUserId();
-        List<Schedule> existingWorkerEvents =
-                (List<Schedule>) workerScheduleRepository.findAnyBetween(currentCheckStart, currentCheckEnd, workerId);
 
-        if (existingWorkerEvents.isEmpty()) {
+        if (isWorkerFree(currentCheckStart, currentCheckEnd, workerId)) {
             // TODO: check for free equipment Items
             // ..
             Term term = new Term(currentCheckStart, currentCheckEnd);
@@ -79,5 +77,11 @@ public class ScheduleChecker {
                     return new EntityRecordNotFoundException(errorMsg);
                 });
         return user.getId();
+    }
+
+    public boolean isWorkerFree(Date start, Date end, Long workerId) {
+        List<Schedule> existingWorkerEvents =
+                (List<Schedule>) workerScheduleRepository.findAnyBetween(start, end, workerId);
+        return existingWorkerEvents.isEmpty();
     }
 }

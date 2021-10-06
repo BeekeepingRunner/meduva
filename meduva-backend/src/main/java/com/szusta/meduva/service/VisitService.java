@@ -41,9 +41,9 @@ public class VisitService {
         suitableEqItems.forEach(item -> System.out.println(item.getName()));
 
         Calendar now = Calendar.getInstance();
-        // temp for testing ===
+        // temp for testing ===============
         now.add(Calendar.MONTH, 1);
-        //=========
+        //=================================
         Calendar currentlyCheckedTime = TimeUtils.roundToNextHalfHour(now);
 
         // check subsequent terms starting from now
