@@ -1,20 +1,15 @@
 package com.szusta.meduva.service;
 
-import com.szusta.meduva.exception.EntityRecordNotFoundException;
 import com.szusta.meduva.model.Service;
-import com.szusta.meduva.model.User;
 import com.szusta.meduva.model.equipment.EquipmentItem;
 import com.szusta.meduva.model.schedule.Schedule;
 import com.szusta.meduva.payload.Term;
 import com.szusta.meduva.repository.RoomRepository;
-import com.szusta.meduva.repository.UserRepository;
 import com.szusta.meduva.repository.equipment.EquipmentItemRepository;
 import com.szusta.meduva.repository.schedule.EquipmentScheduleRepository;
 import com.szusta.meduva.repository.schedule.RoomScheduleRepository;
 import com.szusta.meduva.repository.schedule.WorkerScheduleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -26,7 +21,7 @@ public class ScheduleChecker {
 
     private EquipmentItemRepository equipmentItemRepository;
     private RoomRepository roomRepository;
-    private UserRepository userRepository;
+    private UserService userService;
 
     private EquipmentScheduleRepository equipmentScheduleRepository;
     private RoomScheduleRepository roomScheduleRepository;
@@ -34,13 +29,14 @@ public class ScheduleChecker {
 
     @Autowired
     public ScheduleChecker(EquipmentItemRepository equipmentItemRepository,
-                           RoomRepository roomRepository, UserRepository userRepository,
+                           RoomRepository roomRepository,
+                           UserService userService,
                            EquipmentScheduleRepository equipmentScheduleRepository,
                            RoomScheduleRepository roomScheduleRepository,
                            WorkerScheduleRepository workerScheduleRepository) {
         this.equipmentItemRepository = equipmentItemRepository;
         this.roomRepository = roomRepository;
-        this.userRepository = userRepository;
+        this.userService = userService;
         this.equipmentScheduleRepository = equipmentScheduleRepository;
         this.roomScheduleRepository = roomScheduleRepository;
         this.workerScheduleRepository = workerScheduleRepository;
@@ -51,7 +47,7 @@ public class ScheduleChecker {
         Date currentCheckStart = currentlyCheckedTime.getTime();
         Date currentCheckEnd = getIntervalEnd(currentlyCheckedTime, service.getDurationInMin());
 
-        Long workerId = getCurrentUserId();
+        Long workerId = userService.getCurrentUserId();
 
         if (isWorkerFree(currentCheckStart, currentCheckEnd, workerId)) {
             // TODO: check for free equipment Items
@@ -67,16 +63,6 @@ public class ScheduleChecker {
         Calendar temp = (Calendar) currentlyCheckedTime.clone();
         temp.add(Calendar.MINUTE, serviceDurationInMinutes);
         return temp.getTime();
-    }
-
-    private Long getCurrentUserId() {
-        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        User user = userRepository.findByLogin(userDetails.getUsername())
-                .orElseThrow(() -> {
-                    String errorMsg = "Authenticated user couldn't be found in the database (login : " + userDetails.getUsername() + ")";
-                    return new EntityRecordNotFoundException(errorMsg);
-                });
-        return user.getId();
     }
 
     public boolean isWorkerFree(Date start, Date end, Long workerId) {

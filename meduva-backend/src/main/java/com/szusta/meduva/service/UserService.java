@@ -7,6 +7,8 @@ import com.szusta.meduva.model.User;
 import com.szusta.meduva.repository.RoleRepository;
 import com.szusta.meduva.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
@@ -80,4 +82,13 @@ public class UserService {
                 .orElseThrow(() -> new EntityRecordNotFoundException("user not found with id : " + id));
     }
 
+    public Long getCurrentUserId() {
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User user = userRepository.findByLogin(userDetails.getUsername())
+                .orElseThrow(() -> {
+                    String errorMsg = "Authenticated user couldn't be found in the database (login : " + userDetails.getUsername() + ")";
+                    return new EntityRecordNotFoundException(errorMsg);
+                });
+        return user.getId();
+    }
 }
