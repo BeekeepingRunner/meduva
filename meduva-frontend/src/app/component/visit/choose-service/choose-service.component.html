@@ -3,6 +3,9 @@
 
   <mat-progress-spinner *ngIf="generatingTerms" mode="indeterminate"></mat-progress-spinner>
   <br>
+  <div *ngIf="errorMessage" class="mat-warn">
+    {{ errorMessage }}
+  </div>
 
   <div>
     <table mat-table [dataSource]="services" class="mat-elevation-z8">

@@ -54,6 +54,7 @@ import { CalendarModule, DateAdapter } from 'angular-calendar';
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 import { ChooseServiceComponent } from './component/visit/choose-service/choose-service.component';
 import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
+import { PickTermComponent } from './component/visit/pick-term/pick-term.component';
 
 @NgModule({
   declarations: [
@@ -84,6 +85,7 @@ import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
     ModelDetailsComponent,
     FeedbackDialogComponent,
     ChooseServiceComponent,
+    PickTermComponent,
   ],
   imports: [
     BrowserModule,

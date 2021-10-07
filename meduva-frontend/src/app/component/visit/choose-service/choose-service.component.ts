@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import {Service} from "../../../model/service";
 import {ServicesService} from "../../../service/services.service";
+import {VisitService} from "../../../service/visit.service";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-choose-service',
@@ -13,8 +15,12 @@ export class ChooseServiceComponent implements OnInit {
   displayedColumns: string[] = ['name', 'duration', 'price'];
   generatingTerms: boolean = false;
 
+  errorMessage: string = '';
+
   constructor(
     private servicesService: ServicesService,
+    private visitService: VisitService,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
@@ -28,12 +34,13 @@ export class ChooseServiceComponent implements OnInit {
   getTermsForService(serviceId: number): void {
     this.generatingTerms = true;
     this.servicesService.getTermsForService(serviceId).subscribe(
-      data => {
-        console.log(data);
+      terms => {
+        this.visitService.saveTerms(terms);
         this.generatingTerms = false;
+        this.router.navigate(['/visit/pick-term']);
       },
       err => {
-        console.log(err);
+        this.errorMessage = err.error.message;
         this.generatingTerms = false;
       }
     );

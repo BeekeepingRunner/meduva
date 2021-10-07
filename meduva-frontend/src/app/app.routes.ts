@@ -22,6 +22,7 @@ import {EquipmentListComponent} from "./component/equipment/equipment-list/equip
 import {NewModelComponent} from "./component/equipment/new-model/new-model.component";
 import {ModelDetailsComponent} from "./component/equipment/model-details/model-details.component";
 import {ChooseServiceComponent} from "./component/visit/choose-service/choose-service.component";
+import {PickTermComponent} from "./component/visit/pick-term/pick-term.component";
 
 export const routes: Routes = [
   { path: 'home', component: HomeComponent },
@@ -140,6 +141,14 @@ export const routes: Routes = [
     canActivate: [RoleGuard],
     data: {
       expectedRole: roleNames[UserRole.ROLE_CLIENT]
+    }
+  },
+  {
+    path: 'visit/pick-term',
+    component: PickTermComponent,
+    canActivate: [RoleGuard],
+    data: {
+      expectedRole: roleNames[UserRole.ROLE_WORKER]
     }
   },
   { path: '', redirectTo: 'home', pathMatch: 'full' }
