@@ -20,7 +20,7 @@ export class ChooseServiceComponent implements OnInit {
   constructor(
     private servicesService: ServicesService,
     private visitService: VisitService,
-    private router: Router
+    private router: Router,
   ) { }
 
   ngOnInit(): void {

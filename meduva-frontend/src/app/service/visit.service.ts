@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 
 export interface Term {
-  startTime: Date;
-  endTime: Date;
+  startTime: string;
+  endTime: string;
 
   serviceName: string;
   workerName: string;

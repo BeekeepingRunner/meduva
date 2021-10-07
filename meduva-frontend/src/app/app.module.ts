@@ -32,7 +32,7 @@ import {routes} from "./app.routes";
 import { AccessDeniedComponent } from './component/access-denied/access-denied.component';
 import { ServiceListComponent } from './component/services/service-list/service-list.component';
 import { NewServiceComponent } from './component/services/new-service/new-service.component';
-import {CurrencyPipe} from "@angular/common";
+import {CurrencyPipe, DatePipe} from "@angular/common";
 import {MatCardModule} from "@angular/material/card";
 import {MatListModule} from "@angular/material/list";
 import { ServiceDetailsComponent } from './component/services/service-details/service-details.component';
@@ -118,6 +118,7 @@ import { PickTermComponent } from './component/visit/pick-term/pick-term.compone
   providers: [
     authInterceptorProviders,
     CurrencyPipe,
+    DatePipe,
   ],
   bootstrap: [AppComponent]
 })
