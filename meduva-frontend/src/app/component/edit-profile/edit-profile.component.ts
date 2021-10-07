@@ -102,8 +102,6 @@ export class EditProfileComponent implements OnInit {
     const surname: string = this.form.controls.surname.value;
     const phoneNumber: string = this.form.controls.phoneNumber.value;
 
-
-
     this.userService.editUser(name,surname,phoneNumber, this.id).subscribe(
       data => {
         this.editFailed = false;
