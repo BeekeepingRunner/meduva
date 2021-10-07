@@ -3,6 +3,7 @@ import {Role, User} from "../../model/user";
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {UserService} from "../../service/user.service";
 import {ActivatedRoute} from "@angular/router";
+import {JwtTokenStorageService, TokenUserInfo} from "../../service/token/jwt-token-storage.service";
 
 
 @Component({
@@ -12,6 +13,7 @@ import {ActivatedRoute} from "@angular/router";
 })
 export class EditProfileComponent implements OnInit {
 
+  tokenUserInfo!: TokenUserInfo | null;
   user!: User;
   error!: string;
   form!: FormGroup;
@@ -24,7 +26,8 @@ export class EditProfileComponent implements OnInit {
 
   constructor(private formBuilder: FormBuilder,
               private userService: UserService,
-              private route: ActivatedRoute) { }
+              private route: ActivatedRoute,
+              private token: JwtTokenStorageService) { }
 
   ngOnInit(): void {
     this.populateFormWithUserData();
@@ -56,7 +59,20 @@ export class EditProfileComponent implements OnInit {
   }
 
   private populateFormWithUserData(){
-    this.id = this.route.snapshot.params.id;
+    console.log(typeof(this.route.snapshot.params.id));
+    if(this.route.snapshot.params.id != undefined){
+      this.id = this.route.snapshot.params.id;
+        this.getUserDetails();
+    }else{
+      this.tokenUserInfo = this.token.getCurrentUser();
+      if(this.tokenUserInfo != null) {
+        this.id = this.tokenUserInfo.id;
+        this.getUserDetails();
+      }
+    }
+  }
+
+  private getUserDetails(){
     this.userService.getUserDetails(this.id).subscribe(
       (data: User) => {
         this.user = data;
@@ -86,18 +102,18 @@ export class EditProfileComponent implements OnInit {
     const surname: string = this.form.controls.surname.value;
     const phoneNumber: string = this.form.controls.phoneNumber.value;
 
+
+
     this.userService.editUser(name,surname,phoneNumber, this.id).subscribe(
       data => {
         this.editFailed = false;
         this.editSuccessful = true;
-
       },
       err => {
         this.errorMessage = err.error.message;
         this.editFailed = true;
       }
     )
-
-
   }
+
 }
