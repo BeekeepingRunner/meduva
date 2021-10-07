@@ -13,7 +13,6 @@ import {JwtTokenStorageService, TokenUserInfo} from "../../service/token/jwt-tok
 })
 export class EditProfileComponent implements OnInit {
 
-  tokenUserInfo!: TokenUserInfo | null;
   user!: User;
   error!: string;
   form!: FormGroup;
@@ -22,6 +21,7 @@ export class EditProfileComponent implements OnInit {
   editSuccessful: boolean = false;
 
   id!: number;
+  tokenUserInfo!: TokenUserInfo | null;
 
 
   constructor(private formBuilder: FormBuilder,
