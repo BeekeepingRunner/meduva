@@ -53,6 +53,7 @@ import { FeedbackDialogComponent } from './component/dialog/feedback-dialog/feed
 import { CalendarModule, DateAdapter } from 'angular-calendar';
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 import { ChooseServiceComponent } from './component/visit/choose-service/choose-service.component';
+import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
 
 @NgModule({
   declarations: [
@@ -106,7 +107,8 @@ import { ChooseServiceComponent } from './component/visit/choose-service/choose-
     MatListModule,
     MatDialogModule,
     MatStepperModule,
-    CalendarModule.forRoot({ provide: DateAdapter, useFactory: adapterFactory }),
+    CalendarModule.forRoot({provide: DateAdapter, useFactory: adapterFactory}),
+    MatProgressSpinnerModule,
   ],
   exports: [
     RouterModule

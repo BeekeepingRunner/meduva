@@ -1,5 +1,9 @@
 <div>
   <h2>Choose service</h2>
+
+  <mat-progress-spinner *ngIf="generatingTerms" mode="indeterminate"></mat-progress-spinner>
+  <br>
+
   <div>
     <table mat-table [dataSource]="services" class="mat-elevation-z8">
 

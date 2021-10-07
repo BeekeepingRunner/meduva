@@ -11,6 +11,7 @@ export class ChooseServiceComponent implements OnInit {
 
   services: Service[] = [];
   displayedColumns: string[] = ['name', 'duration', 'price'];
+  generatingTerms: boolean = false;
 
   constructor(
     private servicesService: ServicesService,
@@ -25,9 +26,15 @@ export class ChooseServiceComponent implements OnInit {
   }
 
   getTermsForService(serviceId: number): void {
+    this.generatingTerms = true;
     this.servicesService.getTermsForService(serviceId).subscribe(
       data => {
         console.log(data);
+        this.generatingTerms = false;
+      },
+      err => {
+        console.log(err);
+        this.generatingTerms = false;
       }
     );
   }
