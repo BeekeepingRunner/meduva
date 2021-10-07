@@ -11,6 +11,7 @@ import { RegisterComponent } from './component/register/register.component';
 import { HomeComponent } from './component/home/home.component';
 import { ProfileComponent } from './component/profile/profile.component';
 import { BoardAdminComponent } from './component/board-admin/board-admin.component';
+import { SpecificUserComponent} from "./component/specific-user-profile/specific-user.component";
 import { EditProfileComponent } from './component/edit-profile/edit-profile.component';
 import { EditEmailComponent } from './component/edit-email/edit-email.component';
 import { ActivateNewEmailComponent } from './component/activate-new-email/activate-new-email.component';
@@ -30,6 +31,7 @@ import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatInputModule} from "@angular/material/input";
 import { UserListComponent } from './component/user-list/user-list.component';
 import {MatTableModule} from "@angular/material/table";
+
 import {routes} from "./app.routes";
 import { AccessDeniedComponent } from './component/access-denied/access-denied.component';
 import { ServiceListComponent } from './component/services/service-list/service-list.component';
@@ -52,6 +54,9 @@ import { ServicesSelectComponent } from './component/equipment/new-model/service
 import { ModelFormComponent } from './component/equipment/new-model/model-form/model-form.component';
 import { ModelDetailsComponent } from './component/equipment/model-details/model-details.component';
 import { FeedbackDialogComponent } from './component/dialog/feedback-dialog/feedback-dialog.component';
+import {EditRoleComponent} from "./component/edit-role/edit-role.component";
+import {MatSelectModule} from "@angular/material/select";
+
 
 
 @NgModule({
@@ -67,6 +72,7 @@ import { FeedbackDialogComponent } from './component/dialog/feedback-dialog/feed
     EditEmailComponent,
     ActivateNewEmailComponent,
     UserListComponent,
+    SpecificUserComponent,
     AccessDeniedComponent,
     ServiceListComponent,
     NewServiceComponent,
@@ -84,6 +90,7 @@ import { FeedbackDialogComponent } from './component/dialog/feedback-dialog/feed
     ModelFormComponent,
     ModelDetailsComponent,
     FeedbackDialogComponent,
+    EditRoleComponent,
   ],
   imports: [
     BrowserModule,
@@ -107,6 +114,7 @@ import { FeedbackDialogComponent } from './component/dialog/feedback-dialog/feed
     MatListModule,
     MatDialogModule,
     MatStepperModule,
+    MatSelectModule,
   ],
   exports: [
     RouterModule

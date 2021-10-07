@@ -23,6 +23,8 @@ import {ActivateNewEmailComponent} from "./component/activate-new-email/activate
 import {EquipmentListComponent} from "./component/equipment/equipment-list/equipment-list.component";
 import {NewModelComponent} from "./component/equipment/new-model/new-model.component";
 import {ModelDetailsComponent} from "./component/equipment/model-details/model-details.component";
+import {SpecificUserComponent} from "./component/specific-user-profile/specific-user.component";
+import {EditRoleComponent} from "./component/edit-role/edit-role.component";
 
 
 export const routes: Routes = [
@@ -71,6 +73,22 @@ export const routes: Routes = [
   {
     path: 'users',
     component: UserListComponent,
+    canActivate: [RoleGuard],
+    data: {
+      expectedRole: roleNames[UserRole.ROLE_ADMIN]
+    }
+  },
+  {
+    path: 'specific-user/:id',
+    component:SpecificUserComponent,
+    canActivate: [RoleGuard],
+    data: {
+      expectedRole: roleNames[UserRole.ROLE_RECEPTIONIST]
+    }
+  },
+  {
+    path: 'specific-user/edit-role/:id',
+    component: EditRoleComponent,
     canActivate: [RoleGuard],
     data: {
       expectedRole: roleNames[UserRole.ROLE_ADMIN]
