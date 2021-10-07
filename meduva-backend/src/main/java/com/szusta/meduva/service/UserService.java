@@ -94,6 +94,7 @@ public class UserService {
         userRepository.save(user);
     }
 
+    @Transactional
     public User changeUserRole(Long userId, Long roleId){
 
         User user = userRepository.findById(userId).orElseThrow(()-> new EntityRecordNotFoundException("User not found with id : " + userId));
