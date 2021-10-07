@@ -12,7 +12,10 @@
     </ng-container>
     <ng-container matColumnDef="item">
       <th mat-header-cell *matHeaderCellDef>Item code</th>
-      <td mat-cell *matCellDef="let term">{{ term.eqItemName }}</td>
+      <td mat-cell *matCellDef="let term">
+        <span *ngIf="term.eqItemName">{{ term.eqItemName }}</span>
+        <span *ngIf="!term.eqItemName">-</span>
+      </td>
     </ng-container>
 
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>

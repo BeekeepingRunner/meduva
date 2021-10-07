@@ -4,9 +4,11 @@ import com.szusta.meduva.model.Room;
 import com.szusta.meduva.model.Service;
 import com.szusta.meduva.model.User;
 import com.szusta.meduva.model.equipment.EquipmentItem;
+import com.szusta.meduva.model.equipment.EquipmentModel;
 import com.szusta.meduva.model.schedule.Schedule;
 import com.szusta.meduva.payload.Term;
 import com.szusta.meduva.repository.equipment.EquipmentItemRepository;
+import com.szusta.meduva.repository.equipment.EquipmentModelRepository;
 import com.szusta.meduva.repository.schedule.EquipmentScheduleRepository;
 import com.szusta.meduva.repository.schedule.RoomScheduleRepository;
 import com.szusta.meduva.repository.schedule.WorkerScheduleRepository;
@@ -21,6 +23,7 @@ import java.util.Optional;
 public class ScheduleChecker {
 
     private EquipmentItemRepository equipmentItemRepository;
+    private EquipmentModelRepository equipmentModelRepository;
     private UserService userService;
 
     private EquipmentScheduleRepository equipmentScheduleRepository;
@@ -29,11 +32,13 @@ public class ScheduleChecker {
 
     @Autowired
     public ScheduleChecker(EquipmentItemRepository equipmentItemRepository,
+                           EquipmentModelRepository equipmentModelRepository,
                            UserService userService,
                            EquipmentScheduleRepository equipmentScheduleRepository,
                            RoomScheduleRepository roomScheduleRepository,
                            WorkerScheduleRepository workerScheduleRepository) {
         this.equipmentItemRepository = equipmentItemRepository;
+        this.equipmentModelRepository = equipmentModelRepository;
         this.userService = userService;
         this.equipmentScheduleRepository = equipmentScheduleRepository;
         this.roomScheduleRepository = roomScheduleRepository;
@@ -44,9 +49,9 @@ public class ScheduleChecker {
 
         Date currentCheckStart = currentlyCheckedTime.getTime();
         Date currentCheckEnd = getIntervalEnd(currentlyCheckedTime, service.getDurationInMin());
-
         Long workerId = userService.getCurrentUserId();
         User worker = userService.getUser(workerId);
+
         if (!isWorkerFree(currentCheckStart, currentCheckEnd, worker)) {
             return Optional.empty();
         }
@@ -55,19 +60,23 @@ public class ScheduleChecker {
         if (availableRoom.isEmpty()) {
             return Optional.empty();
         }
-        // TODO: if it's "itemless" service - don't check item schedules
-        Optional<EquipmentItem> availableEqItem =
-                getFirstAvailableEqItem(service, availableRoom.get(), currentCheckStart, currentCheckEnd);
-        if (availableEqItem.isEmpty()) {
-            return Optional.empty();
+
+        boolean itemless = isServiceItemless(service.getId());
+        Optional<EquipmentItem> availableEqItem = Optional.empty();
+        if (!itemless) {
+            availableEqItem = getFirstAvailableEqItem(service, availableRoom.get(), currentCheckStart, currentCheckEnd);
+            if (availableEqItem.isEmpty()) {
+                return Optional.empty();
+            }
         }
 
         Term term = new Term(currentCheckStart, currentCheckEnd);
         term.setServiceName(service.getName());
         term.setWorkerName(worker.getName() + " " + worker.getSurname());
-        term.setRoomName(availableEqItem.get().getRoom().getName());
-        term.setEqItemName(availableEqItem.get().getName());
-
+        term.setRoomName(availableRoom.get().getName());
+        if (!itemless) {
+            term.setEqItemName(availableEqItem.get().getName());
+        }
         return Optional.of(term);
     }
 
@@ -100,6 +109,11 @@ public class ScheduleChecker {
             }
         }
         return Optional.empty();
+    }
+
+    private boolean isServiceItemless(Long serviceId) {
+        List<EquipmentModel> models = this.equipmentModelRepository.findByService(serviceId);
+        return models.isEmpty();
     }
 
     public boolean isWorkerFree(Date start, Date end, User worker) {

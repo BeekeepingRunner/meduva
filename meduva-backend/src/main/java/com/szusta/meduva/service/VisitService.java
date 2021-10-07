@@ -48,12 +48,6 @@ public class VisitService {
             return Collections.emptyList();
         }
 
-        // In the future, we'll have to differentiate between "itemless" service, and one that
-        // requires items, but hasn't any assigned to it.
-        if (!doesRequiredEquipmentExist(serviceId)) {
-            return Collections.emptyList();
-        }
-
         Calendar now = Calendar.getInstance();
         // temp for testing ===============
         now.add(Calendar.MONTH, 1);
