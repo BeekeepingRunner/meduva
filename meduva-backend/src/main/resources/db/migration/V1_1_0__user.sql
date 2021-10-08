@@ -55,10 +55,10 @@ INSERT INTO role VALUES
 -- hashed password is 1234 --
 INSERT INTO user VALUES
 (1, "john.doe@gmail.com", "sampleLogin", "$2a$10$9qx.WFyh9819GyUlQh0M5uj6JZo7FXETpDH5BWeMpJYKY91afWZ2y", "John", "Doe", "48123123123", 0),
-(2, "aaa.doe@gmail.com", "client", "$2a$10$9qx.WFyh9819GyUlQh0M5uj6JZo7FXETpDH5BWeMpJYKY91afWZ2y", "John", "Doe", "48123123123", 0),
-(3, "bbb.doe@gmail.com", "worker", "$2a$10$9qx.WFyh9819GyUlQh0M5uj6JZo7FXETpDH5BWeMpJYKY91afWZ2y", "John", "Doe", "48123123123", 0),
-(4, "ccc.doe@gmail.com", "receptionist", "$2a$10$9qx.WFyh9819GyUlQh0M5uj6JZo7FXETpDH5BWeMpJYKY91afWZ2y", "John", "Doe", "48123123123", 0),
-(5, "ddd.doe@gmail.com", "admin", "$2a$10$9qx.WFyh9819GyUlQh0M5uj6JZo7FXETpDH5BWeMpJYKY91afWZ2y", "John", "Doe", "48123123123", 0);
+(2, "aaa.doe@gmail.com", "client", "$2a$10$9qx.WFyh9819GyUlQh0M5uj6JZo7FXETpDH5BWeMpJYKY91afWZ2y", "Mary", "Jane", "48123123123", 0),
+(3, "bbb.doe@gmail.com", "worker", "$2a$10$9qx.WFyh9819GyUlQh0M5uj6JZo7FXETpDH5BWeMpJYKY91afWZ2y", "Peter", "Parker", "48123123123", 0),
+(4, "ccc.doe@gmail.com", "receptionist", "$2a$10$9qx.WFyh9819GyUlQh0M5uj6JZo7FXETpDH5BWeMpJYKY91afWZ2y", "Geralt", "Fromrivia", "48123123123", 0),
+(5, "ddd.doe@gmail.com", "admin", "$2a$10$9qx.WFyh9819GyUlQh0M5uj6JZo7FXETpDH5BWeMpJYKY91afWZ2y", "Włodzimierz", "Smolarek", "48123123123", 0);
 
 INSERT INTO user_role VALUES
 (1, 1),

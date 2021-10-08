@@ -1,1 +1,30 @@
-<p>summary works!</p>
+<h3>Visit Summary</h3>
+<table>
+  <tr>
+    <td><b>Date: </b></td>
+    <td>{{ term?.startTime }}</td>
+  </tr>
+  <tr>
+    <td><b>Client: </b></td>
+    <td>{{ client?.name + ' ' + client?.surname + ' (' + client?.phoneNumber + ')' }}</td>
+  </tr>
+  <tr>
+    <td><b>Worker: </b></td>
+    <td>{{ term?.workerName }}</td>
+  </tr>
+  <tr>
+    <td><b>Service: </b></td>
+    <td>{{ term?.serviceName }}</td>
+  </tr>
+  <tr>
+    <td><b>Room: </b></td>
+    <td>{{ term?.roomName }}</td>
+  </tr>
+  <tr *ngIf="term?.eqItemName">
+    <td><b>Equipment item code: </b></td>
+    <td>{{ term?.eqItemName }}</td>
+  </tr>
+
+  <br>
+  <button mat-raised-button color="primary" (click)="submitVisit()">Submit a visit</button>
+</table>
