@@ -71,11 +71,11 @@ public class ScheduleChecker {
         }
 
         Term term = new Term(currentCheckStart, currentCheckEnd);
-        term.setServiceName(service.getName());
-        term.setWorkerName(worker.getName() + " " + worker.getSurname());
-        term.setRoomName(availableRoom.get().getName());
+        term.setServiceId(service.getId());
+        term.setWorkerId(worker.getId());
+        term.setRoomId(availableRoom.get().getId());
         if (!itemless) {
-            term.setEqItemName(availableEqItem.get().getName());
+            term.setEqItemId(availableEqItem.get().getId());
         }
         return Optional.of(term);
     }

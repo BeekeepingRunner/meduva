@@ -56,6 +56,11 @@ public class EquipmentService {
                 .orElseThrow(() -> new EntityRecordNotFoundException("Equipment model not found with id : " + id));
     }
 
+    public EquipmentItem findItemById(Long id) {
+        return this.equipmentItemRepository.findById(id)
+                .orElseThrow(() -> new EntityRecordNotFoundException("Equipment item not found with id : " + id));
+    }
+
     public boolean doesModelExistByName(String modelName) {
         return this.equipmentModelRepository.existsByName(modelName);
     }

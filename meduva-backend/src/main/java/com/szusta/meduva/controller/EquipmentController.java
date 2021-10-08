@@ -1,5 +1,6 @@
 package com.szusta.meduva.controller;
 
+import com.szusta.meduva.model.equipment.EquipmentItem;
 import com.szusta.meduva.model.equipment.EquipmentModel;
 import com.szusta.meduva.payload.request.NewEqModelRequest;
 import com.szusta.meduva.service.EquipmentService;
@@ -33,6 +34,11 @@ public class EquipmentController {
     @GetMapping("/model/{id}")
     public EquipmentModel findModelById(@PathVariable Long id) {
         return this.equipmentService.findModelById(id);
+    }
+
+    @GetMapping("/item/{id}")
+    public EquipmentItem findItemById(@PathVariable Long id) {
+        return this.equipmentService.findItemById(id);
     }
 
     @PostMapping("/model/new")

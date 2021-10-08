@@ -11,7 +11,7 @@ import {Router} from "@angular/router";
 export class PickTermComponent implements OnInit {
 
   availableTerms: Term[] = [];
-  displayedColumns: string[] = ["date", "room", "item"];
+  displayedColumns: string[] = ["date"];
 
   constructor(
     private visitService: VisitService,

@@ -6,23 +6,23 @@
   </tr>
   <tr>
     <td><b>Client: </b></td>
-    <td>{{ client?.name + ' ' + client?.surname + ' (' + client?.phoneNumber + ')' }}</td>
+    <td>{{ clientInfo }}</td>
   </tr>
   <tr>
     <td><b>Worker: </b></td>
-    <td>{{ term?.workerName }}</td>
+    <td>{{ workerInfo }}</td>
   </tr>
   <tr>
     <td><b>Service: </b></td>
-    <td>{{ term?.serviceName }}</td>
+    <td>{{ serviceName }}</td>
   </tr>
   <tr>
     <td><b>Room: </b></td>
-    <td>{{ term?.roomName }}</td>
+    <td>{{ roomName }}</td>
   </tr>
-  <tr *ngIf="term?.eqItemName">
+  <tr *ngIf="term?.eqItemId">
     <td><b>Equipment item code: </b></td>
-    <td>{{ term?.eqItemName }}</td>
+    <td>{{ eqItemName }}</td>
   </tr>
 
   <br>

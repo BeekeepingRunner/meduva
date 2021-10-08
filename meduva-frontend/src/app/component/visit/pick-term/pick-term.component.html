@@ -6,17 +6,6 @@
       <th mat-header-cell *matHeaderCellDef>Date</th>
       <td mat-cell *matCellDef="let term"><b>{{ term.startTime }}</b></td>
     </ng-container>
-    <ng-container matColumnDef="room">
-      <th mat-header-cell *matHeaderCellDef>Room</th>
-      <td mat-cell *matCellDef="let term">{{ term.roomName }}</td>
-    </ng-container>
-    <ng-container matColumnDef="item">
-      <th mat-header-cell *matHeaderCellDef>Item code</th>
-      <td mat-cell *matCellDef="let term">
-        <span *ngIf="term.eqItemName">{{ term.eqItemName }}</span>
-        <span *ngIf="!term.eqItemName">-</span>
-      </td>
-    </ng-container>
 
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
     <tr mat-row *matRowDef="let row; let term; columns: displayedColumns;"

@@ -14,10 +14,11 @@ public class Term {
     Date startTime;
     Date endTime;
 
-    String serviceName;
-    String workerName;
-    String roomName;
-    String eqItemName;
+    Long serviceId;
+    Long workerId;
+    Long clientId;
+    Long roomId;
+    Long eqItemId;
 
     public Term(Date startTime, Date endTime) {
         this.startTime = startTime;

@@ -2,13 +2,14 @@ import { Injectable } from '@angular/core';
 import {Client} from "../model/client";
 
 export interface Term {
-  startTime: string;
-  endTime: string;
+  startTime: string,
+  endTime: string,
 
-  serviceName: string;
-  workerName: string;
-  roomName: string;
-  eqItemName: string;
+  serviceId: number,
+  workerId: number,
+  clientId: number,
+  roomId: number,
+  eqItemId: number,
 }
 
 enum VisitKey {
@@ -63,4 +64,7 @@ export class VisitService {
     }
   }
 
+  saveVisit(term: Term | null) {
+
+  }
 }

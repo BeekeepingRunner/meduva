@@ -6,7 +6,7 @@ import {environment} from "../../environments/environment";
 import {Service} from "../model/service";
 import {map} from "rxjs/operators";
 import {trimJSON} from "../util/json/trim";
-import {EquipmentModel} from "../model/equipment";
+import {EquipmentItem, EquipmentModel} from "../model/equipment";
 import {NewModelRequest} from "../component/equipment/new-model/new-model.component";
 
 @Injectable({
@@ -24,6 +24,10 @@ export class EquipmentService {
 
   public getModelById(modelId: number): Observable<EquipmentModel> {
     return this.httpClient.get<EquipmentModel>(environment.API_BASE_URL + 'api/equipment/model/' + modelId);
+  }
+
+  getItemById(eqItemId: number): Observable<EquipmentItem> {
+    return this.httpClient.get<EquipmentModel>(environment.API_BASE_URL + 'api/equipment/item/' + eqItemId);
   }
 
   public deleteModelById(modelId: number | undefined): Observable<any> {

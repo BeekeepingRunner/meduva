@@ -50,7 +50,11 @@ export class PickClientComponent implements OnInit {
   }
 
   summarize(client: Client) {
-    this.visitService.saveSelectedClient(client);
-    this.router.navigate(['/visit/summary']);
+    let selectedTerm = this.visitService.getSelectedTerm();
+    if (selectedTerm != null) {
+      selectedTerm.clientId = client.id;
+      this.visitService.saveSelectedTerm(selectedTerm);
+      this.router.navigate(['/visit/summary']);
+    }
   }
 }
