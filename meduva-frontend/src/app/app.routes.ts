@@ -43,8 +43,24 @@ export const routes: Routes = [
     }
   },
   {
+    path: 'profile/edit-profile',
+    component: EditProfileComponent,
+    canActivate: [RoleGuard],
+    data: {
+      expectedRole: roleNames[UserRole.ROLE_CLIENT]
+    }
+  },
+  {
     path: 'profile/edit-profile/:id',
     component: EditProfileComponent,
+    canActivate: [RoleGuard],
+    data: {
+      expectedRole: roleNames[UserRole.ROLE_ADMIN]
+    }
+  },
+  {
+    path: 'profile/edit-email',
+    component: EditEmailComponent,
     canActivate: [RoleGuard],
     data: {
       expectedRole: roleNames[UserRole.ROLE_CLIENT]
@@ -55,7 +71,7 @@ export const routes: Routes = [
     component: EditEmailComponent,
     canActivate: [RoleGuard],
     data: {
-      expectedRole: roleNames[UserRole.ROLE_CLIENT]
+      expectedRole: roleNames[UserRole.ROLE_ADMIN]
     }
   },
   {

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {ActivatedRoute} from "@angular/router";
 import {EmailService} from "../../service/email.service";
+import {JwtTokenStorageService, TokenUserInfo} from "../../service/token/jwt-token-storage.service";
 
 @Component({
   selector: 'app-edit-email',
@@ -16,11 +17,13 @@ export class EditEmailComponent implements OnInit {
   sendFailed: boolean = false;
   resultInfo: string = '';
   id!: number;
+  tokenUserInfo!: TokenUserInfo | null;
 
   constructor(
     private formBuilder: FormBuilder,
     private emailService: EmailService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private token: JwtTokenStorageService
   ) { }
 
   ngOnInit(): void {
@@ -35,7 +38,14 @@ export class EditEmailComponent implements OnInit {
 
   onSubmit(): void {
     this.submitted = true;
-    this.id = this.route.snapshot.params.id;
+    if(this.route.snapshot.params.id != undefined){
+      this.id = this.route.snapshot.params.id;
+    }else{
+      this.tokenUserInfo = this.token.getCurrentUser();
+      if(this.tokenUserInfo != null){
+        this.id = this.tokenUserInfo.id;
+      }
+    }
 
     this.emailService.sendEmailResetLinkMail(this.id, this.form.get('email')?.value).subscribe(
       this.sentMailMessageObserver
