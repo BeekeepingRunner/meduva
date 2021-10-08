@@ -4,6 +4,7 @@ import {DatePipe} from "@angular/common";
 import {Router} from "@angular/router";
 import {Client} from "../../../model/client";
 import {UserService} from "../../../service/user.service";
+import {JwtTokenStorageService} from "../../../service/token/jwt-token-storage.service";
 
 @Component({
   selector: 'app-pick-client',
@@ -19,6 +20,7 @@ export class PickClientComponent implements OnInit {
   constructor(
     private visitService: VisitService,
     private userService: UserService,
+    private jwtTokenStorageService: JwtTokenStorageService,
     private router: Router,
   ) { }
 
@@ -28,7 +30,7 @@ export class PickClientComponent implements OnInit {
     this.userService.getAllUsers().subscribe(
       clientUsers => {
         this.clients = clientUsers;
-        console.log(this.clients);
+        this.deleteCurrentUserFromClients();
       }
     );
   }
@@ -42,4 +44,13 @@ export class PickClientComponent implements OnInit {
     }
   }
 
+  private deleteCurrentUserFromClients() {
+    let currentUserId = this.jwtTokenStorageService.getCurrentUser()?.id;
+    this.clients = this.clients.filter(client => client.id != currentUserId);
+  }
+
+  summarize(client: Client) {
+    this.visitService.saveSelectedClient(client);
+    this.router.navigate(['/visit/summary']);
+  }
 }

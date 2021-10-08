@@ -62,6 +62,7 @@ import { PickTermComponent } from './component/visit/pick-term/pick-term.compone
 import {EditRoleComponent} from "./component/edit-role/edit-role.component";
 import {MatSelectModule} from "@angular/material/select";
 import { PickClientComponent } from './component/visit/pick-client/pick-client.component';
+import { SummaryComponent } from './component/visit/summary/summary.component';
 
 @NgModule({
   declarations: [
@@ -98,6 +99,7 @@ import { PickClientComponent } from './component/visit/pick-client/pick-client.c
     PickTermComponent,
     EditRoleComponent,
     PickClientComponent,
+    SummaryComponent,
   ],
   imports: [
     BrowserModule,

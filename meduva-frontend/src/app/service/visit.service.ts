@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import {Client} from "../model/client";
 
 export interface Term {
   startTime: string;
@@ -10,8 +11,11 @@ export interface Term {
   eqItemName: string;
 }
 
-const AVAIL_TERMS_KEY = "AVAILABLE_TERMS";
-const SELECTED_TERM_KEY = "SELECTED_TERM";
+enum VisitKey {
+  AVAIL_TERMS_KEY = "AVAILABLE_TERMS",
+  SELECTED_TERM_KEY = "SELECTED_TERM",
+  SELECTED_CLIENT_KEY = "SELECTED_CLIENT"
+}
 
 @Injectable({
   providedIn: 'root'
@@ -21,11 +25,19 @@ export class VisitService {
   constructor() { }
 
   saveAvailTerms(terms: Term[]) : void {
-    window.sessionStorage.setItem(AVAIL_TERMS_KEY, JSON.stringify(terms));
+    window.sessionStorage.setItem(VisitKey.AVAIL_TERMS_KEY, JSON.stringify(terms));
+  }
+
+  saveSelectedTerm(term: Term) : void {
+    window.sessionStorage.setItem(VisitKey.SELECTED_TERM_KEY, JSON.stringify(term));
+  }
+
+  saveSelectedClient(client: Client) : void {
+    window.sessionStorage.setItem(VisitKey.SELECTED_CLIENT_KEY, JSON.stringify(client));
   }
 
   getAvailTerms() : Term[] {
-    let termsJSON: string | null = window.sessionStorage.getItem(AVAIL_TERMS_KEY);
+    let termsJSON: string | null = window.sessionStorage.getItem(VisitKey.AVAIL_TERMS_KEY);
     if (termsJSON) {
       return JSON.parse(termsJSON);
     } else {
@@ -33,16 +45,22 @@ export class VisitService {
     }
   }
 
-  saveSelectedTerm(term: Term) : void {
-    window.sessionStorage.setItem(SELECTED_TERM_KEY, JSON.stringify(term));
-  }
-
   getSelectedTerm() : Term | null {
-    let termJSON: string | null = window.sessionStorage.getItem(SELECTED_TERM_KEY);
+    let termJSON: string | null = window.sessionStorage.getItem(VisitKey.SELECTED_TERM_KEY);
     if (termJSON) {
       return JSON.parse(termJSON);
     } else {
       return null;
     }
   }
+
+  getSelectedClient() : Client | null {
+    let clientJSON: string | null = window.sessionStorage.getItem(VisitKey.SELECTED_CLIENT_KEY);
+    if (clientJSON) {
+      return JSON.parse(clientJSON);
+    } else {
+      return null;
+    }
+  }
+
 }
