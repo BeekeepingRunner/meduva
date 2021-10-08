@@ -12,6 +12,7 @@ import com.szusta.meduva.repository.schedule.VisitRepository;
 import com.szusta.meduva.util.TimeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.time.ZoneId;
 import java.util.*;
 
 @org.springframework.stereotype.Service
@@ -48,7 +49,7 @@ public class VisitService {
             return Collections.emptyList();
         }
 
-        Calendar now = Calendar.getInstance();
+        Calendar now = Calendar.getInstance(TimeZone.getTimeZone(ZoneId.systemDefault()));
         Calendar currentlyCheckedTime = TimeUtils.roundToNextHalfHour(now);
 
         // check subsequent terms starting from now

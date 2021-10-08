@@ -35,7 +35,7 @@ export class ChooseServiceComponent implements OnInit {
     this.generatingTerms = true;
     this.servicesService.getTermsForService(serviceId).subscribe(
       terms => {
-        this.visitService.saveTerms(terms);
+        this.visitService.saveAvailTerms(terms);
         this.generatingTerms = false;
         this.router.navigate(['/visit/pick-term']);
       },

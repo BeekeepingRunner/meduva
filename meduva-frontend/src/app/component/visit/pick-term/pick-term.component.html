@@ -19,7 +19,8 @@
     </ng-container>
 
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; let service; columns: displayedColumns;">
+    <tr mat-row *matRowDef="let row; let term; columns: displayedColumns;"
+    (click)="selectTerm(term)" >
     </tr>
   </table>
 </div>

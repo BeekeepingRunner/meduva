@@ -27,6 +27,7 @@ import {ChooseServiceComponent} from "./component/visit/choose-service/choose-se
 import {PickTermComponent} from "./component/visit/pick-term/pick-term.component";
 import {SpecificUserComponent} from "./component/specific-user-profile/specific-user.component";
 import {EditRoleComponent} from "./component/edit-role/edit-role.component";
+import {PickClientComponent} from "./component/visit/pick-client/pick-client.component";
 
 
 export const routes: Routes = [
@@ -179,6 +180,14 @@ export const routes: Routes = [
   {
     path: 'visit/pick-term',
     component: PickTermComponent,
+    canActivate: [RoleGuard],
+    data: {
+      expectedRole: roleNames[UserRole.ROLE_WORKER]
+    }
+  },
+  {
+    path: 'visit/pick-client',
+    component: PickClientComponent,
     canActivate: [RoleGuard],
     data: {
       expectedRole: roleNames[UserRole.ROLE_WORKER]

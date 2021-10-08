@@ -61,6 +61,7 @@ import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
 import { PickTermComponent } from './component/visit/pick-term/pick-term.component';
 import {EditRoleComponent} from "./component/edit-role/edit-role.component";
 import {MatSelectModule} from "@angular/material/select";
+import { PickClientComponent } from './component/visit/pick-client/pick-client.component';
 
 @NgModule({
   declarations: [
@@ -96,6 +97,7 @@ import {MatSelectModule} from "@angular/material/select";
     ChooseServiceComponent,
     PickTermComponent,
     EditRoleComponent,
+    PickClientComponent,
   ],
   imports: [
     BrowserModule,

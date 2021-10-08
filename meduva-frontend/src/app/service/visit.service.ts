@@ -11,6 +11,7 @@ export interface Term {
 }
 
 const AVAIL_TERMS_KEY = "AVAILABLE_TERMS";
+const SELECTED_TERM_KEY = "SELECTED_TERM";
 
 @Injectable({
   providedIn: 'root'
@@ -19,7 +20,7 @@ export class VisitService {
 
   constructor() { }
 
-  saveTerms(terms: Term[]) : void {
+  saveAvailTerms(terms: Term[]) : void {
     window.sessionStorage.setItem(AVAIL_TERMS_KEY, JSON.stringify(terms));
   }
 
@@ -29,6 +30,19 @@ export class VisitService {
       return JSON.parse(termsJSON);
     } else {
       return [];
+    }
+  }
+
+  saveSelectedTerm(term: Term) : void {
+    window.sessionStorage.setItem(SELECTED_TERM_KEY, JSON.stringify(term));
+  }
+
+  getSelectedTerm() : Term | null {
+    let termJSON: string | null = window.sessionStorage.getItem(SELECTED_TERM_KEY);
+    if (termJSON) {
+      return JSON.parse(termJSON);
+    } else {
+      return null;
     }
   }
 }
