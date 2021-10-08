@@ -70,5 +70,6 @@ public class User extends Undeletable {
         this.name = name;
         this.surname = surname;
         this.phoneNumber = phoneNumber;
+        this.deleted = false;
     }
 }

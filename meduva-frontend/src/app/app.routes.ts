@@ -18,11 +18,16 @@ import {ServiceDetailsComponent} from "./component/services/service-details/serv
 import {RoomListComponent} from "./component/rooms/room-list/room-list.component";
 import {NewRoomComponent} from "./component/rooms/new-room/new-room.component";
 import {RoomDetailsComponent} from "./component/rooms/room-details/room-details.component";
+import {EditEmailComponent} from "./component/edit-email/edit-email.component";
+import {ActivateNewEmailComponent} from "./component/activate-new-email/activate-new-email.component";
 import {EquipmentListComponent} from "./component/equipment/equipment-list/equipment-list.component";
 import {NewModelComponent} from "./component/equipment/new-model/new-model.component";
 import {ModelDetailsComponent} from "./component/equipment/model-details/model-details.component";
 import {ChooseServiceComponent} from "./component/visit/choose-service/choose-service.component";
 import {PickTermComponent} from "./component/visit/pick-term/pick-term.component";
+import {SpecificUserComponent} from "./component/specific-user-profile/specific-user.component";
+import {EditRoleComponent} from "./component/edit-role/edit-role.component";
+
 
 export const routes: Routes = [
   { path: 'home', component: HomeComponent },
@@ -48,6 +53,18 @@ export const routes: Routes = [
     }
   },
   {
+    path: 'profile/edit-email/:id',
+    component: EditEmailComponent,
+    canActivate: [RoleGuard],
+    data: {
+      expectedRole: roleNames[UserRole.ROLE_CLIENT]
+    }
+  },
+  {
+    path: 'new-email-activation/:token',
+    component: ActivateNewEmailComponent,
+  },
+  {
     path: 'admin',
     component: BoardAdminComponent,
     canActivate: [RoleGuard],
@@ -58,6 +75,22 @@ export const routes: Routes = [
   {
     path: 'users',
     component: UserListComponent,
+    canActivate: [RoleGuard],
+    data: {
+      expectedRole: roleNames[UserRole.ROLE_ADMIN]
+    }
+  },
+  {
+    path: 'specific-user/:id',
+    component:SpecificUserComponent,
+    canActivate: [RoleGuard],
+    data: {
+      expectedRole: roleNames[UserRole.ROLE_RECEPTIONIST]
+    }
+  },
+  {
+    path: 'specific-user/edit-role/:id',
+    component: EditRoleComponent,
     canActivate: [RoleGuard],
     data: {
       expectedRole: roleNames[UserRole.ROLE_ADMIN]

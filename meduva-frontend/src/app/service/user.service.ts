@@ -72,4 +72,16 @@ export class UserService {
       phoneNumber
       }, httpOptions);
   }
+
+  public deleteById(userId: number | undefined): Observable<any> {
+    return this.http.delete(environment.API_BASE_URL + 'api/user/' + userId);
+  }
+
+  editRole(roleId: number,
+           id: number){
+
+    return this.http.post( environment.API_BASE_URL+"api/user/edit-role/" + id, {
+      roleId
+    }, httpOptions);
+  }
 }

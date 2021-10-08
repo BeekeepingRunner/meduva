@@ -1,5 +1,4 @@
-
-<mat-card *ngIf="currentUser; else loggedOut" class="col-md-6 card container-fluid ">
+<div class="container mat-elevation-z8">
   <header>
     <h3>
       <strong>{{ userDetails?.name }} {{ userDetails?.surname }}</strong>
@@ -7,14 +6,11 @@
   </header>
   <br>
 
-  <mat-divider ></mat-divider>
-
   <table>
     <tr>
       <td><strong>First name:</strong></td>
       <td>{{ userDetails?.name }}</td>
     </tr>
-
     <tr>
       <td><strong>Surname:</strong></td>
       <td>{{ userDetails?.surname }}</td>
@@ -24,42 +20,48 @@
       <td>+{{ userDetails?.phoneNumber }}</td>
     </tr>
     <tr>
+
+    <tr class="button-row">
+      <td><button mat-icon-button color="primary" [routerLink]="['/profile/edit-profile/' + userId ]">Edit profile</button></td>
+    </tr>
+    <br>
+
+
+    <tr>
       <td><strong>Login:</strong></td>
       <td>{{ userDetails?.login }}</td>
     </tr>
-    <tr class="button-row">
-      <td><button mat-icon-button color="primary" [routerLink]="['/profile/edit-profile/'+ currentUser.id ]">Edit profile</button></td>
+    <tr>
+      <td><strong>Password:</strong></td>
+      <td>********</td>
     </tr>
-    <br>
+    <tr class="button-row">
+      <td><button mat-icon-button color="primary">Change password</button></td>
+    </tr>
     <tr>
       <td><strong>Email:</strong></td>
       <td>{{ userDetails?.email }}</td>
     </tr>
     <tr class="button-row">
-      <td><button mat-icon-button color="primary" [routerLink]="['/profile/edit-email/' + currentUser.id]">Change email</button></td>
+      <td><button mat-icon-button color="primary">Change email</button></td>
     </tr>
-
-    <tr>
-      <td><strong>Password:</strong></td>
-      <td>********</td>
-    </tr>
-
-
-    <tr class="button-row">
-      <td><button mat-icon-button color="primary">Change password</button></td>
-    </tr>
-
     <br>
     <tr>
       <td><strong>Role:</strong></td>
       <td><span>{{ userRole?.name | lowercase | slice : 5 }}</span></td>
     </tr>
+    <tr class="button-row">
+      <td><button mat-icon-button color="primary" [routerLink]="['/specific-user/edit-role/' + userId ]">Change role</button></td>
+    </tr>
+    <br>
+    <tr class="button-row">
+      <td><button mat-raised-button color="warn" (click)="openDeleteConfirmDialog()">Delete user</button></td>
+    </tr>
+    <br>
   </table>
 
-</mat-card>
-
+</div>
 
 <ng-template #loggedOut>
   Please login.
 </ng-template>
-

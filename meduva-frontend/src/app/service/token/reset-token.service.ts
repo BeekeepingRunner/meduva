@@ -17,4 +17,8 @@ export class ResetTokenService {
       token: resetToken
     });
   }
+
+  validateEmailResetToken(resetToken: string): Observable<any> {
+    return this.httpClient.post(environment.API_BASE_URL + 'api/email/validate-email-reset-token', resetToken);
+  }
 }

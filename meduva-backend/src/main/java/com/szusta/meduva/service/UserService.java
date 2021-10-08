@@ -11,9 +11,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import javax.persistence.EntityNotFoundException;
+import javax.transaction.Transactional;
+import java.util.*;
 
 @Service
 public class UserService {
@@ -35,6 +35,11 @@ public class UserService {
     public User findByEmail(String email) {
         return userRepository.findByEmail(email)
                 .orElseThrow(() -> new EntityRecordNotFoundException("User not found with email : " + email));
+    }
+
+    public User findById(long id){
+        return userRepository.findById(id)
+                .orElseThrow(() -> new EntityRecordNotFoundException("User not found with id: " + id));
     }
 
     public Boolean existsByLogin(String login) {
@@ -90,5 +95,30 @@ public class UserService {
                     return new EntityRecordNotFoundException(errorMsg);
                 });
         return user.getId();
+    }
+
+    @Transactional
+    public void markAsDeleted(Long userId) {
+        com.szusta.meduva.model.User user = userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("User not found with id : " + userId));
+
+        user.markAsDeleted();
+        userRepository.save(user);
+    }
+
+    @Transactional
+    public User changeUserRole(Long userId, Long roleId){
+        User user = userRepository.findById(userId)
+                .orElseThrow(()-> new EntityRecordNotFoundException("User not found with id : " + userId));
+
+        Set<Role> roleSet= new HashSet<>();
+        for(Long i=1L; i<=roleId; i++){
+            Role role = roleRepository.findById(i)
+                    .orElseThrow(()-> new EntityRecordNotFoundException("Role not found with id : " + roleId));
+            roleSet.add(role);
+        }
+
+        user.setRoles(roleSet);
+        return userRepository.save(user);
     }
 }

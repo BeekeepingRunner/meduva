@@ -15,6 +15,7 @@ public interface UserRepository extends UndeletableRepository<User> {
 
     Optional<User> findByLogin(String login);
     Optional<User> findByEmail(String email);
+    //Optional<User> findById(long id);
 
     Boolean existsByLogin(String login);
     Boolean existsByEmail(String email);

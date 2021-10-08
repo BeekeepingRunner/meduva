@@ -11,7 +11,10 @@ import { RegisterComponent } from './component/register/register.component';
 import { HomeComponent } from './component/home/home.component';
 import { ProfileComponent } from './component/profile/profile.component';
 import { BoardAdminComponent } from './component/board-admin/board-admin.component';
+import { SpecificUserComponent} from "./component/specific-user-profile/specific-user.component";
 import { EditProfileComponent } from './component/edit-profile/edit-profile.component';
+import { EditEmailComponent } from './component/edit-email/edit-email.component';
+import { ActivateNewEmailComponent } from './component/activate-new-email/activate-new-email.component';
 
 import { authInterceptorProviders } from './helper/auth.interceptor';
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
@@ -28,6 +31,7 @@ import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatInputModule} from "@angular/material/input";
 import { UserListComponent } from './component/user-list/user-list.component';
 import {MatTableModule} from "@angular/material/table";
+
 import {routes} from "./app.routes";
 import { AccessDeniedComponent } from './component/access-denied/access-denied.component';
 import { ServiceListComponent } from './component/services/service-list/service-list.component';
@@ -55,6 +59,8 @@ import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 import { ChooseServiceComponent } from './component/visit/choose-service/choose-service.component';
 import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
 import { PickTermComponent } from './component/visit/pick-term/pick-term.component';
+import {EditRoleComponent} from "./component/edit-role/edit-role.component";
+import {MatSelectModule} from "@angular/material/select";
 
 @NgModule({
   declarations: [
@@ -66,7 +72,10 @@ import { PickTermComponent } from './component/visit/pick-term/pick-term.compone
     BoardAdminComponent,
     PasswordResetEmailInputComponent,
     PasswordResetComponent,
+    EditEmailComponent,
+    ActivateNewEmailComponent,
     UserListComponent,
+    SpecificUserComponent,
     AccessDeniedComponent,
     ServiceListComponent,
     NewServiceComponent,
@@ -86,6 +95,7 @@ import { PickTermComponent } from './component/visit/pick-term/pick-term.compone
     FeedbackDialogComponent,
     ChooseServiceComponent,
     PickTermComponent,
+    EditRoleComponent,
   ],
   imports: [
     BrowserModule,
@@ -111,6 +121,7 @@ import { PickTermComponent } from './component/visit/pick-term/pick-term.compone
     MatStepperModule,
     CalendarModule.forRoot({provide: DateAdapter, useFactory: adapterFactory}),
     MatProgressSpinnerModule,
+    MatSelectModule,
   ],
   exports: [
     RouterModule

@@ -20,4 +20,9 @@ public class RoleService {
         return roleRepository.findByName(name)
                 .orElseThrow(() -> new EntityRecordNotFoundException("Role not found with name :" + name));
     }
+
+    public Role findById(Long id) {
+        return roleRepository.findById(id)
+                .orElseThrow(() -> new EntityRecordNotFoundException("Role not found with id :" + id));
+    }
 }

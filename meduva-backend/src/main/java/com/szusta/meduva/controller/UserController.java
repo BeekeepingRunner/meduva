@@ -2,6 +2,7 @@ package com.szusta.meduva.controller;
 
 import com.szusta.meduva.model.role.ERole;
 import com.szusta.meduva.model.User;
+import com.szusta.meduva.payload.request.ChangeRoleRequest;
 import com.szusta.meduva.payload.request.UpdatedUserRequest;
 import com.szusta.meduva.service.RoleService;
 import com.szusta.meduva.service.UserService;
@@ -59,5 +60,16 @@ public class UserController {
         user.setPhoneNumber(request.getPhoneNumber());
 
         return userService.save(user);
+    }
+
+    @DeleteMapping("/{id}")
+    public void deleteUser(@PathVariable Long id) {
+        this.userService.markAsDeleted(id);
+    }
+
+    @PostMapping("/edit-role/{id}")
+    public User editRole(@PathVariable Long id, @Valid @RequestBody ChangeRoleRequest request){
+        return userService.changeUserRole(id,request.getRoleId());
+
     }
 }
