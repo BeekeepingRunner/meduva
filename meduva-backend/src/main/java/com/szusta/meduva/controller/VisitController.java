@@ -3,10 +3,7 @@ package com.szusta.meduva.controller;
 import com.szusta.meduva.payload.Term;
 import com.szusta.meduva.service.VisitService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -24,5 +21,10 @@ public class VisitController {
     @GetMapping("/terms-for-service/{serviceId}")
     public List<Term> getTermsForService(@PathVariable Long serviceId) {
         return visitService.getTermsForCurrentWorker(serviceId);
+    }
+
+    @PostMapping
+    public void saveNewVisit(@RequestBody Term term) {
+        visitService.saveNewVisit(term);
     }
 }

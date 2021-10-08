@@ -1,4 +1,4 @@
-package com.szusta.meduva.repository.schedule;
+package com.szusta.meduva.repository.schedule.visit;
 
 import com.szusta.meduva.model.schedule.visit.Visit;
 import com.szusta.meduva.repository.undeletable.UndeletableRepository;

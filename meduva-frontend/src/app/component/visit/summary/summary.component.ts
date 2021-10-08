@@ -40,10 +40,6 @@ export class SummaryComponent implements OnInit {
     }
   }
 
-  submitVisit(): void {
-    this.visitService.saveVisit(this.term);
-  }
-
   private setClientInfo() {
     this.userService.getUserDetails(this.term!.clientId).subscribe(
       client => {
@@ -85,5 +81,9 @@ export class SummaryComponent implements OnInit {
         this.eqItemName = eqItem.name;
       }
     );
+  }
+
+  submitVisit(): void {
+    this.visitService.saveVisit(this.term);
   }
 }

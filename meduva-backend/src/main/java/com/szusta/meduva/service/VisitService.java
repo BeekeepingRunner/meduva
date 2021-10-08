@@ -3,12 +3,15 @@ package com.szusta.meduva.service;
 import com.szusta.meduva.exception.EntityRecordNotFoundException;
 import com.szusta.meduva.model.Room;
 import com.szusta.meduva.model.Service;
-import com.szusta.meduva.model.equipment.EquipmentItem;
+import com.szusta.meduva.model.schedule.visit.EVisitStatus;
+import com.szusta.meduva.model.schedule.visit.Visit;
+import com.szusta.meduva.model.schedule.visit.VisitStatus;
 import com.szusta.meduva.payload.Term;
 import com.szusta.meduva.repository.RoomRepository;
 import com.szusta.meduva.repository.ServiceRepository;
 import com.szusta.meduva.repository.equipment.EquipmentItemRepository;
-import com.szusta.meduva.repository.schedule.VisitRepository;
+import com.szusta.meduva.repository.schedule.visit.VisitRepository;
+import com.szusta.meduva.repository.schedule.visit.VisitStatusRepository;
 import com.szusta.meduva.util.TimeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -19,6 +22,7 @@ import java.util.*;
 public class VisitService {
 
     private VisitRepository visitRepository;
+    private VisitStatusRepository visitStatusRepository;
     private ServiceRepository serviceRepository;
     private EquipmentItemRepository itemRepository;
     private RoomRepository roomRepository;
@@ -26,11 +30,13 @@ public class VisitService {
 
     @Autowired
     public VisitService(VisitRepository visitRepository,
+                        VisitStatusRepository visitStatusRepository,
                         ServiceRepository serviceRepository,
                         EquipmentItemRepository itemRepository,
                         RoomRepository roomRepository,
                         ScheduleChecker scheduleChecker) {
         this.visitRepository = visitRepository;
+        this.visitStatusRepository = visitStatusRepository;
         this.serviceRepository = serviceRepository;
         this.itemRepository = itemRepository;
         this.roomRepository = roomRepository;
@@ -66,8 +72,18 @@ public class VisitService {
         return possibleTerms;
     }
 
-    private boolean doesRequiredEquipmentExist(Long serviceId) {
-        List<EquipmentItem> suitableEqItems = itemRepository.findAllSuitableForService(serviceId);
-        return !suitableEqItems.isEmpty();
+    public void saveNewVisit(Term term) {
+        Visit visit = new Visit();
+
+        VisitStatus booked = visitStatusRepository.getById(EVisitStatus.VISIT_BOOKED.getValue());
+        visit.setVisitStatus(booked);
+
+        Service service = serviceRepository.findById(term.getServiceId())
+                .orElseThrow(() -> new EntityRecordNotFoundException("Service from term not found in DB"));
+        visit.setService(service);
+
+        Room room = roomRepository.findById(term.getRoomId())
+                .orElseThrow(() -> new EntityRecordNotFoundException("Room from term not found in DB"));
+        visit.setRoom(room);
     }
 }
