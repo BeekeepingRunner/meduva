@@ -22,6 +22,5 @@ export class EmailService {
     console.log('api/email/request/' + id);
     console.log(email);
     return this.http.post(environment.API_BASE_URL + 'api/email/request/' + id, email);
-
   }
 }

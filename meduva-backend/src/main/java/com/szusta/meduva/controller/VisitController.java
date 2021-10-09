@@ -1,8 +1,10 @@
 package com.szusta.meduva.controller;
 
+import com.szusta.meduva.model.schedule.visit.Visit;
 import com.szusta.meduva.payload.Term;
 import com.szusta.meduva.service.VisitService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,7 +26,7 @@ public class VisitController {
     }
 
     @PostMapping
-    public void saveNewVisit(@RequestBody Term term) {
-        visitService.saveNewVisit(term);
+    public ResponseEntity<Visit> saveNewVisit(@RequestBody Term term) {
+        return ResponseEntity.of(visitService.saveNewVisit(term));
     }
 }
