@@ -17,9 +17,18 @@
 
   <p>{{ room?.description }}</p>
   <br>
-  <tr class="button-row">
-    <td><button mat-raised-button color="primary">Edit room</button></td>
-  </tr>
+  <div class=" row gx-5  p-3">
+    <div class="p-1">
+      <tr class="button-row">
+        <td><button mat-raised-button color="primary">Edit room</button></td>
+      </tr>
+    </div>
+    <div class="p-1">
+      <tr class="button-row">
+        <td><button mat-raised-button color="primary">Edit performed services</button></td>
+      </tr>
+    </div>
+  </div>
   <br>
   <tr class="button-row">
     <td><button mat-raised-button color="warn" (click)="openConfirmationDialog()">Delete room</button></td>
