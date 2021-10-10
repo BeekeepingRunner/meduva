@@ -25,7 +25,7 @@ public class Visit extends Schedule {
 
     private boolean paid = false;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "visit_status_id")
     private VisitStatus visitStatus;
 
@@ -43,8 +43,8 @@ public class Visit extends Schedule {
     )
     @JoinTable(
             name = "user_visit",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "visit_id")
+            joinColumns = @JoinColumn(name = "visit_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id")
     )
     private List<User> users = new ArrayList<>();
 
@@ -54,8 +54,8 @@ public class Visit extends Schedule {
     )
     @JoinTable(
             name = "visit_equipment_item",
-            joinColumns = @JoinColumn(name = "equipment_item_id"),
-            inverseJoinColumns = @JoinColumn(name = "visit_id")
+            joinColumns = @JoinColumn(name = "visit_id"),
+            inverseJoinColumns = @JoinColumn(name = "equipment_item_id")
     )
     private List<EquipmentItem> eqItems = new ArrayList<>();
 

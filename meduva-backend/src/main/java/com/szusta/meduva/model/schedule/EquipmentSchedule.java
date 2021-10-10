@@ -10,6 +10,7 @@ import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import java.util.Date;
 
 @Entity
 @Table(name = "equipment_schedule")
@@ -22,4 +23,11 @@ public class EquipmentSchedule extends Schedule {
     @ManyToOne
     @JoinColumn(name = "equipment_item_id")
     private EquipmentItem equipmentItem;
+
+    public EquipmentSchedule(EquipmentItem equipmentItem, Date timeFrom, Date timeTo) {
+        this.equipmentItem = equipmentItem;
+        this.timeFrom = timeFrom;
+        this.timeTo = timeTo;
+        this.deleted = false;
+    }
 }

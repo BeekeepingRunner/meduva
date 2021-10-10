@@ -1,4 +1,4 @@
-package com.szusta.meduva.security;
+package com.szusta.meduva.config;
 
 import com.szusta.meduva.model.Room;
 import com.szusta.meduva.model.Service;

@@ -5,6 +5,9 @@ import com.szusta.meduva.model.Room;
 import com.szusta.meduva.model.Service;
 import com.szusta.meduva.model.User;
 import com.szusta.meduva.model.equipment.EquipmentItem;
+import com.szusta.meduva.model.schedule.EquipmentSchedule;
+import com.szusta.meduva.model.schedule.RoomSchedule;
+import com.szusta.meduva.model.schedule.WorkerSchedule;
 import com.szusta.meduva.model.schedule.visit.EVisitStatus;
 import com.szusta.meduva.model.schedule.visit.Visit;
 import com.szusta.meduva.model.schedule.visit.VisitStatus;
@@ -13,10 +16,12 @@ import com.szusta.meduva.repository.RoomRepository;
 import com.szusta.meduva.repository.ServiceRepository;
 import com.szusta.meduva.repository.UserRepository;
 import com.szusta.meduva.repository.equipment.EquipmentItemRepository;
+import com.szusta.meduva.repository.schedule.EquipmentScheduleRepository;
+import com.szusta.meduva.repository.schedule.RoomScheduleRepository;
+import com.szusta.meduva.repository.schedule.WorkerScheduleRepository;
 import com.szusta.meduva.repository.schedule.visit.VisitRepository;
 import com.szusta.meduva.repository.schedule.visit.VisitStatusRepository;
 import com.szusta.meduva.util.TimeUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.transaction.Transactional;
 import java.time.ZoneId;
@@ -33,15 +38,20 @@ public class VisitService {
     private UserRepository userRepository;
 
     private ScheduleChecker scheduleChecker;
+    private RoomScheduleRepository roomScheduleRepository;
+    private WorkerScheduleRepository workerScheduleRepository;
+    private EquipmentScheduleRepository equipmentScheduleRepository;
 
-    @Autowired
     public VisitService(VisitRepository visitRepository,
                         VisitStatusRepository visitStatusRepository,
                         ServiceRepository serviceRepository,
                         EquipmentItemRepository itemRepository,
                         RoomRepository roomRepository,
                         UserRepository userRepository,
-                        ScheduleChecker scheduleChecker) {
+                        ScheduleChecker scheduleChecker,
+                        RoomScheduleRepository roomScheduleRepository,
+                        WorkerScheduleRepository workerScheduleRepository,
+                        EquipmentScheduleRepository equipmentScheduleRepository) {
         this.visitRepository = visitRepository;
         this.visitStatusRepository = visitStatusRepository;
         this.serviceRepository = serviceRepository;
@@ -49,6 +59,9 @@ public class VisitService {
         this.roomRepository = roomRepository;
         this.userRepository = userRepository;
         this.scheduleChecker = scheduleChecker;
+        this.roomScheduleRepository = roomScheduleRepository;
+        this.workerScheduleRepository = workerScheduleRepository;
+        this.equipmentScheduleRepository = equipmentScheduleRepository;
     }
 
     // Checks subsequent time-intervals in range of several days, starting from now.
@@ -84,7 +97,11 @@ public class VisitService {
     public Optional<Visit> saveNewVisit(Term term) {
         Visit visit = new Visit(term.getStartTime(), term.getEndTime());
 
-        VisitStatus booked = visitStatusRepository.getById(EVisitStatus.VISIT_BOOKED.getValue());
+        // TODO: validate all term info
+
+
+        VisitStatus booked = visitStatusRepository.findById(EVisitStatus.VISIT_BOOKED.getValue())
+                .orElseThrow(() -> new EntityRecordNotFoundException("Visit status needed for a new visit not found in DB (id : " + EVisitStatus.VISIT_BOOKED.getValue() + ")"));
         visit.setVisitStatus(booked);
 
         Service service = serviceRepository.findById(term.getServiceId())
@@ -104,10 +121,21 @@ public class VisitService {
         visitUsers.add(client);
         visit.setUsers(visitUsers);
 
+        EquipmentItem eqItem = null;
         if (term.getEqItemId() != null) {
-            EquipmentItem eqItem = itemRepository.findById(term.getEqItemId())
+            eqItem = itemRepository.findById(term.getEqItemId())
                             .orElseThrow(() -> new EntityRecordNotFoundException("Item from term not found in DB (id : " + term.getEqItemId() + ")"));
             visit.setEqItems(Collections.singletonList(eqItem));
+        }
+
+        // TODO: add all appropriate schedule rows
+        RoomSchedule roomSchedule = new RoomSchedule(room, term.getStartTime(), term.getEndTime());
+        roomScheduleRepository.save(roomSchedule);
+        WorkerSchedule workerSchedule = new WorkerSchedule(worker, term.getStartTime(), term.getEndTime());
+        workerScheduleRepository.save(workerSchedule);
+        if (eqItem != null) {
+            EquipmentSchedule equipmentSchedule = new EquipmentSchedule(eqItem, term.getStartTime(), term.getEndTime());
+            equipmentScheduleRepository.save(equipmentSchedule);
         }
 
         return Optional.of(visitRepository.save(visit));

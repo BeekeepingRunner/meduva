@@ -84,6 +84,11 @@ export class SummaryComponent implements OnInit {
   }
 
   submitVisit(): void {
-    this.visitService.saveVisit(this.term);
+    console.log(this.term);
+    this.visitService.saveVisit(this.term).subscribe(
+      data => {
+        console.log(data);
+      }
+    )
   }
 }

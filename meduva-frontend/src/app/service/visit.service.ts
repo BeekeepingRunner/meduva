@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import {Client} from "../model/client";
 import {HttpClient} from "@angular/common/http";
 import {environment} from "../../environments/environment";
+import {Observable} from "rxjs";
 
 export interface Term {
   startTime: string,
@@ -55,7 +56,7 @@ export class VisitService {
     }
   }
 
-  saveVisit(term: Term | null): any {
-    this.httpClient.post(environment.API_BASE_URL + 'api/visit', term);
+  saveVisit(term: Term | null): Observable<any> {
+    return this.httpClient.post(environment.API_BASE_URL + 'api/visit', term);
   }
 }

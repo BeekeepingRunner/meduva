@@ -21,20 +21,10 @@ export class PickTermComponent implements OnInit {
 
   ngOnInit(): void {
     this.availableTerms = this.visitService.getAvailTerms();
-    console.log(this.availableTerms);
-    this.availableTerms.forEach((term: Term) => {
-      this.parseStartTime(term);
-    });
-  }
-
-  private parseStartTime(term: Term) {
-    let parsedDate = this.datePipe.transform(new Date(term.startTime), 'dd/MM/yyyy HH:mm');
-    if (parsedDate != null) {
-      term.startTime = parsedDate;
-    }
   }
 
   selectTerm(term: Term) {
+    console.log(term);
     this.visitService.saveSelectedTerm(term);
     this.router.navigate(['/visit/pick-client']);
   }
