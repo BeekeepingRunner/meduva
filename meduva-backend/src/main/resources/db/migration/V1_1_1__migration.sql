@@ -4,6 +4,7 @@ CREATE TABLE IF NOT EXISTS service (
     description VARCHAR(3000),
     duration_in_min INT NOT NULL,
     price DECIMAL(19, 2) NOT NULL,
+    itemless TINYINT NOT NULL,
     deleted TINYINT DEFAULT 0 NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=UTF8;
 
