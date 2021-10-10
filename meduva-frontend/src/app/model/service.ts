@@ -4,5 +4,6 @@ export interface Service {
   description: string,
   durationInMin: number,
   price: number,
+  itemless: boolean,
   deleted: boolean
 }
