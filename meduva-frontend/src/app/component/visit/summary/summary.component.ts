@@ -5,6 +5,9 @@ import {UserService} from "../../../service/user.service";
 import {ServicesService} from "../../../service/services.service";
 import {RoomService} from "../../../service/room.service";
 import {EquipmentService} from "../../../service/equipment.service";
+import {Router} from "@angular/router";
+import {MatDialog} from "@angular/material/dialog";
+import {FeedbackDialogComponent} from "../../dialog/feedback-dialog/feedback-dialog.component";
 
 @Component({
   selector: 'app-summary',
@@ -25,13 +28,14 @@ export class SummaryComponent implements OnInit {
     private userService: UserService,
     private servicesService: ServicesService,
     private roomService: RoomService,
-    private equipmentService: EquipmentService
+    private equipmentService: EquipmentService,
+    private dialog: MatDialog,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
     this.term = this.visitService.getSelectedTerm();
     if (this.term != null) {
-      console.log(this.term);
       this.setClientInfo();
       this.setWorkerInfo();
       this.setServiceName();
@@ -84,11 +88,22 @@ export class SummaryComponent implements OnInit {
   }
 
   submitVisit(): void {
-    console.log(this.term);
     this.visitService.saveVisit(this.term).subscribe(
-      data => {
-        console.log(data);
+      visitData => {
+        this.openFeedbackDialog();
       }
     )
+  }
+
+  private openFeedbackDialog() {
+    const feedbackDialogRef = this.dialog.open(FeedbackDialogComponent, {
+      data: {message: 'Visit has been saved.'}
+    });
+
+    feedbackDialogRef.afterClosed().subscribe(
+      acknowledged => {
+        this.router.navigate(['/home']);
+      }
+    );
   }
 }

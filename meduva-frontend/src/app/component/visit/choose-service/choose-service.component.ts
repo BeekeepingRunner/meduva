@@ -27,22 +27,16 @@ export class ChooseServiceComponent implements OnInit {
     this.servicesService.getAllUndeletedServices().subscribe(
       services => {
         this.services = services;
+      },
+      err => {
+        this.errorMessage = err.error.message;
       }
     )
   }
 
-  getTermsForService(serviceId: number): void {
+  getTermsForService(service: Service): void {
     this.generatingTerms = true;
-    this.servicesService.getTermsForService(serviceId).subscribe(
-      terms => {
-        this.visitService.saveAvailTerms(terms);
-        this.generatingTerms = false;
-        this.router.navigate(['/visit/pick-term']);
-      },
-      err => {
-        this.errorMessage = err.error.message;
-        this.generatingTerms = false;
-      }
-    );
+    this.visitService.saveSelectedService(service);
+    this.router.navigate(['/visit/pick-term']);
   }
 }

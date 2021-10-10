@@ -3,6 +3,7 @@ import {Client} from "../model/client";
 import {HttpClient} from "@angular/common/http";
 import {environment} from "../../environments/environment";
 import {Observable} from "rxjs";
+import {Service} from "../model/service";
 
 export interface Term {
   startTime: string,
@@ -18,7 +19,7 @@ export interface Term {
 enum VisitKey {
   AVAIL_TERMS_KEY = "AVAILABLE_TERMS",
   SELECTED_TERM_KEY = "SELECTED_TERM",
-  SELECTED_CLIENT_KEY = "SELECTED_CLIENT"
+  SELECTED_SERVICE_KEY = "SELECTED_SERVICE_KEY",
 }
 
 @Injectable({
@@ -30,20 +31,20 @@ export class VisitService {
     private httpClient: HttpClient,
   ) { }
 
-  saveAvailTerms(terms: Term[]) : void {
-    window.sessionStorage.setItem(VisitKey.AVAIL_TERMS_KEY, JSON.stringify(terms));
+  saveSelectedService(service: Service) : void {
+    window.sessionStorage.setItem(VisitKey.SELECTED_SERVICE_KEY, JSON.stringify(service));
   }
 
   saveSelectedTerm(term: Term) : void {
     window.sessionStorage.setItem(VisitKey.SELECTED_TERM_KEY, JSON.stringify(term));
   }
 
-  getAvailTerms() : Term[] {
-    let termsJSON: string | null = window.sessionStorage.getItem(VisitKey.AVAIL_TERMS_KEY);
-    if (termsJSON) {
-      return JSON.parse(termsJSON);
+  getSelectedService() : Service | null {
+    let serviceJSON: string | null = window.sessionStorage.getItem(VisitKey.SELECTED_SERVICE_KEY);
+    if (serviceJSON) {
+      return JSON.parse(serviceJSON);
     } else {
-      return [];
+      return null;
     }
   }
 

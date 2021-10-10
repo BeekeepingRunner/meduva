@@ -1,6 +1,8 @@
-<h3>Available Terms:</h3>
+<h3>Available Terms for {{ selectedService?.name }}:</h3>
 <div>
-  <table mat-table [dataSource]="availableTerms" class="mat-elevation-z8">
+  <mat-progress-spinner *ngIf="generatingTerms" mode="indeterminate"></mat-progress-spinner>
+
+  <table mat-table [dataSource]="availableTerms" class="mat-elevation-z8" *ngIf="!generatingTerms">
 
     <ng-container matColumnDef="date">
       <th mat-header-cell *matHeaderCellDef>Date</th>
