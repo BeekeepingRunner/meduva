@@ -36,6 +36,7 @@ public class ServicesController {
                 request.getDescription(),
                 request.getDurationInMin(),
                 request.getPrice(),
+                request.isItemless(),
                 request.isDeleted()
         );
         return this.servicesService.save(service);

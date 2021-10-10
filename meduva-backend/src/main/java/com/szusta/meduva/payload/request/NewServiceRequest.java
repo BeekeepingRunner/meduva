@@ -13,5 +13,6 @@ public class NewServiceRequest {
     private String description;
     private int durationInMin;
     private BigDecimal price;
+    private boolean itemless;
     private boolean deleted;
 }
