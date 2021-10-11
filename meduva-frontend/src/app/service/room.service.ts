@@ -30,11 +30,23 @@ export class RoomService {
     );
   }
 
+  public getRoomServices(roomId: number): Observable<Service[]>{
+    return this.httpClient.get<servicesResponse>(environment.API_BASE_URL + 'rooms/'+ roomId + '/services').pipe(
+      map(services => services._embedded.services)
+    );
+  }
+
   public addNewRoom(room: Room): Observable<Room> {
     return this.httpClient.post<Service>(environment.API_BASE_URL + 'api/room', room);
   }
 
   public deleteById(roomId: number | undefined): Observable<any> {
     return this.httpClient.delete(environment.API_BASE_URL + 'api/room/' + roomId);
+  }
+}
+
+interface servicesResponse {
+  _embedded: {
+    services: Service[];
   }
 }

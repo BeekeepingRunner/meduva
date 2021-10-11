@@ -10,6 +10,7 @@ import {ServicesService} from "../../../service/services.service";
 })
 export class EditPerformedServicesComponent implements OnInit {
 
+  roomId!: number;
   services: Service[] = [];
   displayedColumns: string[] = ['name', 'action'];
 
@@ -23,7 +24,7 @@ export class EditPerformedServicesComponent implements OnInit {
   }
 
   getAllItemlessServices(){
-    let id: number = this.route.snapshot.params.id;
+    this.roomId = this.route.snapshot.params.id;
 
     this.servicesService.getAllItemless().subscribe(
       services => {

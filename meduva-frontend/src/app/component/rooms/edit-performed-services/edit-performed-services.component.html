@@ -1,5 +1,7 @@
 
 <div>
+  <button mat-icon-button color="primary" [routerLink]="['/room/' + roomId]">
+    <-- Back to room</button>
   <h2>Edit performed itemless services</h2>
   <div>
     <table mat-table [dataSource]="services" class="mat-elevation-z8 col-md-4">
@@ -17,10 +19,8 @@
         </td>
       </ng-container>
 
-
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row *matRowDef="let row; let service; columns: displayedColumns;"
-          >
+      <tr mat-row *matRowDef="let row; let service; columns: displayedColumns;">
       </tr>
     </table>
   </div>

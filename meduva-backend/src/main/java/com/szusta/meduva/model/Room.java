@@ -34,7 +34,6 @@ public class Room extends Undeletable {
             joinColumns = @JoinColumn(name = "room_id"),
             inverseJoinColumns = @JoinColumn(name = "service_id")
     )
-
     private List<Service> services = new ArrayList<>();
 
     public Room(String name,
