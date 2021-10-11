@@ -28,19 +28,21 @@ export class RoomDetailsComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.getRoomInformation();
+  }
+
+  getRoomInformation(){
     let roomId: number = Number(this.route.snapshot.params.id);
     this.roomService.getById(roomId).subscribe(
       room => {
         this.room = room;
-      this.roomService.getRoomServices(this.room.id!).subscribe(
-        services => {
-          this.services = services;
-        }
-      )
+        this.roomService.getRoomServices(this.room.id!).subscribe(
+          services => {
+            this.services = services;
+          }
+        )
       }
     );
-
-
   }
 
   openConfirmationDialog() {
