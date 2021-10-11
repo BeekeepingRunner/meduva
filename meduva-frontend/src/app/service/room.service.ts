@@ -32,8 +32,9 @@ export class RoomService {
 
   public getRoomServices(roomId: number): Observable<Service[]>{
     return this.httpClient.get<servicesResponse>(environment.API_BASE_URL + 'rooms/'+ roomId + '/services').pipe(
-      map(services => services._embedded.services)
-    );
+      //map(services => services._embedded.services)
+      map(services => trimJSON(services._embedded.services, ['_links']))
+    )
   }
 
   public addNewRoom(room: Room): Observable<Room> {

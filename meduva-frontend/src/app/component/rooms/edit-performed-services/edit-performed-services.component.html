@@ -4,23 +4,22 @@
     <-- Back to room</button>
   <h2>Edit performed itemless services</h2>
   <div>
-    <table mat-table [dataSource]="services" class="mat-elevation-z8 col-md-4">
+    <table mat-table [dataSource]="itemsDataSource" class="mat-elevation-z8 col-md-4">
 
-      <ng-container matColumnDef="name"  >
+      <ng-container matColumnDef="service.name">
         <th mat-header-cell *matHeaderCellDef class="col-md-3">Name</th>
-        <td mat-cell *matCellDef="let service"><b>{{ service.name }}</b></td>
+        <td mat-cell *matCellDef="let item"><b>{{ item.service.name }}</b></td>
       </ng-container>
-      <ng-container matColumnDef="action" >
+      <!--<ng-container matColumnDef="action">
         <th mat-header-cell *matHeaderCellDef class="col-md-1">Action</th>
-        <td mat-cell *matCellDef="let service">
+        <td mat-cell *matCellDef="let item">
           <mat-checkbox>
-
           </mat-checkbox>
         </td>
       </ng-container>
-
+-->
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row *matRowDef="let row; let service; columns: displayedColumns;">
+      <tr mat-row *matRowDef="let row; let item; columns: displayedColumns;">
       </tr>
     </table>
   </div>

@@ -24,7 +24,7 @@ export class ServicesService {
   }
 
   getAllItemless(): Observable<Service[]> {
-    return this.httpClient.get<Service[]>(environment.API_BASE_URL + 'api/service/all/itemless');
+    return this.httpClient.get<Service[]>(environment.API_BASE_URL + 'api/service/all/itemless')
   }
 
   public getById(serviceId: number): Observable<Service> {
