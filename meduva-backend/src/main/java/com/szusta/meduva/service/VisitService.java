@@ -1,6 +1,5 @@
 package com.szusta.meduva.service;
 
-import com.szusta.meduva.exception.EntityRecordNotFoundException;
 import com.szusta.meduva.model.Room;
 import com.szusta.meduva.model.Service;
 import com.szusta.meduva.model.User;
@@ -66,12 +65,9 @@ public class VisitService {
 
     // Checks subsequent time-intervals in range of several days, starting from now.
     // Returns empty list if there are no available Terms.
-    public List<Term> getTermsForCurrentWorker(Long serviceId) {
+    public List<Term> getTermsForWorker(User worker, Service service) {
 
-        Service service = serviceRepository.findById(serviceId)
-                .orElseThrow(() -> new EntityRecordNotFoundException("Service not found with id : " + serviceId));
-
-        List<Room> suitableRooms = roomRepository.findAllSuitableForService(serviceId);
+        List<Room> suitableRooms = roomRepository.findAllSuitableForService(service.getId());
         if (suitableRooms.isEmpty()) {
             return Collections.emptyList();
         }
@@ -82,62 +78,64 @@ public class VisitService {
         // check subsequent terms starting from now
         List<Term> possibleTerms = new ArrayList<>();
         do {
-            Optional<Term> term = scheduleChecker.getTermForCurrentWorker(service, suitableRooms, currentlyCheckedTime);
+            Optional<Term> term = scheduleChecker.getTermForWorker(worker, service, suitableRooms, currentlyCheckedTime);
             term.ifPresent(possibleTerms::add);
 
             // proceed to the next interval
+            // TODO: move forward until its worker work time
             currentlyCheckedTime.add(Calendar.MINUTE, TimeUtils.MINUTE_OFFSET);
 
-        } while (!TimeUtils.hasNDaysPassedBetween(now, currentlyCheckedTime, 30));
+        } while (!TimeUtils.isNDaysBetween(now, currentlyCheckedTime, 30));
 
         return possibleTerms;
     }
 
     @Transactional
     public Optional<Visit> saveNewVisit(Term term) {
+        // TODO: validate all term info
+        Visit visit = buildVisit(term);
+
+        // TODO: add all appropriate schedule rows
+        RoomSchedule roomSchedule = new RoomSchedule(visit.getRoom(), term.getStartTime(), term.getEndTime());
+        roomScheduleRepository.save(roomSchedule);
+
+        User worker = userRepository.getById(term.getWorkerId());
+        WorkerSchedule workerSchedule = new WorkerSchedule(worker, term.getStartTime(), term.getEndTime());
+        workerScheduleRepository.save(workerSchedule);
+
+        // TODO: check itemless flag
+        if (visit.getEqItems() != null) {
+            EquipmentSchedule equipmentSchedule = new EquipmentSchedule(visit.getEqItems().get(0), term.getStartTime(), term.getEndTime());
+            equipmentScheduleRepository.save(equipmentSchedule);
+        }
+
+        return Optional.of(visitRepository.save(visit));
+    }
+
+    private Visit buildVisit(Term term) {
+
         Visit visit = new Visit(term.getStartTime(), term.getEndTime());
 
-        // TODO: validate all term info
+        VisitStatus booked = visitStatusRepository.getById(EVisitStatus.VISIT_BOOKED.getValue());
+        Service service = serviceRepository.getById(term.getServiceId());
+        Room room = roomRepository.getById(term.getRoomId());
+        User worker = userRepository.getById(term.getWorkerId());
+        User client = userRepository.getById(term.getClientId());
 
-
-        VisitStatus booked = visitStatusRepository.findById(EVisitStatus.VISIT_BOOKED.getValue())
-                .orElseThrow(() -> new EntityRecordNotFoundException("Visit status needed for a new visit not found in DB (id : " + EVisitStatus.VISIT_BOOKED.getValue() + ")"));
         visit.setVisitStatus(booked);
-
-        Service service = serviceRepository.findById(term.getServiceId())
-                .orElseThrow(() -> new EntityRecordNotFoundException("Service from term not found in DB"));
         visit.setService(service);
-
-        Room room = roomRepository.findById(term.getRoomId())
-                .orElseThrow(() -> new EntityRecordNotFoundException("Room from term not found in DB"));
         visit.setRoom(room);
 
-        User worker = userRepository.findById(term.getWorkerId())
-                .orElseThrow(() -> new EntityRecordNotFoundException("Worker from term not found in DB (id : " + term.getWorkerId() + ")"));
-        User client = userRepository.findById(term.getClientId())
-                .orElseThrow(() -> new EntityRecordNotFoundException("Client from term not found in DB (id : " + term.getClientId() + ")"));
         List<User> visitUsers = new ArrayList<>();
         visitUsers.add(worker);
         visitUsers.add(client);
         visit.setUsers(visitUsers);
 
-        EquipmentItem eqItem = null;
         if (term.getEqItemId() != null) {
-            eqItem = itemRepository.findById(term.getEqItemId())
-                            .orElseThrow(() -> new EntityRecordNotFoundException("Item from term not found in DB (id : " + term.getEqItemId() + ")"));
+            EquipmentItem eqItem = itemRepository.getById(term.getEqItemId());
             visit.setEqItems(Collections.singletonList(eqItem));
         }
 
-        // TODO: add all appropriate schedule rows
-        RoomSchedule roomSchedule = new RoomSchedule(room, term.getStartTime(), term.getEndTime());
-        roomScheduleRepository.save(roomSchedule);
-        WorkerSchedule workerSchedule = new WorkerSchedule(worker, term.getStartTime(), term.getEndTime());
-        workerScheduleRepository.save(workerSchedule);
-        if (eqItem != null) {
-            EquipmentSchedule equipmentSchedule = new EquipmentSchedule(eqItem, term.getStartTime(), term.getEndTime());
-            equipmentScheduleRepository.save(equipmentSchedule);
-        }
-
-        return Optional.of(visitRepository.save(visit));
+        return visit;
     }
 }

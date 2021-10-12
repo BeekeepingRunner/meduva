@@ -16,7 +16,7 @@ public class TimeUtils {
         return toRoundCalendar;
     }
 
-    public static boolean hasNDaysPassedBetween(Calendar now, Calendar someday, int days) {
+    public static boolean isNDaysBetween(Calendar now, Calendar someday, int days) {
         Calendar tempSomeday = (Calendar) someday.clone();
         tempSomeday.add(Calendar.DAY_OF_MONTH, -days);
         return now.before(tempSomeday);

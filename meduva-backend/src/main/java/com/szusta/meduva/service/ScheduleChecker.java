@@ -45,12 +45,10 @@ public class ScheduleChecker {
         this.workerScheduleRepository = workerScheduleRepository;
     }
 
-    public Optional<Term> getTermForCurrentWorker(Service service, List<Room> suitableRooms, Calendar currentlyCheckedTime) {
+    public Optional<Term> getTermForWorker(User worker, Service service, List<Room> suitableRooms, Calendar currentlyCheckedTime) {
 
         Date currentCheckStart = currentlyCheckedTime.getTime();
         Date currentCheckEnd = getIntervalEnd(currentlyCheckedTime, service.getDurationInMin());
-        Long workerId = userService.getCurrentUserId();
-        User worker = userService.getUser(workerId);
 
         if (!isWorkerFree(currentCheckStart, currentCheckEnd, worker)) {
             return Optional.empty();
@@ -64,7 +62,9 @@ public class ScheduleChecker {
         boolean itemless = isServiceItemless(service.getId());
         Optional<EquipmentItem> availableEqItem = Optional.empty();
         if (!itemless) {
-            availableEqItem = getFirstAvailableEqItem(service, availableRoom.get(), currentCheckStart, currentCheckEnd);
+            List<EquipmentItem> suitableEqItems =
+                    equipmentItemRepository.findAllSuitableForServiceInRoom(service.getId(), availableRoom.get().getId());
+            availableEqItem = getFirstAvailableEqItem(suitableEqItems, currentCheckStart, currentCheckEnd);
             if (availableEqItem.isEmpty()) {
                 return Optional.empty();
             }
@@ -98,11 +98,7 @@ public class ScheduleChecker {
         return Optional.empty();
     }
 
-    private Optional<EquipmentItem> getFirstAvailableEqItem(Service service, Room room, Date currentCheckStart, Date currentCheckEnd) {
-
-        List<EquipmentItem> suitableEqItems =
-                equipmentItemRepository.findAllSuitableForServiceInRoom(service.getId(), room.getId());
-
+    private Optional<EquipmentItem> getFirstAvailableEqItem(List<EquipmentItem> suitableEqItems, Date currentCheckStart, Date currentCheckEnd) {
         for (EquipmentItem item : suitableEqItems) {
             if (isEqItemFree(currentCheckStart, currentCheckEnd, item)) {
                 return Optional.of(item);
