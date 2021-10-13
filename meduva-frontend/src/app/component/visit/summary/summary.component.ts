@@ -102,7 +102,7 @@ export class SummaryComponent implements OnInit {
 
     feedbackDialogRef.afterClosed().subscribe(
       acknowledged => {
-        this.router.navigate(['/home']);
+        this.router.navigate(['/visit/pick-service']);
       }
     );
   }

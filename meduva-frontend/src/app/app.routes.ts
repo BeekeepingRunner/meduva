@@ -171,7 +171,7 @@ export const routes: Routes = [
     }
   },
   {
-    path: 'visit/choose-service',
+    path: 'visit/pick-service',
     component: ChooseServiceComponent,
     canActivate: [RoleGuard],
     data: {
