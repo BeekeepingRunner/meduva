@@ -1,5 +1,6 @@
 package com.szusta.meduva.model.schedule;
 
+import com.szusta.meduva.model.AccountlessClient;
 import com.szusta.meduva.model.Room;
 import com.szusta.meduva.model.Service;
 import com.szusta.meduva.model.User;
@@ -36,6 +37,10 @@ public class Visit extends Schedule {
     @ManyToOne
     @JoinColumn(name = "room_id")
     private Room room;
+
+    @ManyToOne
+    @JoinColumn(name = "client_id")
+    private AccountlessClient accountlessClient;
 
     @ManyToMany(
             fetch = FetchType.LAZY,

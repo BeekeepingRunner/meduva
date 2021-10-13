@@ -1,3 +1,11 @@
+CREATE TABLE IF NOT EXISTS client (
+    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(30) NOT NULL,
+    surname VARCHAR(30) NOT NULL,
+    phone_number VARCHAR(11) NOT NULL,
+    deleted TINYINT DEFAULT 0 NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=UTF8;
+
 CREATE TABLE IF NOT EXISTS visit_status (
     id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(100)
@@ -23,7 +31,9 @@ CREATE TABLE IF NOT EXISTS visit (
     service_id INT NOT NULL,
     FOREIGN KEY (service_id) REFERENCES service (id),
     room_id INT NOT NULL,
-    FOREIGN KEY (room_id) REFERENCES room (id)
+    FOREIGN KEY (room_id) REFERENCES room (id),
+    client_id INT NOT NULL,
+    FOREIGN KEY (client_id) REFERENCES client (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=UTF8;
 
 CREATE TABLE IF NOT EXISTS user_visit (
@@ -55,7 +65,6 @@ CREATE TABLE IF NOT EXISTS room_schedule (
 
     room_id INT NOT NULL,
     FOREIGN KEY (room_id) REFERENCES room (id),
-
     room_status_id INT NOT NULL,
     FOREIGN KEY (room_status_id) REFERENCES room_status (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=UTF8;
@@ -75,7 +84,6 @@ CREATE TABLE IF NOT EXISTS equipment_schedule (
 
     equipment_item_id INT NOT NULL,
     FOREIGN KEY (equipment_item_id) REFERENCES equipment_item (id),
-
     equipment_status_id INT NOT NULL,
     FOREIGN KEY (equipment_status_id) REFERENCES equipment_status (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=UTF8;
@@ -95,7 +103,6 @@ CREATE TABLE IF NOT EXISTS worker_schedule (
 
     worker_id INT NOT NULL,
     FOREIGN KEY (worker_id) REFERENCES user (id),
-
     worker_status_id INT NOT NULL,
     FOREIGN KEY (worker_status_id) REFERENCES worker_status (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=UTF8;
