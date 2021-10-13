@@ -1,4 +1,4 @@
-package com.szusta.meduva.repository.schedule;
+package com.szusta.meduva.repository.schedule.worker;
 
 import com.szusta.meduva.model.schedule.WorkerSchedule;
 import com.szusta.meduva.repository.undeletable.UndeletableRepository;

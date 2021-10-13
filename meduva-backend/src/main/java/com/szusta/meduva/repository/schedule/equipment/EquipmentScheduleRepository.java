@@ -1,6 +1,6 @@
-package com.szusta.meduva.repository.schedule;
+package com.szusta.meduva.repository.schedule.equipment;
 
-import com.szusta.meduva.model.schedule.RoomSchedule;
+import com.szusta.meduva.model.schedule.EquipmentSchedule;
 import com.szusta.meduva.repository.undeletable.UndeletableRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -9,12 +9,12 @@ import java.util.Date;
 import java.util.List;
 
 @Repository
-public interface RoomScheduleRepository extends UndeletableRepository<RoomSchedule> {
+public interface EquipmentScheduleRepository extends UndeletableRepository<EquipmentSchedule> {
 
     @Query(
             value =
-                    "select * from room_schedule s "
-                            +   "where s.room_id = ?3 and ("
+                    "select * from equipment_schedule s "
+                            +   "where s.equipment_item_id = ?3 and ("
                             +       "("
                             +           "(timestampdiff(MINUTE, time_from, ?2) > 0) and "
                             +           "(timestampdiff(MINUTE, time_from, ?1) <= 0)"
@@ -26,5 +26,5 @@ public interface RoomScheduleRepository extends UndeletableRepository<RoomSchedu
                             +   ")",
             nativeQuery = true
     )
-    List<? super RoomSchedule> findAnyBetween(Date start, Date end, Long roomId);
+    List<? super EquipmentSchedule> findAnyBetween(Date start, Date end, Long eqItemId);
 }

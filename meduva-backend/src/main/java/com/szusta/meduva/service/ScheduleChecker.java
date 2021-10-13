@@ -9,9 +9,9 @@ import com.szusta.meduva.model.schedule.Schedule;
 import com.szusta.meduva.payload.Term;
 import com.szusta.meduva.repository.equipment.EquipmentItemRepository;
 import com.szusta.meduva.repository.equipment.EquipmentModelRepository;
-import com.szusta.meduva.repository.schedule.EquipmentScheduleRepository;
-import com.szusta.meduva.repository.schedule.RoomScheduleRepository;
-import com.szusta.meduva.repository.schedule.WorkerScheduleRepository;
+import com.szusta.meduva.repository.schedule.equipment.EquipmentScheduleRepository;
+import com.szusta.meduva.repository.schedule.room.RoomScheduleRepository;
+import com.szusta.meduva.repository.schedule.worker.WorkerScheduleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Calendar;
