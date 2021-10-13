@@ -1,6 +1,7 @@
-package com.szusta.meduva.model.schedule.visit;
+package com.szusta.meduva.model.schedule.status;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.szusta.meduva.model.schedule.Visit;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,11 +16,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class VisitStatus {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class VisitStatus extends EventStatus {
 
     @OneToMany(mappedBy = "visitStatus")
     @JsonIgnore

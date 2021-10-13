@@ -1,10 +1,10 @@
-package com.szusta.meduva.model.schedule.visit;
+package com.szusta.meduva.model.schedule;
 
-import com.szusta.meduva.model.equipment.EquipmentItem;
 import com.szusta.meduva.model.Room;
 import com.szusta.meduva.model.Service;
 import com.szusta.meduva.model.User;
-import com.szusta.meduva.model.schedule.Schedule;
+import com.szusta.meduva.model.equipment.EquipmentItem;
+import com.szusta.meduva.model.schedule.status.VisitStatus;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

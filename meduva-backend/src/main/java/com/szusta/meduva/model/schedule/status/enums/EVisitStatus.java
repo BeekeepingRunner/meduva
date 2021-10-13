@@ -1,4 +1,4 @@
-package com.szusta.meduva.model.schedule.visit;
+package com.szusta.meduva.model.schedule.status.enums;
 
 public enum EVisitStatus {
     VISIT_BOOKED(1L),

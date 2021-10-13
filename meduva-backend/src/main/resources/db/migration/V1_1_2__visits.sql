@@ -40,6 +40,11 @@ CREATE TABLE IF NOT EXISTS visit_equipment_item (
     FOREIGN KEY (equipment_item_id) REFERENCES equipment_item (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=UTF8;
 
+CREATE TABLE IF NOT EXISTS room_status (
+   id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+   name VARCHAR(100) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=UTF8;
+
 CREATE TABLE IF NOT EXISTS room_schedule (
     id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(100),
@@ -49,7 +54,15 @@ CREATE TABLE IF NOT EXISTS room_schedule (
     deleted TINYINT NOT NULL,
 
     room_id INT NOT NULL,
-    FOREIGN KEY (room_id) REFERENCES room (id)
+    FOREIGN KEY (room_id) REFERENCES room (id),
+
+    room_status_id INT NOT NULL,
+    FOREIGN KEY (room_status_id) REFERENCES room_status (id)
+) ENGINE=InnoDB DEFAULT CHARSET=UTF8;
+
+CREATE TABLE IF NOT EXISTS equipment_status (
+    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=UTF8;
 
 CREATE TABLE IF NOT EXISTS equipment_schedule (
@@ -61,7 +74,15 @@ CREATE TABLE IF NOT EXISTS equipment_schedule (
     deleted TINYINT NOT NULL,
 
     equipment_item_id INT NOT NULL,
-    FOREIGN KEY (equipment_item_id) REFERENCES equipment_item (id)
+    FOREIGN KEY (equipment_item_id) REFERENCES equipment_item (id),
+
+    equipment_status_id INT NOT NULL,
+    FOREIGN KEY (equipment_status_id) REFERENCES equipment_status (id)
+) ENGINE=InnoDB DEFAULT CHARSET=UTF8;
+
+CREATE TABLE IF NOT EXISTS worker_status (
+    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=UTF8;
 
 CREATE TABLE IF NOT EXISTS worker_schedule (
@@ -73,5 +94,20 @@ CREATE TABLE IF NOT EXISTS worker_schedule (
     deleted TINYINT NOT NULL,
 
     worker_id INT NOT NULL,
-    FOREIGN KEY (worker_id) REFERENCES user (id)
+    FOREIGN KEY (worker_id) REFERENCES user (id),
+
+    worker_status_id INT NOT NULL,
+    FOREIGN KEY (worker_status_id) REFERENCES worker_status (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=UTF8;
+
+INSERT INTO room_status values
+(1, "ROOM_OCCUPIED"),
+(2, "ROOM_UNAVAILABLE");
+
+INSERT INTO worker_status values
+(1, "WORKER_OCCUPIED"),
+(2, "WORKER_ABSENT");
+
+INSERT INTO equipment_status values
+(1, "EQUIPMENT_OCCUPIED"),
+(2, "EQUIPMENT_UNAVAILABLE");

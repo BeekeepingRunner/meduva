@@ -3,7 +3,7 @@ package com.szusta.meduva.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.szusta.meduva.model.common.Undeletable;
 import com.szusta.meduva.model.role.Role;
-import com.szusta.meduva.model.schedule.visit.Visit;
+import com.szusta.meduva.model.schedule.Visit;
 import com.szusta.meduva.model.schedule.WorkerSchedule;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

@@ -2,7 +2,7 @@ package com.szusta.meduva.controller;
 
 import com.szusta.meduva.model.Service;
 import com.szusta.meduva.model.User;
-import com.szusta.meduva.model.schedule.visit.Visit;
+import com.szusta.meduva.model.schedule.Visit;
 import com.szusta.meduva.payload.Term;
 import com.szusta.meduva.service.ServicesService;
 import com.szusta.meduva.service.UserService;
