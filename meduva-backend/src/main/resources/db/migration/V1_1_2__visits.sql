@@ -32,7 +32,7 @@ CREATE TABLE IF NOT EXISTS visit (
     FOREIGN KEY (service_id) REFERENCES service (id),
     room_id INT NOT NULL,
     FOREIGN KEY (room_id) REFERENCES room (id),
-    client_id INT NOT NULL,
+    client_id INT,
     FOREIGN KEY (client_id) REFERENCES client (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=UTF8;
 

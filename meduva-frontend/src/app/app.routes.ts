@@ -1,4 +1,3 @@
-import {AuthGuardService as AuthGuard} from "./service/auth/auth-guard.service";
 import {RoleGuardService as RoleGuard} from "./service/auth/role-guard.service";
 import {Routes} from "@angular/router";
 import {HomeComponent} from "./component/home/home.component";
@@ -7,7 +6,6 @@ import {PasswordResetEmailInputComponent} from "./component/password-reset-email
 import {PasswordResetComponent} from "./component/password-reset/password-reset.component";
 import {RegisterComponent} from "./component/register/register.component";
 import {ProfileComponent} from "./component/profile/profile.component";
-import {BoardAdminComponent} from "./component/board-admin/board-admin.component";
 import {UserListComponent} from "./component/user-list/user-list.component";
 import {roleNames, UserRole} from "./model/user";
 import {AccessDeniedComponent} from "./component/access-denied/access-denied.component";
@@ -65,14 +63,6 @@ export const routes: Routes = [
   {
     path: 'new-email-activation/:token',
     component: ActivateNewEmailComponent,
-  },
-  {
-    path: 'admin',
-    component: BoardAdminComponent,
-    canActivate: [RoleGuard],
-    data: {
-      expectedRole: roleNames[UserRole.ROLE_ADMIN]
-    }
   },
   {
     path: 'users',

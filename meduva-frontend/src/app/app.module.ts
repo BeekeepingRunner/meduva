@@ -10,7 +10,6 @@ import { LoginComponent } from './component/login/login.component';
 import { RegisterComponent } from './component/register/register.component';
 import { HomeComponent } from './component/home/home.component';
 import { ProfileComponent } from './component/profile/profile.component';
-import { BoardAdminComponent } from './component/board-admin/board-admin.component';
 import { SpecificUserComponent} from "./component/specific-user-profile/specific-user.component";
 import { EditProfileComponent } from './component/edit-profile/edit-profile.component';
 import { EditEmailComponent } from './component/edit-email/edit-email.component';
@@ -71,7 +70,6 @@ import { SummaryComponent } from './component/visit/summary/summary.component';
     RegisterComponent,
     HomeComponent,
     ProfileComponent,
-    BoardAdminComponent,
     PasswordResetEmailInputComponent,
     PasswordResetComponent,
     EditEmailComponent,
