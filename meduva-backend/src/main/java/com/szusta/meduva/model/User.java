@@ -40,6 +40,17 @@ public class User extends Undeletable {
     )
     private Set<Role> roles = new HashSet<>();
 
+    @ManyToMany(
+            fetch = FetchType.LAZY,
+            cascade = CascadeType.ALL
+    )
+    @JoinTable(
+            name = "worker_service",
+            joinColumns = @JoinColumn(name = "worker_id"),
+            inverseJoinColumns = @JoinColumn(name = "service_id")
+    )
+    private Set<Service> services = new HashSet<>();
+
     public User(String login, String email, String password) {
         this.login = login;
         this.email = email;

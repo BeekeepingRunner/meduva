@@ -3,6 +3,7 @@ import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {environment} from "../../environments/environment";
 import {ResetPasswordRequest, Role, User} from "../model/user";
+import {Service} from "../model/service";
 
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type' : 'application/json' })
@@ -84,4 +85,17 @@ export class UserService {
       roleId
     }, httpOptions);
   }
+
+  getWorkerServices(userId: number){
+    return this.http.get<Service[]>(environment.API_BASE_URL + "api/user/workerServices/" + userId);
+  }
+
+  assignServicesToWorker(serviceList: number[],
+           id: number){
+
+    return this.http.post( environment.API_BASE_URL+"api/user/assignServicesToWorker/" + id,
+      serviceList
+    , httpOptions);
+  }
+
 }

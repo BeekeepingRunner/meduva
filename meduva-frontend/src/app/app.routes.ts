@@ -25,6 +25,7 @@ import {NewModelComponent} from "./component/equipment/new-model/new-model.compo
 import {ModelDetailsComponent} from "./component/equipment/model-details/model-details.component";
 import {SpecificUserComponent} from "./component/specific-user-profile/specific-user.component";
 import {EditRoleComponent} from "./component/edit-role/edit-role.component";
+import {WorkerServicesComponent} from "./component/worker-services/worker-services.component";
 
 
 export const routes: Routes = [
@@ -121,6 +122,14 @@ export const routes: Routes = [
   {
     path: 'service/:id',
     component: ServiceDetailsComponent,
+    canActivate: [RoleGuard],
+    data: {
+      expectedRole: roleNames[UserRole.ROLE_ADMIN]
+    }
+  },
+  {
+    path: 'specific-user/worker-services/:id',
+    component: WorkerServicesComponent,
     canActivate: [RoleGuard],
     data: {
       expectedRole: roleNames[UserRole.ROLE_ADMIN]
