@@ -16,9 +16,10 @@ export class EditPerformedServicesComponent implements OnInit {
   roomId!: number;
   itemlessServices: Service[] = [];
   performedServices: Service[] = [];
+  performedItemlessServices: Service[] = [];
   editedServiceList: Service[] =[];
   displayedColumns: string[] = ['name', 'action'];
-  selection?: SelectionModel<Service>;
+  selection?: SelectionModel<Service> = new SelectionModel<Service>();
 
 
   constructor(
@@ -50,9 +51,20 @@ export class EditPerformedServicesComponent implements OnInit {
       performedServices => {
         this.performedServices = performedServices;
         console.log(this.performedServices);
-        this.selection = new SelectionModel<Service>(true, this.itemlessServices);
+        this.getPerformedItemlessServices();
+        this.selection = new SelectionModel<Service>(true, this.performedItemlessServices);
       }
     )
+  }
+
+  getPerformedItemlessServices(){
+    for (let performedService of this.performedServices){
+      for(let itemlessService of this.itemlessServices){
+        if(performedService.id == itemlessService.id){
+          this.performedItemlessServices.push(itemlessService);
+        }
+      }
+    }
   }
 
   isServicePerformedInRoom(service: Service): boolean {
