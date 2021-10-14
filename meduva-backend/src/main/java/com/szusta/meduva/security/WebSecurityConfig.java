@@ -110,6 +110,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/api/password/change").permitAll()
                 .antMatchers("/api/service/{id}").hasAuthority("ROLE_ADMIN")
                 .antMatchers("/services").hasAuthority("ROLE_ADMIN")
+                .antMatchers("/api/service/all/itemless").hasAuthority("ROLE_ADMIN")
+                .antMatchers("/api/room/{id}/edit-services").hasAuthority("ROLE_ADMIN")
                 .antMatchers("/api/user/edit/{id}").hasAuthority("ROLE_CLIENT")
                 .antMatchers("/api/email/request/{id}").hasAuthority("ROLE_CLIENT")
                 .antMatchers("/api/email/validate-email-reset-token").permitAll()

@@ -29,6 +29,9 @@ public class ServicesController {
         return this.servicesService.findAllUndeletedServices();
     }
 
+    @GetMapping("/all/itemless")
+    public List<Service> findAllItemlessServices(){ return this.servicesService.findAllItemless(); }
+
     @PostMapping
     public Service saveNewService(@RequestBody NewServiceRequest request) {
         Service service = new Service(
@@ -36,6 +39,7 @@ public class ServicesController {
                 request.getDescription(),
                 request.getDurationInMin(),
                 request.getPrice(),
+                request.isItemless(),
                 request.isDeleted()
         );
         return this.servicesService.save(service);

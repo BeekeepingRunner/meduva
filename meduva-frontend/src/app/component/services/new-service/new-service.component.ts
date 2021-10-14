@@ -34,6 +34,7 @@ export class NewServiceComponent implements OnInit {
         price: new FormControl('', [
           Validators.required
         ]),
+        itemless: new FormControl(false),
       }
     );
   }
@@ -50,6 +51,7 @@ export class NewServiceComponent implements OnInit {
       description: this.form.controls.description.value,
       durationInMin: this.form.controls.durationInMin.value,
       price: this.form.controls.price.value,
+      itemless: this.form.controls.itemless.value,
       deleted: false
     };
 

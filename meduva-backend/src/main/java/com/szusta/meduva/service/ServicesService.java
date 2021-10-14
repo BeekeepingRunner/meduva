@@ -34,6 +34,10 @@ public class ServicesService {
         return this.serviceRepository.findAllUndeleted();
     }
 
+    public List<Service> findAllItemless() {
+        return this.serviceRepository.findByItemlessTrue();
+    }
+
     public Service findById(Long serviceId) {
         return this.serviceRepository.findById(serviceId)
                 .orElseThrow(() -> new EntityRecordNotFoundException("Service not found with id : " + serviceId));
@@ -61,4 +65,6 @@ public class ServicesService {
         service.markAsDeleted();
         serviceRepository.save(service);
     }
+
+
 }

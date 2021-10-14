@@ -23,12 +23,13 @@ public class Service extends Undeletable {
     @Column(name = "duration_in_min")
     private int durationInMin;
     private BigDecimal price;
+    private boolean itemless;
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JsonIgnore
     List<EquipmentModel> equipmentModel;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "services")
     @JsonIgnore
     List<Room> rooms;
 
@@ -36,11 +37,13 @@ public class Service extends Undeletable {
                    String description,
                    int durationInMin,
                    BigDecimal price,
+                   boolean itemless,
                    boolean deleted) {
         this.name = name;
         this.description = description;
         this.durationInMin = durationInMin;
         this.price = price;
+        this.itemless = itemless;
         this.deleted = deleted;
     }
 }

@@ -1,12 +1,14 @@
 package com.szusta.meduva.controller;
 
 import com.szusta.meduva.model.Room;
+import com.szusta.meduva.model.Service;
 import com.szusta.meduva.payload.request.NewRoomRequest;
 import com.szusta.meduva.service.RoomService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/room")
@@ -37,6 +39,16 @@ public class RoomController {
                 request.isDeleted()
         );
         return this.roomService.saveNewRoom(room);
+    }
+
+    @PostMapping("/{id}/edit-services")
+    public Room editServices(@PathVariable final Long id, @RequestBody final List<Service> editedServicesList){
+        Room room = this.roomService.findById(id);
+        List<Service> services = room.getServices();
+        services = services.stream().filter(service -> !service.isItemless()).collect(Collectors.toList());
+        services.addAll(editedServicesList);
+        room.setServices(services);
+        return this.roomService.editRoomServices(room);
     }
 
     @DeleteMapping("/{id}")
