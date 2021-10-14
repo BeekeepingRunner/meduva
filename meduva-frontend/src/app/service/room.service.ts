@@ -43,6 +43,10 @@ export class RoomService {
   public deleteById(roomId: number | undefined): Observable<any> {
     return this.httpClient.delete(environment.API_BASE_URL + 'api/room/' + roomId);
   }
+
+  editServices(roomId: number, editedServiceList: Service[]): Observable<any> {
+    return this.httpClient.post(environment.API_BASE_URL + 'api/room/' + roomId + '/edit-services', editedServiceList);
+  }
 }
 
 interface servicesResponse {

@@ -1,6 +1,7 @@
 package com.szusta.meduva.controller;
 
 import com.szusta.meduva.model.Room;
+import com.szusta.meduva.model.Service;
 import com.szusta.meduva.payload.request.NewRoomRequest;
 import com.szusta.meduva.service.RoomService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +38,13 @@ public class RoomController {
                 request.isDeleted()
         );
         return this.roomService.saveNewRoom(room);
+    }
+
+    @PostMapping("/{id}/edit-services")
+    public Room editServices(@PathVariable final Long id, @RequestBody final List<Service> editedServicesList){
+        Room room = this.roomService.findById(id);
+        room.setServices(editedServicesList);
+        return this.roomService.editRoomServices(room);
     }
 
     @DeleteMapping("/{id}")

@@ -21,6 +21,10 @@ export class EditPerformedServicesComponent implements OnInit {
   displayedColumns: string[] = ['name', 'action'];
   selection?: SelectionModel<Service> = new SelectionModel<Service>();
 
+  editSuccessfully: boolean = false;
+  requestSended: boolean = false;
+  errorMessage: string = '';
+
 
   constructor(
     private route: ActivatedRoute,
@@ -67,46 +71,20 @@ export class EditPerformedServicesComponent implements OnInit {
     }
   }
 
-  isServicePerformedInRoom(service: Service): boolean {
-    for (let performedService of this.performedServices) {
-      if (service.id == performedService.id) {
-        //console.log('checked')
-        //this.addOrDeleteServiceList(service);
-        return true;
-      }
-    }
-    return false;
-  }
-
-  addOrDeleteServiceList(service: Service){
-    console.log('checked')
-    //console.log(this.editedServiceList)
-    if(this.editedServiceList.length > 0){
-      for(let editService of this.editedServiceList){
-        if(service.id == editService.id ){
-          const index = this.editedServiceList.indexOf(editService);
-          this.editedServiceList.splice(index, 1);
-          //console.log('deleted')
-         // console.log(this.editedServiceList)
-        }else{
-          this.editedServiceList.push(service);
-          //console.log('added')
-          //console.log(this.editedServiceList)
-        }
-      }
-    }else{
-     // console.log('added')
-      this.editedServiceList.push(service);
-      //console.log(this.editedServiceList)
-    }
-  }
-
-  addServiceList(){
-    console.log(this.editedServiceList)
-
-  }
-
-  logSelection() {
+  tryEditServices() {
     this.selection!.selected.forEach(s => console.log(s));
+    this.selection!.selected.forEach(s => this.editedServiceList.push(s));
+
+    this.roomService.editServices(this.roomId, this.editedServiceList).subscribe(
+      data => {
+        this.requestSended = true;
+        this.editSuccessfully = true;
+      },
+      err => {
+        this.errorMessage = err.error.message;
+        this.requestSended = true;
+        this.editSuccessfully = false;
+      }
+    )
   }
 }
