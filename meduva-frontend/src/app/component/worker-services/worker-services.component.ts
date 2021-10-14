@@ -31,7 +31,7 @@ export class WorkerServicesComponent implements OnInit {
   displayedColumns: string[] = ['name', 'select'];
 
 
-  id!: number;
+  userId!: number;
 
 
   constructor(private formBuilder: FormBuilder,
@@ -47,7 +47,7 @@ export class WorkerServicesComponent implements OnInit {
     this.populateFormWithUserData();
     this.buildForm();
     this.getAllServices();
-    this.getWorkerServices(this.id);
+    this.getWorkerServices(this.userId);
   }
 
   private buildForm(){
@@ -58,8 +58,8 @@ export class WorkerServicesComponent implements OnInit {
   }
 
   private populateFormWithUserData(){
-    this.id = this.route.snapshot.params.id;
-    this.userService.getUserDetails(this.id).subscribe(
+    this.userId = this.route.snapshot.params.id;
+    this.userService.getUserDetails(this.userId).subscribe(
       (data: User) => {
         this.user = data;
 
@@ -78,8 +78,8 @@ export class WorkerServicesComponent implements OnInit {
     )
   }
 
-  getWorkerServices(id: number){
-    this.userService.getWorkerServices(id).subscribe(
+  getWorkerServices(userId: number){
+    this.userService.getWorkerServices(userId).subscribe(
       services => {
         services.forEach(serv => {if(serv.id)
           this.servicesId.push((serv.id));})
@@ -132,7 +132,7 @@ export class WorkerServicesComponent implements OnInit {
       selectedServices.push((serv.id));
     }
 
-    this.userService.assignServicesToWorker(selectedServices, this.id).subscribe(
+    this.userService.assignServicesToWorker(selectedServices, this.userId).subscribe(
       data => {
         this.editFailed = false;
         this.editSuccessful = true;
