@@ -72,18 +72,22 @@ export class WorkerServicesComponent implements OnInit {
   getAllServices() {
     this.servicesService.getAllUndeletedServices().subscribe(
       services => {
-
         this.services = services;
-      }
-    )
+      })
   }
 
   getWorkerServices(userId: number){
     this.userService.getWorkerServices(userId).subscribe(
-      services => {
-        services.forEach(serv => {if(serv.id)
-          this.servicesId.push((serv.id));})
 
+      services => {
+
+        /** Fills the array which contain worker services id, which are saved in database */
+        services.forEach(serv => {
+          if(serv.id)
+          this.servicesId.push(serv.id);
+        })
+
+          /** Selects all rows that are services containing the identifier from servicesId array */
         this.services.forEach(row => {
           if(row.id)
           if(this.servicesId.includes(row.id))
@@ -92,7 +96,6 @@ export class WorkerServicesComponent implements OnInit {
       }
     );
 }
-
 
   isAllSelected() {
     const numSelected = this.selection.selected.length;

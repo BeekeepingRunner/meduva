@@ -25,12 +25,14 @@ public class UserToServiceService {
 
     public com.szusta.meduva.model.Service[] getWorkerServices(Long userId) {
         User user = userRepository.findById(userId).orElseThrow(() -> new EntityRecordNotFoundException("User not found with id : " + userId));
-        Set<com.szusta.meduva.model.Service> serviceSet = new HashSet<>();
-        serviceSet = user.getServices();
+
+        Set<com.szusta.meduva.model.Service> serviceSet = user.getServices();
+
         com.szusta.meduva.model.Service[] serviceIdTable = new com.szusta.meduva.model.Service[serviceSet.size()];
-        int k=0;
+
+        int ItemInTableCounter=0;
         for (com.szusta.meduva.model.Service s : serviceSet) {
-            serviceIdTable[k++]=s;
+            serviceIdTable[ItemInTableCounter++]=s;
         }
         return serviceIdTable;
     }
@@ -38,7 +40,9 @@ public class UserToServiceService {
     @Transactional
     public User assignServicesToWorker(Long userId, Long[] servicesId){
         User user = userRepository.findById(userId).orElseThrow(()-> new EntityRecordNotFoundException("User not found with id : " + userId));
+
         Set<com.szusta.meduva.model.Service> serviceSet= new HashSet<>();
+
         for(Long s : servicesId){
             com.szusta.meduva.model.Service serv = serviceRepository.findById(s).orElseThrow(()-> new EntityRecordNotFoundException("Service not found with id : " + s));
             serviceSet.add(serv);
@@ -47,7 +51,6 @@ public class UserToServiceService {
         user.setServices(serviceSet);
 
         return userRepository.save(user);
-
     }
 
 }

@@ -33,7 +33,6 @@ public class WorkerController {
 
     @PostMapping("/assignServicesToWorker/{id}")
     public User assignServicesToWorker(@PathVariable Long id, @RequestBody Long[] request){
-        System.out.println(request);
         return userToServiceService.assignServicesToWorker(id, request);
 
     }
