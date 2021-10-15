@@ -5,6 +5,7 @@ import {MatDialog} from "@angular/material/dialog";
 import {RoomService} from "../../../service/room.service";
 import {ConfirmationDialogComponent} from "../../dialog/confirmation-dialog/confirmation-dialog.component";
 import {FeedbackDialogComponent} from "../../dialog/feedback-dialog/feedback-dialog.component";
+import {Service} from "../../../model/service";
 
 @Component({
   selector: 'app-room-details',
@@ -16,6 +17,8 @@ export class RoomDetailsComponent implements OnInit {
   room!: Room;
   wasDeletionSuccessful: boolean = true;
   errorMessage: string = '';
+  columnName: string[] = ['Name'];
+  services: Service[] = [];
 
   constructor(
     private route: ActivatedRoute,
@@ -25,10 +28,19 @@ export class RoomDetailsComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.getRoomInformation();
+  }
+
+  getRoomInformation(){
     let roomId: number = Number(this.route.snapshot.params.id);
     this.roomService.getById(roomId).subscribe(
       room => {
         this.room = room;
+        this.roomService.getRoomServices(this.room.id!).subscribe(
+          services => {
+            this.services = services;
+          }
+        )
       }
     );
   }

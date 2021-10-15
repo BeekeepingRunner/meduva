@@ -26,6 +26,8 @@ import {ModelDetailsComponent} from "./component/equipment/model-details/model-d
 import {SpecificUserComponent} from "./component/specific-user-profile/specific-user.component";
 import {EditRoleComponent} from "./component/edit-role/edit-role.component";
 import {WorkerServicesComponent} from "./component/worker-services/worker-services.component";
+import {EditPerformedServicesComponent} from "./component/rooms/edit-performed-services/edit-performed-services.component";
+
 
 
 export const routes: Routes = [
@@ -162,6 +164,14 @@ export const routes: Routes = [
   {
     path: 'room/:id',
     component: RoomDetailsComponent,
+    canActivate: [RoleGuard],
+    data: {
+      expectedRole: roleNames[UserRole.ROLE_ADMIN]
+    }
+  },
+  {
+    path: 'room/:id/edit-performed-services',
+    component: EditPerformedServicesComponent,
     canActivate: [RoleGuard],
     data: {
       expectedRole: roleNames[UserRole.ROLE_ADMIN]
