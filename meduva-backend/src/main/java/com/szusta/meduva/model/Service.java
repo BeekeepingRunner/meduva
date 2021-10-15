@@ -8,6 +8,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.Collection;
 import java.util.List;
 
 @Entity
@@ -32,6 +33,10 @@ public class Service extends Undeletable {
     @ManyToMany(fetch = FetchType.LAZY, mappedBy = "services")
     @JsonIgnore
     List<Room> rooms;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JsonIgnore
+    Collection<User> users;
 
     public Service(String name,
                    String description,

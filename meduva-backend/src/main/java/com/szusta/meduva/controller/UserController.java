@@ -3,12 +3,15 @@ package com.szusta.meduva.controller;
 import com.szusta.meduva.model.ERole;
 import com.szusta.meduva.model.Role;
 import com.szusta.meduva.model.User;
+import com.szusta.meduva.payload.request.AssignServicesToWorkerRequest;
 import com.szusta.meduva.payload.request.ChangeRoleRequest;
 import com.szusta.meduva.payload.request.UpdatedUserRequest;
 import com.szusta.meduva.repository.RoleRepository;
 import com.szusta.meduva.service.RoleService;
 import com.szusta.meduva.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.NumberFormat;
+import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -76,4 +79,5 @@ public class UserController {
         return userService.changeUserRole(id,request.getRoleId());
 
     }
+
 }

@@ -46,3 +46,10 @@ CREATE TABLE IF NOT EXISTS equipment_item (
     FOREIGN KEY (equipment_model_id) REFERENCES equipment_model (id),
     FOREIGN KEY (room_id) REFERENCES room (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=UTF8;
+
+CREATE TABLE IF NOT EXISTS worker_service (
+    service_id INT NOT NULL,
+    worker_id INT NOT NULL,
+    FOREIGN KEY (service_id) REFERENCES service (id),
+    FOREIGN KEY (worker_id) REFERENCES user (id)
+) ENGINE=InnoDB DEFAULT CHARSET=UTF8;

@@ -56,6 +56,7 @@ import { ModelDetailsComponent } from './component/equipment/model-details/model
 import { FeedbackDialogComponent } from './component/dialog/feedback-dialog/feedback-dialog.component';
 import {EditRoleComponent} from "./component/edit-role/edit-role.component";
 import {MatSelectModule} from "@angular/material/select";
+import {WorkerServicesComponent} from "./component/worker-services/worker-services.component";
 import { EditPerformedServicesComponent } from './component/rooms/edit-performed-services/edit-performed-services.component';
 
 
@@ -92,6 +93,7 @@ import { EditPerformedServicesComponent } from './component/rooms/edit-performed
     ModelDetailsComponent,
     FeedbackDialogComponent,
     EditRoleComponent,
+    WorkerServicesComponent,
     EditPerformedServicesComponent,
   ],
   imports: [

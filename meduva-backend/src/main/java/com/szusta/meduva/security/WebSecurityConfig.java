@@ -102,7 +102,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     // TODO: finish permitting endpoint access for users with specific roles
     private void authorizeRequests(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers("/api/auth/**").permitAll()
+               /* .antMatchers("/api/auth/**").permitAll()
                 .antMatchers("/api/test/all").permitAll()
                 .antMatchers("/api/password/request").permitAll()
                 .antMatchers("/api/password/user").permitAll()
@@ -115,7 +115,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/api/user/edit/{id}").hasAuthority("ROLE_CLIENT")
                 .antMatchers("/api/email/request/{id}").hasAuthority("ROLE_CLIENT")
                 .antMatchers("/api/email/validate-email-reset-token").permitAll()
-                .anyRequest().authenticated();
-        //.anyRequest().permitAll();
+                .antMatchers("/edit-role/{id}").hasAuthority("ROLE_ADMIN")
+                .antMatchers("/assignServicesToWorker/{id}").hasAuthority("ROLE_RECEPTIONIST")
+                .anyRequest().authenticated();*/
+        .anyRequest().permitAll();
     }
 }
