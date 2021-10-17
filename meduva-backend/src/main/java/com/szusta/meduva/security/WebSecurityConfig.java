@@ -99,10 +99,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
     }
 
-    // TODO: finish permitting endpoint access for users with specific roles
+    // TODO: secure endpoint access for users with specific roles
     private void authorizeRequests(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers("/api/greetings").permitAll()
+                /*
                 .antMatchers("/api/auth/**").permitAll()
                 .antMatchers("/api/test/all").permitAll()
                 .antMatchers("/api/password/request").permitAll()
@@ -111,10 +111,15 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/api/password/change").permitAll()
                 .antMatchers("/api/service/{id}").hasAuthority("ROLE_ADMIN")
                 .antMatchers("/services").hasAuthority("ROLE_ADMIN")
+                .antMatchers("/api/service/all/itemless").hasAuthority("ROLE_ADMIN")
+                .antMatchers("/api/room/{id}/edit-services").hasAuthority("ROLE_ADMIN")
                 .antMatchers("/api/user/edit/{id}").hasAuthority("ROLE_CLIENT")
                 .antMatchers("/api/email/request/{id}").hasAuthority("ROLE_CLIENT")
                 .antMatchers("/api/email/validate-email-reset-token").permitAll()
+                .antMatchers("/edit-role/{id}").hasAuthority("ROLE_ADMIN")
+                .antMatchers("/assignServicesToWorker/{id}").hasAuthority("ROLE_RECEPTIONIST")
                 .anyRequest().authenticated();
-        //.anyRequest().permitAll();
+                */
+        .anyRequest().permitAll();
     }
 }

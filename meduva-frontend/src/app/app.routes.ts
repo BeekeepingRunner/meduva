@@ -27,7 +27,8 @@ import {SpecificUserComponent} from "./component/specific-user-profile/specific-
 import {EditRoleComponent} from "./component/edit-role/edit-role.component";
 import {PickClientComponent} from "./component/visit/pick-client/pick-client.component";
 import {SummaryComponent} from "./component/visit/summary/summary.component";
-
+import {WorkerServicesComponent} from "./component/worker-services/worker-services.component";
+import {EditPerformedServicesComponent} from "./component/rooms/edit-performed-services/edit-performed-services.component";
 
 export const routes: Routes = [
   { path: 'home', component: HomeComponent },
@@ -45,8 +46,24 @@ export const routes: Routes = [
     }
   },
   {
+    path: 'profile/edit-profile',
+    component: EditProfileComponent,
+    canActivate: [RoleGuard],
+    data: {
+      expectedRole: roleNames[UserRole.ROLE_CLIENT]
+    }
+  },
+  {
     path: 'profile/edit-profile/:id',
     component: EditProfileComponent,
+    canActivate: [RoleGuard],
+    data: {
+      expectedRole: roleNames[UserRole.ROLE_ADMIN]
+    }
+  },
+  {
+    path: 'profile/edit-email',
+    component: EditEmailComponent,
     canActivate: [RoleGuard],
     data: {
       expectedRole: roleNames[UserRole.ROLE_CLIENT]
@@ -57,7 +74,7 @@ export const routes: Routes = [
     component: EditEmailComponent,
     canActivate: [RoleGuard],
     data: {
-      expectedRole: roleNames[UserRole.ROLE_CLIENT]
+      expectedRole: roleNames[UserRole.ROLE_ADMIN]
     }
   },
   {
@@ -105,6 +122,14 @@ export const routes: Routes = [
     }
   },
   {
+    path: 'specific-user/worker-services/:id',
+    component: WorkerServicesComponent,
+    canActivate: [RoleGuard],
+    data: {
+      expectedRole: roleNames[UserRole.ROLE_ADMIN]
+    }
+  },
+  {
     path: 'services/add-service',
     component: NewServiceComponent,
     canActivate: [RoleGuard],
@@ -131,6 +156,14 @@ export const routes: Routes = [
   {
     path: 'room/:id',
     component: RoomDetailsComponent,
+    canActivate: [RoleGuard],
+    data: {
+      expectedRole: roleNames[UserRole.ROLE_ADMIN]
+    }
+  },
+  {
+    path: 'room/:id/edit-performed-services',
+    component: EditPerformedServicesComponent,
     canActivate: [RoleGuard],
     data: {
       expectedRole: roleNames[UserRole.ROLE_ADMIN]

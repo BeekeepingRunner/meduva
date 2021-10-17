@@ -46,6 +46,10 @@ public class RoomService {
             throw new AlreadyExistsException("Room already exists with name: " + room.getName());
     }
 
+    public Room editRoomServices(Room room) {
+        return this.roomRepository.save(room);
+    }
+
     public void deleteById(Long id) {
         this.roomRepository.deleteById(id);
     }
@@ -59,4 +63,6 @@ public class RoomService {
         room.markAsDeleted();
         roomRepository.save(room);
     }
+
+
 }

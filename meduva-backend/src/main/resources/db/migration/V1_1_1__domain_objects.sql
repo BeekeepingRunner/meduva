@@ -4,6 +4,7 @@ CREATE TABLE IF NOT EXISTS service (
     description VARCHAR(3000),
     duration_in_min INT NOT NULL,
     price DECIMAL(19, 2) NOT NULL,
+    itemless TINYINT NOT NULL,
     deleted TINYINT DEFAULT 0 NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=UTF8;
 
@@ -44,4 +45,11 @@ CREATE TABLE IF NOT EXISTS equipment_item (
     room_id INT,
     FOREIGN KEY (equipment_model_id) REFERENCES equipment_model (id),
     FOREIGN KEY (room_id) REFERENCES room (id)
+) ENGINE=InnoDB DEFAULT CHARSET=UTF8;
+
+CREATE TABLE IF NOT EXISTS worker_service (
+    service_id INT NOT NULL,
+    worker_id INT NOT NULL,
+    FOREIGN KEY (service_id) REFERENCES service (id),
+    FOREIGN KEY (worker_id) REFERENCES user (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=UTF8;

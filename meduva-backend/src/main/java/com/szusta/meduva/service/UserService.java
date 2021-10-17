@@ -5,6 +5,7 @@ import com.szusta.meduva.model.role.ERole;
 import com.szusta.meduva.model.role.Role;
 import com.szusta.meduva.model.User;
 import com.szusta.meduva.repository.RoleRepository;
+import com.szusta.meduva.repository.ServiceRepository;
 import com.szusta.meduva.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -20,11 +21,13 @@ public class UserService {
 
     UserRepository userRepository;
     RoleRepository roleRepository;
+    ServiceRepository serviceRepository;
 
     @Autowired
-    public UserService(UserRepository userRepository, RoleRepository roleRepository) {
+    public UserService(UserRepository userRepository, RoleRepository roleRepository, ServiceRepository serviceRepository) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
+        this.serviceRepository = serviceRepository;
     }
 
     public User findByLogin(String login) {

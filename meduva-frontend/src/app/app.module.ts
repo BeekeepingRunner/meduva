@@ -62,6 +62,8 @@ import {EditRoleComponent} from "./component/edit-role/edit-role.component";
 import {MatSelectModule} from "@angular/material/select";
 import { PickClientComponent } from './component/visit/pick-client/pick-client.component';
 import { SummaryComponent } from './component/visit/summary/summary.component';
+import {WorkerServicesComponent} from "./component/worker-services/worker-services.component";
+import { EditPerformedServicesComponent } from './component/rooms/edit-performed-services/edit-performed-services.component';
 
 @NgModule({
   declarations: [
@@ -98,6 +100,8 @@ import { SummaryComponent } from './component/visit/summary/summary.component';
     EditRoleComponent,
     PickClientComponent,
     SummaryComponent,
+    WorkerServicesComponent,
+    EditPerformedServicesComponent,
   ],
   imports: [
     BrowserModule,
