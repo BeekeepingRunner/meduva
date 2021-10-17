@@ -1,4 +1,4 @@
-package com.szusta.meduva.service.entityconnections;
+package com.szusta.meduva.service.equipment;
 
 import com.szusta.meduva.model.Service;
 import com.szusta.meduva.model.equipment.EquipmentItem;
@@ -12,13 +12,13 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @org.springframework.stereotype.Service
-public class ServiceToEqModelService {
+public class ModelDeactivator {
 
     private EquipmentModelRepository equipmentModelRepository;
     private EquipmentItemRepository equipmentItemRepository;
 
     @Autowired
-    public ServiceToEqModelService(
+    public ModelDeactivator(
             EquipmentModelRepository equipmentModelRepository,
             EquipmentItemRepository equipmentItemRepository
     ) {

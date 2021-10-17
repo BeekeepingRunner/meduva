@@ -1,7 +1,7 @@
 package com.szusta.meduva.filter;
 
 import com.szusta.meduva.security.jwt.JwtUtils;
-import com.szusta.meduva.service.UserDetailsServiceImpl;
+import com.szusta.meduva.service.user.UserDetailsServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

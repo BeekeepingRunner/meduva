@@ -6,7 +6,7 @@ import com.szusta.meduva.model.role.Role;
 import com.szusta.meduva.model.User;
 import com.szusta.meduva.repository.RoleRepository;
 import com.szusta.meduva.repository.UserRepository;
-import com.szusta.meduva.service.UserService;
+import com.szusta.meduva.service.user.UserService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

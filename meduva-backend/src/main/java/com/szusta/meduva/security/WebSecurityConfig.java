@@ -2,7 +2,7 @@ package com.szusta.meduva.security;
 
 import com.szusta.meduva.filter.AuthTokenFilter;
 import com.szusta.meduva.security.jwt.AuthEntryPointJwt;
-import com.szusta.meduva.service.UserDetailsServiceImpl;
+import com.szusta.meduva.service.user.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

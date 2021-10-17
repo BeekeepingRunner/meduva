@@ -1,4 +1,4 @@
-package com.szusta.meduva.service;
+package com.szusta.meduva.service.equipment;
 
 import com.szusta.meduva.exception.EntityRecordNotFoundException;
 import com.szusta.meduva.model.Room;
@@ -37,30 +37,24 @@ public class EquipmentMaker {
 
     @Transactional
     public EquipmentModel createModelWithItems(NewEqModelRequest eqModelRequest) {
-
+        
+        // deconstruct request
         String modelName = eqModelRequest.getModelName();
-        EquipmentModel eqModel = new EquipmentModel(modelName, true, false);
-
-        // connect services to the model
         List<Long> servicesIds = eqModelRequest.getServicesIds();
-        List<com.szusta.meduva.model.Service> services = serviceRepository.findAllById(servicesIds);
-
-        // serviceToEqModelService.connectServicesToTheModel(eqModel, services);
-        eqModel.setServices(services);
-        equipmentModelRepository.save(eqModel);
-
-        // connect rooms with services
         List<Long> roomsIds = eqModelRequest.getSelectedRoomsIds();
-        List<Room> rooms = findRoomsByIdsInOrder(roomsIds);
-        rooms = connectRoomsWithServices(rooms, services);
-
-        // create items and connect them with rooms
         int itemCount = eqModelRequest.getItemCount();
-        List<EquipmentItem> eqItems = createItemsWithNames(itemCount, modelName);
-        eqItems = connectItemsWithRooms(eqItems, rooms);
 
-        // connect model with items and save
-        eqItems = saveItemsWithModel(eqItems, eqModel);
+        // get necessary entities
+        EquipmentModel eqModel = new EquipmentModel(modelName, true, false);
+        List<com.szusta.meduva.model.Service> services = serviceRepository.findAllById(servicesIds);
+        List<Room> rooms = findRoomsByIdsInOrder(roomsIds);
+        List<EquipmentItem> eqItems = createItemsWithNames(itemCount, modelName);
+
+        eqModel = connect(eqModel, services);
+        rooms = connect(rooms, services);
+        eqItems = connectInParallel(eqItems, rooms);
+        eqItems = connect(eqItems, eqModel);
+
         eqModel.setItems(eqItems);
         return equipmentModelRepository.save(eqModel);
     }
@@ -76,14 +70,6 @@ public class EquipmentMaker {
         return rooms;
     }
 
-    private List<Room> connectRoomsWithServices(List<Room> rooms, List<com.szusta.meduva.model.Service> services) {
-        for (Room room : rooms) {
-            room.setServices(services);
-            room = roomRepository.save(room);
-        }
-        return rooms;
-    }
-
     private List<EquipmentItem> createItemsWithNames(int itemCount, String modelName) {
         List<EquipmentItem> eqItems = new ArrayList<>(itemCount);
         for (int i = 0; i < itemCount; ++i) {
@@ -94,20 +80,33 @@ public class EquipmentMaker {
         return eqItems;
     }
 
-    private List<EquipmentItem> saveItemsWithModel(List<EquipmentItem> items, EquipmentModel model) {
-        for (EquipmentItem item: items) {
-            item.setEquipmentModel(model);
-            item = equipmentItemRepository.save(item);
+    private EquipmentModel connect(EquipmentModel eqModel, List<com.szusta.meduva.model.Service> services) {
+        eqModel.setServices(services);
+        return equipmentModelRepository.save(eqModel);
+    }
+    
+    private List<Room> connect(List<Room> rooms, List<com.szusta.meduva.model.Service> services) {
+        for (Room room : rooms) {
+            room.setServices(services);
+            room = roomRepository.save(room);
         }
-        return items;
+        return rooms;
     }
 
-    private List<EquipmentItem> connectItemsWithRooms(List<EquipmentItem> items, List<Room> rooms) {
+    private List<EquipmentItem> connectInParallel(List<EquipmentItem> items, List<Room> rooms) {
         // we have to connect elements of two collections collaterally
         int i = 0;
         for (EquipmentItem item : items) {
             item.setRoom(rooms.get(i));
             ++i;
+        }
+        return items;
+    }
+
+    private List<EquipmentItem> connect(List<EquipmentItem> items, EquipmentModel model) {
+        for (EquipmentItem item: items) {
+            item.setEquipmentModel(model);
+            item = equipmentItemRepository.save(item);
         }
         return items;
     }

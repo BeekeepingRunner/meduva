@@ -12,6 +12,7 @@ import com.szusta.meduva.repository.equipment.EquipmentModelRepository;
 import com.szusta.meduva.repository.schedule.equipment.EquipmentScheduleRepository;
 import com.szusta.meduva.repository.schedule.room.RoomScheduleRepository;
 import com.szusta.meduva.repository.schedule.worker.WorkerScheduleRepository;
+import com.szusta.meduva.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Calendar;

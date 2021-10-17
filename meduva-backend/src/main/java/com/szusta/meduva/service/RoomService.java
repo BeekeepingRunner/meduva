@@ -4,7 +4,7 @@ import com.szusta.meduva.exception.AlreadyExistsException;
 import com.szusta.meduva.exception.EntityRecordNotFoundException;
 import com.szusta.meduva.model.Room;
 import com.szusta.meduva.repository.RoomRepository;
-import com.szusta.meduva.service.entityconnections.RoomToEqItemService;
+import com.szusta.meduva.service.equipment.ItemsDisconnector;
 import com.szusta.meduva.util.UndeletableWithNameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,13 +16,13 @@ import java.util.List;
 public class RoomService {
 
     private RoomRepository roomRepository;
-    private RoomToEqItemService roomToEqItemService;
+    private ItemsDisconnector itemsDisconnector;
 
     @Autowired
     public RoomService(RoomRepository roomRepository,
-                       RoomToEqItemService roomToEqItemService) {
+                       ItemsDisconnector itemsDisconnector) {
         this.roomRepository = roomRepository;
-        this.roomToEqItemService = roomToEqItemService;
+        this.itemsDisconnector = itemsDisconnector;
     }
 
     public List<Room> findAllRooms() {
@@ -50,19 +50,13 @@ public class RoomService {
         return this.roomRepository.save(room);
     }
 
-    public void deleteById(Long id) {
-        this.roomRepository.deleteById(id);
-    }
-
     @Transactional
     public void markAsDeleted(Long id) {
         Room room = roomRepository.findById(id)
                         .orElseThrow(() -> new EntityRecordNotFoundException("Room not found with id : " + id));
 
-        roomToEqItemService.disconnectItems(room);
+        itemsDisconnector.disconnectItems(room);
         room.markAsDeleted();
         roomRepository.save(room);
     }
-
-
 }

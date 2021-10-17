@@ -4,7 +4,7 @@ import com.szusta.meduva.exception.AlreadyExistsException;
 import com.szusta.meduva.exception.EntityRecordNotFoundException;
 import com.szusta.meduva.model.Service;
 import com.szusta.meduva.repository.ServiceRepository;
-import com.szusta.meduva.service.entityconnections.ServiceToEqModelService;
+import com.szusta.meduva.service.equipment.ModelDeactivator;
 import com.szusta.meduva.util.UndeletableWithNameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -17,13 +17,13 @@ import java.util.List;
 public class ServicesService {
 
     private ServiceRepository serviceRepository;
-    private ServiceToEqModelService serviceToEqModelService;
+    private ModelDeactivator modelDeactivator;
 
     @Autowired
     public ServicesService(ServiceRepository serviceRepository,
-                           ServiceToEqModelService serviceToEqModelService) {
+                           ModelDeactivator modelDeactivator) {
         this.serviceRepository = serviceRepository;
-        this.serviceToEqModelService = serviceToEqModelService;
+        this.modelDeactivator = modelDeactivator;
     }
 
     public List<Service> findAllServices() {
@@ -51,20 +51,14 @@ public class ServicesService {
             throw new AlreadyExistsException("Service already exists with name: " + service.getName());
     }
 
-    public void deleteById(Long id) {
-        this.serviceRepository.deleteById(id);
-    }
-
     @Transactional
     public void markAsDeleted(Long serviceId) {
         Service service = serviceRepository.findById(serviceId)
                 .orElseThrow(() -> new EntityNotFoundException("Service not found with id : " + serviceId));
 
-        serviceToEqModelService.deactivateModelsWithLastService(service);
+        modelDeactivator.deactivateModelsWithLastService(service);
         service.setEquipmentModel(Collections.emptyList()); // won't that connection be useful in the future though?
         service.markAsDeleted();
         serviceRepository.save(service);
     }
-
-
 }

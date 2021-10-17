@@ -1,4 +1,4 @@
-package com.szusta.meduva.service.entityconnections;
+package com.szusta.meduva.service;
 
 import com.szusta.meduva.exception.EntityRecordNotFoundException;
 
@@ -12,13 +12,13 @@ import javax.transaction.Transactional;
 import java.util.*;
 
 @Service
-public class UserToServiceService {
+public class WorkManager {
 
     UserRepository userRepository;
     ServiceRepository serviceRepository;
 
     @Autowired
-    public UserToServiceService(UserRepository userRepository, ServiceRepository serviceRepository) {
+    public WorkManager(UserRepository userRepository, ServiceRepository serviceRepository) {
         this.userRepository = userRepository;
         this.serviceRepository = serviceRepository;
     }

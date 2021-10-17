@@ -1,4 +1,4 @@
-package com.szusta.meduva.service;
+package com.szusta.meduva.service.user;
 
 import com.szusta.meduva.model.User;
 import com.szusta.meduva.repository.UserRepository;

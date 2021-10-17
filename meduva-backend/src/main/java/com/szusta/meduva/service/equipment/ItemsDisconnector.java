@@ -1,4 +1,4 @@
-package com.szusta.meduva.service.entityconnections;
+package com.szusta.meduva.service.equipment;
 
 import com.szusta.meduva.model.Room;
 import com.szusta.meduva.model.equipment.EquipmentItem;
@@ -9,12 +9,12 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class RoomToEqItemService {
+public class ItemsDisconnector {
 
     private EquipmentItemRepository equipmentItemRepository;
 
     @Autowired
-    public RoomToEqItemService(EquipmentItemRepository equipmentItemRepository) {
+    public ItemsDisconnector(EquipmentItemRepository equipmentItemRepository) {
         this.equipmentItemRepository = equipmentItemRepository;
     }
 

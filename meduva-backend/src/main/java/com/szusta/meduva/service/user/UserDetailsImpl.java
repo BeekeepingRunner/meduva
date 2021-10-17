@@ -1,4 +1,4 @@
-package com.szusta.meduva.service;
+package com.szusta.meduva.service.user;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.szusta.meduva.model.User;

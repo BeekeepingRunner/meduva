@@ -1,4 +1,4 @@
-package com.szusta.meduva.service;
+package com.szusta.meduva.service.equipment;
 
 import com.szusta.meduva.exception.EntityRecordNotFoundException;
 import com.szusta.meduva.model.equipment.EquipmentItem;

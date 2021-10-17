@@ -1,10 +1,12 @@
-package com.szusta.meduva.service;
+package com.szusta.meduva.service.reset;
 
 import com.szusta.meduva.exception.EntityRecordNotFoundException;
 import com.szusta.meduva.model.PasswordResetToken;
 import com.szusta.meduva.model.User;
 import com.szusta.meduva.repository.PasswordResetTokenRepository;
 import com.szusta.meduva.security.jwt.JwtUtils;
+import com.szusta.meduva.service.user.UserDetailsImpl;
+import com.szusta.meduva.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;

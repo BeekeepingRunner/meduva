@@ -1,6 +1,6 @@
 package com.szusta.meduva.security.jwt;
 
-import com.szusta.meduva.service.UserDetailsImpl;
+import com.szusta.meduva.service.user.UserDetailsImpl;
 import io.jsonwebtoken.*;
 import lombok.Getter;
 import lombok.Setter;
