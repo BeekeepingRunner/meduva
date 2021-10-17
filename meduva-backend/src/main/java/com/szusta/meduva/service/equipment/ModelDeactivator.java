@@ -6,12 +6,13 @@ import com.szusta.meduva.model.equipment.EquipmentModel;
 import com.szusta.meduva.repository.equipment.EquipmentItemRepository;
 import com.szusta.meduva.repository.equipment.EquipmentModelRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@org.springframework.stereotype.Service
+@Component
 public class ModelDeactivator {
 
     private EquipmentModelRepository equipmentModelRepository;

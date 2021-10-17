@@ -6,7 +6,7 @@ import com.szusta.meduva.model.schedule.Visit;
 import com.szusta.meduva.payload.Term;
 import com.szusta.meduva.service.ServicesService;
 import com.szusta.meduva.service.user.UserService;
-import com.szusta.meduva.service.VisitService;
+import com.szusta.meduva.service.visit.VisitService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
