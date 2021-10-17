@@ -16,14 +16,6 @@ export class UserService {
 
   constructor(private http: HttpClient) { }
 
-  getPublicContent(): Observable<any> {
-    return this.http.get(environment.TEST_API_URL + 'all', { responseType : 'text' });
-  }
-
-  getAdminBoard(): Observable<any> {
-    return this.http.get(environment.TEST_API_URL + 'admin', { responseType : 'text' });
-  }
-
   getUserDetails(userId: number): Observable<User> {
     return this.http.get<User>(environment.API_BASE_URL + 'api/user/find/' + userId);
   }

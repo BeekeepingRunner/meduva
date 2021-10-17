@@ -10,7 +10,6 @@ import { LoginComponent } from './component/login/login.component';
 import { RegisterComponent } from './component/register/register.component';
 import { HomeComponent } from './component/home/home.component';
 import { ProfileComponent } from './component/profile/profile.component';
-import { BoardAdminComponent } from './component/board-admin/board-admin.component';
 import { SpecificUserComponent} from "./component/specific-user-profile/specific-user.component";
 import { EditProfileComponent } from './component/edit-profile/edit-profile.component';
 import { EditEmailComponent } from './component/edit-email/edit-email.component';
@@ -36,7 +35,7 @@ import {routes} from "./app.routes";
 import { AccessDeniedComponent } from './component/access-denied/access-denied.component';
 import { ServiceListComponent } from './component/services/service-list/service-list.component';
 import { NewServiceComponent } from './component/services/new-service/new-service.component';
-import {CurrencyPipe} from "@angular/common";
+import {CurrencyPipe, DatePipe} from "@angular/common";
 import {MatCardModule} from "@angular/material/card";
 import {MatListModule} from "@angular/material/list";
 import { ServiceDetailsComponent } from './component/services/service-details/service-details.component';
@@ -54,12 +53,17 @@ import { ServicesSelectComponent } from './component/equipment/new-model/service
 import { ModelFormComponent } from './component/equipment/new-model/model-form/model-form.component';
 import { ModelDetailsComponent } from './component/equipment/model-details/model-details.component';
 import { FeedbackDialogComponent } from './component/dialog/feedback-dialog/feedback-dialog.component';
+import { CalendarModule, DateAdapter } from 'angular-calendar';
+import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
+import { ChooseServiceComponent } from './component/visit/choose-service/choose-service.component';
+import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
+import { PickTermComponent } from './component/visit/pick-term/pick-term.component';
 import {EditRoleComponent} from "./component/edit-role/edit-role.component";
 import {MatSelectModule} from "@angular/material/select";
+import { PickClientComponent } from './component/visit/pick-client/pick-client.component';
+import { SummaryComponent } from './component/visit/summary/summary.component';
 import {WorkerServicesComponent} from "./component/worker-services/worker-services.component";
 import { EditPerformedServicesComponent } from './component/rooms/edit-performed-services/edit-performed-services.component';
-
-
 
 @NgModule({
   declarations: [
@@ -68,7 +72,6 @@ import { EditPerformedServicesComponent } from './component/rooms/edit-performed
     RegisterComponent,
     HomeComponent,
     ProfileComponent,
-    BoardAdminComponent,
     PasswordResetEmailInputComponent,
     PasswordResetComponent,
     EditEmailComponent,
@@ -92,7 +95,11 @@ import { EditPerformedServicesComponent } from './component/rooms/edit-performed
     ModelFormComponent,
     ModelDetailsComponent,
     FeedbackDialogComponent,
+    ChooseServiceComponent,
+    PickTermComponent,
     EditRoleComponent,
+    PickClientComponent,
+    SummaryComponent,
     WorkerServicesComponent,
     EditPerformedServicesComponent,
   ],
@@ -118,6 +125,8 @@ import { EditPerformedServicesComponent } from './component/rooms/edit-performed
     MatListModule,
     MatDialogModule,
     MatStepperModule,
+    CalendarModule.forRoot({provide: DateAdapter, useFactory: adapterFactory}),
+    MatProgressSpinnerModule,
     MatSelectModule,
   ],
   exports: [
@@ -126,6 +135,7 @@ import { EditPerformedServicesComponent } from './component/rooms/edit-performed
   providers: [
     authInterceptorProviders,
     CurrencyPipe,
+    DatePipe,
   ],
   bootstrap: [AppComponent]
 })

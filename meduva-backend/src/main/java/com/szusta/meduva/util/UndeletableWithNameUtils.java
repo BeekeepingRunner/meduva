@@ -1,6 +1,6 @@
 package com.szusta.meduva.util;
 
-import com.szusta.meduva.model.Undeletable;
+import com.szusta.meduva.model.common.Undeletable;
 import com.szusta.meduva.repository.undeletable.UndeletableRepository;
 import com.szusta.meduva.repository.undeletable.UndeletableWithNameRepository;
 

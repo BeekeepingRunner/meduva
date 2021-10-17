@@ -2,7 +2,7 @@ package com.szusta.meduva.security;
 
 import com.szusta.meduva.filter.AuthTokenFilter;
 import com.szusta.meduva.security.jwt.AuthEntryPointJwt;
-import com.szusta.meduva.service.UserDetailsServiceImpl;
+import com.szusta.meduva.service.user.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -99,10 +99,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
     }
 
-    // TODO: finish permitting endpoint access for users with specific roles
+    // TODO: secure endpoint access for users with specific roles
     private void authorizeRequests(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-               /* .antMatchers("/api/auth/**").permitAll()
+                /*
+                .antMatchers("/api/auth/**").permitAll()
                 .antMatchers("/api/test/all").permitAll()
                 .antMatchers("/api/password/request").permitAll()
                 .antMatchers("/api/password/user").permitAll()
@@ -117,7 +118,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/api/email/validate-email-reset-token").permitAll()
                 .antMatchers("/edit-role/{id}").hasAuthority("ROLE_ADMIN")
                 .antMatchers("/assignServicesToWorker/{id}").hasAuthority("ROLE_RECEPTIONIST")
-                .anyRequest().authenticated();*/
+                .anyRequest().authenticated();
+                */
         .anyRequest().permitAll();
     }
 }

@@ -1,7 +1,7 @@
 package com.szusta.meduva.unit.service;
 
 import com.szusta.meduva.exception.EntityRecordNotFoundException;
-import com.szusta.meduva.model.Role;
+import com.szusta.meduva.model.role.Role;
 import com.szusta.meduva.repository.RoleRepository;
 import com.szusta.meduva.service.RoleService;
 import org.junit.jupiter.api.Test;

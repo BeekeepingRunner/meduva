@@ -1,6 +1,6 @@
 package com.szusta.meduva.repository;
 
-import com.szusta.meduva.model.Role;
+import com.szusta.meduva.model.role.Role;
 import com.szusta.meduva.model.User;
 import com.szusta.meduva.repository.undeletable.UndeletableRepository;
 import org.springframework.data.jpa.repository.Query;

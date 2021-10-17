@@ -54,8 +54,6 @@ export class JwtTokenStorageService {
     }
   }
 
-
-
   public getCurrentUser(): TokenUserInfo | null {
     const user = window.sessionStorage.getItem(USER_KEY);
     if (user) {

@@ -1,6 +1,8 @@
 package com.szusta.meduva.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.szusta.meduva.model.common.Undeletable;
+import com.szusta.meduva.model.equipment.EquipmentModel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -34,7 +36,7 @@ public class Service extends Undeletable {
     @JsonIgnore
     List<Room> rooms;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "services")
     @JsonIgnore
     Collection<User> users;
 

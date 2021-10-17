@@ -1,6 +1,6 @@
 package com.szusta.meduva.repository;
 
-import com.szusta.meduva.model.Role;
+import com.szusta.meduva.model.role.Role;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

@@ -1,6 +1,6 @@
 package com.szusta.meduva.repository.undeletable;
 
-import com.szusta.meduva.model.Undeletable;
+import com.szusta.meduva.model.common.Undeletable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.NoRepositoryBean;

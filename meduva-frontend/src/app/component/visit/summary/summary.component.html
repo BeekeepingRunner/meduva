@@ -1,0 +1,30 @@
+<h3>Visit Summary</h3>
+<table>
+  <tr>
+    <td><b>Date: </b></td>
+    <td>{{ term?.startTime | date: 'dd/MM/yyyy HH:mm' }}</td>
+  </tr>
+  <tr>
+    <td><b>Client: </b></td>
+    <td>{{ clientInfo }}</td>
+  </tr>
+  <tr>
+    <td><b>Worker: </b></td>
+    <td>{{ workerInfo }}</td>
+  </tr>
+  <tr>
+    <td><b>Service: </b></td>
+    <td>{{ serviceName }}</td>
+  </tr>
+  <tr>
+    <td><b>Room: </b></td>
+    <td>{{ roomName }}</td>
+  </tr>
+  <tr *ngIf="term?.eqItemId">
+    <td><b>Equipment item code: </b></td>
+    <td>{{ eqItemName }}</td>
+  </tr>
+
+  <br>
+  <button mat-raised-button color="primary" (click)="submitVisit()">Submit a visit</button>
+</table>

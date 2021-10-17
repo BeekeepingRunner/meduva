@@ -1,9 +1,18 @@
 package com.szusta.meduva.model;
 
-import lombok.*;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.szusta.meduva.model.common.Undeletable;
+import com.szusta.meduva.model.role.Role;
+import com.szusta.meduva.model.schedule.Visit;
+import com.szusta.meduva.model.schedule.WorkerSchedule;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -40,16 +49,23 @@ public class User extends Undeletable {
     )
     private Set<Role> roles = new HashSet<>();
 
-    @ManyToMany(
-            fetch = FetchType.LAZY,
-            cascade = CascadeType.ALL
-    )
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JsonIgnore
+    List<Visit> visits;
+
+    @OneToMany(mappedBy = "user")
+    @JsonIgnore
+    private List<WorkerSchedule> workerSchedules;
+
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "worker_service",
             joinColumns = @JoinColumn(name = "worker_id"),
             inverseJoinColumns = @JoinColumn(name = "service_id")
     )
     private Set<Service> services = new HashSet<>();
+
 
     public User(String login, String email, String password) {
         this.login = login;

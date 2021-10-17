@@ -1,4 +1,3 @@
-import {AuthGuardService as AuthGuard} from "./service/auth/auth-guard.service";
 import {RoleGuardService as RoleGuard} from "./service/auth/role-guard.service";
 import {Routes} from "@angular/router";
 import {HomeComponent} from "./component/home/home.component";
@@ -7,7 +6,6 @@ import {PasswordResetEmailInputComponent} from "./component/password-reset-email
 import {PasswordResetComponent} from "./component/password-reset/password-reset.component";
 import {RegisterComponent} from "./component/register/register.component";
 import {ProfileComponent} from "./component/profile/profile.component";
-import {BoardAdminComponent} from "./component/board-admin/board-admin.component";
 import {UserListComponent} from "./component/user-list/user-list.component";
 import {roleNames, UserRole} from "./model/user";
 import {AccessDeniedComponent} from "./component/access-denied/access-denied.component";
@@ -23,12 +21,14 @@ import {ActivateNewEmailComponent} from "./component/activate-new-email/activate
 import {EquipmentListComponent} from "./component/equipment/equipment-list/equipment-list.component";
 import {NewModelComponent} from "./component/equipment/new-model/new-model.component";
 import {ModelDetailsComponent} from "./component/equipment/model-details/model-details.component";
+import {ChooseServiceComponent} from "./component/visit/choose-service/choose-service.component";
+import {PickTermComponent} from "./component/visit/pick-term/pick-term.component";
 import {SpecificUserComponent} from "./component/specific-user-profile/specific-user.component";
 import {EditRoleComponent} from "./component/edit-role/edit-role.component";
+import {PickClientComponent} from "./component/visit/pick-client/pick-client.component";
+import {SummaryComponent} from "./component/visit/summary/summary.component";
 import {WorkerServicesComponent} from "./component/worker-services/worker-services.component";
 import {EditPerformedServicesComponent} from "./component/rooms/edit-performed-services/edit-performed-services.component";
-
-
 
 export const routes: Routes = [
   { path: 'home', component: HomeComponent },
@@ -80,14 +80,6 @@ export const routes: Routes = [
   {
     path: 'new-email-activation/:token',
     component: ActivateNewEmailComponent,
-  },
-  {
-    path: 'admin',
-    component: BoardAdminComponent,
-    canActivate: [RoleGuard],
-    data: {
-      expectedRole: roleNames[UserRole.ROLE_ADMIN]
-    }
   },
   {
     path: 'users',
@@ -199,6 +191,38 @@ export const routes: Routes = [
     canActivate: [RoleGuard],
     data: {
       expectedRole: roleNames[UserRole.ROLE_ADMIN]
+    }
+  },
+  {
+    path: 'visit/pick-service',
+    component: ChooseServiceComponent,
+    canActivate: [RoleGuard],
+    data: {
+      expectedRole: roleNames[UserRole.ROLE_CLIENT]
+    }
+  },
+  {
+    path: 'visit/pick-term',
+    component: PickTermComponent,
+    canActivate: [RoleGuard],
+    data: {
+      expectedRole: roleNames[UserRole.ROLE_WORKER]
+    }
+  },
+  {
+    path: 'visit/pick-client',
+    component: PickClientComponent,
+    canActivate: [RoleGuard],
+    data: {
+      expectedRole: roleNames[UserRole.ROLE_WORKER]
+    }
+  },
+  {
+    path: 'visit/summary',
+    component: SummaryComponent,
+    canActivate: [RoleGuard],
+    data: {
+      expectedRole: roleNames[UserRole.ROLE_WORKER]
     }
   },
   { path: '', redirectTo: 'home', pathMatch: 'full' }

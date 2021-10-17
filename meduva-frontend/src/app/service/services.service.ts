@@ -41,6 +41,8 @@ export class ServicesService {
     return this.httpClient.delete(environment.API_BASE_URL + 'api/service/' + serviceId);
   }
 
-
+  getTermsForService(serviceId: number): Observable<any> {
+    return this.httpClient.get<any>(environment.API_BASE_URL + 'api/visit/terms-for-service/' + serviceId);
+  }
 }
 
