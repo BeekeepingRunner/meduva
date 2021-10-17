@@ -36,7 +36,7 @@ public class Service extends Undeletable {
     @JsonIgnore
     List<Room> rooms;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "services")
     @JsonIgnore
     Collection<User> users;
 

@@ -1,11 +1,10 @@
 package com.szusta.meduva.service.entityconnections;
 
+import com.szusta.meduva.model.Service;
 import com.szusta.meduva.model.equipment.EquipmentItem;
 import com.szusta.meduva.model.equipment.EquipmentModel;
-import com.szusta.meduva.model.Service;
 import com.szusta.meduva.repository.equipment.EquipmentItemRepository;
 import com.szusta.meduva.repository.equipment.EquipmentModelRepository;
-import com.szusta.meduva.repository.ServiceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
@@ -17,26 +16,14 @@ public class ServiceToEqModelService {
 
     private EquipmentModelRepository equipmentModelRepository;
     private EquipmentItemRepository equipmentItemRepository;
-    private ServiceRepository serviceRepository;
 
     @Autowired
     public ServiceToEqModelService(
             EquipmentModelRepository equipmentModelRepository,
-            EquipmentItemRepository equipmentItemRepository,
-            ServiceRepository serviceRepository
+            EquipmentItemRepository equipmentItemRepository
     ) {
         this.equipmentModelRepository = equipmentModelRepository;
         this.equipmentItemRepository = equipmentItemRepository;
-        this.serviceRepository = serviceRepository;
-    }
-
-    public List<Service> findAllById(List<Long> servicesIds) {
-        return serviceRepository.findAllById(servicesIds);
-    }
-
-    public EquipmentModel connectServicesToTheModel(EquipmentModel model, List<Service> services) {
-        model.setServices(services);
-        return this.equipmentModelRepository.save(model);
     }
 
     public void deactivateModelsWithLastService(Service service) {

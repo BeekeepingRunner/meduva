@@ -58,10 +58,7 @@ public class User extends Undeletable {
     @JsonIgnore
     private List<WorkerSchedule> workerSchedules;
 
-    @ManyToMany(
-            fetch = FetchType.LAZY,
-            cascade = CascadeType.ALL
-    )
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "worker_service",
             joinColumns = @JoinColumn(name = "worker_id"),
