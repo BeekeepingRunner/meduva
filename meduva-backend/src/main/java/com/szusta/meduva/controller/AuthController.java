@@ -40,7 +40,7 @@ public class AuthController {
 
         String login = loginRequest.getLogin();
         String password = loginRequest.getPassword();
-        JwtResponse jwtResponse = authService.loginUser(login, password);
+        JwtResponse jwtResponse = authService.authenticate(login, password);
         return ResponseEntity.ok(jwtResponse);
     }
 

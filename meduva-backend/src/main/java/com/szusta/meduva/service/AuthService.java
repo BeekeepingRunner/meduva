@@ -111,7 +111,7 @@ public class AuthService {
         });
     }
 
-    public JwtResponse loginUser(String login, String password) {
+    public JwtResponse authenticate(String login, String password) {
 
         Authentication authentication = authenticateUser(login, password);
 
