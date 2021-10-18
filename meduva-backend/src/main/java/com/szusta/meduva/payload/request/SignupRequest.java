@@ -11,7 +11,6 @@ import java.util.Set;
 public class SignupRequest {
 
     @Email(message = "Email must be in its correct format")
-    //@Size(max = 35, message = "Email must contain maximum 35 characters")
     private String email;
 
     @Size(min = 5, max = 20, message = "Login must contain between 5 and 20 characters")

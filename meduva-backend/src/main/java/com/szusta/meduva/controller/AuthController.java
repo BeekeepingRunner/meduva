@@ -1,16 +1,15 @@
 package com.szusta.meduva.controller;
 
-import com.szusta.meduva.exception.*;
 import com.szusta.meduva.exception.EntityRecordNotFoundException;
 import com.szusta.meduva.model.RefreshToken;
 import com.szusta.meduva.model.role.Role;
-import com.szusta.meduva.model.User;
 import com.szusta.meduva.payload.request.LoginRequest;
 import com.szusta.meduva.payload.request.RefreshTokenRequest;
 import com.szusta.meduva.payload.request.SignupRequest;
 import com.szusta.meduva.payload.response.JwtResponse;
 import com.szusta.meduva.payload.response.MessageResponse;
 import com.szusta.meduva.security.jwt.JwtUtils;
+import com.szusta.meduva.service.AuthService;
 import com.szusta.meduva.service.RefreshTokenService;
 import com.szusta.meduva.service.RoleService;
 import com.szusta.meduva.service.user.UserDetailsImpl;
@@ -25,13 +24,14 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.HashSet;
 import java.util.Set;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
+
+    AuthService authService;
 
     AuthenticationManager authenticationManager;
     UserService userService;
@@ -41,12 +41,14 @@ public class AuthController {
     RefreshTokenService refreshTokenService;
 
     @Autowired
-    public AuthController(AuthenticationManager authenticationManager,
+    public AuthController(AuthService authService,
+                          AuthenticationManager authenticationManager,
                           UserService userService,
                           RoleService roleService,
                           PasswordEncoder encoder,
                           JwtUtils jwtUtils,
                           RefreshTokenService refreshTokenService) {
+        this.authService = authService;
         this.authenticationManager = authenticationManager;
         this.userService = userService;
         this.roleService = roleService;
@@ -93,77 +95,16 @@ public class AuthController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signupRequest) {
+    public ResponseEntity<?> registerUser(
+            @Valid @RequestBody SignupRequest signupRequest) {
 
-        checkForExistingCredentials(signupRequest);
-        saveNewUserFrom(signupRequest);
+        String login = signupRequest.getLogin();
+        String email = signupRequest.getEmail();
+        authService.checkForExistingCredentials(login, email);
 
-        return ResponseEntity.ok(new MessageResponse("User registered successfully"));
-    }
-
-    private void checkForExistingCredentials(SignupRequest request) {
-
-        if (userService.existsByLogin(request.getLogin())) {
-            throw new AlreadyExistsException("That login is already taken : " + request.getLogin());
-        }
-        if (userService.existsByEmail(request.getEmail())) {
-            throw new AlreadyExistsException("Email is already in use : " + request.getEmail());
-        }
-    }
-
-    private void saveNewUserFrom(SignupRequest request) {
-
-        Set<Role> roles = extractRequestRoles(request.getRoles());
-
-        User user = new User(
-                request.getLogin(),
-                request.getEmail(),
-                encoder.encode(request.getPassword()),
-                request.getName(),
-                request.getSurname(),
-                request.getPhoneNumber());
-
-        user.setRoles(roles);
-        userService.save(user);
-    }
-
-    private Set<Role> extractRequestRoles(Set<String> requestRoles) {
-
-        Set<Role> userRoles = new HashSet<>();
-
-        if (requestRoles == null) {
-            addDefaultRoleTo(userRoles);
-        } else {
-            addRoles(requestRoles, userRoles);
-        }
-
-        return userRoles;
-    }
-
-    private void addDefaultRoleTo(Set<Role> userRoles) {
-        userRoles.add(roleService.findByName("ROLE_CLIENT"));
-    }
-
-    private void addRoles(Set<String> requestRoles, Set<Role> userRoles) {
-
-        requestRoles.forEach(role -> {
-            switch (role) {
-                case "ROLE_ADMIN":
-                    userRoles.add(roleService.findByName("ROLE_ADMIN"));
-                    break;
-                case "ROLE_RECEPTIONIST":
-                    userRoles.add(roleService.findByName("ROLE_RECEPTIONIST"));
-                    break;
-                case "ROLE_WORKER":
-                    userRoles.add(roleService.findByName("ROLE_WORKER"));
-                    break;
-                case "ROLE_CLIENT":
-                    userRoles.add(roleService.findByName("ROLE_CLIENT"));
-                    break;
-                default:
-                    throw new BadRequestRoleException("Bad user role in request body");
-            }
-        });
+        authService.saveNewUserFrom(signupRequest);
+        return ResponseEntity.ok(
+                new MessageResponse("User registered successfully"));
     }
 
     @PostMapping("/validate-jwt")
