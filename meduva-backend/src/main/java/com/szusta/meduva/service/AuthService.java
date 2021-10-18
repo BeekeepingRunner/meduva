@@ -146,4 +146,8 @@ public class AuthService {
         refreshTokenService.deleteByUserId(userDetails.getId());
         return refreshTokenService.createRefreshToken(userDetails.getId());
     }
+
+    public boolean validateUserJwt(String jwt) {
+        return jwtUtils.hasJwtExpired(jwt);
+    }
 }

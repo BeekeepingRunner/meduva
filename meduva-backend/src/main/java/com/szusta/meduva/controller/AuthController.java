@@ -59,7 +59,7 @@ public class AuthController {
 
     @PostMapping("/validate-jwt")
     public boolean validateUserJwt(@RequestBody String jwt) {
-        return jwtUtils.hasJwtExpired(jwt);
+        return authService.validateUserJwt(jwt);
     }
 
     @PostMapping("/refreshtoken")
