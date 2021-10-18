@@ -27,10 +27,10 @@ public class JwtUtils {
     @Value("${meduva.app.jwtExpirationMs}")
     private int jwtExpirationMs;
 
-    public String generateJwtTokenFrom(UserDetailsImpl userPrincipal) {
+    public String generateJwtTokenFrom(UserDetailsImpl userDetails) {
 
         return Jwts.builder()
-                .setSubject((userPrincipal.getUsername()))
+                .setSubject((userDetails.getUsername()))
                 .setIssuedAt(new Date())
                 .setExpiration(new Date((new Date()).getTime() + jwtExpirationMs))
                 .signWith(SignatureAlgorithm.HS256, jwtSecret)
