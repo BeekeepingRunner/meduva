@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import {Role, User, UserRole} from "../../model/user";
+import {Role, User, UserRole} from "../../../model/user";
 import {FormBuilder, FormControl, FormGroup, ValidationErrors, Validators} from "@angular/forms";
-import {UserService} from "../../service/user.service";
+import {UserService} from "../../../service/user.service";
 import {ActivatedRoute} from "@angular/router";
-import {environment} from "../../../environments/environment";
-import {ServicesService} from "../../service/services.service";
-import {Service} from "../../model/service";
+import {environment} from "../../../../environments/environment";
+import {ServicesService} from "../../../service/services.service";
+import {Service} from "../../../model/service";
 import {DataSource, SelectionModel} from "@angular/cdk/collections";
 import {MatTableDataSource} from "@angular/material/table";
 import {SimpleOuterSubscriber} from "rxjs/internal/innerSubscribe";

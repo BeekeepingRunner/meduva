@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {ActivatedRoute} from "@angular/router";
-import {ResetTokenService} from "../../service/token/reset-token.service";
+import {ResetTokenService} from "../../../service/token/reset-token.service";
 
 @Component({
   selector: 'app-activate-new-email',

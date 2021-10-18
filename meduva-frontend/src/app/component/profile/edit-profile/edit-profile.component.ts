@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import {Role, User} from "../../model/user";
+import {Role, User} from "../../../model/user";
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
-import {UserService} from "../../service/user.service";
+import {UserService} from "../../../service/user.service";
 import {ActivatedRoute} from "@angular/router";
-import {JwtTokenStorageService, TokenUserInfo} from "../../service/token/jwt-token-storage.service";
+import {JwtTokenStorageService, TokenUserInfo} from "../../../service/token/jwt-token-storage.service";
 
 
 @Component({

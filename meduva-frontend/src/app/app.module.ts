@@ -11,9 +11,9 @@ import { RegisterComponent } from './component/register/register.component';
 import { HomeComponent } from './component/home/home.component';
 import { ProfileComponent } from './component/profile/profile.component';
 import { SpecificUserComponent} from "./component/specific-user-profile/specific-user.component";
-import { EditProfileComponent } from './component/edit-profile/edit-profile.component';
-import { EditEmailComponent } from './component/edit-email/edit-email.component';
-import { ActivateNewEmailComponent } from './component/activate-new-email/activate-new-email.component';
+import { EditProfileComponent } from './component/profile/edit-profile/edit-profile.component';
+import { EditEmailComponent } from './component/profile/edit-email/edit-email.component';
+import { ActivateNewEmailComponent } from './component/login-data/activate-new-email/activate-new-email.component';
 
 import { authInterceptorProviders } from './helper/auth.interceptor';
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
@@ -24,8 +24,8 @@ import {MatDividerModule} from "@angular/material/divider";
 import {MatButtonModule} from "@angular/material/button";
 import {MatTreeModule} from "@angular/material/tree";
 import {MatExpansionModule} from "@angular/material/expansion";
-import { PasswordResetEmailInputComponent } from './component/password-reset-email-input/password-reset-email-input.component';
-import { PasswordResetComponent } from './component/password-reset/password-reset.component';
+import { PasswordResetEmailInputComponent } from './component/login-data/password-reset-email-input/password-reset-email-input.component';
+import { PasswordResetComponent } from './component/login-data/password-reset/password-reset.component';
 import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatInputModule} from "@angular/material/input";
 import { UserListComponent } from './component/user-list/user-list.component';
@@ -58,11 +58,11 @@ import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 import { ChooseServiceComponent } from './component/visit/choose-service/choose-service.component';
 import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
 import { PickTermComponent } from './component/visit/pick-term/pick-term.component';
-import {EditRoleComponent} from "./component/edit-role/edit-role.component";
+import {EditRoleComponent} from "./component/specific-user-profile/edit-role/edit-role.component";
 import {MatSelectModule} from "@angular/material/select";
 import { PickClientComponent } from './component/visit/pick-client/pick-client.component';
 import { SummaryComponent } from './component/visit/summary/summary.component';
-import {WorkerServicesComponent} from "./component/worker-services/worker-services.component";
+import {WorkerServicesComponent} from "./component/specific-user-profile/worker-services/worker-services.component";
 import { EditPerformedServicesComponent } from './component/rooms/edit-performed-services/edit-performed-services.component';
 
 @NgModule({

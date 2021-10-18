@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {ActivatedRoute} from "@angular/router";
-import {EmailService} from "../../service/email.service";
-import {JwtTokenStorageService, TokenUserInfo} from "../../service/token/jwt-token-storage.service";
+import {EmailService} from "../../../service/email.service";
+import {JwtTokenStorageService, TokenUserInfo} from "../../../service/token/jwt-token-storage.service";
 
 @Component({
   selector: 'app-edit-email',

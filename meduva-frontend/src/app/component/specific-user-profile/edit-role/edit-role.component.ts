@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import {Role, User, UserRole} from "../../model/user";
-import {TokenUserInfo} from "../../service/token/jwt-token-storage.service";
+import {Role, User, UserRole} from "../../../model/user";
+import {TokenUserInfo} from "../../../service/token/jwt-token-storage.service";
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
-import {UserService} from "../../service/user.service";
+import {UserService} from "../../../service/user.service";
 import {ActivatedRoute} from "@angular/router";
-import {environment} from "../../../environments/environment";
+import {environment} from "../../../../environments/environment";
 
 @Component({
   selector: 'app-edit-role',
