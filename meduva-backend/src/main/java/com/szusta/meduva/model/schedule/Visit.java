@@ -39,8 +39,8 @@ public class Visit extends Schedule {
     private Room room;
 
     @ManyToOne
-    @JoinColumn(name = "client_id")
-    private AccountlessClient accountlessClient;
+    @JoinColumn(name = "unregistered_client_id")
+    private AccountlessClient unregisteredClient;
 
     @ManyToMany(
             fetch = FetchType.LAZY,
