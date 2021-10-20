@@ -30,6 +30,7 @@ import {SummaryComponent} from "./component/visit/summary/summary.component";
 import {WorkerServicesComponent} from "./component/specific-user-profile/worker-services/worker-services.component";
 import {EditPerformedServicesComponent} from "./component/rooms/edit-performed-services/edit-performed-services.component";
 import {ChangePasswordComponent} from "./component/profile/change-password/change-password.component";
+import {ClientListComponent} from "./component/clients/client-list/client-list.component";
 
 export const routes: Routes = [
   { path: 'home', component: HomeComponent },
@@ -90,6 +91,14 @@ export const routes: Routes = [
   {
     path: 'new-email-activation/:token',
     component: ActivateNewEmailComponent,
+  },
+  {
+    path: 'client/list',
+    component: ClientListComponent,
+    canActivate: [RoleGuard],
+    data: {
+      expectedRole: roleNames[UserRole.ROLE_ADMIN]
+    }
   },
   {
     path: 'users',
