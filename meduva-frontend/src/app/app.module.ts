@@ -64,6 +64,7 @@ import { PickClientComponent } from './component/visit/pick-client/pick-client.c
 import { SummaryComponent } from './component/visit/summary/summary.component';
 import {WorkerServicesComponent} from "./component/specific-user-profile/worker-services/worker-services.component";
 import { EditPerformedServicesComponent } from './component/rooms/edit-performed-services/edit-performed-services.component';
+import { ChangePasswordComponent } from './component/profile/change-password/change-password.component';
 
 @NgModule({
   declarations: [
@@ -102,6 +103,7 @@ import { EditPerformedServicesComponent } from './component/rooms/edit-performed
     SummaryComponent,
     WorkerServicesComponent,
     EditPerformedServicesComponent,
+    ChangePasswordComponent,
   ],
   imports: [
     BrowserModule,
