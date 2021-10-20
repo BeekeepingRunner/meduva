@@ -4,6 +4,7 @@ import {ClientService} from "../../../service/client.service";
 import {UserService} from "../../../service/user.service";
 import {trimJSON} from "../../../util/json/trim";
 import {User} from "../../../model/user";
+import {Route, Router} from "@angular/router";
 
 @Component({
   selector: 'app-client-list',
@@ -18,13 +19,14 @@ export class ClientListComponent implements OnInit {
   constructor(
     private userService: UserService,
     private clientService: ClientService,
+    private router: Router,
   ) { }
 
   ngOnInit(): void {
     this.getAllClients();
   }
 
-  getAllClients() {
+  getAllClients(): void {
     this.clients = [];
     this.userService.getAllUndeletedUsers().subscribe(
       registeredClients => {
@@ -45,7 +47,7 @@ export class ClientListComponent implements OnInit {
     });
   }
 
-  getAllRegisteredClients() {
+  getAllRegisteredClients(): void {
     this.userService.getAllUndeletedUsers().subscribe(
       users => {
         this.clients = users;
@@ -53,9 +55,14 @@ export class ClientListComponent implements OnInit {
     )
   }
 
-  getAllUnregisteredClients() {
+  getAllUnregisteredClients(): void {
     this.clientService.getAllUnregisteredClients().subscribe(clients => {
       this.clients = clients;
     });
+  }
+
+  pickClient(client: Client): void {
+    this.clientService.saveSelectedClient(client);
+    this.router.navigate(["client/details"]);
   }
 }

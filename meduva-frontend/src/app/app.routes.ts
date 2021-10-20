@@ -6,7 +6,7 @@ import {PasswordResetEmailInputComponent} from "./component/login-data/password-
 import {PasswordResetComponent} from "./component/login-data/password-reset/password-reset.component";
 import {RegisterComponent} from "./component/register/register.component";
 import {ProfileComponent} from "./component/profile/profile.component";
-import {UserListComponent} from "./component/user-list/user-list.component";
+import {UserListComponent} from "./component/user/user-list/user-list.component";
 import {roleNames, UserRole} from "./model/user";
 import {AccessDeniedComponent} from "./component/access-denied/access-denied.component";
 import {ServiceListComponent} from "./component/services/service-list/service-list.component";
@@ -31,6 +31,7 @@ import {WorkerServicesComponent} from "./component/specific-user-profile/worker-
 import {EditPerformedServicesComponent} from "./component/rooms/edit-performed-services/edit-performed-services.component";
 import {ChangePasswordComponent} from "./component/profile/change-password/change-password.component";
 import {ClientListComponent} from "./component/clients/client-list/client-list.component";
+import {ClientDetailsComponent} from "./component/clients/client-details/client-details.component";
 
 export const routes: Routes = [
   { path: 'home', component: HomeComponent },
@@ -97,7 +98,15 @@ export const routes: Routes = [
     component: ClientListComponent,
     canActivate: [RoleGuard],
     data: {
-      expectedRole: roleNames[UserRole.ROLE_ADMIN]
+      expectedRole: roleNames[UserRole.ROLE_WORKER]
+    }
+  },
+  {
+    path: 'client/details',
+    component: ClientDetailsComponent,
+    canActivate: [RoleGuard],
+    data: {
+      expectedRole: roleNames[UserRole.ROLE_WORKER]
     }
   },
   {

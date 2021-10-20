@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import {UserService} from "../../service/user.service";
-import {User} from "../../model/user";
-import {JwtTokenStorageService} from "../../service/token/jwt-token-storage.service";
+import {UserService} from "../../../service/user.service";
+import {User} from "../../../model/user";
+import {JwtTokenStorageService} from "../../../service/token/jwt-token-storage.service";
 import { Router } from '@angular/router';
 
 @Component({

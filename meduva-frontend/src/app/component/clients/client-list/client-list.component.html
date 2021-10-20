@@ -28,7 +28,8 @@
       </ng-container>
 
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row *matRowDef="let row; let user; columns: displayedColumns;" class="element-row" [routerLink]="['/specific-user/' + user.id]"></tr>
+      <tr mat-row *matRowDef="let row; let client; columns: displayedColumns;"
+          class="element-row" (click)="pickClient(client)"></tr>
     </table>
   </div>
 </div>

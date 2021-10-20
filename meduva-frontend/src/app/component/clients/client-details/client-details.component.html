@@ -1,0 +1,28 @@
+<div class="container mat-elevation-z8">
+  <header>
+    <h3>
+      <strong>Client</strong>
+    </h3>
+  </header>
+  <br>
+
+  <table>
+    <tr>
+      <td><strong>First name:</strong></td>
+      <td>{{ client?.name }}</td>
+    </tr>
+    <tr>
+      <td><strong>Surname:</strong></td>
+      <td>{{ client?.surname }}</td>
+    </tr>
+    <tr>
+      <td><strong>Phone number:</strong></td>
+      <td>+{{ client?.phoneNumber }}</td>
+    </tr>
+    <tr *ngIf="client.email">
+      <td><strong>Email:</strong></td>
+      <td>+{{ client?.email }}</td>
+    </tr>
+  </table>
+
+</div>

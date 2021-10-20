@@ -28,7 +28,7 @@ import { PasswordResetEmailInputComponent } from './component/login-data/passwor
 import { PasswordResetComponent } from './component/login-data/password-reset/password-reset.component';
 import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatInputModule} from "@angular/material/input";
-import { UserListComponent } from './component/user-list/user-list.component';
+import { UserListComponent } from './component/user/user-list/user-list.component';
 import {MatTableModule} from "@angular/material/table";
 
 import {routes} from "./app.routes";
@@ -66,6 +66,7 @@ import {WorkerServicesComponent} from "./component/specific-user-profile/worker-
 import { EditPerformedServicesComponent } from './component/rooms/edit-performed-services/edit-performed-services.component';
 import { ChangePasswordComponent } from './component/profile/change-password/change-password.component';
 import { ClientListComponent } from './component/clients/client-list/client-list.component';
+import { ClientDetailsComponent } from './component/clients/client-details/client-details.component';
 
 @NgModule({
   declarations: [
@@ -106,6 +107,7 @@ import { ClientListComponent } from './component/clients/client-list/client-list
     EditPerformedServicesComponent,
     ChangePasswordComponent,
     ClientListComponent,
+    ClientDetailsComponent,
   ],
   imports: [
     BrowserModule,
