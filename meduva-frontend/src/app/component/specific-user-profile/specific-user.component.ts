@@ -65,9 +65,7 @@ export class SpecificUserComponent implements OnInit {
   }
 
   isUserAWorker(){
-    console.log(this.userRole)
     this.isAWorker = this.userRole.name != 'ROLE_CLIENT';
-    console.log(this.isAWorker);
   }
 
   openDeleteConfirmDialog(): void {
