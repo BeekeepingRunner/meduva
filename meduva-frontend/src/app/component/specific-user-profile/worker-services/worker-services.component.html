@@ -1,4 +1,4 @@
-<mat-card class="col-md-6 card container-fluid ">
+<mat-card class="col-md-6 card container-fluid " *ngIf="isAWorker; else AccessDenied" >
   <form class="basic-form container-fluid " (ngSubmit)="onSubmit()" [formGroup]="form">
     <br>
     <strong>Worker services:</strong>
@@ -57,3 +57,7 @@
   </form>
 
 </mat-card>
+
+<ng-template #AccessDenied>
+  Access Denied. User is a client.
+</ng-template>
