@@ -27,5 +27,21 @@
     <br>
     <button mat-raised-button color="primary" (click)="tryEditServices()">Edit services</button>
   </div>
+
+  <br>
+
+  <div
+    class="alert alert-success col-md-4"
+    role="alert"
+    *ngIf=" editSuccessfully && requestSended">
+    {{ resultMessage }}
+  </div>
+
+  <div
+    class="alert alert-danger col-md-4"
+    role="alert"
+    *ngIf=" !editSuccessfully && requestSended">
+    {{ resultMessage }}
+  </div>
 </div>
 
