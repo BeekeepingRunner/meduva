@@ -33,6 +33,7 @@ import {ChangePasswordComponent} from "./component/profile/change-password/chang
 import {ClientListComponent} from "./component/clients/client-list/client-list.component";
 import {ClientDetailsComponent} from "./component/clients/client-details/client-details.component";
 import {AddClientComponent} from "./component/clients/add-client/add-client.component";
+import {EditClientComponent} from "./component/clients/client-details/edit-client/edit-client.component";
 
 export const routes: Routes = [
   { path: 'home', component: HomeComponent },
@@ -113,6 +114,14 @@ export const routes: Routes = [
   {
     path: 'client/new',
     component: AddClientComponent,
+    canActivate: [RoleGuard],
+    data: {
+      expectedRole: roleNames[UserRole.ROLE_RECEPTIONIST]
+    }
+  },
+  {
+    path: 'client/edit/:id',
+    component: EditClientComponent,
     canActivate: [RoleGuard],
     data: {
       expectedRole: roleNames[UserRole.ROLE_RECEPTIONIST]

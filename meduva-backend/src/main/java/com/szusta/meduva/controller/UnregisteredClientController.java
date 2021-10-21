@@ -44,4 +44,13 @@ public class UnregisteredClientController {
         newClient.setPhoneNumber(client.getPhoneNumber());
         return clientService.save(newClient);
     }
+
+    @PostMapping("/edit")
+    public UnregisteredClient edit(@RequestBody UnregisteredClient editedClient){
+        UnregisteredClient client = clientService.findById(editedClient.getId());
+        client.setName(editedClient.getName());
+        client.setSurname(editedClient.getSurname());
+        client.setPhoneNumber(editedClient.getPhoneNumber());
+        return clientService.save(client);
+    }
 }

@@ -36,4 +36,8 @@ export class ClientService {
   addClient(client: any): Observable<any> {
     return this.httpClient.post(environment.API_BASE_URL + "api/unregistered-client/add", client);
   }
+
+  editClient(client: Client): Observable<any> {
+    return this.httpClient.post(environment.API_BASE_URL + "api/unregistered-client/edit", client);
+  }
 }

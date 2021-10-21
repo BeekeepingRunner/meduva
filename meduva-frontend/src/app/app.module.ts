@@ -68,6 +68,7 @@ import { ChangePasswordComponent } from './component/profile/change-password/cha
 import { ClientListComponent } from './component/clients/client-list/client-list.component';
 import { ClientDetailsComponent } from './component/clients/client-details/client-details.component';
 import { AddClientComponent } from './component/clients/add-client/add-client.component';
+import { EditClientComponent } from './component/clients/client-details/edit-client/edit-client.component';
 
 @NgModule({
   declarations: [
@@ -110,6 +111,7 @@ import { AddClientComponent } from './component/clients/add-client/add-client.co
     ClientListComponent,
     ClientDetailsComponent,
     AddClientComponent,
+    EditClientComponent,
   ],
   imports: [
     BrowserModule,

@@ -23,6 +23,13 @@
       <td><strong>Email:</strong></td>
       <td>+{{ client?.email }}</td>
     </tr>
+
+    <div *ngIf="!client.email">
+      <br>
+      <button mat-raised-button color="primary" [routerLink]="['/client/edit/' + client.id]">Edit</button>
+      <br>
+      <br>
+    </div>
   </table>
 
 </div>
