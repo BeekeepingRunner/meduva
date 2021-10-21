@@ -23,7 +23,7 @@ export class EditPerformedServicesComponent implements OnInit {
 
   editSuccessfully: boolean = false;
   requestSended: boolean = false;
-  errorMessage: string = '';
+  resultMessage: string = '';
 
 
   constructor(
@@ -79,9 +79,10 @@ export class EditPerformedServicesComponent implements OnInit {
       data => {
         this.requestSended = true;
         this.editSuccessfully = true;
+        this.resultMessage = "Services edited successfully";
       },
       err => {
-        this.errorMessage = err.error.message;
+        this.resultMessage = err.error.message;
         this.requestSended = true;
         this.editSuccessfully = false;
       }
