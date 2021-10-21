@@ -6,6 +6,7 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {ConfirmationDialogComponent} from "../dialog/confirmation-dialog/confirmation-dialog.component";
 import {MatDialog} from "@angular/material/dialog";
 import {FeedbackDialogComponent} from "../dialog/feedback-dialog/feedback-dialog.component";
+import {Service} from "../../model/service";
 
 @Component({
   selector: 'app-specific-user',
@@ -17,6 +18,8 @@ export class SpecificUserComponent implements OnInit {
   userId!: number;
   userDetails!: User;
   userRole!: Role;
+  workerServices!: Service[];
+  columnName: string[] = ['Name'];
   error!: string;
 
   constructor(
@@ -31,7 +34,9 @@ export class SpecificUserComponent implements OnInit {
     this.userId = this.activatedRoute.snapshot.params.id;
     if (this.userId != null) {
       this.getUserDetails(this.userId);
+      this.getWorkerSerivces();
     }
+
   }
 
   private getUserDetails(userId: number): void {
@@ -45,6 +50,15 @@ export class SpecificUserComponent implements OnInit {
         this.error = err.getError();
       }
     );
+  }
+
+  getWorkerSerivces(){
+
+    this.userService.getWorkerServices(this.userId).subscribe(
+      services => {
+        this.workerServices = services;
+      }
+    )
   }
 
   openDeleteConfirmDialog(): void {
