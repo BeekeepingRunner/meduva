@@ -1,11 +1,10 @@
 package com.szusta.meduva.controller;
 
 import com.szusta.meduva.model.UnregisteredClient;
+import com.szusta.meduva.payload.request.add.NewUnregisteredClient;
 import com.szusta.meduva.service.UnregisteredClientService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -37,17 +36,12 @@ public class UnregisteredClientController {
         return clientService.findAllUndeleted();
     }
 
-    /*
-    @PostMapping("/edit/{id}")
-    public UnregisteredClient edit(@PathVariable Long id, @Valid @RequestBody UpdatedUserRequest request){
-
-        User user = userService.getUser(id);
-
-        user.setName(request.getName());
-        user.setSurname(request.getSurname());
-        user.setPhoneNumber(request.getPhoneNumber());
-
-        return userService.save(user);
+    @PostMapping("/add")
+    public UnregisteredClient add(@RequestBody NewUnregisteredClient client){
+        UnregisteredClient newClient = new UnregisteredClient();
+        newClient.setName(client.getName());
+        newClient.setSurname(client.getSurname());
+        newClient.setPhoneNumber(client.getPhoneNumber());
+        return clientService.save(newClient);
     }
-     */
 }

@@ -8,10 +8,36 @@ th.mat-header-cell {
   font-size: medium;
 }
 
-table {
+.left-side {
+  left: 0;
+}
+
+.right-side {
+  right: 0;
+}
+
+.add-button {
+  padding: revert;
+  width: revert;
+  margin: 0px;
+}
+
+.table-topping {
+  display: flex;
+  justify-content: space-between;
+  align-content: center;
+  max-width: 800px;
+  min-width: 600px;
+}
+
+.table-container {
   width: 90%;
   max-width: 800px;
   min-width: 600px;
+}
+
+table {
+  width: 100%;
 }
 
 button {

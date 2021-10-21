@@ -32,6 +32,7 @@ import {EditPerformedServicesComponent} from "./component/rooms/edit-performed-s
 import {ChangePasswordComponent} from "./component/profile/change-password/change-password.component";
 import {ClientListComponent} from "./component/clients/client-list/client-list.component";
 import {ClientDetailsComponent} from "./component/clients/client-details/client-details.component";
+import {AddClientComponent} from "./component/clients/add-client/add-client.component";
 
 export const routes: Routes = [
   { path: 'home', component: HomeComponent },
@@ -107,6 +108,14 @@ export const routes: Routes = [
     canActivate: [RoleGuard],
     data: {
       expectedRole: roleNames[UserRole.ROLE_WORKER]
+    }
+  },
+  {
+    path: 'client/new',
+    component: AddClientComponent,
+    canActivate: [RoleGuard],
+    data: {
+      expectedRole: roleNames[UserRole.ROLE_RECEPTIONIST]
     }
   },
   {

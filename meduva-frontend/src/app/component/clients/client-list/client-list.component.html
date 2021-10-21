@@ -1,9 +1,18 @@
 <div>
   <h2>Clients</h2>
-  <div>
-    <button mat-raised-button color="primary" (click)="getAllClients()">All</button>
-    <button mat-raised-button color="primary" (click)="getAllRegisteredClients()">Registered</button>
-    <button mat-raised-button color="primary" (click)="getAllUnregisteredClients()">Unregistered</button>
+  <div class="table-container">
+    <div class="table-topping">
+      <div class="left-side">
+        <button mat-raised-button color="primary" (click)="getAllClients()">All</button>
+        <button mat-raised-button color="primary" (click)="getAllRegisteredClients()">Registered</button>
+        <button mat-raised-button color="primary" (click)="getAllUnregisteredClients()">Unregistered</button>
+      </div>
+      <div class="right-side">
+      <button *ngIf="isReceptionist" class="add-button" mat-icon-button color="primary"
+              [routerLink]="['/client/new']">
+        + Add new Client</button>
+      </div>
+    </div>
 
     <table mat-table [dataSource]="clients" class="mat-elevation-z8">
 

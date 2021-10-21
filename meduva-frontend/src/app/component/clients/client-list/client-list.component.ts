@@ -3,8 +3,10 @@ import {Client} from "../../../model/client";
 import {ClientService} from "../../../service/client.service";
 import {UserService} from "../../../service/user.service";
 import {trimJSON} from "../../../util/json/trim";
-import {User} from "../../../model/user";
+import {roleNames, User, UserRole} from "../../../model/user";
 import {Route, Router} from "@angular/router";
+import {JwtTokenStorageService, TokenUserInfo} from "../../../service/token/jwt-token-storage.service";
+import {RoleGuardService} from "../../../service/auth/role-guard.service";
 
 @Component({
   selector: 'app-client-list',
@@ -13,16 +15,21 @@ import {Route, Router} from "@angular/router";
 })
 export class ClientListComponent implements OnInit {
 
+  currentUser!: TokenUserInfo | null;
   clients: Client[] = [];
   displayedColumns: string[] = ["name", "surname", "phoneNumber", "email"];
 
+  isReceptionist: boolean = false;
+
   constructor(
+    private roleGuardService: RoleGuardService,
     private userService: UserService,
     private clientService: ClientService,
     private router: Router,
   ) { }
 
   ngOnInit(): void {
+    this.isReceptionist = this.roleGuardService.hasExpectedRole(roleNames[UserRole.ROLE_RECEPTIONIST]);
     this.getAllClients();
   }
 

@@ -67,6 +67,7 @@ import { EditPerformedServicesComponent } from './component/rooms/edit-performed
 import { ChangePasswordComponent } from './component/profile/change-password/change-password.component';
 import { ClientListComponent } from './component/clients/client-list/client-list.component';
 import { ClientDetailsComponent } from './component/clients/client-details/client-details.component';
+import { AddClientComponent } from './component/clients/add-client/add-client.component';
 
 @NgModule({
   declarations: [
@@ -108,6 +109,7 @@ import { ClientDetailsComponent } from './component/clients/client-details/clien
     ChangePasswordComponent,
     ClientListComponent,
     ClientDetailsComponent,
+    AddClientComponent,
   ],
   imports: [
     BrowserModule,
