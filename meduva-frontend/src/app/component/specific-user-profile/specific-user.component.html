@@ -56,14 +56,14 @@
       </tr>
       <br>
       <tr class="button-row">
-        <td><button mat-raised-button color="primary" [routerLink]="['/specific-user/worker-services/' + userId ]">Choose services</button></td>
+        <td *ngIf="isAWorker"><button mat-raised-button color="primary" [routerLink]="['/specific-user/worker-services/' + userId ]">Choose services</button></td>
         <td><button mat-raised-button color="warn" (click)="openDeleteConfirmDialog()">Delete user</button></td>
       </tr>
       <br>
     </table>
   </div>
 
-  <div class="container">
+  <div *ngIf="isAWorker" class="container">
     <br>
     <div class="centered-content d-flex flex-column">
     <strong>Performed services:</strong>

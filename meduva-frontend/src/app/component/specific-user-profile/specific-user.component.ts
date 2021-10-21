@@ -7,6 +7,7 @@ import {ConfirmationDialogComponent} from "../dialog/confirmation-dialog/confirm
 import {MatDialog} from "@angular/material/dialog";
 import {FeedbackDialogComponent} from "../dialog/feedback-dialog/feedback-dialog.component";
 import {Service} from "../../model/service";
+import {stringify} from "@angular/compiler/src/util";
 
 @Component({
   selector: 'app-specific-user',
@@ -18,6 +19,7 @@ export class SpecificUserComponent implements OnInit {
   userId!: number;
   userDetails!: User;
   userRole!: Role;
+  isAWorker: boolean = false;
   workerServices!: Service[];
   columnName: string[] = ['Name'];
   error!: string;
@@ -45,6 +47,7 @@ export class SpecificUserComponent implements OnInit {
       (data: User) => {
         this.userDetails = data;
         this.userRole = this.userService.getMasterRole(this.userDetails.roles);
+        this.isUserAWorker();
       },
       err => {
         this.error = err.getError();
@@ -59,6 +62,12 @@ export class SpecificUserComponent implements OnInit {
         this.workerServices = services;
       }
     )
+  }
+
+  isUserAWorker(){
+    console.log(this.userRole)
+    this.isAWorker = this.userRole.name != 'ROLE_CLIENT';
+    console.log(this.isAWorker);
   }
 
   openDeleteConfirmDialog(): void {
