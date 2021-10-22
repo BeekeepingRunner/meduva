@@ -19,12 +19,10 @@ public class UnregisteredClientController {
         this.clientService = clientService;
     }
 
-    /*
     @GetMapping("/find/{id}")
     public UnregisteredClient getById(@PathVariable Long id) {
-        return clientService.getUnregisteredClient(id);
+        return clientService.findById(id);
     }
-     */
 
     @GetMapping("/all")
     public List<UnregisteredClient> findAll() {

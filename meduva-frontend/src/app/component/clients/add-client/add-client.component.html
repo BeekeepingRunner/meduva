@@ -2,7 +2,7 @@
 
   <form class="basic-form" *ngIf="!isSuccessful" (ngSubmit)="onSubmit()" [formGroup]="form">
     <br>
-    <h3>Add new Client</h3>
+    <h3>{{ heading }}</h3>
     <br>
     <mat-form-field class="wide-element" appearance="outline">
       <mat-label>First name:</mat-label>
@@ -55,7 +55,7 @@
       </mat-error>
     </mat-form-field>
 
-    <button class="btn btn-primary btn-block" type="submit">Sign Up</button>
+    <button class="btn btn-primary btn-block" type="submit">{{ submitButtonText }}</button>
 
     <br><br>
     <div class="alert alert-warning" *ngIf="isSignUpFailed">

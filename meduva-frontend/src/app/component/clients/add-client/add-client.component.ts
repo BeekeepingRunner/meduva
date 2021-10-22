@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
-import {AuthService} from "../../../service/auth/auth.service";
-import {MatDialog, MatDialogRef} from "@angular/material/dialog";
+import {MatDialog} from "@angular/material/dialog";
 import {FeedbackDialogComponent} from "../../dialog/feedback-dialog/feedback-dialog.component";
 import {Router} from "@angular/router";
 import {ClientService} from "../../../service/client.service";
@@ -12,6 +11,9 @@ import {ClientService} from "../../../service/client.service";
   styleUrls: ['./add-client.component.css']
 })
 export class AddClientComponent implements OnInit {
+
+  heading: string = '';
+  submitButtonText: string = 'Add Client';
 
   form!: FormGroup;
 
@@ -27,6 +29,8 @@ export class AddClientComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.heading = "Add new Client";
+
     this.form = this.formBuilder.group({
         name: new FormControl('', [
           Validators.required,

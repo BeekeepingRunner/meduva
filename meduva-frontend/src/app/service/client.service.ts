@@ -33,6 +33,10 @@ export class ClientService {
     }
   }
 
+  getClientById(clientId: number): Observable<any> {
+    return this.httpClient.get<Client>(environment.API_BASE_URL + 'api/unregistered-client/find/' + clientId);
+  }
+
   addClient(client: any): Observable<any> {
     return this.httpClient.post(environment.API_BASE_URL + "api/unregistered-client/add", client);
   }
