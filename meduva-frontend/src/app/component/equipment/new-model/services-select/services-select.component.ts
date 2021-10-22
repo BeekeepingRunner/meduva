@@ -26,7 +26,11 @@ export class ServicesSelectComponent implements OnInit {
   fetchServices(): void {
     this.servicesService.getAllUndeletedServices().subscribe(
       services => {
-        this.services = services;
+        services.forEach(service => {
+          if(!service.itemless){
+            this.services.push(service);
+          }
+        })
       },
       err => {
         console.log(err);
