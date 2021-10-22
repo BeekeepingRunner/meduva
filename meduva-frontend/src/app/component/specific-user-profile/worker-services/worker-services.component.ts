@@ -19,6 +19,7 @@ import {isElementScrolledOutsideView} from "@angular/cdk/overlay/position/scroll
 export class WorkerServicesComponent implements OnInit {
 
   user!: User;
+  isAWorker: boolean = false;
   error!: string;
   form!: FormGroup;
   errorMessage!: string;
@@ -48,6 +49,7 @@ export class WorkerServicesComponent implements OnInit {
     this.buildForm();
     this.getAllServices();
     this.getWorkerServices(this.userId);
+
   }
 
   private buildForm(){
@@ -62,7 +64,7 @@ export class WorkerServicesComponent implements OnInit {
     this.userService.getUserDetails(this.userId).subscribe(
       (data: User) => {
         this.user = data;
-
+        this.isUserAWorker();
       },
       err => {
         this.error = err.getError();
@@ -149,6 +151,14 @@ export class WorkerServicesComponent implements OnInit {
 
   }
 
+  isUserAWorker(){
+    let role = this.userService.getMasterRole(this.user.roles);
+    if(role.name != 'ROLE_CLIENT'){
+      this.isAWorker = true;
+    }else {
+      this.isAWorker = false;
+    }
+  }
 
 
 }
