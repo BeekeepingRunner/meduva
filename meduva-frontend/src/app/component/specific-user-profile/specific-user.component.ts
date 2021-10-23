@@ -6,6 +6,8 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {ConfirmationDialogComponent} from "../dialog/confirmation-dialog/confirmation-dialog.component";
 import {MatDialog} from "@angular/material/dialog";
 import {FeedbackDialogComponent} from "../dialog/feedback-dialog/feedback-dialog.component";
+import {Service} from "../../model/service";
+import {stringify} from "@angular/compiler/src/util";
 
 @Component({
   selector: 'app-specific-user',
@@ -17,6 +19,9 @@ export class SpecificUserComponent implements OnInit {
   userId!: number;
   userDetails!: User;
   userRole!: Role;
+  isAWorker: boolean = false;
+  workerServices!: Service[];
+  columnName: string[] = ['Name'];
   error!: string;
 
   constructor(
@@ -31,7 +36,9 @@ export class SpecificUserComponent implements OnInit {
     this.userId = this.activatedRoute.snapshot.params.id;
     if (this.userId != null) {
       this.getUserDetails(this.userId);
+      this.getWorkerSerivces();
     }
+
   }
 
   private getUserDetails(userId: number): void {
@@ -40,11 +47,25 @@ export class SpecificUserComponent implements OnInit {
       (data: User) => {
         this.userDetails = data;
         this.userRole = this.userService.getMasterRole(this.userDetails.roles);
+        this.isUserAWorker();
       },
       err => {
         this.error = err.getError();
       }
     );
+  }
+
+  getWorkerSerivces(){
+
+    this.userService.getWorkerServices(this.userId).subscribe(
+      services => {
+        this.workerServices = services;
+      }
+    )
+  }
+
+  isUserAWorker(){
+    this.isAWorker = this.userRole.name != 'ROLE_CLIENT';
   }
 
   openDeleteConfirmDialog(): void {
