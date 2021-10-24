@@ -1,0 +1,39 @@
+<h5>Enter the room details</h5>
+
+<form class="basic-form" [formGroup]="form">
+
+  <br>
+  <mat-form-field class="wide-element" appearance="outline">
+    <mat-label>Room name:</mat-label>
+    <input matInput id="name" type="text" formControlName="name">
+
+    <mat-error *ngIf="form.controls.name.invalid &&
+                            (form.controls.name.dirty || form.controls.name.touched)">
+      <mat-error *ngIf="form.controls.name.errors?.required">
+        Name is required
+      </mat-error>
+    </mat-error>
+
+  </mat-form-field>
+
+  <mat-form-field class="wide-element" appearance="outline">
+    <mat-label>Description:</mat-label>
+    <textarea matInput
+              id="description" formControlName="description"
+              cdkTextareaAutosize
+              #autosize="cdkTextareaAutosize"
+              cdkAutosizeMinRows="1"
+              cdkAutosizeMaxRows="10"></textarea>
+  </mat-form-field>
+
+
+  <div mat-dialog-actions>
+    <button mat-button [mat-dialog-close]="selectedRoom" [disabled]="!form.valid" cdkFocusInitial>Ok</button>
+  </div>
+  <br>
+
+
+</form>
+
+
+

@@ -8,6 +8,7 @@ import {EquipmentItem} from "../../model/equipment";
 import {RoomSelectComponent} from "../equipment/new-model/room-select/room-select.component";
 import {EquipmentService} from "../../service/equipment.service";
 import {Router} from "@angular/router";
+import {Room} from "../../model/room";
 
 
 export interface CreatorRequest {
@@ -24,13 +25,10 @@ export interface CreatorRequest {
 })
 export class CreatorComponent implements OnInit {
 
-  modelName: string = '';
   isFormValid: boolean = false;
 
-  selectedServicesIds: number[] = [];
-  serviceSelectionError: string = '';
 
-  eqItems: EquipmentItem[] = [];
+  roomItems: Room[] = [];
   @ViewChild(RoomSelectComponent)
   private roomSelectComponent!: RoomSelectComponent;
   selectedRoomsIds: number[] = [];
@@ -47,62 +45,30 @@ export class CreatorComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  onModelNameInput($event: string) {
-    this.modelName = $event;
-  }
 
-  onItemsGeneration($event: EquipmentItem[]) {
-    this.eqItems = $event;
+  onItemsGeneration($event: Room[]) {
+    this.roomItems = $event;
   }
 
   onModelFormSubmitted($event: boolean) {
     this.isFormValid = $event;
   }
 
-  onServicesSelected($event: number[]) {
-    this.selectedServicesIds = $event;
-  }
-
-  IsAtLeastOneServiceSelected(): boolean {
-    if (this.selectedServicesIds.length > 0) {
-      this.serviceSelectionError = '';
-      return true;
-    } else {
-      this.serviceSelectionError = 'You have to select at least one service';
-      return false;
-    }
-  }
 
   onRoomsSelected($event: Array<number>) {
     this.selectedRoomsIds = $event;
   }
 
   areAllItemsDisplaced(): boolean {
-    let eqItemCount: number = this.eqItems.length;
-    if (this.selectedRoomsIds.length == eqItemCount && eqItemCount > 0) {
+    let roomItemCount: number = this.roomItems.length;
+    if (this.selectedRoomsIds.length == roomItemCount && roomItemCount > 0) {
       this.roomSelectionError = '';
       return true;
     } else {
-      this.roomSelectionError = 'You have to dispose all equipment items';
+      this.roomSelectionError = 'You must complete all the names of the rooms';
       return false;
     }
   }
 
-  saveModelWithItems() {
-    let creatorRequest: CreatorRequest = {
-      modelName: this.modelName,
-      itemCount: this.eqItems.length,
-      servicesIds: this.selectedServicesIds,
-      selectedRoomsIds: this.selectedRoomsIds
-    };
 
-    /*this.equipmentService.saveCreator(creatorRequest).subscribe(
-      data => {
-        this.router.navigate(['/equipment']);
-      },
-      err => {
-        // TODO: do something with error
-      }
-    );*/
-  }
 }

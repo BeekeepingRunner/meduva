@@ -67,6 +67,8 @@ import { EditPerformedServicesComponent } from './component/rooms/edit-performed
 import { ChangePasswordComponent } from './component/profile/change-password/change-password.component';
 import {CreatorComponent} from "./component/creator/creator.component";
 import {NumberOfRoomsComponent} from "./component/creator/assign-rooms/number-of-rooms/number-of-rooms.component";
+import {ConfigureRoomsCreatorComponent} from "./component/creator/assign-rooms/configure-rooms-creator/configure-rooms-creator.component";
+import {ConfigureRoomsCreatorDialogComponent} from "./component/dialog/configure-rooms-creator-dialog/configure-rooms-creator-dialog.component";
 
 @NgModule({
   declarations: [
@@ -109,6 +111,8 @@ import {NumberOfRoomsComponent} from "./component/creator/assign-rooms/number-of
 
     CreatorComponent,
     NumberOfRoomsComponent,
+    ConfigureRoomsCreatorComponent,
+    ConfigureRoomsCreatorDialogComponent,
 
   ],
   imports: [

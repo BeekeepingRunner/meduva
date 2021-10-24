@@ -1,6 +1,3 @@
-<button mat-icon-button color="primary" routerLink='/equipment'>
-  <- Back to equipment
-</button>
 
 <mat-stepper [linear]="true" orientation="vertical" #stepper>\
 
@@ -8,7 +5,7 @@
 
   <mat-step label="Number of rooms"
             [completed]="isFormValid">
-    <app-number-of-rooms (eqItemsEmitter)="onItemsGeneration($event)"
+    <app-number-of-rooms (roomItemsEmitter)="onItemsGeneration($event)"
                     (stepCompletionEmitter)="onModelFormSubmitted($event)">
     </app-number-of-rooms>
     <div>
@@ -18,13 +15,13 @@
 
 
 
-  <mat-step label="Place items in rooms"
+  <mat-step label="Configure your rooms"
             [completed]="areAllItemsDisplaced()">
 
-    <app-room-select *ngIf="eqItems.length"
-                     [eqItems]="eqItems"
+    <app-configure-rooms-creator *ngIf="roomItems.length"
+                     [roomItems]="roomItems"
                      (selectedIdsEmitter)="onRoomsSelected($event)">
-    </app-room-select>
+    </app-configure-rooms-creator>
     <br>
     <div>
       <button mat-button matStepperPrevious>Back</button>

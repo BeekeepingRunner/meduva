@@ -1,7 +1,6 @@
 import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
-import {EquipmentService} from "../../../../service/equipment.service";
-import {EquipmentItem} from "../../../../model/equipment";
+import {Room} from "../../../../model/room";
 
 @Component({
   selector: 'app-number-of-rooms',
@@ -13,8 +12,8 @@ export class NumberOfRoomsComponent implements OnInit {
   numberOfRoomsGroup!: FormGroup;
   successMessage: string = '';
 
-  eqItems: EquipmentItem[] = [];
-  @Output() eqItemsEmitter = new EventEmitter<EquipmentItem[]>();
+  roomItems: Room[] = [];
+  @Output() roomItemsEmitter = new EventEmitter<Room[]>();
   @Output() stepCompletionEmitter = new EventEmitter<boolean>();
 
   constructor(
@@ -40,19 +39,19 @@ export class NumberOfRoomsComponent implements OnInit {
   generateItems(): void {
     let itemCount: number = this.numberOfRoomsGroup.controls.itemCount.value;
 
-    this.eqItems = [];
+    this.roomItems = [];
     for(let i = 1; i <= itemCount; i++)
     {
-      let eqItem: EquipmentItem = {
-        id: i,
+      let roomItem: Room = {
+        description: "",
         name: "Room " + i
       }
-      this.eqItems.push(eqItem);
+      this.roomItems.push(roomItem);
     }
   }
 
   completeStep(): void {
-    this.eqItemsEmitter.emit(this.eqItems);
+    this.roomItemsEmitter.emit(this.roomItems);
     this.stepCompletionEmitter.emit(true);
   }
 
