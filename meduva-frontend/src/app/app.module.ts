@@ -35,7 +35,7 @@ import {routes} from "./app.routes";
 import { AccessDeniedComponent } from './component/access-denied/access-denied.component';
 import { ServiceListComponent } from './component/services/service-list/service-list.component';
 import { NewServiceComponent } from './component/services/new-service/new-service.component';
-import {CommonModule, CurrencyPipe, DatePipe} from "@angular/common";
+import {CurrencyPipe, DatePipe} from "@angular/common";
 import {MatCardModule} from "@angular/material/card";
 import {MatListModule} from "@angular/material/list";
 import { ServiceDetailsComponent } from './component/services/service-details/service-details.component';
@@ -67,10 +67,7 @@ import { ClientListComponent } from './component/clients/client-list/client-list
 import { ClientDetailsComponent } from './component/clients/client-details/client-details.component';
 import { AddClientComponent } from './component/clients/add-client/add-client.component';
 import { EditClientComponent } from './component/clients/client-details/edit-client/edit-client.component';
-import {CalendarModule, DateAdapter} from "angular-calendar";
-import {adapterFactory} from "angular-calendar/date-adapters/date-fns";
-import {WorkerScheduleComponent} from "./component/worker-schedule/worker-schedule.component";
-import {DemoUtilsModule} from "./util/demo-utils/module";
+import {ScheduleModule} from "./schedule/schedule.module";
 
 @NgModule({
   declarations: [
@@ -114,7 +111,6 @@ import {DemoUtilsModule} from "./util/demo-utils/module";
     ClientDetailsComponent,
     AddClientComponent,
     EditClientComponent,
-    WorkerScheduleComponent,
   ],
   imports: [
     BrowserModule,
@@ -139,13 +135,8 @@ import {DemoUtilsModule} from "./util/demo-utils/module";
     MatDialogModule,
     MatStepperModule,
     MatProgressSpinnerModule,
-    CommonModule,
-    CalendarModule.forRoot({
-      provide: DateAdapter,
-      useFactory: adapterFactory
-    }),
     MatSelectModule,
-    DemoUtilsModule,
+    ScheduleModule,
   ],
   exports: [
     RouterModule
