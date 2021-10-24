@@ -65,6 +65,8 @@ import { SummaryComponent } from './component/visit/summary/summary.component';
 import {WorkerServicesComponent} from "./component/specific-user-profile/worker-services/worker-services.component";
 import { EditPerformedServicesComponent } from './component/rooms/edit-performed-services/edit-performed-services.component';
 import { ChangePasswordComponent } from './component/profile/change-password/change-password.component';
+import {CreatorComponent} from "./component/creator/creator.component";
+import {NumberOfRoomsComponent} from "./component/creator/assign-rooms/number-of-rooms/number-of-rooms.component";
 
 @NgModule({
   declarations: [
@@ -104,6 +106,10 @@ import { ChangePasswordComponent } from './component/profile/change-password/cha
     WorkerServicesComponent,
     EditPerformedServicesComponent,
     ChangePasswordComponent,
+
+    CreatorComponent,
+    NumberOfRoomsComponent,
+
   ],
   imports: [
     BrowserModule,
