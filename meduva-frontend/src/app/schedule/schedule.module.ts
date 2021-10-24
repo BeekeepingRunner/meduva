@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {CalendarModule, DateAdapter} from "angular-calendar";
-import {WorkerScheduleComponent} from "./worker-schedule/worker-schedule.component";
+import {WorkerScheduleComponent} from "./component/worker-schedule/worker-schedule.component";
 import {adapterFactory} from "angular-calendar/date-adapters/date-fns";
 import {DemoUtilsModule} from "../util/demo-utils/module";
 

@@ -34,7 +34,7 @@ import {ClientListComponent} from "./component/clients/client-list/client-list.c
 import {ClientDetailsComponent} from "./component/clients/client-details/client-details.component";
 import {AddClientComponent} from "./component/clients/add-client/add-client.component";
 import {EditClientComponent} from "./component/clients/client-details/edit-client/edit-client.component";
-import {WorkerScheduleComponent} from "./schedule/worker-schedule/worker-schedule.component";
+import {WorkerScheduleComponent} from "./schedule/component/worker-schedule/worker-schedule.component";
 
 export const routes: Routes = [
   { path: 'home', component: HomeComponent },
