@@ -44,6 +44,8 @@ export class WorkerScheduleComponent implements OnInit {
   openDayDialog(date: Date) {
     this.clickedDate = date;
     const dayDialog = this.dialog.open(DayDialogComponent, {
+      width: '400px',
+      panelClass: 'my-dialog',
       data: { day: this.clickedDate }
     });
 

@@ -1,4 +1,11 @@
+<button class="close" mat-icon-button [mat-dialog-close]="true">X</button>
 <h3>{{ dayDate }}</h3>
 <div mat-dialog-actions>
-  <button mat-raised-button [mat-dialog-close]="false">Close</button>
+  <button mat-raised-button *ngIf="!settingWorkHours"
+          (click)="settingWorkHours = true">Set work hours</button>
+  <div *ngIf="settingWorkHours">
+    Setting work hours...
+    <br>
+    <button mat-raised-button (click)="settingWorkHours = false">Save</button>
+  </div>
 </div>

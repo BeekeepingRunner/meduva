@@ -9,6 +9,7 @@ import {MatTableModule} from "@angular/material/table";
 import {RouterModule} from "@angular/router";
 import { DayDialogComponent } from './component/dialog/day-dialog/day-dialog.component';
 import {MatDialogModule} from "@angular/material/dialog";
+import {MatButtonModule} from "@angular/material/button";
 
 @NgModule({
   declarations: [
@@ -26,6 +27,7 @@ import {MatDialogModule} from "@angular/material/dialog";
     MatTableModule,
     RouterModule,
     MatDialogModule,
+    MatButtonModule,
   ]
 })
 export class ScheduleModule { }

@@ -13,6 +13,7 @@ export interface DayDialogData {
 export class DayDialogComponent implements OnInit {
 
   dayDate: string = '';
+  settingWorkHours: boolean = false;
 
   constructor(
     public dialogRef: MatDialogRef<DayDialogComponent>,
@@ -22,5 +23,4 @@ export class DayDialogComponent implements OnInit {
   ngOnInit(): void {
     this.dayDate = this.data.day.toDateString();
   }
-
 }
