@@ -1,7 +1,7 @@
 package com.szusta.meduva.controller;
 
 import com.szusta.meduva.model.Service;
-import com.szusta.meduva.payload.request.NewServiceRequest;
+import com.szusta.meduva.payload.request.add.NewServiceRequest;
 import com.szusta.meduva.service.ServicesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

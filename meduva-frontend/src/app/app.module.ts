@@ -28,7 +28,7 @@ import { PasswordResetEmailInputComponent } from './component/login-data/passwor
 import { PasswordResetComponent } from './component/login-data/password-reset/password-reset.component';
 import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatInputModule} from "@angular/material/input";
-import { UserListComponent } from './component/user-list/user-list.component';
+import { UserListComponent } from './component/user/user-list/user-list.component';
 import {MatTableModule} from "@angular/material/table";
 
 import {routes} from "./app.routes";
@@ -65,6 +65,10 @@ import { SummaryComponent } from './component/visit/summary/summary.component';
 import {WorkerServicesComponent} from "./component/specific-user-profile/worker-services/worker-services.component";
 import { EditPerformedServicesComponent } from './component/rooms/edit-performed-services/edit-performed-services.component';
 import { ChangePasswordComponent } from './component/profile/change-password/change-password.component';
+import { ClientListComponent } from './component/clients/client-list/client-list.component';
+import { ClientDetailsComponent } from './component/clients/client-details/client-details.component';
+import { AddClientComponent } from './component/clients/add-client/add-client.component';
+import { EditClientComponent } from './component/clients/client-details/edit-client/edit-client.component';
 
 @NgModule({
   declarations: [
@@ -104,6 +108,10 @@ import { ChangePasswordComponent } from './component/profile/change-password/cha
     WorkerServicesComponent,
     EditPerformedServicesComponent,
     ChangePasswordComponent,
+    ClientListComponent,
+    ClientDetailsComponent,
+    AddClientComponent,
+    EditClientComponent,
   ],
   imports: [
     BrowserModule,

@@ -1,6 +1,6 @@
-export function trimJSON(json: any, properties: string[]) {
+export function trimJSON(jsonObject: any, properties: string[]): any {
   properties.forEach(propName => {
-    delete json[propName];
+    delete jsonObject[propName];
   });
-  return json;
+  return jsonObject;
 }

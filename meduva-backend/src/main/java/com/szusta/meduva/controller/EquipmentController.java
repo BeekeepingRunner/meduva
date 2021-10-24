@@ -2,7 +2,7 @@ package com.szusta.meduva.controller;
 
 import com.szusta.meduva.model.equipment.EquipmentItem;
 import com.szusta.meduva.model.equipment.EquipmentModel;
-import com.szusta.meduva.payload.request.NewEqModelRequest;
+import com.szusta.meduva.payload.request.add.NewEqModelRequest;
 import com.szusta.meduva.service.equipment.EquipmentMaker;
 import com.szusta.meduva.service.equipment.EquipmentService;
 import org.springframework.beans.factory.annotation.Autowired;
