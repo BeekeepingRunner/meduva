@@ -27,6 +27,10 @@ export class ServicesService {
     return this.httpClient.get<Service[]>(environment.API_BASE_URL + 'api/service/all/itemless')
   }
 
+  getAllNonItemless(): Observable<Service[]> {
+    return this.httpClient.get<Service[]>(environment.API_BASE_URL + 'api/service/all/nonitemless')
+  }
+
   public getById(serviceId: number): Observable<Service> {
     return this.httpClient.get<Service>(environment.API_BASE_URL + 'services/' + serviceId).pipe(
       map(service => trimJSON(service, ['_links']))

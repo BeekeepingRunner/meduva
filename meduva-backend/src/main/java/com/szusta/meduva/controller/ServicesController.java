@@ -32,6 +32,9 @@ public class ServicesController {
     @GetMapping("/all/itemless")
     public List<Service> findAllItemlessServices(){ return this.servicesService.findAllItemless(); }
 
+    @GetMapping("/all/nonitemless")
+    public List<Service> findAllNonItemlessServices(){ return this.servicesService.findAllNonItemless(); }
+
     @PostMapping
     public Service saveNewService(@RequestBody NewServiceRequest request) {
         Service service = new Service(
