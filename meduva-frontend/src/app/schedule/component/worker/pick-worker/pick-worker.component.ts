@@ -21,7 +21,6 @@ export class PickWorkerComponent implements OnInit {
   ngOnInit(): void {
     this.userService.getAllWorkers().subscribe(
       workers => {
-        workers = this.deleteCurrentUser(workers);
         this.workers = this.setMasterRoles(workers);
       }, err => {
         console.log(err);
@@ -34,10 +33,5 @@ export class PickWorkerComponent implements OnInit {
       user.masterRole = this.userService.getMasterRole(user.roles);
     });
     return users;
-  }
-
-  private deleteCurrentUser(registeredClients: User[]): User[] {
-    let currentUserId = this.jwtTokenStorageService.getCurrentUser()?.id;
-    return registeredClients.filter(client => client.id != currentUserId);
   }
 }

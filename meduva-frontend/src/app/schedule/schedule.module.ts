@@ -13,12 +13,14 @@ import {MatButtonModule} from "@angular/material/button";
 import {NgxMaterialTimepickerModule} from "ngx-material-timepicker";
 import {MatInputModule} from "@angular/material/input";
 import {ReactiveFormsModule} from "@angular/forms";
+import { MyScheduleComponent } from './component/my-schedule/my-schedule.component';
 
 @NgModule({
   declarations: [
     WorkerScheduleComponent,
     PickWorkerComponent,
     DayDialogComponent,
+    MyScheduleComponent,
   ],
   imports: [
     CommonModule,
