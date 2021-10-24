@@ -5,6 +5,7 @@ import {MatDialog} from "@angular/material/dialog";
 import {ActivatedRoute, Router} from "@angular/router";
 import {Client} from "../../../../model/client";
 import {FeedbackDialogComponent} from "../../../dialog/feedback-dialog/feedback-dialog.component";
+import {controlsConfig} from "../../add-client/add-client.component";
 
 @Component({
   selector: 'app-edit-client',
@@ -13,11 +14,10 @@ import {FeedbackDialogComponent} from "../../../dialog/feedback-dialog/feedback-
 })
 export class EditClientComponent implements OnInit {
 
-  heading: string = '';
+  heading: string = 'Edit a Client';
   submitButtonText: string = 'Edit Client';
 
   form!: FormGroup;
-
   isSuccessful = false;
   isSignUpFailed = false;
   errorMessage = '';
@@ -33,32 +33,13 @@ export class EditClientComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.heading = 'Edit a Client';
-
-    this.form = this.formBuilder.group({
-        name: new FormControl('', [
-          Validators.required,
-          Validators.minLength(1),
-          Validators.maxLength(30),
-          Validators.pattern('^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.\'-]+$'),
-          Validators.pattern('^[^-\\s]+$')
-        ]),
-        surname: new FormControl('', [
-          Validators.required,
-          Validators.minLength(1),
-          Validators.maxLength(30),
-          Validators.pattern('^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.\'-]+$'),
-          Validators.pattern('^[^-\\s]+$')
-
-        ]),
-        phoneNumber: new FormControl('', [
-          Validators.required,
-          Validators.pattern('^(\\+[0-9]{1,4})?[0-9]{6,12}$')
-        ]),
-      }
-    );
+    this.form = this.formBuilder.group(controlsConfig);
 
     let editedClientId: number = Number(this.route.snapshot.params.id);
+    this.fillFormWithClientData(editedClientId);
+  }
+
+  private fillFormWithClientData(editedClientId: number) {
     this.clientService.getClientById(editedClientId).subscribe(
       client => {
         this.client = client;
@@ -67,6 +48,8 @@ export class EditClientComponent implements OnInit {
           surname: this.client.surname,
           phoneNumber: this.client.phoneNumber
         });
+      }, err => {
+        this.errorMessage = err.error.message;
       }
     );
   }
@@ -76,18 +59,25 @@ export class EditClientComponent implements OnInit {
       this.errorMessage = "Entered data must be correct";
       this.isSignUpFailed = true;
     } else {
-      this.client.name = this.form.get('name')?.value;
-      this.client.surname = this.form.get('surname')?.value;
-      this.client.phoneNumber = this.form.get('phoneNumber')?.value;
-
-      this.clientService.editClient(this.client).subscribe(
-        data => {
-          this.openFeedbackDialog();
-        }, err => {
-          this.errorMessage = err.error.message;
-        }
-      );
+      this.setNewClientData();
+      this.sendEditRequest();
     }
+  }
+
+  private setNewClientData() {
+    this.client.name = this.form.get('name')?.value;
+    this.client.surname = this.form.get('surname')?.value;
+    this.client.phoneNumber = this.form.get('phoneNumber')?.value;
+  }
+
+  private sendEditRequest() {
+    this.clientService.editClient(this.client).subscribe(
+      success => {
+        this.openFeedbackDialog();
+      }, err => {
+        this.errorMessage = err.error.message;
+      }
+    );
   }
 
   private openFeedbackDialog() {

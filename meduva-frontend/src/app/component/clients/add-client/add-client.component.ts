@@ -30,29 +30,7 @@ export class AddClientComponent implements OnInit {
 
   ngOnInit(): void {
     this.heading = "Add new Client";
-
-    this.form = this.formBuilder.group({
-        name: new FormControl('', [
-          Validators.required,
-          Validators.minLength(1),
-          Validators.maxLength(30),
-          Validators.pattern('^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.\'-]+$'),
-          Validators.pattern('^[^-\\s]+$')
-        ]),
-        surname: new FormControl('', [
-          Validators.required,
-          Validators.minLength(1),
-          Validators.maxLength(30),
-          Validators.pattern('^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.\'-]+$'),
-          Validators.pattern('^[^-\\s]+$')
-
-        ]),
-        phoneNumber: new FormControl('', [
-          Validators.required,
-          Validators.pattern('^(\\+[0-9]{1,4})?[0-9]{6,12}$')
-        ]),
-      }
-    );
+    this.form = this.formBuilder.group(controlsConfig);
   }
 
   onSubmit(){
@@ -93,3 +71,25 @@ export class AddClientComponent implements OnInit {
     );
   }
 }
+
+export const controlsConfig = {
+  name: new FormControl('', [
+    Validators.required,
+    Validators.minLength(1),
+    Validators.maxLength(30),
+    Validators.pattern('^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.\'-]+$'),
+    Validators.pattern('^[^-\\s]+$')
+  ]),
+    surname: new FormControl('', [
+  Validators.required,
+  Validators.minLength(1),
+  Validators.maxLength(30),
+  Validators.pattern('^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.\'-]+$'),
+  Validators.pattern('^[^-\\s]+$')
+
+]),
+  phoneNumber: new FormControl('', [
+  Validators.required,
+  Validators.pattern('^(\\+[0-9]{1,4})?[0-9]{6,12}$')
+])
+};
