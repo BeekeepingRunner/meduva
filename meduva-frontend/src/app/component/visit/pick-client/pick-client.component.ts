@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import {Term, VisitService} from "../../../service/visit.service";
-import {DatePipe} from "@angular/common";
 import {Router} from "@angular/router";
 import {Client} from "../../../model/client";
 import {UserService} from "../../../service/user.service";
