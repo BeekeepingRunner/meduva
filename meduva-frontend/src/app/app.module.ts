@@ -35,7 +35,7 @@ import {routes} from "./app.routes";
 import { AccessDeniedComponent } from './component/access-denied/access-denied.component';
 import { ServiceListComponent } from './component/services/service-list/service-list.component';
 import { NewServiceComponent } from './component/services/new-service/new-service.component';
-import {CurrencyPipe, DatePipe} from "@angular/common";
+import {CommonModule, CurrencyPipe, DatePipe} from "@angular/common";
 import {MatCardModule} from "@angular/material/card";
 import {MatListModule} from "@angular/material/list";
 import { ServiceDetailsComponent } from './component/services/service-details/service-details.component';
@@ -53,8 +53,6 @@ import { ServicesSelectComponent } from './component/equipment/new-model/service
 import { ModelFormComponent } from './component/equipment/new-model/model-form/model-form.component';
 import { ModelDetailsComponent } from './component/equipment/model-details/model-details.component';
 import { FeedbackDialogComponent } from './component/dialog/feedback-dialog/feedback-dialog.component';
-import { CalendarModule, DateAdapter } from 'angular-calendar';
-import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 import { ChooseServiceComponent } from './component/visit/choose-service/choose-service.component';
 import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
 import { PickTermComponent } from './component/visit/pick-term/pick-term.component';
@@ -69,6 +67,10 @@ import { ClientListComponent } from './component/clients/client-list/client-list
 import { ClientDetailsComponent } from './component/clients/client-details/client-details.component';
 import { AddClientComponent } from './component/clients/add-client/add-client.component';
 import { EditClientComponent } from './component/clients/client-details/edit-client/edit-client.component';
+import {CalendarModule, DateAdapter} from "angular-calendar";
+import {adapterFactory} from "angular-calendar/date-adapters/date-fns";
+import {WorkerScheduleComponent} from "./component/worker-schedule/worker-schedule.component";
+import {DemoUtilsModule} from "./util/demo-utils/module";
 
 @NgModule({
   declarations: [
@@ -112,6 +114,7 @@ import { EditClientComponent } from './component/clients/client-details/edit-cli
     ClientDetailsComponent,
     AddClientComponent,
     EditClientComponent,
+    WorkerScheduleComponent,
   ],
   imports: [
     BrowserModule,
@@ -135,9 +138,14 @@ import { EditClientComponent } from './component/clients/client-details/edit-cli
     MatListModule,
     MatDialogModule,
     MatStepperModule,
-    CalendarModule.forRoot({provide: DateAdapter, useFactory: adapterFactory}),
     MatProgressSpinnerModule,
+    CommonModule,
+    CalendarModule.forRoot({
+      provide: DateAdapter,
+      useFactory: adapterFactory
+    }),
     MatSelectModule,
+    DemoUtilsModule,
   ],
   exports: [
     RouterModule

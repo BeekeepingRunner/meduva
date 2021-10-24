@@ -34,6 +34,7 @@ import {ClientListComponent} from "./component/clients/client-list/client-list.c
 import {ClientDetailsComponent} from "./component/clients/client-details/client-details.component";
 import {AddClientComponent} from "./component/clients/add-client/add-client.component";
 import {EditClientComponent} from "./component/clients/client-details/edit-client/edit-client.component";
+import {WorkerScheduleComponent} from "./component/worker-schedule/worker-schedule.component";
 
 export const routes: Routes = [
   { path: 'home', component: HomeComponent },
@@ -266,6 +267,14 @@ export const routes: Routes = [
   {
     path: 'visit/summary',
     component: SummaryComponent,
+    canActivate: [RoleGuard],
+    data: {
+      expectedRole: roleNames[UserRole.ROLE_WORKER]
+    }
+  },
+  {
+    path: 'schedule/my',
+    component: WorkerScheduleComponent,
     canActivate: [RoleGuard],
     data: {
       expectedRole: roleNames[UserRole.ROLE_WORKER]
