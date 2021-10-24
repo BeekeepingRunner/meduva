@@ -10,6 +10,9 @@ import {RouterModule} from "@angular/router";
 import { DayDialogComponent } from './component/dialog/day-dialog/day-dialog.component';
 import {MatDialogModule} from "@angular/material/dialog";
 import {MatButtonModule} from "@angular/material/button";
+import {NgxMaterialTimepickerModule} from "ngx-material-timepicker";
+import {MatInputModule} from "@angular/material/input";
+import {ReactiveFormsModule} from "@angular/forms";
 
 @NgModule({
   declarations: [
@@ -28,6 +31,9 @@ import {MatButtonModule} from "@angular/material/button";
     RouterModule,
     MatDialogModule,
     MatButtonModule,
+    NgxMaterialTimepickerModule,
+    MatInputModule,
+    ReactiveFormsModule,
   ]
 })
 export class ScheduleModule { }
