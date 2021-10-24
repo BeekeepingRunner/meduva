@@ -1,5 +1,10 @@
-import {ChangeDetectionStrategy, Component, NgModule, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
 import {CalendarEvent, CalendarView} from "angular-calendar";
+import {MatDialog} from "@angular/material/dialog";
+import {ActivatedRoute, Router} from "@angular/router";
+import {DayDialogComponent} from "../../dialog/day-dialog/day-dialog.component";
+import {User} from "../../../../model/user";
+import {UserService} from "../../../../service/user.service";
 
 @Component({
   selector: 'app-worker-schedule',
@@ -9,7 +14,7 @@ import {CalendarEvent, CalendarView} from "angular-calendar";
 })
 export class WorkerScheduleComponent implements OnInit {
 
-  view: CalendarView = CalendarView.Month;
+  view: CalendarView = CalendarView.Week;
   viewDate: Date = new Date();
 
   events: CalendarEvent[] = [];
@@ -17,6 +22,39 @@ export class WorkerScheduleComponent implements OnInit {
   clickedDate!: Date;
   clickedColumn!: number;
 
+  worker!: User;
+
+  constructor(
+    private activatedRoute: ActivatedRoute,
+    private dialog: MatDialog,
+    private userService: UserService,
+    ) {
+  }
+
   ngOnInit(): void {
+    let workerId = this.activatedRoute.snapshot.params.id;
+    this.userService.getUserDetails(workerId).subscribe(
+      worker => {
+        this.worker = worker;
+        console.log(this.worker);
+      }
+    );
+  }
+
+  openDayDialog(date: Date) {
+    this.clickedDate = date;
+    const dayDialog = this.dialog.open(DayDialogComponent, {
+      data: { day: this.clickedDate }
+    });
+
+    dayDialog.afterClosed().subscribe(
+      acknowledged => {
+        // window.location.reload();
+      }
+    );
+  }
+
+  printCurrDate() {
+    console.log(this.viewDate);
   }
 }

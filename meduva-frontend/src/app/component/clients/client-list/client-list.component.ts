@@ -25,6 +25,7 @@ export class ClientListComponent implements OnInit {
     private roleGuardService: RoleGuardService,
     private userService: UserService,
     private clientService: ClientService,
+    private jwtTokenStorageService: JwtTokenStorageService,
     private router: Router,
   ) { }
 
@@ -37,9 +38,15 @@ export class ClientListComponent implements OnInit {
     this.clients = [];
     this.userService.getAllUndeletedUsers().subscribe(
       registeredClients => {
+        registeredClients = this.deleteCurrentUser(registeredClients);
         this.combineWithUnregisteredClients(registeredClients);
       }
     );
+  }
+
+  private deleteCurrentUser(registeredClients: User[]): User[] {
+    let currentUserId = this.jwtTokenStorageService.getCurrentUser()?.id;
+    return registeredClients.filter(client => client.id != currentUserId);
   }
 
   private combineWithUnregisteredClients(registeredClients: User[]): void {
@@ -57,6 +64,7 @@ export class ClientListComponent implements OnInit {
   getAllRegisteredClients(): void {
     this.userService.getAllUndeletedUsers().subscribe(
       users => {
+        users = this.deleteCurrentUser(users);
         this.clients = users;
       }
     )

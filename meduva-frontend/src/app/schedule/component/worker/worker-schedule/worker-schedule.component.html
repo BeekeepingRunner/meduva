@@ -1,4 +1,10 @@
-<mwl-demo-utils-calendar-header [(view)]="view" [(viewDate)]="viewDate">
+<h3>{{ worker!.name + ' ' + worker!.surname }}</h3>
+<br>
+
+<mwl-demo-utils-calendar-header [(view)]="view"
+                                [(viewDate)]="viewDate"
+                                (viewDateChange)="printCurrDate()"
+                                (viewChange)="printCurrDate()">
 </mwl-demo-utils-calendar-header>
 
 <div class="alert alert-info">
@@ -17,22 +23,19 @@
     [viewDate]="viewDate"
     [events]="events"
     (columnHeaderClicked)="clickedColumn = $event.isoDayNumber"
-    (dayClicked)="clickedDate = $event.day.date"
-  >
+    (dayClicked)="clickedDate = $event.day.date">
   </mwl-calendar-month-view>
   <mwl-calendar-week-view
     *ngSwitchCase="'week'"
     [viewDate]="viewDate"
     [events]="events"
-    (dayHeaderClicked)="clickedDate = $event.day.date"
-    (hourSegmentClicked)="clickedDate = $event.date"
-  >
+    (dayHeaderClicked)="openDayDialog($event.day.date)"
+    (hourSegmentClicked)="clickedDate = $event.date">
   </mwl-calendar-week-view>
   <mwl-calendar-day-view
     *ngSwitchCase="'day'"
     [viewDate]="viewDate"
     [events]="events"
-    (hourSegmentClicked)="clickedDate = $event.date"
-  >
+    (hourSegmentClicked)="clickedDate = $event.date">
   </mwl-calendar-day-view>
 </div>

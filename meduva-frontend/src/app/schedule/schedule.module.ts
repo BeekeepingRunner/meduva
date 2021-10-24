@@ -7,11 +7,14 @@ import {DemoUtilsModule} from "./demo-utils/module";
 import { PickWorkerComponent } from './component/worker/pick-worker/pick-worker.component';
 import {MatTableModule} from "@angular/material/table";
 import {RouterModule} from "@angular/router";
+import { DayDialogComponent } from './component/dialog/day-dialog/day-dialog.component';
+import {MatDialogModule} from "@angular/material/dialog";
 
 @NgModule({
   declarations: [
     WorkerScheduleComponent,
     PickWorkerComponent,
+    DayDialogComponent,
   ],
   imports: [
     CommonModule,
@@ -22,6 +25,7 @@ import {RouterModule} from "@angular/router";
     DemoUtilsModule,
     MatTableModule,
     RouterModule,
+    MatDialogModule,
   ]
 })
 export class ScheduleModule { }
