@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import {CalendarModule, DateAdapter} from "angular-calendar";
 import {WorkerScheduleComponent} from "./component/worker/worker-schedule/worker-schedule.component";
 import {adapterFactory} from "angular-calendar/date-adapters/date-fns";
-import {DemoUtilsModule} from "./calendar-demo-utils/module";
+import {DemoUtilsModule} from "./util/calendar-demo-utils/module";
 import { PickWorkerComponent } from './component/worker/pick-worker/pick-worker.component';
 import {MatTableModule} from "@angular/material/table";
 import {RouterModule} from "@angular/router";

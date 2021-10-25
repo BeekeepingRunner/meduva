@@ -5,6 +5,7 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {DayDialogComponent} from "../../dialog/day-dialog/day-dialog.component";
 import {User} from "../../../../model/user";
 import {UserService} from "../../../../service/user.service";
+import {ScheduleService, WorkHours} from "../../../service/schedule.service";
 
 @Component({
   selector: 'app-worker-schedule',
@@ -28,6 +29,7 @@ export class WorkerScheduleComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private dialog: MatDialog,
     private userService: UserService,
+    private scheduleService: ScheduleService,
     ) {
   }
 
@@ -45,14 +47,16 @@ export class WorkerScheduleComponent implements OnInit {
     const dayDialog = this.dialog.open(DayDialogComponent, {
       width: '400px',
       panelClass: 'my-dialog',
-      data: { day: this.clickedDate }
+      data: { date: this.clickedDate }
     });
 
     dayDialog.afterClosed().subscribe(
       result => {
         if (result.event == 'WORK_HOURS') {
-          let workHoursToSave: string[] = result.data;
+          let workHoursToSave: WorkHours = result.data;
           console.log(workHoursToSave);
+          // TODO: send work hours to the backend
+          this.scheduleService.saveWorkHours(workHoursToSave);
         }
       }
     );

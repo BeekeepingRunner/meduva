@@ -1,11 +1,11 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
-import {controlsConfig} from "../../../../component/clients/add-client/add-client.component";
 import {startTimeBeforeEndTimeValidator} from "../../../util/validator/hours-input";
+import {WorkHours} from "../../../service/schedule.service";
 
 export interface DayDialogData {
-  day: Date
+  date: Date
 }
 
 export const START_TIME_IDX = 0;
@@ -18,12 +18,13 @@ export const END_TIME_IDX = 1;
 })
 export class DayDialogComponent implements OnInit {
 
-  dayDate: string = '';
+  selectedDate!: Date;
+  dateString: string = '';
 
   settingWorkHours: boolean = false;
   form!: FormGroup;
 
-  workHours: string[] = [];
+  workHours!: WorkHours;
 
   constructor(
     public dialogRef: MatDialogRef<DayDialogComponent>,
@@ -32,7 +33,8 @@ export class DayDialogComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.dayDate = this.data.day.toDateString();
+    this.selectedDate = this.data.date;
+    this.dateString = this.data.date.toDateString();
   }
 
   startSettingWorkHours() {
@@ -44,11 +46,31 @@ export class DayDialogComponent implements OnInit {
   }
 
   onWorkHoursSave() {
-    this.workHours[START_TIME_IDX] = this.form.get('startTime')?.value;
-    this.workHours[END_TIME_IDX] = this.form.get('endTime')?.value;
+    let startTime: Date = new Date(this.selectedDate);
+    let endTime: Date = new Date(this.selectedDate);
+
+    let hourAndMinutes: string = this.form.get('startTime')?.value; // HH:MM
+    startTime = this.setHoursAndMinutes(startTime, hourAndMinutes);
+    hourAndMinutes = this.form.get('endTime')?.value;
+    endTime = this.setHoursAndMinutes(endTime, hourAndMinutes);
+
+    this.workHours = {
+      startTime: startTime,
+      endTime: endTime
+    }
     this.dialogRef.close({
       event: 'WORK_HOURS',
       data: this.workHours
     });
+  }
+
+  private setHoursAndMinutes(dateTime: Date, hourAndMinutes: string): Date {
+    let temp: string[] = hourAndMinutes.split(':');
+    let hour = Number(temp[0]);
+    let minutes = Number(temp[1]);
+
+    dateTime.setHours(hour);
+    dateTime.setMinutes(minutes);
+    return dateTime;
   }
 }
