@@ -18,7 +18,7 @@ export class ScheduleService {
   ) { }
 
 
-  saveWorkHours(workHoursToSave: WorkHours) {
-    // this.httpClient.post(environment.API_BASE_URL + '/api/???');
+  saveWorkHours(workerId: number, workHours: WorkHours): Observable<any> {
+    return this.httpClient.post(environment.API_BASE_URL + 'api/worker/set-work-hours/' + workerId, workHours);
   }
 }

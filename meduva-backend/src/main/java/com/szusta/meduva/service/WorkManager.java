@@ -1,26 +1,39 @@
 package com.szusta.meduva.service;
 
 import com.szusta.meduva.exception.EntityRecordNotFoundException;
-
 import com.szusta.meduva.model.User;
+import com.szusta.meduva.model.WorkHours;
+import com.szusta.meduva.payload.WorkHoursPayload;
 import com.szusta.meduva.repository.ServiceRepository;
 import com.szusta.meduva.repository.UserRepository;
+import com.szusta.meduva.repository.WorkHoursRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.*;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 @Service
 public class WorkManager {
 
     UserRepository userRepository;
     ServiceRepository serviceRepository;
+    WorkHoursRepository workHoursRepository;
+
+    ScheduleChecker scheduleChecker;
 
     @Autowired
-    public WorkManager(UserRepository userRepository, ServiceRepository serviceRepository) {
+    public WorkManager(UserRepository userRepository,
+                       ServiceRepository serviceRepository,
+                       WorkHoursRepository workHoursRepository,
+                       ScheduleChecker scheduleChecker) {
         this.userRepository = userRepository;
         this.serviceRepository = serviceRepository;
+        this.workHoursRepository = workHoursRepository;
+        this.scheduleChecker = scheduleChecker;
     }
 
     public com.szusta.meduva.model.Service[] getWorkerServices(Long userId) {
@@ -53,4 +66,31 @@ public class WorkManager {
         return userRepository.save(user);
     }
 
+
+    public WorkHours setWorkHours(User worker, WorkHoursPayload workHoursPayload) {
+
+        // TODO: make sure that there aren't any worker's visits
+        //  before and after requested work hours
+
+        Date newWorkStartTime = workHoursPayload.getStartTime();
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(workHoursPayload.getStartTime());
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        boolean hasNotAnyVisits =
+            scheduleChecker.isWorkerFree(calendar.getTime(), newWorkStartTime, worker);
+
+        Date newWorkEndTime = workHoursPayload.getEndTime();
+        calendar.set(Calendar.HOUR_OF_DAY, 23);
+        calendar.set(Calendar.MINUTE, 59);
+        hasNotAnyVisits = scheduleChecker.isWorkerFree(newWorkEndTime, calendar.getTime(), worker);
+
+        if (hasNotAnyVisits) {
+            WorkHours workHours = new WorkHours(
+                    workHoursPayload.getStartTime(), workHoursPayload.getEndTime());
+            workHours.setWorker(worker);
+            return workHoursRepository.save(workHours);
+        } else {
+            return null;
+        }
+    }
 }

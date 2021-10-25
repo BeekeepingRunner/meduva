@@ -55,8 +55,13 @@ export class WorkerScheduleComponent implements OnInit {
         if (result.event == 'WORK_HOURS') {
           let workHoursToSave: WorkHours = result.data;
           console.log(workHoursToSave);
-          // TODO: send work hours to the backend
-          this.scheduleService.saveWorkHours(workHoursToSave);
+          this.scheduleService.saveWorkHours(this.worker.id, workHoursToSave).subscribe(
+            workHours => {
+              console.log(workHours);
+            }, err => {
+              console.log(err);
+            }
+          );
         }
       }
     );

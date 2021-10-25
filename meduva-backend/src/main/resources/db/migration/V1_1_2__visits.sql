@@ -118,3 +118,12 @@ INSERT INTO worker_status values
 INSERT INTO equipment_status values
 (1, "EQUIPMENT_OCCUPIED"),
 (2, "EQUIPMENT_UNAVAILABLE");
+
+CREATE TABLE IF NOT EXISTS work_hours (
+    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    start_time TIMESTAMP NOT NULL,
+    end_time TIMESTAMP NOT NULL,
+
+    worker_id INT NOT NULL,
+    FOREIGN KEY (worker_id) REFERENCES user (id)
+) ENGINE=InnoDB DEFAULT CHARSET=UTF8;
