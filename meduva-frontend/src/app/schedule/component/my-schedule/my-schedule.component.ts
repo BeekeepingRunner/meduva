@@ -37,6 +37,6 @@ export class MyScheduleComponent implements OnInit {
   }
 
   openDayDialog(date: Date) {
-    
+
   }
 }

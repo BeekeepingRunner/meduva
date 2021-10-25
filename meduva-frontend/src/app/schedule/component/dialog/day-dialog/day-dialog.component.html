@@ -24,6 +24,17 @@
                                   [controlOnly]="true"></ngx-timepicker-field>
           </td>
         </tr>
+        <tr *ngIf="form.invalid">
+          <mat-error *ngIf="form.controls.startTime.errors?.required && (form.dirty || form.touched)">
+            Start time is required.
+          </mat-error>
+          <mat-error *ngIf="form.controls.endTime.errors?.required && (form.dirty || form.touched)">
+            End time is required.
+          </mat-error>
+          <mat-error *ngIf="form.errors?.inWrongOrder && (form.dirty || form.touched)">
+            Start time should be earlier than end time.
+          </mat-error>
+        </tr>
         <tr>
           <br>
           <button mat-raised-button color="primary" type="submit" [disabled]="this.form.invalid">Save</button>

@@ -8,7 +8,7 @@ import {UserService} from "../../../../service/user.service";
 
 @Component({
   selector: 'app-worker-schedule',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  changeDetection: ChangeDetectionStrategy.Default, // if strange bugs will occur, try using .OnPush
   templateUrl: './worker-schedule.component.html',
   styleUrls: ['./worker-schedule.component.css']
 })
@@ -36,7 +36,6 @@ export class WorkerScheduleComponent implements OnInit {
     this.userService.getUserDetails(workerId).subscribe(
       worker => {
         this.worker = worker;
-        console.log(this.worker);
       }
     );
   }
@@ -50,8 +49,11 @@ export class WorkerScheduleComponent implements OnInit {
     });
 
     dayDialog.afterClosed().subscribe(
-      acknowledged => {
-        // window.location.reload();
+      result => {
+        if (result.event == 'WORK_HOURS') {
+          let workHoursToSave: string[] = result.data;
+          console.log(workHoursToSave);
+        }
       }
     );
   }
