@@ -7,11 +7,11 @@ import com.szusta.meduva.payload.WorkHoursPayload;
 import com.szusta.meduva.repository.ServiceRepository;
 import com.szusta.meduva.repository.UserRepository;
 import com.szusta.meduva.repository.WorkHoursRepository;
+import com.szusta.meduva.util.TimeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -66,31 +66,35 @@ public class WorkManager {
         return userRepository.save(user);
     }
 
-
+    @Transactional
     public WorkHours setWorkHours(User worker, WorkHoursPayload workHoursPayload) {
 
-        // TODO: make sure that there aren't any worker's visits
-        //  before and after requested work hours
-
         Date newWorkStartTime = workHoursPayload.getStartTime();
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(workHoursPayload.getStartTime());
-        calendar.set(Calendar.HOUR_OF_DAY, 0);
-        boolean hasNotAnyVisits =
-            scheduleChecker.isWorkerFree(calendar.getTime(), newWorkStartTime, worker);
-
         Date newWorkEndTime = workHoursPayload.getEndTime();
-        calendar.set(Calendar.HOUR_OF_DAY, 23);
-        calendar.set(Calendar.MINUTE, 59);
-        hasNotAnyVisits = scheduleChecker.isWorkerFree(newWorkEndTime, calendar.getTime(), worker);
+        boolean collidingVisitsExist =
+                hasVisitsBefore(newWorkStartTime, worker)
+                && hasVisitsAfter(newWorkEndTime, worker);
 
-        if (hasNotAnyVisits) {
-            WorkHours workHours = new WorkHours(
-                    workHoursPayload.getStartTime(), workHoursPayload.getEndTime());
+        if (!collidingVisitsExist) {
+            Date dayStart = TimeUtils.getDayStart(newWorkStartTime);
+            Date dayEnd = TimeUtils.getDayEnd(newWorkStartTime);
+            workHoursRepository.deleteBetween(dayStart, dayEnd);
+
+            WorkHours workHours = new WorkHours(newWorkStartTime, newWorkEndTime);
             workHours.setWorker(worker);
             return workHoursRepository.save(workHours);
         } else {
-            return null;
+            throw new RuntimeException("Cannot set work hours - visits exist before or after requested work hours");
         }
+    }
+
+    private boolean hasVisitsBefore(Date newWorkStartTime, User worker) {
+        Date dayStart = TimeUtils.getDayStart(newWorkStartTime);
+        return !scheduleChecker.isWorkerFreeBeetween(dayStart, newWorkStartTime, worker);
+    }
+
+    private boolean hasVisitsAfter(Date newWorkEndTime, User worker) {
+        Date dayEnd = TimeUtils.getDayEnd(newWorkEndTime);
+        return !scheduleChecker.isWorkerFreeBeetween(newWorkEndTime, dayEnd, worker);
     }
 }

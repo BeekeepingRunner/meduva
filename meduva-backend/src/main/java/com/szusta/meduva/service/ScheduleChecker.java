@@ -51,7 +51,7 @@ public class ScheduleChecker {
         Date currentCheckStart = currentlyCheckedTime.getTime();
         Date currentCheckEnd = getIntervalEnd(currentlyCheckedTime, service.getDurationInMin());
 
-        if (!isWorkerFree(currentCheckStart, currentCheckEnd, worker)) {
+        if (!isWorkerFreeBeetween(currentCheckStart, currentCheckEnd, worker)) {
             return Optional.empty();
         }
         // get first available room
@@ -113,7 +113,7 @@ public class ScheduleChecker {
         return models.isEmpty();
     }
 
-    public boolean isWorkerFree(Date start, Date end, User worker) {
+    public boolean isWorkerFreeBeetween(Date start, Date end, User worker) {
         List<Schedule> existingWorkerEvents =
                 (List<Schedule>) workerScheduleRepository.findAnyBetween(start, end, worker.getId());
         return existingWorkerEvents.isEmpty();

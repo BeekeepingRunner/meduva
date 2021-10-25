@@ -1,6 +1,7 @@
 package com.szusta.meduva.util;
 
 import java.util.Calendar;
+import java.util.Date;
 
 public class TimeUtils {
 
@@ -20,5 +21,20 @@ public class TimeUtils {
         Calendar tempSomeday = (Calendar) someday.clone();
         tempSomeday.add(Calendar.DAY_OF_MONTH, -days);
         return now.before(tempSomeday);
+    }
+
+    public static Date getDayStart(Date dateTime) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(dateTime);
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        return calendar.getTime();
+    }
+
+    public static Date getDayEnd(Date dateTime) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(dateTime);
+        calendar.set(Calendar.HOUR_OF_DAY, 23);
+        calendar.set(Calendar.MINUTE, 59);
+        return calendar.getTime();
     }
 }
