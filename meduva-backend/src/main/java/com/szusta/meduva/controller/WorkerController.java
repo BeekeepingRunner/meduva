@@ -9,6 +9,8 @@ import com.szusta.meduva.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
+
 @RestController
 @RequestMapping("/api/worker")
 public class WorkerController {
@@ -36,6 +38,8 @@ public class WorkerController {
     @PostMapping("/set-work-hours/{workerId}")
     public WorkHours setWorkHours(@PathVariable Long workerId, @RequestBody WorkHoursPayload workHoursPayload) {
         User worker = userService.findById(workerId);
-        return workManager.setWorkHours(worker, workHoursPayload);
+        Date newWorkStartTime = workHoursPayload.getStartTime();
+        Date newWorkEndTime = workHoursPayload.getEndTime();
+        return workManager.setWorkHours(worker, newWorkStartTime, newWorkEndTime);
     }
 }

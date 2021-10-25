@@ -3,7 +3,6 @@ package com.szusta.meduva.service;
 import com.szusta.meduva.exception.EntityRecordNotFoundException;
 import com.szusta.meduva.model.User;
 import com.szusta.meduva.model.WorkHours;
-import com.szusta.meduva.payload.WorkHoursPayload;
 import com.szusta.meduva.repository.ServiceRepository;
 import com.szusta.meduva.repository.UserRepository;
 import com.szusta.meduva.repository.WorkHoursRepository;
@@ -67,19 +66,13 @@ public class WorkManager {
     }
 
     @Transactional
-    public WorkHours setWorkHours(User worker, WorkHoursPayload workHoursPayload) {
-
-        Date newWorkStartTime = workHoursPayload.getStartTime();
-        Date newWorkEndTime = workHoursPayload.getEndTime();
+    public WorkHours setWorkHours(User worker, Date newWorkStartTime, Date newWorkEndTime) {
         boolean collidingVisitsExist =
                 hasVisitsBefore(newWorkStartTime, worker)
                 && hasVisitsAfter(newWorkEndTime, worker);
 
         if (!collidingVisitsExist) {
-            Date dayStart = TimeUtils.getDayStart(newWorkStartTime);
-            Date dayEnd = TimeUtils.getDayEnd(newWorkStartTime);
-            workHoursRepository.deleteBetween(dayStart, dayEnd);
-
+            deleteVisitsAt(newWorkStartTime);
             WorkHours workHours = new WorkHours(newWorkStartTime, newWorkEndTime);
             workHours.setWorker(worker);
             return workHoursRepository.save(workHours);
@@ -96,5 +89,11 @@ public class WorkManager {
     private boolean hasVisitsAfter(Date newWorkEndTime, User worker) {
         Date dayEnd = TimeUtils.getDayEnd(newWorkEndTime);
         return !scheduleChecker.isWorkerFreeBeetween(newWorkEndTime, dayEnd, worker);
+    }
+
+    private void deleteVisitsAt(Date dateTime) {
+        Date dayStart = TimeUtils.getDayStart(dateTime);
+        Date dayEnd = TimeUtils.getDayEnd(dateTime);
+        workHoursRepository.deleteBetween(dayStart, dayEnd);
     }
 }
