@@ -3,6 +3,7 @@ package com.szusta.meduva.controller;
 import com.szusta.meduva.model.Service;
 import com.szusta.meduva.model.User;
 import com.szusta.meduva.model.WorkHours;
+import com.szusta.meduva.payload.WeekBoundaries;
 import com.szusta.meduva.payload.WorkHoursPayload;
 import com.szusta.meduva.service.WorkManager;
 import com.szusta.meduva.service.user.UserService;
@@ -10,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/worker")
@@ -33,6 +35,14 @@ public class WorkerController {
     @PostMapping("/assignServicesToWorker/{id}")
     public User assignServicesToWorker(@PathVariable Long id, @RequestBody Long[] request){
         return workManager.assignServicesToWorker(id, request);
+    }
+
+    @PostMapping("/get-week-work-hours/{workerId}")
+    public List<WorkHours> getWeekWorkHours(@PathVariable Long workerId, @RequestBody WeekBoundaries weekBoundaries) {
+        User worker = userService.findById(workerId);
+        Date firstWeekDay = weekBoundaries.getFirstWeekDay();
+        Date lastWeekDay = weekBoundaries.getLastWeekDay();
+        return workManager.getWeeklyWorkHours(worker, firstWeekDay, lastWeekDay);
     }
 
     @PostMapping("/set-work-hours/{workerId}")

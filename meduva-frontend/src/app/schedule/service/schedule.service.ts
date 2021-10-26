@@ -8,6 +8,11 @@ export interface WorkHours {
   endTime: Date
 }
 
+export interface WeekBoundaries {
+  firstWeekDay: Date,
+  lastWeekDay: Date
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -22,10 +27,7 @@ export class ScheduleService {
     return this.httpClient.post(environment.API_BASE_URL + 'api/worker/set-work-hours/' + workerId, workHours);
   }
 
-  getWeekWorkHours(workerId: number, firstDayOfWeek: Date, lastDayOfWeek: Date): Observable<any> {
-    return this.httpClient.post(environment.API_BASE_URL + 'api/worker/get-week-work-hours/' + workerId, {
-      firstDayOfWeek,
-      lastDayOfWeek
-    });
+  getWeekWorkHours(workerId: number, weekBoundaries: WeekBoundaries): Observable<any> {
+    return this.httpClient.post(environment.API_BASE_URL + 'api/worker/get-week-work-hours/' + workerId, weekBoundaries);
   }
 }

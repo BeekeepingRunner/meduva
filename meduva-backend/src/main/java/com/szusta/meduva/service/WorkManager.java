@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Service
@@ -72,7 +73,7 @@ public class WorkManager {
                 && hasVisitsAfter(newWorkEndTime, worker);
 
         if (!collidingVisitsExist) {
-            deleteVisitsAt(newWorkStartTime);
+            deleteWorkHoursAt(newWorkStartTime, worker);
             WorkHours workHours = new WorkHours(newWorkStartTime, newWorkEndTime);
             workHours.setWorker(worker);
             return workHoursRepository.save(workHours);
@@ -91,9 +92,15 @@ public class WorkManager {
         return !scheduleChecker.isWorkerFreeBeetween(newWorkEndTime, dayEnd, worker);
     }
 
-    private void deleteVisitsAt(Date dateTime) {
+    private void deleteWorkHoursAt(Date dateTime, User worker) {
         Date dayStart = TimeUtils.getDayStart(dateTime);
         Date dayEnd = TimeUtils.getDayEnd(dateTime);
-        workHoursRepository.deleteBetween(dayStart, dayEnd);
+        workHoursRepository.deleteByWorkerIdBetween(worker.getId(), dayStart, dayEnd);
+    }
+
+    public List<WorkHours> getWeeklyWorkHours(User worker, Date firstWeekDay, Date lastWeekDay) {
+        firstWeekDay = TimeUtils.getDayStart(firstWeekDay);
+        lastWeekDay = TimeUtils.getDayEnd(lastWeekDay);
+        return workHoursRepository.getAllByWorkerIdBetween(worker.getId(), firstWeekDay, lastWeekDay);
     }
 }
