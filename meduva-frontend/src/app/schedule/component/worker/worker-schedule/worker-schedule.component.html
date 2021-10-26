@@ -3,8 +3,8 @@
 
 <mwl-demo-utils-calendar-header [(view)]="view"
                                 [(viewDate)]="viewDate"
-                                (viewDateChange)="printCurrDate()"
-                                (viewChange)="printCurrDate()">
+                                (viewDateChange)="prepareWeekEvents()"
+                                (viewChange)="prepareWeekEvents()">
 </mwl-demo-utils-calendar-header>
 
 <div class="alert alert-info">
@@ -30,7 +30,8 @@
     [viewDate]="viewDate"
     [events]="events"
     (dayHeaderClicked)="openDayDialog($event.day.date)"
-    (hourSegmentClicked)="clickedDate = $event.date">
+    (hourSegmentClicked)="clickedDate = $event.date"
+    (eventClicked)="eventClick($event)">
   </mwl-calendar-week-view>
   <mwl-calendar-day-view
     *ngSwitchCase="'day'"

@@ -21,4 +21,11 @@ export class ScheduleService {
   saveWorkHours(workerId: number, workHours: WorkHours): Observable<any> {
     return this.httpClient.post(environment.API_BASE_URL + 'api/worker/set-work-hours/' + workerId, workHours);
   }
+
+  getWeekWorkHours(workerId: number, firstDayOfWeek: Date, lastDayOfWeek: Date): Observable<any> {
+    return this.httpClient.post(environment.API_BASE_URL + 'api/worker/get-week-work-hours/' + workerId, {
+      firstDayOfWeek,
+      lastDayOfWeek
+    });
+  }
 }
