@@ -1,0 +1,33 @@
+<h3>Choose a Worker to see his schedule:</h3>
+<br>
+
+<div class="table-container">
+  <table mat-table [dataSource]="workers" class="mat-elevation-z8">
+
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef>Name</th>
+      <td mat-cell *matCellDef="let worker">{{ worker.name }}</td>
+    </ng-container>
+    <ng-container matColumnDef="surname">
+      <th mat-header-cell *matHeaderCellDef>Surname</th>
+      <td mat-cell *matCellDef="let worker">{{ worker.surname }}</td>
+    </ng-container>
+    <ng-container matColumnDef="phoneNumber">
+      <th mat-header-cell *matHeaderCellDef>Phone number</th>
+      <td mat-cell *matCellDef="let worker">{{ worker.phoneNumber }}</td>
+    </ng-container>
+    <ng-container matColumnDef="email">
+      <th mat-header-cell *matHeaderCellDef>Email</th>
+      <td mat-cell *matCellDef="let worker">{{ worker.email }}</td>
+    </ng-container>
+    <ng-container matColumnDef="role">
+      <th mat-header-cell *matHeaderCellDef>Role</th>
+      <td mat-cell *matCellDef="let worker">{{ worker.masterRole.name | lowercase | slice : 5 }}</td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; let worker; columns: displayedColumns;" class="element-row"
+      [routerLink]="['/schedule/worker/' + worker.id]">
+    </tr>
+  </table>
+</div>

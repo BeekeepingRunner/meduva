@@ -34,6 +34,9 @@ import {ClientListComponent} from "./component/clients/client-list/client-list.c
 import {ClientDetailsComponent} from "./component/clients/client-details/client-details.component";
 import {AddClientComponent} from "./component/clients/add-client/add-client.component";
 import {EditClientComponent} from "./component/clients/client-details/edit-client/edit-client.component";
+import {WorkerScheduleComponent} from "./schedule/component/worker/worker-schedule/worker-schedule.component";
+import {PickWorkerComponent} from "./schedule/component/worker/pick-worker/pick-worker.component";
+import {MyScheduleComponent} from "./schedule/component/my-schedule/my-schedule.component";
 
 export const routes: Routes = [
   { path: 'home', component: HomeComponent },
@@ -269,6 +272,30 @@ export const routes: Routes = [
     canActivate: [RoleGuard],
     data: {
       expectedRole: roleNames[UserRole.ROLE_WORKER]
+    }
+  },
+  {
+    path: 'schedule/my',
+    component: MyScheduleComponent,
+    canActivate: [RoleGuard],
+    data: {
+      expectedRole: roleNames[UserRole.ROLE_WORKER]
+    }
+  },
+  {
+    path: 'schedule/worker/:id',
+    component: WorkerScheduleComponent,
+    canActivate: [RoleGuard],
+    data: {
+      expectedRole: roleNames[UserRole.ROLE_WORKER]
+    }
+  },
+  {
+    path: 'schedule/workers/pick-worker',
+    component: PickWorkerComponent,
+    canActivate: [RoleGuard],
+    data: {
+      expectedRole: roleNames[UserRole.ROLE_RECEPTIONIST]
     }
   },
   { path: '', redirectTo: 'home', pathMatch: 'full' }

@@ -1,15 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import {Role, User, UserRole} from "../../../model/user";
-import {FormBuilder, FormControl, FormGroup, ValidationErrors, Validators} from "@angular/forms";
+import {User} from "../../../model/user";
+import {FormBuilder, FormGroup} from "@angular/forms";
 import {UserService} from "../../../service/user.service";
 import {ActivatedRoute} from "@angular/router";
-import {environment} from "../../../../environments/environment";
 import {ServicesService} from "../../../service/services.service";
 import {Service} from "../../../model/service";
-import {DataSource, SelectionModel} from "@angular/cdk/collections";
-import {MatTableDataSource} from "@angular/material/table";
-import {SimpleOuterSubscriber} from "rxjs/internal/innerSubscribe";
-import {isElementScrolledOutsideView} from "@angular/cdk/overlay/position/scroll-clip";
+import {SelectionModel} from "@angular/cdk/collections";
 
 @Component({
   selector: 'app-worker-services',

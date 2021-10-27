@@ -62,23 +62,48 @@
 
       <mat-divider></mat-divider>
 
-      <button *ngIf="showWorkerOptions" mat-button class="menu-button">
-        <mat-icon>schedule</mat-icon>
-        <span>Your schedule</span>
-      </button>
-      <button *ngIf="showReceptionistOptions" mat-button class="menu-button">
-        <mat-icon>event</mat-icon>
-        <span>Schedule management</span>
-      </button>
-
-      <mat-divider></mat-divider>
-
       <button *ngIf="showWorkerOptions" mat-button class="menu-button" routerLink="client/list">
         <mat-icon>accessible</mat-icon>
         <span>Clients</span>
       </button>
 
-      <br>
+      <mat-divider></mat-divider>
+
+      <mat-accordion *ngIf="showWorkerOptions">
+        <mat-expansion-panel hideToggle>
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              <button mat-button class="menu-button">
+                <mat-icon>schedule</mat-icon>
+                <span>Schedules</span>
+              </button>
+            </mat-panel-title>
+            <mat-panel-description>
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+
+          <div class="admin-panel-items">
+            <button mat-button class="menu-button" routerLink="schedule/my">
+              <span>Your Schedule</span>
+            </button>
+          </div>
+          <div class="admin-panel-items" *ngIf="showReceptionistOptions">
+            <button mat-button class="menu-button" routerLink="schedule/workers/pick-worker">
+              <span>Workers</span>
+            </button>
+          </div>
+          <div class="admin-panel-items">
+            <button mat-button class="menu-button">
+              <span>Rooms</span>
+            </button>
+          </div>
+          <div class="admin-panel-items">
+            <button mat-button class="menu-button">
+              <span>Items</span>
+            </button>
+          </div>
+        </mat-expansion-panel>
+      </mat-accordion>
 
       <mat-accordion *ngIf="showAdminPanel">
         <mat-expansion-panel hideToggle>
