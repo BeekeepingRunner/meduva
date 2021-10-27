@@ -35,4 +35,24 @@
 
 
 
+
+
+  <mat-step label="Add the equipment"
+            [completed]="areAllItemsDisplaced()">
+
+    <app-equipment-list-creator>
+    </app-equipment-list-creator>
+    <br>
+    <div>
+      <button mat-button matStepperPrevious>Back</button>
+      <button mat-button matStepperNext>Next</button>
+    </div>
+    <br>
+    <div *ngIf="roomSelectionError" class="alert alert-warning">
+      <p>{{ roomSelectionError }}</p>
+    </div>
+  </mat-step>
+
+
+
 </mat-stepper>

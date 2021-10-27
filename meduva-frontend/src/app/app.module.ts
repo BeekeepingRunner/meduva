@@ -69,6 +69,9 @@ import {CreatorComponent} from "./component/creator/creator.component";
 import {NumberOfRoomsComponent} from "./component/creator/assign-rooms/number-of-rooms/number-of-rooms.component";
 import {ConfigureRoomsCreatorComponent} from "./component/creator/assign-rooms/configure-rooms-creator/configure-rooms-creator.component";
 import {ConfigureRoomsCreatorDialogComponent} from "./component/dialog/configure-rooms-creator-dialog/configure-rooms-creator-dialog.component";
+import {EquipmentListCreatorComponent} from "./component/creator/assign-equipment/equipment-list-creator/equipment-list-creator.component";
+import {NewModelCreatorComponent} from "./component/creator/assign-equipment/new-model-creator/new-model-creator.component";
+import {ConfigureEquipmentCreatorDialogComponent} from "./component/dialog/configure-equipment-creator-dialog/configure-equipment-creator-dialog.component";
 
 @NgModule({
   declarations: [
@@ -113,6 +116,9 @@ import {ConfigureRoomsCreatorDialogComponent} from "./component/dialog/configure
     NumberOfRoomsComponent,
     ConfigureRoomsCreatorComponent,
     ConfigureRoomsCreatorDialogComponent,
+    EquipmentListCreatorComponent,
+    NewModelCreatorComponent,
+    ConfigureEquipmentCreatorDialogComponent,
 
   ],
   imports: [

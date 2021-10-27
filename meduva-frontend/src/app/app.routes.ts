@@ -31,6 +31,7 @@ import {WorkerServicesComponent} from "./component/specific-user-profile/worker-
 import {EditPerformedServicesComponent} from "./component/rooms/edit-performed-services/edit-performed-services.component";
 import {ChangePasswordComponent} from "./component/profile/change-password/change-password.component";
 import {CreatorComponent} from "./component/creator/creator.component";
+import {NewModelCreatorComponent} from "./component/creator/assign-equipment/new-model-creator/new-model-creator.component";
 
 export const routes: Routes = [
   { path: 'home', component: HomeComponent },
@@ -207,6 +208,14 @@ export const routes: Routes = [
   {
     path: 'creator',
     component: CreatorComponent,
+    canActivate: [RoleGuard],
+    data: {
+      expectedRole: roleNames[UserRole.ROLE_ADMIN]
+    }
+  },
+  {
+    path: 'creator/add-model',
+    component: NewModelCreatorComponent,
     canActivate: [RoleGuard],
     data: {
       expectedRole: roleNames[UserRole.ROLE_ADMIN]

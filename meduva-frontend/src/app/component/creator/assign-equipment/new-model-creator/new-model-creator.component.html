@@ -1,0 +1,45 @@
+<button mat-icon-button color="primary" [mat-dialog-close]>
+  <- Back to configuration
+</button>
+
+<mat-stepper [linear]="true" orientation="vertical" #stepper>
+
+
+  <mat-step label="Define new model"
+            [completed]="isFormValid">
+    <app-model-form (modelNameEmitter)="onModelNameInput($event)"
+                    (eqItemsEmitter)="onItemsGeneration($event)"
+                    (stepCompletionEmitter)="onModelFormSubmitted($event)">
+    </app-model-form>
+    <div>
+      <button mat-button matStepperNext>Next</button>
+    </div>
+  </mat-step>
+
+  <mat-step label="Place items in rooms"
+            [completed]="areAllItemsDisplaced()">
+
+    <app-room-select *ngIf="eqItems.length"
+                     [eqItems]="eqItems"
+                     (selectedIdsEmitter)="onRoomsSelected($event)">
+    </app-room-select>
+    <br>
+    <div>
+      <button mat-button matStepperPrevious>Back</button>
+      <button mat-button matStepperNext>Next</button>
+    </div>
+    <br>
+    <div *ngIf="roomSelectionError" class="alert alert-warning">
+      <p>{{ roomSelectionError }}</p>
+    </div>
+  </mat-step>
+
+  <mat-step>
+    <ng-template matStepLabel>Done</ng-template>
+    <p>Everything is ready.</p>
+    <div>
+      <button mat-button matStepperPrevious>Back</button>
+      <button mat-button  [mat-dialog-close]>Save</button>
+    </div>
+  </mat-step>
+</mat-stepper>
