@@ -103,4 +103,6 @@ public class WorkManager {
         lastWeekDay = TimeUtils.getDayEnd(lastWeekDay);
         return workHoursRepository.getAllByWorkerIdBetween(worker.getId(), firstWeekDay, lastWeekDay);
     }
+
+    public List<>
 }

@@ -6,6 +6,8 @@ import {DayDialogComponent} from "../../dialog/day-dialog/day-dialog.component";
 import {User} from "../../../../model/user";
 import {UserService} from "../../../../service/user.service";
 import {ScheduleService, WeekBoundaries, WorkHours} from "../../../service/schedule.service";
+import {Observable} from "rxjs";
+import {map} from "rxjs/operators";
 
 @Component({
   selector: 'app-worker-schedule',
@@ -18,7 +20,7 @@ export class WorkerScheduleComponent implements OnInit {
   view: CalendarView = CalendarView.Week;
   viewDate: Date = new Date();
 
-  events: CalendarEvent[] = [];
+  events!: Observable<CalendarEvent[]>;
 
   clickedDate!: Date;
   clickedColumn!: number;
@@ -72,14 +74,12 @@ export class WorkerScheduleComponent implements OnInit {
   }
 
   prepareWeekEvents() {
-    this.events = [];
     this.setFirstAndLastDayOfWeek();
     this.prepareWeekWorkHours();
   }
 
   setFirstAndLastDayOfWeek() {
-    // console.log(this.viewDate);
-    let currDate = this.viewDate;
+    let currDate = new Date(this.viewDate);
     let firstDayOfWeekNumber = currDate.getDate() - currDate.getDay();
     let lastDayOfWeekNumber = firstDayOfWeekNumber + 6;
     this.firstDayOfWeek = new Date(currDate.setDate(firstDayOfWeekNumber));
@@ -92,61 +92,96 @@ export class WorkerScheduleComponent implements OnInit {
       lastWeekDay: this.lastDayOfWeek
     };
 
+    /*
     this.scheduleService.getWeekWorkHours(this.worker.id, weekBoundaries).subscribe(
-      (workHours: WorkHours[]) => {
-        // create and push events
-        workHours.forEach(wHours => {
-
-          let dayStart: Date = new Date(wHours.startTime);
-          dayStart.setHours(0);
-          dayStart.setMinutes(0);
-          dayStart.setSeconds(0);
-          let dayEnd: Date = new Date(wHours.startTime);
-          dayEnd.setHours(23);
-          dayEnd.setMinutes(59);
-          dayEnd.setSeconds(59);
-
-          console.log(new Date(dayStart));
-          console.log(new Date(wHours.startTime));
-          console.log(new Date(wHours.endTime));
-          console.log(new Date(dayEnd));
-
-          // pre work off-time
-          this.events.push({
-            draggable: false,
-            end: new Date(wHours.startTime),
-            id: undefined,
-            meta: undefined,
-            start: new Date(dayStart),
-            title: "Off work",
-            color: {
-              primary: "gray",
-              secondary: "gray"
-            }
-          });
-
-          // post work off-time
-          this.events.push({
-            draggable: false,
-            end: new Date(dayEnd),
-            id: undefined,
-            meta: undefined,
-            start: new Date(wHours.endTime),
-            title: "Off work",
-            color: {
-              primary: "gray",
-              secondary: "gray"
-            }
-          });
-        });
+      (weekWorkHours: WorkHours[]) => {
+        this.events = this.getWeeklyWorkHourEvents(weekWorkHours);
       }, err => {
         console.log(err);
       }
     );
 
-    this.createTestEvent();
+     */
+    this.events = this.scheduleService.getWeekWorkHours(this.worker.id, weekBoundaries).pipe(
+      map((weeklyWorkHours : WorkHours[]) => {
+        return weeklyWorkHours.map((workHours) => {
+          return {
+            draggable: false,
+            end: new Date(workHours.endTime),
+            id: undefined,
+            meta: undefined,
+            start: new Date(workHours.startTime),
+            title: "Off work",
+            color: {
+              primary: "gray",
+              secondary: "gray"
+            }
+          }
+        });
+      })
+    ).pipe(
+
+    );
+
+
+    // this.createTestEvent();
   }
 
+  /*
+  private getWeeklyWorkHourEvents(weekWorkHours: WorkHours[]): Observable<CalendarEvent[]> {
+
+    let workHoursEvents: CalendarEvent[] = [];
+    weekWorkHours.forEach(workHours => {
+
+      let dayStart: Date = new Date(workHours.startTime);
+      dayStart.setHours(0);
+      dayStart.setMinutes(0);
+      dayStart.setSeconds(0);
+      let dayEnd: Date = new Date(workHours.startTime);
+      dayEnd.setHours(23);
+      dayEnd.setMinutes(59);
+      dayEnd.setSeconds(59);
+
+      console.log(new Date(dayStart));
+      console.log(new Date(workHours.startTime));
+      console.log(new Date(workHours.endTime));
+      console.log(new Date(dayEnd));
+
+      // pre work off-time
+      workHoursEvents.push({
+        draggable: false,
+        end: new Date(workHours.startTime),
+        id: undefined,
+        meta: undefined,
+        start: new Date(dayStart),
+        title: "Off work",
+        color: {
+          primary: "gray",
+          secondary: "gray"
+        }
+      });
+
+      // post work off-time
+      workHoursEvents.push({
+        draggable: false,
+        end: new Date(dayEnd),
+        id: undefined,
+        meta: undefined,
+        start: new Date(workHours.endTime),
+        title: "Off work",
+        color: {
+          primary: "gray",
+          secondary: "gray"
+        }
+      });
+    });
+
+    return new Observable<CalendarEvent[]>(workHoursEvents);
+  }
+
+   */
+
+  /*
   private createTestEvent() {
     let startDate = new Date();
     startDate.setHours(16);
@@ -169,6 +204,8 @@ export class WorkerScheduleComponent implements OnInit {
       }
     });
   }
+
+   */
 
   eventClick($event: { event: CalendarEvent<any>; sourceEvent: any }) {
 
