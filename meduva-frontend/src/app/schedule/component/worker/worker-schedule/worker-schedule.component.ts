@@ -20,7 +20,7 @@ export class WorkerScheduleComponent implements OnInit {
   view: CalendarView = CalendarView.Week;
   viewDate: Date = new Date();
 
-  events!: Observable<CalendarEvent[]>;
+  events: CalendarEvent[] = [];
 
   clickedDate!: Date;
   clickedColumn!: number;
@@ -74,6 +74,7 @@ export class WorkerScheduleComponent implements OnInit {
   }
 
   prepareWeekEvents() {
+    this.events = [];
     this.setFirstAndLastDayOfWeek();
     this.prepareWeekWorkHours();
   }
@@ -92,39 +93,26 @@ export class WorkerScheduleComponent implements OnInit {
       lastWeekDay: this.lastDayOfWeek
     };
 
-    /*
     this.scheduleService.getWeekWorkHours(this.worker.id, weekBoundaries).subscribe(
-      (weekWorkHours: WorkHours[]) => {
-        this.events = this.getWeeklyWorkHourEvents(weekWorkHours);
-      }, err => {
-        console.log(err);
-      }
-    );
-
-     */
-    this.events = this.scheduleService.getWeekWorkHours(this.worker.id, weekBoundaries).pipe(
-      map((weeklyWorkHours : WorkHours[]) => {
-        return weeklyWorkHours.map((workHours) => {
-          return {
-            draggable: false,
-            end: new Date(workHours.endTime),
-            id: undefined,
-            meta: undefined,
-            start: new Date(workHours.startTime),
-            title: "Off work",
-            color: {
-              primary: "gray",
-              secondary: "gray"
-            }
+    (weeklyWorkHours: WorkHours[]) => {
+      let newEvents = this.events;
+      this.events = [];
+      weeklyWorkHours.forEach(workHours => {
+        newEvents.push({
+          draggable: false,
+          end: new Date(workHours.endTime),
+          id: undefined,
+          meta: undefined,
+          start: new Date(workHours.startTime),
+          title: "Off work",
+          color: {
+            primary: "gray",
+            secondary: "gray"
           }
-        });
-      })
-    ).pipe(
-
-    );
-
-
-    // this.createTestEvent();
+        })
+      });
+      this.events = [...newEvents];
+    });
   }
 
   /*
@@ -177,32 +165,6 @@ export class WorkerScheduleComponent implements OnInit {
     });
 
     return new Observable<CalendarEvent[]>(workHoursEvents);
-  }
-
-   */
-
-  /*
-  private createTestEvent() {
-    let startDate = new Date();
-    startDate.setHours(16);
-    let endDate = new Date();
-    endDate.setHours(23);
-    endDate.setMinutes(59);
-    endDate.setSeconds(59);
-
-    this.events = [];
-    this.events.push({
-      draggable: false,
-      end: endDate,
-      id: undefined,
-      meta: undefined,
-      start: startDate,
-      title: "Off work",
-      color: {
-        primary: "gray",
-        secondary: "gray"
-      }
-    });
   }
 
    */

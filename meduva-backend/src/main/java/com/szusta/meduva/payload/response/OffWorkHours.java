@@ -11,4 +11,9 @@ public class OffWorkHours {
 
     private Date startTime;
     private Date endTime;
+
+    public OffWorkHours(Date startTime, Date endTime) {
+        this.startTime = startTime;
+        this.endTime = endTime;
+    }
 }

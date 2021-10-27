@@ -3,6 +3,7 @@ package com.szusta.meduva.service;
 import com.szusta.meduva.exception.EntityRecordNotFoundException;
 import com.szusta.meduva.model.User;
 import com.szusta.meduva.model.WorkHours;
+import com.szusta.meduva.payload.response.OffWorkHours;
 import com.szusta.meduva.repository.ServiceRepository;
 import com.szusta.meduva.repository.UserRepository;
 import com.szusta.meduva.repository.WorkHoursRepository;
@@ -11,10 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Service
 public class WorkManager {
@@ -104,5 +102,22 @@ public class WorkManager {
         return workHoursRepository.getAllByWorkerIdBetween(worker.getId(), firstWeekDay, lastWeekDay);
     }
 
-    public List<>
+    public List<OffWorkHours> getWeeklyOffWorkHours(User worker, Date fisrtWeekDay, Date lastWeekDay) {
+        List<WorkHours> weeklyWorkHours = getWeeklyWorkHours(worker, fisrtWeekDay, lastWeekDay);
+
+        // convert them to offWorkHours
+        List<OffWorkHours> weeklyOffWorkHours = new ArrayList<>();
+        weeklyWorkHours.forEach(workHours -> {
+
+            Date dayStart = TimeUtils.getDayStart(workHours.getStartTime());
+            Date dayEnd = TimeUtils.getDayEnd(workHours.getStartTime());
+
+            OffWorkHours timeBeforeWork = new OffWorkHours(dayStart, workHours.getStartTime());
+            OffWorkHours timeAfterWork = new OffWorkHours(workHours.getEndTime(), dayEnd);
+            weeklyOffWorkHours.add(timeBeforeWork);
+            weeklyOffWorkHours.add(timeAfterWork);
+        });
+
+        return weeklyOffWorkHours;
+    }
 }
