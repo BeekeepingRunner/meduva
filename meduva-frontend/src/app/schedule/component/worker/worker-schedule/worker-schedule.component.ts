@@ -6,8 +6,6 @@ import {DayDialogComponent} from "../../dialog/day-dialog/day-dialog.component";
 import {User} from "../../../../model/user";
 import {UserService} from "../../../../service/user.service";
 import {ScheduleService, WeekBoundaries, WorkHours} from "../../../service/schedule.service";
-import {Observable} from "rxjs";
-import {map} from "rxjs/operators";
 
 @Component({
   selector: 'app-worker-schedule',
@@ -60,34 +58,36 @@ export class WorkerScheduleComponent implements OnInit {
       result => {
         if (result.event == 'WORK_HOURS') {
           let workHoursToSave: WorkHours = result.data;
-          console.log(workHoursToSave);
-          this.scheduleService.saveWorkHours(this.worker.id, workHoursToSave).subscribe(
-            workHours => {
-              this.prepareWeekEvents();
-            }, err => {
-              console.log(err);
-            }
-          );
+          this.saveWorkHours(workHoursToSave);
         }
       }
     );
   }
 
-  prepareWeekEvents() {
-    console.log(this.viewDate);
-    this.events = [];
-    this.setFirstAndLastDayOfWeek();
-    this.prepareWeekOffWorkHours();
+  private saveWorkHours(workHoursToSave: WorkHours) {
+    this.scheduleService.saveWorkHours(this.worker.id, workHoursToSave).subscribe(
+      workHours => {
+        this.prepareWeekEvents();
+      }, err => {
+        console.log(err);
+      }
+    );
   }
 
-  setFirstAndLastDayOfWeek() {
+  prepareWeekEvents() {
+    this.events = [];
+    this.setFirstAndLastDayOfWeek();
+    this.prepareWeeklyOffWorkHours();
+  }
+
+  private setFirstAndLastDayOfWeek() {
     let currDate = new Date(this.viewDate);
     let firstDayOfWeekNumber = currDate.getDate() - currDate.getDay();
     this.firstDayOfWeek = new Date(currDate.setDate(firstDayOfWeekNumber));
     this.lastDayOfWeek = new Date(currDate.setDate(this.firstDayOfWeek.getDate() + 6));
   }
 
-  prepareWeekOffWorkHours(): void {
+  private prepareWeeklyOffWorkHours(): void {
     let weekBoundaries: WeekBoundaries = {
       firstWeekDay: this.firstDayOfWeek,
       lastWeekDay: this.lastDayOfWeek
@@ -95,25 +95,28 @@ export class WorkerScheduleComponent implements OnInit {
 
     this.scheduleService.getWeeklyOffWorkHours(this.worker.id, weekBoundaries).subscribe(
     (weeklyOffWorkHours: WorkHours[]) => {
-      console.log(weeklyOffWorkHours);
-      let newEvents = this.events;
-      this.events = [];
-      weeklyOffWorkHours.forEach(OffWorkHours => {
-        newEvents.push({
-          draggable: false,
-          end: new Date(OffWorkHours.endTime),
-          id: undefined,
-          meta: undefined,
-          start: new Date(OffWorkHours.startTime),
-          title: "Off work",
-          color: {
-            primary: "lightGray",
-            secondary: "lightGray"
-          }
-        })
-      });
-      this.events = [...newEvents];
+      this.updateWorkHoursEvents(weeklyOffWorkHours);
     });
+  }
+
+  private updateWorkHoursEvents(weeklyOffWorkHours: WorkHours[]) {
+    let newEvents = this.events;
+    this.events = [];
+    weeklyOffWorkHours.forEach(OffWorkHours => {
+      newEvents.push({
+        draggable: false,
+        end: new Date(OffWorkHours.endTime),
+        id: undefined,
+        meta: undefined,
+        start: new Date(OffWorkHours.startTime),
+        title: "Off work",
+        color: {
+          primary: "lightGray",
+          secondary: "lightGray"
+        }
+      })
+    });
+    this.events = [...newEvents];
   }
 
   eventClick($event: { event: CalendarEvent<any>; sourceEvent: any }) {

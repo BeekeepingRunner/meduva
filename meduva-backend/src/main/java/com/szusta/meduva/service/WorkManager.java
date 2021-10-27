@@ -105,24 +105,28 @@ public class WorkManager {
     public List<TimeRange> getWeeklyOffWorkHours(User worker, Date firstWeekDay, Date lastWeekDay) {
 
         List<WorkHours> weeklyWorkHours = getWeeklyWorkHours(worker, firstWeekDay, lastWeekDay);
-        // convert work hours to offWork Hours
-        List<TimeRange> weeklyOffWorkHours = new ArrayList<>();
-        weeklyWorkHours.forEach(workHours -> {
+        List<TimeRange> weeklyOffWorkHours = convertToOffWorkHours(weeklyWorkHours);
 
-            Date dayStart = TimeUtils.getDayStart(workHours.getStartTime());
-            Date dayEnd = TimeUtils.getDayEnd(workHours.getStartTime());
-
-            TimeRange timeBeforeWork = new TimeRange(dayStart, workHours.getStartTime());
-            TimeRange timeAfterWork = new TimeRange(workHours.getEndTime(), dayEnd);
-            weeklyOffWorkHours.add(timeBeforeWork);
-            weeklyOffWorkHours.add(timeAfterWork);
-        });
-
-        // for days without described work hours, create offWorkHours that last all day
         List<TimeRange> allDayOffWorkHours = getAllDayOffWeeklyWorkHours(worker, firstWeekDay);
         weeklyOffWorkHours.addAll(allDayOffWorkHours);
 
         return weeklyOffWorkHours;
+    }
+
+    private List<TimeRange> convertToOffWorkHours(List<WorkHours> manyWorkHours) {
+        List<TimeRange> manyOffWorkHours = new ArrayList<>();
+
+        manyWorkHours.forEach(workHours -> {
+            Date dayStart = TimeUtils.getDayStart(workHours.getStartTime());
+            Date dayEnd = TimeUtils.getDayEnd(workHours.getStartTime());
+            TimeRange timeBeforeWork = new TimeRange(dayStart, workHours.getStartTime());
+            TimeRange timeAfterWork = new TimeRange(workHours.getEndTime(), dayEnd);
+
+            manyOffWorkHours.add(timeBeforeWork);
+            manyOffWorkHours.add(timeAfterWork);
+        });
+
+        return manyOffWorkHours;
     }
 
     private List<TimeRange> getAllDayOffWeeklyWorkHours(User worker, Date firstWeekDay) {
