@@ -43,8 +43,10 @@ export class NumberOfRoomsComponent implements OnInit {
     for(let i = 1; i <= itemCount; i++)
     {
       let roomItem: Room = {
+        name: "Room " + i,
         description: "",
-        name: "Room " + i
+        deleted: false
+
       }
       this.roomItems.push(roomItem);
     }

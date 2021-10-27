@@ -27,11 +27,9 @@ export class CreatorComponent implements OnInit {
 
   isFormValid: boolean = false;
 
-
   roomItems: Room[] = [];
   @ViewChild(RoomSelectComponent)
   private roomSelectComponent!: RoomSelectComponent;
-  selectedRoomsIds: number[] = [];
   roomSelectionError: string = '';
 
   constructor(
@@ -55,19 +53,23 @@ export class CreatorComponent implements OnInit {
   }
 
 
-  onRoomsSelected($event: Array<number>) {
-    this.selectedRoomsIds = $event;
-  }
 
   areAllItemsDisplaced(): boolean {
-    let roomItemCount: number = this.roomItems.length;
-    if (this.selectedRoomsIds.length == roomItemCount && roomItemCount > 0) {
+
+    if (this.roomItems.length > 0) {
+      for(let anyRoom of this.roomItems){
+        if(anyRoom.name == '' || anyRoom.name == null){
+          this.roomSelectionError = 'Room name cannot be empty';
+        }
+      }
       this.roomSelectionError = '';
       return true;
+
     } else {
-      this.roomSelectionError = 'You must complete all the names of the rooms';
+      this.roomSelectionError = 'You must add minimum one room';
       return false;
     }
+
   }
 
 

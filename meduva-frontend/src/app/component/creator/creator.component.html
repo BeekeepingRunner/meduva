@@ -19,8 +19,8 @@
             [completed]="areAllItemsDisplaced()">
 
     <app-configure-rooms-creator *ngIf="roomItems.length"
-                     [roomItems]="roomItems"
-                     (selectedIdsEmitter)="onRoomsSelected($event)">
+                                 [roomItems]="roomItems"
+                                 (roomItemsEmitter)="onItemsGeneration($event)">
     </app-configure-rooms-creator>
     <br>
     <div>

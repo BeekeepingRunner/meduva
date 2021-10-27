@@ -3,9 +3,9 @@
 <form class="basic-form" [formGroup]="form">
 
   <br>
-  <mat-form-field class="wide-element" appearance="outline">
+  <mat-form-field class="wide-element" appearance="outline" >
     <mat-label>Room name:</mat-label>
-    <input matInput id="name" type="text" formControlName="name">
+    <input matInput id="name" type="text" formControlName="name" [(ngModel)]="selectedRoom.name">
 
     <mat-error *ngIf="form.controls.name.invalid &&
                             (form.controls.name.dirty || form.controls.name.touched)">
@@ -23,12 +23,13 @@
               cdkTextareaAutosize
               #autosize="cdkTextareaAutosize"
               cdkAutosizeMinRows="1"
-              cdkAutosizeMaxRows="10"></textarea>
+              cdkAutosizeMaxRows="10"
+              [(ngModel)]="selectedRoom.description"></textarea>
   </mat-form-field>
 
 
   <div mat-dialog-actions>
-    <button mat-button [mat-dialog-close]="selectedRoom" [disabled]="!form.valid" cdkFocusInitial>Ok</button>
+    <button mat-button [mat-dialog-close]="selectedRoom" [disabled]="!form.valid" >Ok</button>
   </div>
   <br>
 

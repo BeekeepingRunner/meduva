@@ -3,9 +3,11 @@ import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 import {Room} from "../../../model/room";
 import {RoomService} from "../../../service/room.service";
 import {NewRoomComponent} from "../../rooms/new-room/new-room.component";
+import {FormBuilder} from "@angular/forms";
 
-export interface RoomSelectionDialogData {
-  message: string
+export interface ConfigureRoomsCreatorDialogData {
+  name: string
+  description: string
 }
 
 @Component({
@@ -16,13 +18,20 @@ export interface RoomSelectionDialogData {
 export class ConfigureRoomsCreatorDialogComponent extends NewRoomComponent{
 
   rooms: Room[] = [];
-  selectedRoom!: Room;
-  compareFunction = (o1: any, o2: any) => o1.id === o2.id;
+  selectedRoom: Room = {
+    name: "",
+    description: "",
+    deleted: false
+  };
 
-  /*constructor(
-    public dialogRef: MatDialogRef<ConfigureRoomsCreatorDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: RoomSelectionDialogData,
-  ) { }*/
+  constructor(
+     formBuilder: FormBuilder,
+     roomService: RoomService,
+    @Inject(MAT_DIALOG_DATA) public data: ConfigureRoomsCreatorDialogData,
+  ) {
+    super(formBuilder,roomService);
+  }
+
 
 
 }

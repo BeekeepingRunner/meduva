@@ -15,29 +15,34 @@ export class ConfigureRoomsCreatorComponent implements OnInit {
   displayedColumns: string[] = ['roomName', 'description', 'buttons'];
 
   @Input() roomItems!: Room[];
-  @Output() selectedIdsEmitter = new EventEmitter<Array<number>>();
+  @Output() roomItemsEmitter = new EventEmitter<Room[]>();
   rooms: Room[] = [];
-  selectedRoomIds!: Array<number>;
 
   constructor(
     public dialog: MatDialog,
   ) { }
 
   ngOnInit(): void {
-    this.selectedRoomIds = new Array<number>();
+
   }
 
 
   openRoomSelectionDialog(item: Room) {
     const roomSelectionDialogRef = this.dialog.open(ConfigureRoomsCreatorDialogComponent, {
-      data: { message: item.name }
+      data: { name: item.name, description: item.description }
     });
     roomSelectionDialogRef.afterClosed().subscribe(room => {
-      let selectedRoom: Room = room[0];
-      item = selectedRoom;
-      // @ts-ignore
-      this.selectedRoomIds[item.id - 1] = selectedRoom.id;
-      this.selectedIdsEmitter.emit(this.selectedRoomIds);
+
+      if(room!=undefined){
+        let selectedRoom: Room = room;
+        item.name=selectedRoom.name;
+        item.description=selectedRoom.description;
+        this.roomItems.splice(this.roomItems.indexOf(item),1,selectedRoom)
+        // @ts-ignore
+        console.log(this.roomItems)
+        this.roomItemsEmitter.emit(this.roomItems);
+      }
+
     });
   }
 }

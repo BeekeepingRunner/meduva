@@ -9,8 +9,8 @@
     <ng-container matColumnDef="description">
       <th mat-header-cell *matHeaderCellDef>Description</th>
       <td mat-cell *matCellDef="let item">
-        <span *ngIf="item.room != undefined">{{ item.room.name }}</span>
-        <span *ngIf="item.room == undefined">-</span>
+        <span *ngIf="item.description != ''">{{ item.description }}</span>
+        <span *ngIf="item.description == ''">-</span>
       </td>
     </ng-container>
 
