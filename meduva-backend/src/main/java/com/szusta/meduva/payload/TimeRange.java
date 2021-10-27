@@ -7,8 +7,13 @@ import java.util.Date;
 
 @Getter
 @Setter
-public class WorkHoursPayload {
+public class TimeRange {
 
     private Date startTime;
     private Date endTime;
+
+    public TimeRange(Date startTime, Date endTime) {
+        this.startTime = startTime;
+        this.endTime = endTime;
+    }
 }

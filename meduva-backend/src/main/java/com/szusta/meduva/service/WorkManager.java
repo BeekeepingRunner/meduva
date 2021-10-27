@@ -3,7 +3,7 @@ package com.szusta.meduva.service;
 import com.szusta.meduva.exception.EntityRecordNotFoundException;
 import com.szusta.meduva.model.User;
 import com.szusta.meduva.model.WorkHours;
-import com.szusta.meduva.payload.response.OffWorkHours;
+import com.szusta.meduva.payload.TimeRange;
 import com.szusta.meduva.repository.ServiceRepository;
 import com.szusta.meduva.repository.UserRepository;
 import com.szusta.meduva.repository.WorkHoursRepository;
@@ -102,22 +102,58 @@ public class WorkManager {
         return workHoursRepository.getAllByWorkerIdBetween(worker.getId(), firstWeekDay, lastWeekDay);
     }
 
-    public List<OffWorkHours> getWeeklyOffWorkHours(User worker, Date fisrtWeekDay, Date lastWeekDay) {
-        List<WorkHours> weeklyWorkHours = getWeeklyWorkHours(worker, fisrtWeekDay, lastWeekDay);
+    public List<TimeRange> getWeeklyOffWorkHours(User worker, Date firstWeekDay, Date lastWeekDay) {
 
-        // convert them to offWorkHours
-        List<OffWorkHours> weeklyOffWorkHours = new ArrayList<>();
+        List<WorkHours> weeklyWorkHours = getWeeklyWorkHours(worker, firstWeekDay, lastWeekDay);
+        // convert work hours to offWork Hours
+        List<TimeRange> weeklyOffWorkHours = new ArrayList<>();
         weeklyWorkHours.forEach(workHours -> {
 
             Date dayStart = TimeUtils.getDayStart(workHours.getStartTime());
             Date dayEnd = TimeUtils.getDayEnd(workHours.getStartTime());
 
-            OffWorkHours timeBeforeWork = new OffWorkHours(dayStart, workHours.getStartTime());
-            OffWorkHours timeAfterWork = new OffWorkHours(workHours.getEndTime(), dayEnd);
+            TimeRange timeBeforeWork = new TimeRange(dayStart, workHours.getStartTime());
+            TimeRange timeAfterWork = new TimeRange(workHours.getEndTime(), dayEnd);
             weeklyOffWorkHours.add(timeBeforeWork);
             weeklyOffWorkHours.add(timeAfterWork);
         });
 
+        // for days without described work hours, create offWorkHours that last all day
+        List<TimeRange> allDayOffWorkHours = getAllDayOffWeeklyWorkHours(worker, firstWeekDay);
+        weeklyOffWorkHours.addAll(allDayOffWorkHours);
+
         return weeklyOffWorkHours;
+    }
+
+    private List<TimeRange> getAllDayOffWeeklyWorkHours(User worker, Date firstWeekDay) {
+
+        List<TimeRange> allDayOffWorkHours = new ArrayList<>();
+        Calendar calendar = getFirstWeekDayStart(firstWeekDay);
+        for (int dayOfWeek = 1; dayOfWeek < 8; ++dayOfWeek)
+        {
+            Date currentDayStart = calendar.getTime();
+            Date currentDayEnd = TimeUtils.getDayEnd(currentDayStart);
+
+            if (!hasWorkHours(worker, currentDayStart, currentDayEnd)) {
+                allDayOffWorkHours.add(
+                        new TimeRange(currentDayStart, currentDayEnd)
+                );
+            }
+            calendar.add(Calendar.DATE, 1);
+        }
+
+        return allDayOffWorkHours;
+    }
+
+    private Calendar getFirstWeekDayStart(Date firstWeekDay) {
+        Calendar calendar = Calendar.getInstance();
+        Date firstWeekDayStart  = TimeUtils.getDayStart(firstWeekDay);
+        calendar.setTime(firstWeekDayStart);
+        return calendar;
+    }
+
+    private boolean hasWorkHours(User worker, Date start, Date end) {
+        List<WorkHours> workHours = workHoursRepository.getAllByWorkerIdBetween(worker.getId(), start, end);
+        return !workHours.isEmpty();
     }
 }

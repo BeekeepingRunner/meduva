@@ -3,8 +3,8 @@ package com.szusta.meduva.controller;
 import com.szusta.meduva.model.Service;
 import com.szusta.meduva.model.User;
 import com.szusta.meduva.model.WorkHours;
+import com.szusta.meduva.payload.TimeRange;
 import com.szusta.meduva.payload.WeekBoundaries;
-import com.szusta.meduva.payload.WorkHoursPayload;
 import com.szusta.meduva.service.WorkManager;
 import com.szusta.meduva.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,18 +47,18 @@ public class WorkerController {
 
     // TODO
     @PostMapping("/get-week-off-work-hours/{workerId}")
-    public List<WorkHours> getWeeklyOffWorkHours(@PathVariable Long workerId, @RequestBody WeekBoundaries weekBoundaries) {
+    public List<TimeRange> getWeeklyOffWorkHours(@PathVariable Long workerId, @RequestBody WeekBoundaries weekBoundaries) {
         User worker = userService.findById(workerId);
         Date firstWeekDay = weekBoundaries.getFirstWeekDay();
         Date lastWeekDay = weekBoundaries.getLastWeekDay();
-        return workManager.getWeeklyWorkHours(worker, firstWeekDay, lastWeekDay);
+        return workManager.getWeeklyOffWorkHours(worker, firstWeekDay, lastWeekDay);
     }
 
     @PostMapping("/set-work-hours/{workerId}")
-    public WorkHours setWorkHours(@PathVariable Long workerId, @RequestBody WorkHoursPayload workHoursPayload) {
+    public WorkHours setWorkHours(@PathVariable Long workerId, @RequestBody TimeRange newWorkHours) {
         User worker = userService.findById(workerId);
-        Date newWorkStartTime = workHoursPayload.getStartTime();
-        Date newWorkEndTime = workHoursPayload.getEndTime();
+        Date newWorkStartTime = newWorkHours.getStartTime();
+        Date newWorkEndTime = newWorkHours.getEndTime();
         return workManager.setWorkHours(worker, newWorkStartTime, newWorkEndTime);
     }
 }

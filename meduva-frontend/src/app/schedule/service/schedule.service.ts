@@ -27,7 +27,11 @@ export class ScheduleService {
     return this.httpClient.post(environment.API_BASE_URL + 'api/worker/set-work-hours/' + workerId, workHours);
   }
 
-  getWeekWorkHours(workerId: number, weekBoundaries: WeekBoundaries): Observable<any> {
+  getWeeklyWorkHours(workerId: number, weekBoundaries: WeekBoundaries): Observable<any> {
     return this.httpClient.post(environment.API_BASE_URL + 'api/worker/get-week-work-hours/' + workerId, weekBoundaries);
+  }
+
+  getWeeklyOffWorkHours(workerId: number, weekBoundaries: WeekBoundaries): Observable<any> {
+    return this.httpClient.post(environment.API_BASE_URL + 'api/worker/get-week-off-work-hours/' + workerId, weekBoundaries);
   }
 }
