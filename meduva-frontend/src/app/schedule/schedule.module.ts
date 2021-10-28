@@ -14,6 +14,10 @@ import {NgxMaterialTimepickerModule} from "ngx-material-timepicker";
 import {MatInputModule} from "@angular/material/input";
 import {ReactiveFormsModule} from "@angular/forms";
 import { MyScheduleComponent } from './component/my-schedule/my-schedule.component';
+import { RoomScheduleComponent } from './component/room/room-schedule/room-schedule.component';
+import { PickRoomComponent } from './component/room/pick-room/pick-room.component';
+import { PickItemComponent } from './component/item/pick-item/pick-item.component';
+import { ItemScheduleComponent } from './component/item/item-schedule/item-schedule.component';
 
 @NgModule({
   declarations: [
@@ -21,6 +25,10 @@ import { MyScheduleComponent } from './component/my-schedule/my-schedule.compone
     PickWorkerComponent,
     DayDialogComponent,
     MyScheduleComponent,
+    RoomScheduleComponent,
+    PickRoomComponent,
+    PickItemComponent,
+    ItemScheduleComponent,
   ],
   imports: [
     CommonModule,

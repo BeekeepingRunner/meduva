@@ -37,6 +37,10 @@ import {EditClientComponent} from "./component/clients/client-details/edit-clien
 import {WorkerScheduleComponent} from "./schedule/component/worker/worker-schedule/worker-schedule.component";
 import {PickWorkerComponent} from "./schedule/component/worker/pick-worker/pick-worker.component";
 import {MyScheduleComponent} from "./schedule/component/my-schedule/my-schedule.component";
+import {PickRoomComponent} from "./schedule/component/room/pick-room/pick-room.component";
+import {RoomScheduleComponent} from "./schedule/component/room/room-schedule/room-schedule.component";
+import {PickItemComponent} from "./schedule/component/item/pick-item/pick-item.component";
+import {ItemScheduleComponent} from "./schedule/component/item/item-schedule/item-schedule.component";
 
 export const routes: Routes = [
   { path: 'home', component: HomeComponent },
@@ -293,6 +297,38 @@ export const routes: Routes = [
   {
     path: 'schedule/workers/pick-worker',
     component: PickWorkerComponent,
+    canActivate: [RoleGuard],
+    data: {
+      expectedRole: roleNames[UserRole.ROLE_RECEPTIONIST]
+    }
+  },
+  {
+    path: 'schedule/room/pick-room',
+    component: PickRoomComponent,
+    canActivate: [RoleGuard],
+    data: {
+      expectedRole: roleNames[UserRole.ROLE_RECEPTIONIST]
+    }
+  },
+  {
+    path: 'schedule/room/:id',
+    component: RoomScheduleComponent,
+    canActivate: [RoleGuard],
+    data: {
+      expectedRole: roleNames[UserRole.ROLE_RECEPTIONIST]
+    }
+  },
+  {
+    path: 'schedule/item/pick-item',
+    component: PickItemComponent,
+    canActivate: [RoleGuard],
+    data: {
+      expectedRole: roleNames[UserRole.ROLE_RECEPTIONIST]
+    }
+  },
+  {
+    path: 'schedule/item/:id',
+    component: ItemScheduleComponent,
     canActivate: [RoleGuard],
     data: {
       expectedRole: roleNames[UserRole.ROLE_RECEPTIONIST]
