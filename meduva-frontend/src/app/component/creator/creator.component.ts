@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {Component, OnInit, Output, ViewChild} from '@angular/core';
 import {
   FormBuilder,
 } from "@angular/forms";
@@ -9,6 +9,7 @@ import {RoomSelectComponent} from "../equipment/new-model/room-select/room-selec
 import {EquipmentService} from "../../service/equipment.service";
 import {Router} from "@angular/router";
 import {Room} from "../../model/room";
+import {EquipmentListCreatorComponent} from "./assign-equipment/equipment-list-creator/equipment-list-creator.component";
 
 
 export interface CreatorRequest {
@@ -27,8 +28,8 @@ export class CreatorComponent implements OnInit {
 
   isFormValid: boolean = false;
 
-  roomItems: Room[] = [];
-  @ViewChild(RoomSelectComponent)
+  @Output() roomItems: Room[] = [];
+  @ViewChild(EquipmentListCreatorComponent)
   private roomSelectComponent!: RoomSelectComponent;
   roomSelectionError: string = '';
 
@@ -41,6 +42,7 @@ export class CreatorComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+
   }
 
 
@@ -60,9 +62,11 @@ export class CreatorComponent implements OnInit {
       for(let anyRoom of this.roomItems){
         if(anyRoom.name == '' || anyRoom.name == null){
           this.roomSelectionError = 'Room name cannot be empty';
+          return false;
         }
       }
       this.roomSelectionError = '';
+
       return true;
 
     } else {

@@ -1,5 +1,7 @@
 
-  <app-new-model-creator>
+  <app-new-model-creator *ngIf="rooms.length"
+                         [roomItems]="rooms">
+
   </app-new-model-creator>
 
 

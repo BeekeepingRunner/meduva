@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import {
   FormBuilder,
 } from "@angular/forms";
@@ -9,6 +9,7 @@ import {EquipmentItem} from "../../../../model/equipment";
 import {EquipmentService} from "../../../../service/equipment.service";
 import {Router} from "@angular/router";
 import {NewModelComponent} from "../../../equipment/new-model/new-model.component";
+import {Room} from "../../../../model/room";
 
 
 export interface NewModelRequest {
@@ -31,6 +32,11 @@ export class NewModelCreatorComponent extends NewModelComponent implements OnIni
   selectedServicesIds: number[] = [];
   serviceSelectionError: string = '';
 
+  @Input() roomItems: Room[] = [];
+  /**Because of the fact that this class is used in two cases, during adding the room and in the creator, there is an input annotation.
+   Creator uses that class in the string of giving data among the dialogs and classes*/
+
+
   eqItems: EquipmentItem[] = [];
  /** @ViewChild(RoomSelectCreatorComponent)
   private roomSelectComponent!: RoomSelectCreatorComponent;*/
@@ -46,7 +52,9 @@ export class NewModelCreatorComponent extends NewModelComponent implements OnIni
      router: Router,
   ) {
     super(formBuilder,servicesService,roomService,equipmentService,router)
+    console.log(this.roomItems)
   }
+
 
 //zamiast zapisywania do bazy należy zrobic zapis do tabeli w kreatorze
   /*saveModelWithItems() {

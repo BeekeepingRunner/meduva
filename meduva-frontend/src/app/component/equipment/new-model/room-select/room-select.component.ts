@@ -16,7 +16,11 @@ export class RoomSelectComponent implements OnInit {
 
   @Input() eqItems!: EquipmentItem[];
   @Output() selectedIdsEmitter = new EventEmitter<Array<number>>();
-  rooms: Room[] = [];
+
+  @Input() rooms!: Room[];
+  /**Because of the fact that this class is used in two cases, during adding the room and in the creator, there is an input annotation.
+   Creator uses that class in the string of giving data among the dialogs and classes*/
+
   selectedRoomIds!: Array<number>;
 
   constructor(
@@ -32,14 +36,17 @@ export class RoomSelectComponent implements OnInit {
   fetchRooms() {
     this.roomService.getAllUndeletedRooms().subscribe(
       rooms => {
-        this.rooms = rooms;
+        for (let room of rooms){
+          this.rooms.push(room);
+        }
+
       }
     );
   }
 
   openRoomSelectionDialog(item: EquipmentItem) {
     const roomSelectionDialogRef = this.dialog.open(RoomSelectionDialogComponent, {
-      data: { message: item.name }
+      data: { message: item.name, roomItems: this.rooms }
     });
 
     roomSelectionDialogRef.afterClosed().subscribe(room => {

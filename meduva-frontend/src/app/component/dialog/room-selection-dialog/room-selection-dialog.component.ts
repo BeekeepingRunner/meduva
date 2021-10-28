@@ -5,6 +5,7 @@ import {RoomService} from "../../../service/room.service";
 
 export interface RoomSelectionDialogData {
   message: string
+  roomItems: Room[]
 }
 
 @Component({
@@ -27,7 +28,10 @@ export class RoomSelectionDialogComponent implements OnInit {
   ngOnInit(): void {
     this.roomService.getAllUndeletedRooms().subscribe(
       rooms => {
-        this.rooms = rooms;
+        for (let room of rooms){
+          this.rooms.push(room);
+        }
+        console.log(rooms+"room-selection-dialog")
       }
     )
   }

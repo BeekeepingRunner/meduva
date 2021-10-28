@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {EquipmentModel} from "../../../../model/equipment";
 import {EquipmentService} from "../../../../service/equipment.service";
 import {ConfigureRoomsCreatorDialogComponent} from "../../../dialog/configure-rooms-creator-dialog/configure-rooms-creator-dialog.component";
 import {MatDialog} from "@angular/material/dialog";
 import {ConfigureEquipmentCreatorDialogComponent} from "../../../dialog/configure-equipment-creator-dialog/configure-equipment-creator-dialog.component";
+import {Room} from "../../../../model/room";
 
 @Component({
   selector: 'app-equipment-list-creator',
@@ -12,17 +13,22 @@ import {ConfigureEquipmentCreatorDialogComponent} from "../../../dialog/configur
 })
 export class EquipmentListCreatorComponent implements OnInit {
 
+  @Input() roomItems!: Room[];
   models: EquipmentModel[] = [];
   modelTableColumns: string[] = ['name'];
   itemTableColumns: string[] = ['name', 'room', 'status'];
 
+
   constructor(
     private equipmentService: EquipmentService,
     public dialog: MatDialog,
-  ) { }
+  ) {
+  }
 
   ngOnInit(): void {
     this.getModels();
+
+
   }
 
   private getModels() {
@@ -45,6 +51,8 @@ export class EquipmentListCreatorComponent implements OnInit {
   }
 
   openConfigureEquipmentCreatorDialog() {
-    const equipmentCreatorDialogRef = this.dialog.open(ConfigureEquipmentCreatorDialogComponent);
+    const equipmentCreatorDialogRef = this.dialog.open(ConfigureEquipmentCreatorDialogComponent,{
+      data: { roomItems: this.roomItems }
+    });
   }
 }

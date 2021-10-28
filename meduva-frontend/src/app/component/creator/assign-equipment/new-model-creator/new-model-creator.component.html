@@ -21,6 +21,7 @@
 
     <app-room-select *ngIf="eqItems.length"
                      [eqItems]="eqItems"
+                     [rooms]="roomItems"
                      (selectedIdsEmitter)="onRoomsSelected($event)">
     </app-room-select>
     <br>

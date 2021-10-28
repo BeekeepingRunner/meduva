@@ -40,7 +40,9 @@
   <mat-step label="Add the equipment"
             [completed]="areAllItemsDisplaced()">
 
-    <app-equipment-list-creator>
+    <app-equipment-list-creator *ngIf="roomItems.length"
+                                [roomItems]="roomItems">
+
     </app-equipment-list-creator>
     <br>
     <div>
