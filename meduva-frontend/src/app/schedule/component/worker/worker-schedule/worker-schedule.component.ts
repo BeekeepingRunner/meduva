@@ -7,6 +7,8 @@ import {User} from "../../../../model/user";
 import {UserService} from "../../../../service/user.service";
 import {ScheduleService, WeekBoundaries, WorkHours} from "../../../service/schedule.service";
 
+import {getHours} from "date-fns";
+
 @Component({
   selector: 'app-worker-schedule',
   changeDetection: ChangeDetectionStrategy.Default, // if strange bugs will occur, try using .OnPush
@@ -27,6 +29,9 @@ export class WorkerScheduleComponent implements OnInit {
 
   firstDayOfWeek!: Date;
   lastDayOfWeek!: Date;
+
+  dayStartHour: number = 6;
+  dayEndHour: number = 20;
 
   constructor(
     private activatedRoute: ActivatedRoute,

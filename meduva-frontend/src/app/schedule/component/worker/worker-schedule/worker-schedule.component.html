@@ -28,7 +28,6 @@
   <mwl-calendar-month-view
     *ngSwitchCase="'month'"
     [viewDate]="viewDate"
-    [events]="events"
     (columnHeaderClicked)="clickedColumn = $event.isoDayNumber"
     (dayClicked)="clickedDate = $event.day.date">
   </mwl-calendar-month-view>
@@ -38,7 +37,9 @@
     [events]="events"
     (dayHeaderClicked)="openDayDialog($event.day.date)"
     (hourSegmentClicked)="clickedDate = $event.date"
-    (eventClicked)="eventClick($event)">
+    (eventClicked)="eventClick($event)"
+    [dayStartHour]="dayStartHour"
+    [dayEndHour]="dayEndHour">
   </mwl-calendar-week-view>
   <mwl-calendar-day-view
     *ngSwitchCase="'day'"
