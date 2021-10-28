@@ -1,13 +1,11 @@
 import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
 import {CalendarEvent, CalendarView} from "angular-calendar";
 import {MatDialog} from "@angular/material/dialog";
-import {ActivatedRoute, Router} from "@angular/router";
+import {ActivatedRoute} from "@angular/router";
 import {DayDialogComponent} from "../../dialog/day-dialog/day-dialog.component";
 import {User} from "../../../../model/user";
 import {UserService} from "../../../../service/user.service";
 import {ScheduleService, WeekBoundaries, WorkHours} from "../../../service/schedule.service";
-
-import {getHours} from "date-fns";
 
 @Component({
   selector: 'app-worker-schedule',
