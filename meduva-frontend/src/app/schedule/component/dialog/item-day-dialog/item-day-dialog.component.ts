@@ -1,30 +1,33 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
-import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
-import {startTimeBeforeEndTimeValidator} from "../../../util/validator/hours-input";
-import {WorkHours} from "../../../service/schedule.service";
+import {FormBuilder, FormGroup} from "@angular/forms";
+import {DayDialogData} from "../day-dialog/day-dialog.component";
 
-export interface DayDialogData {
-  date: Date
+export enum UnavailabilityOptions {
+  THAT_DAY,
+  THAT_DAY_AND_NEXT
 }
 
 @Component({
   selector: 'app-day-dialog',
-  templateUrl: './day-dialog.component.html',
-  styleUrls: ['./day-dialog.component.css']
+  templateUrl: './item-day-dialog.component.html',
+  styleUrls: ['./item-day-dialog.component.css']
 })
-export class DayDialogComponent implements OnInit {
+export class ItemDayDialogComponent implements OnInit {
 
   selectedDate!: Date;
   dateString: string = '';
 
-  settingWorkHours: boolean = false;
+  settingUnavailability: boolean = false;
   form!: FormGroup;
 
-  workHours!: WorkHours;
+  THAT_DAY: number = 0;
+  THAT_DAY_AND_NEXT: number = 1;
+
+  selectedUnavailOption!: number;
 
   constructor(
-    public dialogRef: MatDialogRef<DayDialogComponent>,
+    public dialogRef: MatDialogRef<ItemDayDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: DayDialogData,
     private formBuilder: FormBuilder,
   ) { }
@@ -34,6 +37,13 @@ export class DayDialogComponent implements OnInit {
     this.dateString = this.data.date.toDateString();
   }
 
+  onUnavailabilitySet() {
+    this.dialogRef.close({
+      event: 'UNAVAILABILITY_SET',
+      data: this.selectedUnavailOption
+    })
+  }
+  /*
   startSettingWorkHours() {
     this.settingWorkHours = true;
     this.form = this.formBuilder.group({
@@ -70,4 +80,7 @@ export class DayDialogComponent implements OnInit {
     dateTime.setMinutes(minutes);
     return dateTime;
   }
+
+   */
+
 }

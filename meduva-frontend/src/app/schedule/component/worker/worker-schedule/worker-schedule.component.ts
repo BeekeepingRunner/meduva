@@ -49,34 +49,6 @@ export class WorkerScheduleComponent implements OnInit {
     );
   }
 
-  openDayDialog(date: Date) {
-    this.clickedDate = date;
-    const dayDialog = this.dialog.open(DayDialogComponent, {
-      width: '400px',
-      panelClass: 'my-dialog',
-      data: { date: this.clickedDate }
-    });
-
-    dayDialog.afterClosed().subscribe(
-      result => {
-        if (result.event == 'WORK_HOURS') {
-          let workHoursToSave: WorkHours = result.data;
-          this.saveWorkHours(workHoursToSave);
-        }
-      }
-    );
-  }
-
-  private saveWorkHours(workHoursToSave: WorkHours) {
-    this.scheduleService.saveWorkHours(this.worker.id, workHoursToSave).subscribe(
-      workHours => {
-        this.prepareWeekEvents();
-      }, err => {
-        console.log(err);
-      }
-    );
-  }
-
   prepareWeekEvents() {
     this.events = [];
     this.setFirstAndLastDayOfWeek();
@@ -120,6 +92,34 @@ export class WorkerScheduleComponent implements OnInit {
       })
     });
     this.events = [...newEvents];
+  }
+
+  openDayDialog(date: Date) {
+    this.clickedDate = date;
+    const dayDialog = this.dialog.open(DayDialogComponent, {
+      width: '400px',
+      panelClass: 'my-dialog',
+      data: { date: this.clickedDate }
+    });
+
+    dayDialog.afterClosed().subscribe(
+      result => {
+        if (result.event == 'WORK_HOURS') {
+          let workHoursToSave: WorkHours = result.data;
+          this.saveWorkHours(workHoursToSave);
+        }
+      }
+    );
+  }
+
+  private saveWorkHours(workHoursToSave: WorkHours) {
+    this.scheduleService.saveWorkHours(this.worker.id, workHoursToSave).subscribe(
+      workHours => {
+        this.prepareWeekEvents();
+      }, err => {
+        console.log(err);
+      }
+    );
   }
 
   eventClick($event: { event: CalendarEvent<any>; sourceEvent: any }) {

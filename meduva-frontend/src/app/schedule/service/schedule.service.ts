@@ -34,4 +34,8 @@ export class ScheduleService {
   getWeeklyOffWorkHours(workerId: number, weekBoundaries: WeekBoundaries): Observable<any> {
     return this.httpClient.post(environment.API_BASE_URL + 'api/worker/get-week-off-work-hours/' + workerId, weekBoundaries);
   }
+
+  setItemDayUnavailability(itemId: number, day: Date): Observable<any> {
+    return this.httpClient.post(environment.API_BASE_URL + 'api/item/set-day-unavailability/' + itemId, day);
+  }
 }
