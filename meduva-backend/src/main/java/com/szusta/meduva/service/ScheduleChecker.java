@@ -82,19 +82,20 @@ public class ScheduleChecker {
     }
 
     public boolean isEqItemFree(TimeRange timeRange, EquipmentItem eqItem) {
-        Date startTime = timeRange.getStartTime();
-        Date endTime = timeRange.getEndTime();
         return equipmentScheduleRepository
-                .findAnyBetween(startTime, endTime, eqItem.getId())
+                .findAllBetween(
+                        timeRange.getStartTime(),
+                        timeRange.getEndTime(),
+                        eqItem.getId(),
+                        EEquipmentStatus.EQUIPMENT_OCCUPIED.getValue())
                 .isEmpty();
     }
 
     public List<EquipmentSchedule> getItemUnavailabilityIn(EquipmentItem item, TimeRange weekBoundaries) {
-        Long eqStatus = EEquipmentStatus.EQUIPMENT_UNAVAILABLE.getValue();
         return equipmentScheduleRepository.findAllBetween(
                 weekBoundaries.getStartTime(),
                 weekBoundaries.getEndTime(),
                 item.getId(),
-                eqStatus);
+                EEquipmentStatus.EQUIPMENT_UNAVAILABLE.getValue());
     }
 }
