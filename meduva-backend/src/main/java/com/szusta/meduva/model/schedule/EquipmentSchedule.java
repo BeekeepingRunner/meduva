@@ -2,6 +2,7 @@ package com.szusta.meduva.model.schedule;
 
 import com.szusta.meduva.model.equipment.EquipmentItem;
 import com.szusta.meduva.model.schedule.status.EquipmentStatus;
+import com.szusta.meduva.payload.TimeRange;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -30,6 +31,14 @@ public class EquipmentSchedule extends Schedule {
         this.equipmentItem = equipmentItem;
         this.timeFrom = timeFrom;
         this.timeTo = timeTo;
+        this.deleted = false;
+    }
+
+    public EquipmentSchedule(EquipmentItem equipmentItem, TimeRange timeRange, EquipmentStatus eqStatus) {
+        this.equipmentItem = equipmentItem;
+        this.timeFrom = timeRange.getStartTime();
+        this.timeTo = timeRange.getEndTime();
+        this.equipmentStatus = eqStatus;
         this.deleted = false;
     }
 }

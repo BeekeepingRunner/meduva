@@ -5,7 +5,7 @@ import {MatDialog} from "@angular/material/dialog";
 import {EquipmentItem} from "../../../../model/equipment";
 import {EquipmentService} from "../../../../service/equipment.service";
 import {DayDialogComponent} from "../../dialog/day-dialog/day-dialog.component";
-import {ScheduleService, WorkHours} from "../../../service/schedule.service";
+import {ScheduleService, TimeRange, WeekBoundaries, WorkHours} from "../../../service/schedule.service";
 import {ItemDayDialogComponent, UnavailabilityOptions} from "../../dialog/item-day-dialog/item-day-dialog.component";
 
 @Component({
@@ -43,8 +43,55 @@ export class ItemScheduleComponent implements OnInit {
     this.itemService.getItemById(itemId).subscribe(
       item => {
         this.item = item;
+        this.getWeeklyEvents();
       }
     );
+  }
+
+  private getWeeklyEvents() {
+    this.events = [];
+    this.setFirstAndLastDayOfWeek();
+    this.pushWeeklyUnavailability();
+  }
+
+  private setFirstAndLastDayOfWeek() {
+    let currDate = new Date(this.viewDate);
+    let firstDayOfWeekNumber = currDate.getDate() - currDate.getDay();
+    this.firstDayOfWeek = new Date(currDate.setDate(firstDayOfWeekNumber));
+    this.lastDayOfWeek = new Date(currDate.setDate(this.firstDayOfWeek.getDate() + 6));
+  }
+
+  private pushWeeklyUnavailability(): void {
+    let weekBoundaries: TimeRange = {
+      startTime: this.firstDayOfWeek,
+      endTime: this.lastDayOfWeek
+    };
+
+    // @ts-ignore
+    this.scheduleService.getWeeklyItemUnavailability(this.item.id, weekBoundaries).subscribe(
+      (weeklyUnavailability: TimeRange[]) => {
+        this.pushUnavailabilities(weeklyUnavailability);
+      });
+  }
+
+  private pushUnavailabilities(weeklyUnavailability: TimeRange[]) {
+    let newEvents = this.events;
+    weeklyUnavailability.forEach(unavailability => {
+      newEvents.push({
+        draggable: false,
+        end: new Date(unavailability.endTime),
+        id: undefined,
+        meta: undefined,
+        start: new Date(unavailability.startTime),
+        title: "Unavailable",
+        color: {
+          primary: "#FF9191",
+          secondary: "#FF9191"
+        }
+      })
+    });
+    this.events = [];
+    this.events = [...newEvents];
   }
 
   openDayDialog(date: Date) {
@@ -66,17 +113,36 @@ export class ItemScheduleComponent implements OnInit {
   }
 
   private setUnavailability(selectedOption: number) {
-    
+
     if (selectedOption == UnavailabilityOptions.THAT_DAY) {
       // @ts-ignore
       this.scheduleService.setItemDayUnavailability(this.item.id, this.clickedDate).subscribe(
-        data => {
-          console.log(data);
+        (dayTimeRange: TimeRange) => {
+          console.log(dayTimeRange); // git gud
+          this.pushUnavailableDayToEvents(dayTimeRange);
         }
       )
     } else if (selectedOption == UnavailabilityOptions.THAT_DAY_AND_NEXT) {
       // ...
     }
+  }
+
+  private pushUnavailableDayToEvents(dayTimeRange: TimeRange) {
+    let newEvents = this.events;
+    newEvents.push({
+      draggable: false,
+      end: new Date(dayTimeRange.endTime),
+      id: undefined,
+      meta: undefined,
+      start: new Date(dayTimeRange.startTime),
+      title: "Unavailable",
+      color: {
+        primary: "#FF9191",
+        secondary: "#FF9191"
+      }
+    });
+    this.events = [];
+    this.events = [...newEvents];
   }
 
   eventClick($event: {event: CalendarEvent<any>; sourceEvent: any}) {
