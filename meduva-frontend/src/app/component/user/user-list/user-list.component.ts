@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {UserService} from "../../../service/user.service";
 import {User} from "../../../model/user";
-import {JwtTokenStorageService} from "../../../service/token/jwt-token-storage.service";
+import {JwtStorageService} from "../../../service/token/jwt-storage.service";
 import { Router } from '@angular/router';
 
 @Component({
@@ -16,7 +16,7 @@ export class UserListComponent implements OnInit {
   displayedColumns: string[] = ['id','name', 'surname', 'phoneNumber', 'email', 'role'];
 
   constructor(
-    private jwtTokenStorageService: JwtTokenStorageService,
+    private jwtTokenStorageService: JwtStorageService,
     private userService: UserService,
     private router: Router,
   ) { }

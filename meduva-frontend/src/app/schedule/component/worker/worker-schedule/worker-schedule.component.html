@@ -24,7 +24,7 @@
   </div>
 </ng-template>
 
-<div [ngSwitch]="view">
+<div *ngIf="events else loading" [ngSwitch]="view">
   <mwl-calendar-month-view
     *ngSwitchCase="'month'"
     [viewDate]="viewDate"

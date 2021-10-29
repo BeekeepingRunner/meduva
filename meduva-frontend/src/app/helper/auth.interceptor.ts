@@ -1,6 +1,6 @@
 import {Injectable} from "@angular/core";
 import {HTTP_INTERCEPTORS, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest} from "@angular/common/http";
-import {JwtTokenStorageService} from "../service/token/jwt-token-storage.service";
+import {JwtStorageService} from "../service/token/jwt-storage.service";
 import {Observable} from "rxjs";
 
 const TOKEN_HEADER_KEY = 'Authorization';
@@ -9,7 +9,7 @@ const TOKEN_PREFIX = 'Bearer ';
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
 
-  constructor(private tokenService: JwtTokenStorageService)
+  constructor(private tokenService: JwtStorageService)
   {
   }
 

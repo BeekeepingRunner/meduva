@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {ActivatedRoute} from "@angular/router";
 import {EmailService} from "../../../service/email.service";
-import {JwtTokenStorageService, TokenUserInfo} from "../../../service/token/jwt-token-storage.service";
+import {JwtStorageService, TokenUserInfo} from "../../../service/token/jwt-storage.service";
 
 @Component({
   selector: 'app-edit-email',
@@ -23,7 +23,7 @@ export class EditEmailComponent implements OnInit {
     private formBuilder: FormBuilder,
     private emailService: EmailService,
     private route: ActivatedRoute,
-    private token: JwtTokenStorageService
+    private token: JwtStorageService
   ) { }
 
   ngOnInit(): void {

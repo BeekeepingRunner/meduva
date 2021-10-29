@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {AuthService} from "../../service/auth/auth.service";
-import {JwtTokenStorageService, TokenUserInfo} from "../../service/token/jwt-token-storage.service";
+import {JwtStorageService, TokenUserInfo} from "../../service/token/jwt-storage.service";
 import {Router} from "@angular/router";
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 
@@ -20,7 +20,7 @@ export class LoginComponent implements OnInit {
 
   constructor(
     private authService: AuthService,
-    private tokenStorage: JwtTokenStorageService,
+    private tokenStorage: JwtStorageService,
     private router: Router,
     private formBuilder: FormBuilder
   ) { }

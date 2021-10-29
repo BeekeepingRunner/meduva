@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {EmailService} from "../../../service/email.service";
-import {JwtTokenStorageService, TokenUserInfo} from "../../../service/token/jwt-token-storage.service";
+import {JwtStorageService, TokenUserInfo} from "../../../service/token/jwt-storage.service";
 import {UserService} from "../../../service/user.service";
 import {DefaultUrlSerializer} from "@angular/router";
 import {User} from "../../../model/user";
@@ -21,7 +21,7 @@ export class ChangePasswordComponent implements OnInit {
   constructor(
       private emailService: EmailService,
       private userService: UserService,
-      private token: JwtTokenStorageService
+      private token: JwtStorageService
   ) { }
 
   ngOnInit(): void {
