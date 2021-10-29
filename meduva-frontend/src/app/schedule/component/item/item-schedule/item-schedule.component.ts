@@ -4,8 +4,7 @@ import {ActivatedRoute} from "@angular/router";
 import {MatDialog} from "@angular/material/dialog";
 import {EquipmentItem} from "../../../../model/equipment";
 import {EquipmentService} from "../../../../service/equipment.service";
-import {DayDialogComponent} from "../../dialog/day-dialog/day-dialog.component";
-import {ScheduleService, TimeRange, WeekBoundaries, WorkHours} from "../../../service/schedule.service";
+import {ScheduleService, TimeRange} from "../../../service/schedule.service";
 import {ItemDayDialogComponent, UnavailabilityOptions} from "../../dialog/item-day-dialog/item-day-dialog.component";
 
 @Component({
