@@ -1,0 +1,13 @@
+<br>
+<h4>Assign equipment models:</h4>
+<mat-selection-list #selectionListServices
+                    [(ngModel)]="selectedModels"
+                    [compareWith]="compareFunction"
+                    (selectionChange)="emitSelectedServicesIds()">
+  <mat-list-option *ngFor="let model of models" [value]="model">
+    {{ model.name }}
+  </mat-list-option>
+</mat-selection-list>
+
+<br>
+<mat-checkbox id="itemless" formControlName="itemless">Service is itemless</mat-checkbox>
