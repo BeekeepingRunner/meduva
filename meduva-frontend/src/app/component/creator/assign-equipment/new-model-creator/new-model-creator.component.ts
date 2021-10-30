@@ -52,7 +52,9 @@ export class NewModelCreatorComponent extends NewModelComponent implements OnIni
      router: Router,
   ) {
     super(formBuilder,servicesService,roomService,equipmentService,router)
-    console.log(this.roomItems)
+  }
+
+  ngOnInit(): void {
   }
 
 

@@ -1,4 +1,4 @@
-import {Component, Inject, OnInit} from '@angular/core';
+import {Component, Inject, OnInit, Output} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 import {Room} from "../../../model/room";
 import {RoomService} from "../../../service/room.service";
@@ -17,23 +17,26 @@ export class RoomSelectionDialogComponent implements OnInit {
 
   rooms: Room[] = [];
   selectedRoom!: Room;
+  roomItems: Room[] = [];
   compareFunction = (o1: any, o2: any) => o1.id === o2.id;
 
   constructor(
     public dialogRef: MatDialogRef<RoomSelectionDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: RoomSelectionDialogData,
     private roomService: RoomService,
-  ) { }
+  ) {
+    this.rooms=data.roomItems;
+  }
 
   ngOnInit(): void {
-    this.roomService.getAllUndeletedRooms().subscribe(
-      rooms => {
-        for (let room of rooms){
-          this.rooms.push(room);
+    if(this.rooms.length==0){
+      this.roomService.getAllUndeletedRooms().subscribe(
+        rooms => {
+          this.rooms=rooms;
         }
-        console.log(rooms+"room-selection-dialog")
-      }
-    )
+      )
+    }
+
   }
 
 }

@@ -20,14 +20,15 @@ export interface roomData {
   styleUrls: ['./configure-equipment-creator-dialog.component.css']
 })
 export class ConfigureEquipmentCreatorDialogComponent {
-  @Output() rooms: Room[] = [];
+  @Output() roomItems: Room[] = [];
+  @ViewChild(NewModelCreatorComponent)
+  private newModelCreatorComponent!: NewModelCreatorComponent;
 
   constructor(
     public dialogRef: MatDialogRef<ConfigureEquipmentCreatorDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: roomData
   ) {
-    this.rooms=data.roomItems;
-    console.log(this.rooms)
+    this.roomItems=data.roomItems;
   }
 
 }
