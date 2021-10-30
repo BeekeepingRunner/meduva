@@ -43,44 +43,4 @@ export class ItemDayDialogComponent implements OnInit {
       data: this.selectedUnavailOption
     })
   }
-  /*
-  startSettingWorkHours() {
-    this.settingWorkHours = true;
-    this.form = this.formBuilder.group({
-      startTime : new FormControl('', [Validators.required]),
-      endTime: new FormControl('', [Validators.required])
-    }, { validators: startTimeBeforeEndTimeValidator });
-  }
-
-  onWorkHoursSave() {
-    let startTime: Date = new Date(this.selectedDate);
-    let endTime: Date = new Date(this.selectedDate);
-
-    let hourAndMinutes: string = this.form.get('startTime')?.value; // HH:MM
-    startTime = this.setHoursAndMinutes(startTime, hourAndMinutes);
-    hourAndMinutes = this.form.get('endTime')?.value;
-    endTime = this.setHoursAndMinutes(endTime, hourAndMinutes);
-
-    this.workHours = {
-      startTime: startTime,
-      endTime: endTime
-    }
-    this.dialogRef.close({
-      event: 'WORK_HOURS',
-      data: this.workHours
-    });
-  }
-
-  private setHoursAndMinutes(dateTime: Date, hourAndMinutes: string): Date {
-    let temp: string[] = hourAndMinutes.split(':');
-    let hour = Number(temp[0]);
-    let minutes = Number(temp[1]);
-
-    dateTime.setHours(hour);
-    dateTime.setMinutes(minutes);
-    return dateTime;
-  }
-
-   */
-
 }
