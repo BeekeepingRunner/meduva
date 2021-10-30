@@ -6,6 +6,7 @@ import {DayDialogComponent} from "../../dialog/day-dialog/day-dialog.component";
 import {User} from "../../../../model/user";
 import {UserService} from "../../../../service/user.service";
 import {ScheduleService, WeekBoundaries, WorkHours} from "../../../service/schedule.service";
+import {createOffWorkHoursEvent} from "../../../util/event/creation";
 
 @Component({
   selector: 'app-worker-schedule',
@@ -77,19 +78,9 @@ export class WorkerScheduleComponent implements OnInit {
   private updateWorkHoursEvents(weeklyOffWorkHours: WorkHours[]) {
     let newEvents = this.events;
     this.events = [];
-    weeklyOffWorkHours.forEach(OffWorkHours => {
-      newEvents.push({
-        draggable: false,
-        end: new Date(OffWorkHours.endTime),
-        id: undefined,
-        meta: undefined,
-        start: new Date(OffWorkHours.startTime),
-        title: "Off work",
-        color: {
-          primary: "lightGray",
-          secondary: "lightGray"
-        }
-      })
+    weeklyOffWorkHours.forEach(offWorkHours => {
+      newEvents.push(
+        createOffWorkHoursEvent(offWorkHours.startTime, offWorkHours.endTime));
     });
     this.events = [...newEvents];
   }
