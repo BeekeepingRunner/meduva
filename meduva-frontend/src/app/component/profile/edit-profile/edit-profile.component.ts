@@ -3,7 +3,7 @@ import {Role, User} from "../../../model/user";
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {UserService} from "../../../service/user.service";
 import {ActivatedRoute} from "@angular/router";
-import {JwtTokenStorageService, TokenUserInfo} from "../../../service/token/jwt-token-storage.service";
+import {JwtStorageService, TokenUserInfo} from "../../../service/token/jwt-storage.service";
 
 
 @Component({
@@ -27,7 +27,7 @@ export class EditProfileComponent implements OnInit {
   constructor(private formBuilder: FormBuilder,
               private userService: UserService,
               private route: ActivatedRoute,
-              private token: JwtTokenStorageService) { }
+              private token: JwtStorageService) { }
 
   ngOnInit(): void {
     this.populateFormWithUserData();

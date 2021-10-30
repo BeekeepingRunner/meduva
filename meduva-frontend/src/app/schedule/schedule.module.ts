@@ -12,15 +12,26 @@ import {MatDialogModule} from "@angular/material/dialog";
 import {MatButtonModule} from "@angular/material/button";
 import {NgxMaterialTimepickerModule} from "ngx-material-timepicker";
 import {MatInputModule} from "@angular/material/input";
-import {ReactiveFormsModule} from "@angular/forms";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import { MyScheduleComponent } from './component/my-schedule/my-schedule.component';
+import { RoomScheduleComponent } from './component/room/room-schedule/room-schedule.component';
+import { PickRoomComponent } from './component/room/pick-room/pick-room.component';
+import { PickItemComponent } from './component/item/pick-item/pick-item.component';
+import { ItemScheduleComponent } from './component/item/item-schedule/item-schedule.component';
+import {ItemDayDialogComponent} from "./component/dialog/item-day-dialog/item-day-dialog.component";
+import {MatRadioModule} from "@angular/material/radio";
 
 @NgModule({
   declarations: [
     WorkerScheduleComponent,
     PickWorkerComponent,
     DayDialogComponent,
+    ItemDayDialogComponent,
     MyScheduleComponent,
+    RoomScheduleComponent,
+    PickRoomComponent,
+    PickItemComponent,
+    ItemScheduleComponent,
   ],
   imports: [
     CommonModule,
@@ -36,6 +47,8 @@ import { MyScheduleComponent } from './component/my-schedule/my-schedule.compone
     NgxMaterialTimepickerModule,
     MatInputModule,
     ReactiveFormsModule,
+    MatRadioModule,
+    FormsModule,
   ]
 })
 export class ScheduleModule { }

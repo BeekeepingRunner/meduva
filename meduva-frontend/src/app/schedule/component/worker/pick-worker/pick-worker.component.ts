@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {User} from "../../../../model/user";
 import {UserService} from "../../../../service/user.service";
-import {JwtTokenStorageService} from "../../../../service/token/jwt-token-storage.service";
+import {JwtStorageService} from "../../../../service/token/jwt-storage.service";
 
 @Component({
   selector: 'app-pick-worker',
@@ -15,7 +15,7 @@ export class PickWorkerComponent implements OnInit {
 
   constructor(
     private userService: UserService,
-    private jwtTokenStorageService: JwtTokenStorageService,
+    private jwtTokenStorageService: JwtStorageService,
   ) { }
 
   ngOnInit(): void {

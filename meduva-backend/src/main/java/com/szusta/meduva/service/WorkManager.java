@@ -21,17 +21,17 @@ public class WorkManager {
     ServiceRepository serviceRepository;
     WorkHoursRepository workHoursRepository;
 
-    ScheduleChecker scheduleChecker;
+    TermGenerator termGenerator;
 
     @Autowired
     public WorkManager(UserRepository userRepository,
                        ServiceRepository serviceRepository,
                        WorkHoursRepository workHoursRepository,
-                       ScheduleChecker scheduleChecker) {
+                       TermGenerator termGenerator) {
         this.userRepository = userRepository;
         this.serviceRepository = serviceRepository;
         this.workHoursRepository = workHoursRepository;
-        this.scheduleChecker = scheduleChecker;
+        this.termGenerator = termGenerator;
     }
 
     public com.szusta.meduva.model.Service[] getWorkerServices(Long userId) {
@@ -82,12 +82,12 @@ public class WorkManager {
 
     private boolean hasVisitsBefore(Date newWorkStartTime, User worker) {
         Date dayStart = TimeUtils.getDayStart(newWorkStartTime);
-        return !scheduleChecker.isWorkerFreeBeetween(dayStart, newWorkStartTime, worker);
+        return !termGenerator.isWorkerFreeBeetween(dayStart, newWorkStartTime, worker);
     }
 
     private boolean hasVisitsAfter(Date newWorkEndTime, User worker) {
         Date dayEnd = TimeUtils.getDayEnd(newWorkEndTime);
-        return !scheduleChecker.isWorkerFreeBeetween(newWorkEndTime, dayEnd, worker);
+        return !termGenerator.isWorkerFreeBeetween(newWorkEndTime, dayEnd, worker);
     }
 
     private void deleteWorkHoursAt(Date dateTime, User worker) {
@@ -113,20 +113,20 @@ public class WorkManager {
         return weeklyOffWorkHours;
     }
 
-    private List<TimeRange> convertToOffWorkHours(List<WorkHours> manyWorkHours) {
-        List<TimeRange> manyOffWorkHours = new ArrayList<>();
+    private List<TimeRange> convertToOffWorkHours(List<WorkHours> weeklyWorkHours) {
+        List<TimeRange> weeklyOffWorkHours = new ArrayList<>();
 
-        manyWorkHours.forEach(workHours -> {
+        weeklyWorkHours.forEach(workHours -> {
             Date dayStart = TimeUtils.getDayStart(workHours.getStartTime());
             Date dayEnd = TimeUtils.getDayEnd(workHours.getStartTime());
             TimeRange timeBeforeWork = new TimeRange(dayStart, workHours.getStartTime());
             TimeRange timeAfterWork = new TimeRange(workHours.getEndTime(), dayEnd);
 
-            manyOffWorkHours.add(timeBeforeWork);
-            manyOffWorkHours.add(timeAfterWork);
+            weeklyOffWorkHours.add(timeBeforeWork);
+            weeklyOffWorkHours.add(timeAfterWork);
         });
 
-        return manyOffWorkHours;
+        return weeklyOffWorkHours;
     }
 
     private List<TimeRange> getAllDayOffWeeklyWorkHours(User worker, Date firstWeekDay) {

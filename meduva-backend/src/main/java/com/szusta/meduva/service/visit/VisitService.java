@@ -7,7 +7,7 @@ import com.szusta.meduva.model.schedule.Visit;
 import com.szusta.meduva.payload.Term;
 import com.szusta.meduva.repository.RoomRepository;
 import com.szusta.meduva.repository.schedule.visit.VisitRepository;
-import com.szusta.meduva.service.ScheduleChecker;
+import com.szusta.meduva.service.TermGenerator;
 import com.szusta.meduva.util.TimeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -23,20 +23,20 @@ public class VisitService {
 
     private RoomRepository roomRepository;
 
-    private ScheduleChecker scheduleChecker;
-    private ScheduleGenerator scheduleGenerator;
+    private TermGenerator termGenerator;
+    private VisitScheduleGenerator visitScheduleGenerator;
 
     @Autowired
     public VisitService(VisitRepository visitRepository,
                         VisitBuilder visitBuilder,
-                        ScheduleGenerator scheduleGenerator,
+                        VisitScheduleGenerator visitScheduleGenerator,
                         RoomRepository roomRepository,
-                        ScheduleChecker scheduleChecker) {
+                        TermGenerator termGenerator) {
         this.visitRepository = visitRepository;
         this.visitBuilder = visitBuilder;
-        this.scheduleGenerator = scheduleGenerator;
+        this.visitScheduleGenerator = visitScheduleGenerator;
         this.roomRepository = roomRepository;
-        this.scheduleChecker = scheduleChecker;
+        this.termGenerator = termGenerator;
     }
 
     // Checks subsequent time-intervals in range of several days, starting from now.
@@ -54,7 +54,7 @@ public class VisitService {
         // check subsequent terms starting from now
         List<Term> possibleTerms = new ArrayList<>();
         do {
-            Optional<Term> term = scheduleChecker.getTermForWorker(worker, service, suitableRooms, currentlyCheckedTime);
+            Optional<Term> term = termGenerator.getTermForWorker(worker, service, suitableRooms, currentlyCheckedTime);
             term.ifPresent(possibleTerms::add);
 
             // proceed to the next interval
@@ -69,7 +69,7 @@ public class VisitService {
     @Transactional
     public Optional<Visit> saveNewVisit(Term term) {
         Visit visit = visitBuilder.buildVisit(term);
-        scheduleGenerator.generateSchedules(visit);
+        visitScheduleGenerator.generateVisitSchedules(visit);
         return Optional.of(visitRepository.save(visit));
     }
 }

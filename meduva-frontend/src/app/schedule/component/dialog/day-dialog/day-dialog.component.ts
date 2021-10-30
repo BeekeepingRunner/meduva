@@ -8,9 +8,6 @@ export interface DayDialogData {
   date: Date
 }
 
-export const START_TIME_IDX = 0;
-export const END_TIME_IDX = 1;
-
 @Component({
   selector: 'app-day-dialog',
   templateUrl: './day-dialog.component.html',

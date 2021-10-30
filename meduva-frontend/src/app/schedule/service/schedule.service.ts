@@ -3,6 +3,11 @@ import {HttpClient} from "@angular/common/http";
 import {environment} from "../../../environments/environment";
 import {Observable} from "rxjs";
 
+export interface TimeRange {
+  startTime: Date,
+  endTime: Date
+}
+
 export interface WorkHours {
   startTime: Date,
   endTime: Date
@@ -33,5 +38,21 @@ export class ScheduleService {
 
   getWeeklyOffWorkHours(workerId: number, weekBoundaries: WeekBoundaries): Observable<any> {
     return this.httpClient.post(environment.API_BASE_URL + 'api/worker/get-week-off-work-hours/' + workerId, weekBoundaries);
+  }
+
+  getWeeklyItemUnavailability(itemId: number, weekBoundaries: TimeRange): Observable<any> {
+    return this.httpClient.post(environment.API_BASE_URL + 'api/equipment/item/get-weekly-unavailability/' + itemId, weekBoundaries);
+  }
+
+  setItemDayUnavailability(itemId: number, day: Date): Observable<any> {
+    return this.httpClient.post(environment.API_BASE_URL + 'api/equipment/item/set-day-unavailability/' + itemId, day);
+  }
+
+  getWeeklyRoomUnavailability(roomId: number, weekBoundaries: TimeRange): Observable<any> {
+    return this.httpClient.post(environment.API_BASE_URL + 'api/room/get-weekly-unavailability/' + roomId, weekBoundaries);
+  }
+
+  setRoomDayUnavailability(roomId: number, day: Date): Observable<any> {
+    return this.httpClient.post(environment.API_BASE_URL + 'api/room/set-day-unavailability/' + roomId, day);
   }
 }

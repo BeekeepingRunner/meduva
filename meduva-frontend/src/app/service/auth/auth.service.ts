@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {environment} from "../../../environments/environment";
-import {JwtTokenStorageService, TokenUserInfo} from "../token/jwt-token-storage.service";
+import {JwtStorageService, TokenUserInfo} from "../token/jwt-storage.service";
 
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type' : 'application/json' })
@@ -15,7 +15,7 @@ export class AuthService {
 
   constructor(
     private http: HttpClient,
-    private jwtTokenStorageService: JwtTokenStorageService,
+    private jwtTokenStorageService: JwtStorageService,
   ) { }
 
   login(login: string, password: string): Observable<TokenUserInfo> {

@@ -1,5 +1,5 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
-import {JwtTokenStorageService, TokenUserInfo} from "./service/token/jwt-token-storage.service";
+import {JwtStorageService, TokenUserInfo} from "./service/token/jwt-storage.service";
 import {MatSidenav} from "@angular/material/sidenav";
 import {BreakpointObserver} from "@angular/cdk/layout";
 import {UserRole} from "./model/user";
@@ -23,7 +23,7 @@ export class AppComponent implements OnInit {
 
   constructor(
     private observer: BreakpointObserver,
-    private tokenStorageService: JwtTokenStorageService,
+    private tokenStorageService: JwtStorageService,
   ) {
   }
 

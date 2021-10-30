@@ -27,7 +27,7 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 @Component
-public class ScheduleGenerator {
+public class VisitScheduleGenerator {
 
     private RoomStatusRepository roomStatusRepository;
     private WorkerStatusRepository workerStatusRepository;
@@ -40,13 +40,13 @@ public class ScheduleGenerator {
     private RoleRepository roleRepository;
 
     @Autowired
-    public ScheduleGenerator(RoomStatusRepository roomStatusRepository,
-                             WorkerStatusRepository workerStatusRepository,
-                             EquipmentStatusRepository equipmentStatusRepository,
-                             RoomScheduleRepository roomScheduleRepository,
-                             WorkerScheduleRepository workerScheduleRepository,
-                             EquipmentScheduleRepository equipmentScheduleRepository,
-                             RoleRepository roleRepository) {
+    public VisitScheduleGenerator(RoomStatusRepository roomStatusRepository,
+                                  WorkerStatusRepository workerStatusRepository,
+                                  EquipmentStatusRepository equipmentStatusRepository,
+                                  RoomScheduleRepository roomScheduleRepository,
+                                  WorkerScheduleRepository workerScheduleRepository,
+                                  EquipmentScheduleRepository equipmentScheduleRepository,
+                                  RoleRepository roleRepository) {
         this.roomStatusRepository = roomStatusRepository;
         this.workerStatusRepository = workerStatusRepository;
         this.equipmentStatusRepository = equipmentStatusRepository;
@@ -56,7 +56,7 @@ public class ScheduleGenerator {
         this.roleRepository = roleRepository;
     }
 
-    public void generateSchedules(Visit visit) {
+    public void generateVisitSchedules(Visit visit) {
 
         generateRoomSchedule(visit);
         generateWorkerSchedule(visit);

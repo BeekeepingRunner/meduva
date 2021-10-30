@@ -1,7 +1,7 @@
 package com.szusta.meduva.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.szusta.meduva.model.common.Undeletable;
+import com.szusta.meduva.model.common.ScheduleSubject;
 import com.szusta.meduva.model.equipment.EquipmentItem;
 import com.szusta.meduva.model.schedule.RoomSchedule;
 import lombok.AllArgsConstructor;
@@ -19,7 +19,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Room extends Undeletable {
+public class Room extends ScheduleSubject {
 
     private String name;
     private String description;

@@ -5,7 +5,7 @@ import {UserService} from "../../../service/user.service";
 import {trimJSON} from "../../../util/json/trim";
 import {roleNames, User, UserRole} from "../../../model/user";
 import {Route, Router} from "@angular/router";
-import {JwtTokenStorageService, TokenUserInfo} from "../../../service/token/jwt-token-storage.service";
+import {JwtStorageService, TokenUserInfo} from "../../../service/token/jwt-storage.service";
 import {RoleGuardService} from "../../../service/auth/role-guard.service";
 
 @Component({
@@ -25,7 +25,7 @@ export class ClientListComponent implements OnInit {
     private roleGuardService: RoleGuardService,
     private userService: UserService,
     private clientService: ClientService,
-    private jwtTokenStorageService: JwtTokenStorageService,
+    private jwtTokenStorageService: JwtStorageService,
     private router: Router,
   ) { }
 
