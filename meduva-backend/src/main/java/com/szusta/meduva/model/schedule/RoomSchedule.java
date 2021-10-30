@@ -2,6 +2,7 @@ package com.szusta.meduva.model.schedule;
 
 import com.szusta.meduva.model.Room;
 import com.szusta.meduva.model.schedule.status.RoomStatus;
+import com.szusta.meduva.payload.TimeRange;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -30,6 +31,14 @@ public class RoomSchedule extends Schedule {
         this.room = room;
         this.timeFrom = timeFrom;
         this.timeTo = timeTo;
+        this.deleted = false;
+    }
+
+    public RoomSchedule(Room room, TimeRange timeRange, RoomStatus roomStatus) {
+        this.room = room;
+        this.timeFrom = timeRange.getStartTime();
+        this.timeTo = timeRange.getEndTime();
+        this.roomStatus = roomStatus;
         this.deleted = false;
     }
 }

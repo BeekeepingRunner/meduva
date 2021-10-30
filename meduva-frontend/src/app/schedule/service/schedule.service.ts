@@ -47,4 +47,12 @@ export class ScheduleService {
   setItemDayUnavailability(itemId: number, day: Date): Observable<any> {
     return this.httpClient.post(environment.API_BASE_URL + 'api/equipment/item/set-day-unavailability/' + itemId, day);
   }
+
+  getWeeklyRoomUnavailability(roomId: number, weekBoundaries: TimeRange): Observable<any> {
+    return this.httpClient.post(environment.API_BASE_URL + 'api/room/get-weekly-unavailability/' + roomId, weekBoundaries);
+  }
+
+  setRoomDayUnavailability(roomId: number, day: Date): Observable<any> {
+    return this.httpClient.post(environment.API_BASE_URL + 'api/room/set-day-unavailability/' + roomId, day);
+  }
 }

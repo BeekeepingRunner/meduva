@@ -27,4 +27,22 @@ public interface RoomScheduleRepository extends UndeletableRepository<RoomSchedu
             nativeQuery = true
     )
     List<? super RoomSchedule> findAnyBetween(Date start, Date end, Long roomId);
+
+    @Query(
+            value =
+                    "select * from room_schedule s "
+                            +   "where s.room_status_id = ?3 and "
+                            +   "s.room_status_id = ?4 and ("
+                            +       "("
+                            +           "(timestampdiff(MINUTE, time_from, ?2) > 0) and "
+                            +           "(timestampdiff(MINUTE, time_from, ?1) <= 0)"
+                            +       ") or "
+                            +       "("
+                            +           "(timestampdiff(MINUTE, time_to, ?1) < 0) and "
+                            +           "(timestampdiff(MINUTE, time_to, ?2) >= 0)"
+                            +       ")"
+                            +   ")",
+            nativeQuery = true
+    )
+    List<RoomSchedule> findAllBetween(Date startTime, Date endTime, long roomId, Long statusId);
 }

@@ -9,7 +9,7 @@ import javax.persistence.MappedSuperclass;
 @MappedSuperclass
 @Getter
 @Setter
-public class Activable extends Undeletable {
+public class Activable extends ScheduleSubject {
 
     @Column(name = "is_active")
     protected boolean isActive;

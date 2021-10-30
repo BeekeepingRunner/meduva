@@ -4,6 +4,9 @@ import {Room} from "../../../../model/room";
 import {ActivatedRoute} from "@angular/router";
 import {MatDialog} from "@angular/material/dialog";
 import {RoomService} from "../../../../service/room.service";
+import {ItemDayDialogComponent, UnavailabilityOptions} from "../../dialog/item-day-dialog/item-day-dialog.component";
+import {ScheduleService, TimeRange} from "../../../service/schedule.service";
+import {createUnavailabilityEvent} from "../../../util/event/creation";
 
 @Component({
   selector: 'app-room-schedule',
@@ -32,6 +35,7 @@ export class RoomScheduleComponent implements OnInit {
     private roomService: RoomService,
     private activatedRoute: ActivatedRoute,
     private dialog: MatDialog,
+    private scheduleService: ScheduleService
   ) { }
 
   ngOnInit(): void {
@@ -39,12 +43,84 @@ export class RoomScheduleComponent implements OnInit {
     this.roomService.getById(roomId).subscribe(
       room => {
         this.room = room;
+        this.getWeeklyEvents();
       }
     );
   }
 
-  openDayDialog(date: Date) {
+  private getWeeklyEvents() {
+    this.events = [];
+    this.setFirstAndLastDayOfWeek();
+    this.pushWeeklyUnavailability();
+  }
 
+  private setFirstAndLastDayOfWeek() {
+    let currDate = new Date(this.viewDate);
+    let firstDayOfWeekNumber = currDate.getDate() - currDate.getDay();
+    this.firstDayOfWeek = new Date(currDate.setDate(firstDayOfWeekNumber));
+    this.lastDayOfWeek = new Date(currDate.setDate(this.firstDayOfWeek.getDate() + 6));
+  }
+
+  private pushWeeklyUnavailability(): void {
+    let weekBoundaries: TimeRange = {
+      startTime: this.firstDayOfWeek,
+      endTime: this.lastDayOfWeek
+    };
+
+    // @ts-ignore
+    this.scheduleService.getWeeklyRoomUnavailability(this.room.id, weekBoundaries).subscribe(
+      (weeklyUnavailability: TimeRange[]) => {
+        this.pushUnavailabilities(weeklyUnavailability);
+      });
+  }
+
+  private pushUnavailabilities(weeklyUnavailability: TimeRange[]) {
+    let newEvents = this.events;
+    weeklyUnavailability.forEach(unavailability => {
+      newEvents.push(
+        createUnavailabilityEvent(unavailability.startTime, unavailability.endTime)
+      );
+    });
+    this.events = [];
+    this.events = [...newEvents];
+  }
+
+  openDayDialog(date: Date) {
+    this.clickedDate = date;
+    const dayDialog = this.dialog.open(ItemDayDialogComponent, {
+      width: '400px',
+      panelClass: 'my-dialog',
+      data: { date: this.clickedDate }
+    });
+
+    dayDialog.afterClosed().subscribe(
+      result => {
+        if (result.event == 'UNAVAILABILITY_SET') {
+          let selectedOption: number = result.data;
+          this.setUnavailability(selectedOption);
+        }
+      }
+    );
+  }
+
+  private setUnavailability(selectedOption: number) {
+
+    if (selectedOption == UnavailabilityOptions.THAT_DAY) {
+      // @ts-ignore
+      this.scheduleService.setRoomDayUnavailability(this.room.id, this.clickedDate).subscribe(
+        (dayTimeRange: TimeRange) => {
+          this.pushUnavailableDayToEvents(dayTimeRange);
+        }
+      )
+    }
+  }
+
+  private pushUnavailableDayToEvents(dayTimeRange: TimeRange) {
+    let newEvents = this.events;
+    newEvents.push(
+      createUnavailabilityEvent(dayTimeRange.startTime, dayTimeRange.endTime));
+    this.events = [];
+    this.events = [...newEvents];
   }
 
   eventClick($event: {event: CalendarEvent<any>; sourceEvent: any}) {

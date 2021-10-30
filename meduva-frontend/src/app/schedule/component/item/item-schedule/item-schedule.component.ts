@@ -6,6 +6,7 @@ import {EquipmentItem} from "../../../../model/equipment";
 import {EquipmentService} from "../../../../service/equipment.service";
 import {ScheduleService, TimeRange} from "../../../service/schedule.service";
 import {ItemDayDialogComponent, UnavailabilityOptions} from "../../dialog/item-day-dialog/item-day-dialog.component";
+import {createUnavailabilityEvent} from "../../../util/event/creation";
 
 @Component({
   selector: 'app-item-schedule',
@@ -76,18 +77,9 @@ export class ItemScheduleComponent implements OnInit {
   private pushUnavailabilities(weeklyUnavailability: TimeRange[]) {
     let newEvents = this.events;
     weeklyUnavailability.forEach(unavailability => {
-      newEvents.push({
-        draggable: false,
-        end: new Date(unavailability.endTime),
-        id: undefined,
-        meta: undefined,
-        start: new Date(unavailability.startTime),
-        title: "Unavailable",
-        color: {
-          primary: "#FF9191",
-          secondary: "#FF9191"
-        }
-      })
+      newEvents.push(
+        createUnavailabilityEvent(unavailability.startTime, unavailability.endTime)
+      );
     });
     this.events = [];
     this.events = [...newEvents];
@@ -121,8 +113,6 @@ export class ItemScheduleComponent implements OnInit {
           this.pushUnavailableDayToEvents(dayTimeRange);
         }
       )
-    } else if (selectedOption == UnavailabilityOptions.THAT_DAY_AND_NEXT) {
-      // ...
     }
   }
 
