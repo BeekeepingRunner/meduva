@@ -5,7 +5,7 @@ import {ActivatedRoute} from "@angular/router";
 import {DayDialogComponent} from "../../dialog/day-dialog/day-dialog.component";
 import {User} from "../../../../model/user";
 import {UserService} from "../../../../service/user.service";
-import {ScheduleService, WeekBoundaries, WorkHours} from "../../../service/schedule.service";
+import {ScheduleService, TimeRange, WeekBoundaries, WorkHours} from "../../../service/schedule.service";
 import {createOffWorkHoursEvent} from "../../../util/event/creation";
 
 @Component({
@@ -99,7 +99,7 @@ export class WorkerScheduleComponent implements OnInit {
           let workHoursToSave: WorkHours = result.data;
           this.saveWorkHours(workHoursToSave);
         } else if(result.event == 'ABSENCE_HOURS'){
-          let absenceHoursToSave: WorkHours = result.data;
+          let absenceHoursToSave: TimeRange = result.data;
           this.saveAbsenceHours(absenceHoursToSave);
         }
       }
@@ -116,7 +116,7 @@ export class WorkerScheduleComponent implements OnInit {
     );
   }
 
-  private saveAbsenceHours(absenceHoursToSave: WorkHours){
+  private saveAbsenceHours(absenceHoursToSave: TimeRange){
     this.scheduleService.saveAbsenceHours(this.worker.id, absenceHoursToSave).subscribe(
       data => {
         this.prepareWeekEvents();
