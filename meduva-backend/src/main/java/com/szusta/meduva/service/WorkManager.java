@@ -10,6 +10,7 @@ import com.szusta.meduva.payload.TimeRange;
 import com.szusta.meduva.repository.ServiceRepository;
 import com.szusta.meduva.repository.UserRepository;
 import com.szusta.meduva.repository.WorkHoursRepository;
+import com.szusta.meduva.repository.schedule.worker.WorkerScheduleRepository;
 import com.szusta.meduva.repository.schedule.worker.WorkerStatusRepository;
 import com.szusta.meduva.util.TimeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,7 @@ public class WorkManager {
     ServiceRepository serviceRepository;
     WorkHoursRepository workHoursRepository;
     WorkerStatusRepository workerStatusRepository;
+    WorkerScheduleRepository workerScheduleRepository;
 
     TermGenerator termGenerator;
 
@@ -33,11 +35,13 @@ public class WorkManager {
                        ServiceRepository serviceRepository,
                        WorkHoursRepository workHoursRepository,
                        WorkerStatusRepository workerStatusRepository,
+                       WorkerScheduleRepository workerScheduleRepository,
                        TermGenerator termGenerator) {
         this.userRepository = userRepository;
         this.serviceRepository = serviceRepository;
         this.workHoursRepository = workHoursRepository;
         this.workerStatusRepository = workerStatusRepository;
+        this.workerScheduleRepository = workerScheduleRepository;
         this.termGenerator = termGenerator;
     }
 
@@ -88,7 +92,7 @@ public class WorkManager {
     }
 
     @Transactional
-    public WorkHours setAbsenceHours(User worker, Date newAbsenceStartTime, Date newAbsenceEndTime) {
+    public WorkerSchedule setAbsenceHours(User worker, Date newAbsenceStartTime, Date newAbsenceEndTime) {
         boolean collidingVisitsExist =
                 hasVisitsBefore(newAbsenceStartTime, worker)
                         && hasVisitsAfter(newAbsenceEndTime, worker);
@@ -97,6 +101,9 @@ public class WorkManager {
             WorkerSchedule workerSchedule = new WorkerSchedule(worker, newAbsenceStartTime, newAbsenceEndTime);
             WorkerStatus workerStatus = workerStatusRepository.getById(EWorkerStatus.WORKER_ABSENT.getValue());
             workerSchedule.setWorkerStatus(workerStatus);
+            return workerScheduleRepository.save(workerSchedule);
+        } else {
+            throw new RuntimeException("Cannot set absence hours - visits exist before or after requested absence hours");
         }
     }
 

@@ -118,7 +118,7 @@ export class WorkerScheduleComponent implements OnInit {
 
   private saveAbsenceHours(absenceHoursToSave: WorkHours){
     this.scheduleService.saveAbsenceHours(this.worker.id, absenceHoursToSave).subscribe(
-      absenceHours => {
+      data => {
         this.prepareWeekEvents();
       }, err => {
         console.log(err);

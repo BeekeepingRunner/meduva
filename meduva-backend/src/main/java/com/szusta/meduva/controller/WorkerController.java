@@ -3,6 +3,7 @@ package com.szusta.meduva.controller;
 import com.szusta.meduva.model.Service;
 import com.szusta.meduva.model.User;
 import com.szusta.meduva.model.WorkHours;
+import com.szusta.meduva.model.schedule.WorkerSchedule;
 import com.szusta.meduva.payload.TimeRange;
 import com.szusta.meduva.payload.WeekBoundaries;
 import com.szusta.meduva.service.WorkManager;
@@ -63,7 +64,7 @@ public class WorkerController {
     }
 
     @PostMapping("/set-absence-hours/{workerId}")
-    public WorkHours setAbsenceHours(@PathVariable Long workerId, @RequestBody TimeRange absenceHours) {
+    public WorkerSchedule setAbsenceHours(@PathVariable Long workerId, @RequestBody TimeRange absenceHours) {
         User worker = userService.findById(workerId);
         Date newAbsenceStartTime = absenceHours.getStartTime();
         Date newAbsenceEndTime = absenceHours.getEndTime();
