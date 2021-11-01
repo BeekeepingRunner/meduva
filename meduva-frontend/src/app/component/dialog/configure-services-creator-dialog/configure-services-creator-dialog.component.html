@@ -1,5 +1,7 @@
 
-<app-new-service-creator>
+<app-new-service-creator *ngIf="roomItems.length"
+                         [roomItems]="roomItems"
+                         [eqModels]="eqModels">
 
 </app-new-service-creator>
 

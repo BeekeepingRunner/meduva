@@ -12,9 +12,28 @@ import {EquipmentModel} from "../../../../model/equipment";
 export class ItemsSelectServiceCreatorComponent extends EquipmentListComponent {
 
   selectedModels: EquipmentModel[] = [];
+  @Input() creatorModels: EquipmentModel[] = [];
+  @Input() service!: Service;
+
+  @Output() relatedItemsEmitter = new EventEmitter<EquipmentModel[]>();
 
   compareFunction = (o1: any, o2: any) => o1.id === o2.id;
   emitSelectedServicesIds() {
+  }
+  ngOnInit() {
+    for(let model of this.creatorModels){
+      this.models.push(model);
+    }
+  }
 
+  assignEquipmentToService() {
+    for (let selectedModel of this.selectedModels){
+      for(let properModel of this.models){
+        if(selectedModel==properModel){
+          properModel.services.push(this.service);
+        }
+      }
+    }
+    this.relatedItemsEmitter.emit(this.models);
   }
 }

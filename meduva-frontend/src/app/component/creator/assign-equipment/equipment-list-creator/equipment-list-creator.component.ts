@@ -1,5 +1,5 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {EquipmentModel} from "../../../../model/equipment";
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {EquipmentItem, EquipmentModel} from "../../../../model/equipment";
 import {EquipmentService} from "../../../../service/equipment.service";
 import {ConfigureRoomsCreatorDialogComponent} from "../../../dialog/configure-rooms-creator-dialog/configure-rooms-creator-dialog.component";
 import {MatDialog} from "@angular/material/dialog";
@@ -18,6 +18,8 @@ export class EquipmentListCreatorComponent implements OnInit {
   modelTableColumns: string[] = ['name'];
   itemTableColumns: string[] = ['name', 'room', 'status'];
 
+  @Output() eqModelEmitter = new EventEmitter<EquipmentModel[]>();
+
 
   constructor(
     private equipmentService: EquipmentService,
@@ -27,15 +29,12 @@ export class EquipmentListCreatorComponent implements OnInit {
 
   ngOnInit(): void {
     this.getModels();
-
-
   }
 
   private getModels() {
     this.equipmentService.getAllUndeletedEquipmentModels().subscribe(
       models => {
         this.models = this.excludeDeletedItems(models);
-        console.log(this.models);
       },
       err => {
         console.log(err);
@@ -54,5 +53,12 @@ export class EquipmentListCreatorComponent implements OnInit {
     const equipmentCreatorDialogRef = this.dialog.open(ConfigureEquipmentCreatorDialogComponent,{
       data: { roomItems: this.roomItems }
     });
+    equipmentCreatorDialogRef.afterClosed().subscribe(equipmentModel => {
+      let eqModel: EquipmentModel = equipmentModel;
+      this.models.push(eqModel)
+      this.eqModelEmitter.emit(this.models);
+
+    });
+
   }
 }

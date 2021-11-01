@@ -22,7 +22,8 @@
     <app-room-select *ngIf="eqItems.length"
                      [eqItems]="eqItems"
                      [rooms]="roomItems"
-                     (selectedIdsEmitter)="onRoomsSelected($event)">
+                     (selectedIdsEmitter)="onRoomsSelected($event)"
+                     (itemsEmitter)="onRoomsAssigned($event)">
     </app-room-select>
     <br>
     <div>
@@ -40,7 +41,7 @@
     <p>Everything is ready.</p>
     <div>
       <button mat-button matStepperPrevious>Back</button>
-      <button mat-button  [mat-dialog-close]>Save</button>
+      <button mat-button  [mat-dialog-close]="eqModel">Save</button>
     </div>
   </mat-step>
 </mat-stepper>

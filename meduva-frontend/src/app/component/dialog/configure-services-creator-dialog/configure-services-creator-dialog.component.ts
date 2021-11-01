@@ -10,9 +10,11 @@ import {
 } from "../confirmation-dialog/confirmation-dialog.component";
 import {NewModelCreatorComponent} from "../../creator/assign-equipment/new-model-creator/new-model-creator.component";
 import {EquipmentListCreatorComponent} from "../../creator/assign-equipment/equipment-list-creator/equipment-list-creator.component";
+import {EquipmentModel} from "../../../model/equipment";
 
 export interface roomData {
   roomItems: Room[];
+  eqModels: EquipmentModel[];
 }
 @Component({
   selector: 'app-configure-services-creator-dialog',
@@ -21,6 +23,7 @@ export interface roomData {
 })
 export class ConfigureServicesCreatorDialogComponent {
   @Output() roomItems: Room[] = [];
+  @Output() eqModels: EquipmentModel[] = [];
   @ViewChild(NewModelCreatorComponent)
   private newModelCreatorComponent!: NewModelCreatorComponent;
 
@@ -29,6 +32,7 @@ export class ConfigureServicesCreatorDialogComponent {
     @Inject(MAT_DIALOG_DATA) public data: roomData
   ) {
     this.roomItems=data.roomItems;
+    this.eqModels=data.eqModels;
   }
 
 }

@@ -41,7 +41,9 @@
             [completed]="areAllItemsDisplaced()">
 
     <app-equipment-list-creator *ngIf="roomItems.length"
-                                [roomItems]="roomItems">
+                                [roomItems]="roomItems"
+                                (eqModelEmitter)="onEquipmentModelGot($event)">
+
 
     </app-equipment-list-creator>
     <br>
@@ -60,7 +62,9 @@
   <mat-step label="Personalize services"
             [completed]="areAllItemsDisplaced()">
 
-    <app-service-list-creator>
+    <app-service-list-creator *ngIf="roomItems.length"
+                              [roomItems]="roomItems"
+                              [eqModels]="eqModels">
 
     </app-service-list-creator>
     <br>

@@ -16,6 +16,8 @@ export class RoomSelectComponent implements OnInit {
 
   @Input() eqItems!: EquipmentItem[];
   @Output() selectedIdsEmitter = new EventEmitter<Array<number>>();
+  @Output() itemsEmitter = new EventEmitter<EquipmentItem[]>();
+  eqItemsOutput: EquipmentItem[] = [];
 
   @Input() rooms!: Room[];
   /**Because of the fact that this class is used in two cases, during adding the room and in the creator, there is an input annotation.
@@ -52,9 +54,15 @@ export class RoomSelectComponent implements OnInit {
     roomSelectionDialogRef.afterClosed().subscribe(room => {
       let selectedRoom: Room = room[0];
       item.room = selectedRoom;
+      this.eqItemsOutput.push(item);
+
       // @ts-ignore
       this.selectedRoomIds[item.id - 1] = selectedRoom.id;
       this.selectedIdsEmitter.emit(this.selectedRoomIds);
+
+      if(this.eqItemsOutput.length==this.eqItems.length)
+      this.itemsEmitter.emit(this.eqItemsOutput)
+
     });
   }
 }

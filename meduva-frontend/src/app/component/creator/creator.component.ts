@@ -4,7 +4,7 @@ import {
 } from "@angular/forms";
 import {ServicesService} from "../../service/services.service";
 import {RoomService} from "../../service/room.service";
-import {EquipmentItem} from "../../model/equipment";
+import {EquipmentItem, EquipmentModel} from "../../model/equipment";
 import {RoomSelectComponent} from "../equipment/new-model/room-select/room-select.component";
 import {EquipmentService} from "../../service/equipment.service";
 import {Router} from "@angular/router";
@@ -29,7 +29,8 @@ export class CreatorComponent implements OnInit {
   isFormValid: boolean = false;
 
   @Output() roomItems: Room[] = [];
-  @ViewChild(EquipmentListCreatorComponent)
+  eqModels: EquipmentModel[] = [];
+
   private roomSelectComponent!: RoomSelectComponent;
   roomSelectionError: string = '';
 
@@ -45,13 +46,16 @@ export class CreatorComponent implements OnInit {
 
   }
 
-
   onItemsGeneration($event: Room[]) {
     this.roomItems = $event;
   }
 
   onModelFormSubmitted($event: boolean) {
     this.isFormValid = $event;
+  }
+
+  onEquipmentModelGot($event: EquipmentModel[]){
+    this.eqModels = $event;
   }
 
 

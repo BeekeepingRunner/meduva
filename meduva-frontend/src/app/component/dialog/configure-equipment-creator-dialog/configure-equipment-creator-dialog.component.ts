@@ -10,6 +10,7 @@ import {
 } from "../confirmation-dialog/confirmation-dialog.component";
 import {NewModelCreatorComponent} from "../../creator/assign-equipment/new-model-creator/new-model-creator.component";
 import {EquipmentListCreatorComponent} from "../../creator/assign-equipment/equipment-list-creator/equipment-list-creator.component";
+import {EquipmentItem} from "../../../model/equipment";
 
 export interface roomData {
   roomItems: Room[];
@@ -30,5 +31,6 @@ export class ConfigureEquipmentCreatorDialogComponent {
   ) {
     this.roomItems=data.roomItems;
   }
+
 
 }

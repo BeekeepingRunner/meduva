@@ -1,10 +1,10 @@
-import {Component, Input, OnInit, ViewChild} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
 import {
   FormBuilder,
 } from "@angular/forms";
 import {ServicesService} from "../../../../service/services.service";
 import {RoomService} from "../../../../service/room.service";
-import {EquipmentItem} from "../../../../model/equipment";
+import {EquipmentItem, EquipmentModel} from "../../../../model/equipment";
 /**import {RoomSelectCreatorComponent} from "./room-select-creator/room-select-creator.component";*/
 import {EquipmentService} from "../../../../service/equipment.service";
 import {Router} from "@angular/router";
@@ -38,11 +38,22 @@ export class NewModelCreatorComponent extends NewModelComponent implements OnIni
 
 
   eqItems: EquipmentItem[] = [];
+
+  eqModel: EquipmentModel = {
+    name: '',
+    active: true,
+    deleted: false,
+    items: [],
+    services: []
+
+  };
+
  /** @ViewChild(RoomSelectCreatorComponent)
   private roomSelectComponent!: RoomSelectCreatorComponent;*/
   selectedRoomsIds: number[] = [];
   roomSelectionError: string = '';
 
+  @Output() itemsEmitter = new EventEmitter<EquipmentItem[]>();
 
   constructor(
      formBuilder: FormBuilder,
@@ -53,10 +64,9 @@ export class NewModelCreatorComponent extends NewModelComponent implements OnIni
   ) {
     super(formBuilder,servicesService,roomService,equipmentService,router)
   }
-
-  ngOnInit(): void {
+  ngOnInit() {
+    super.ngOnInit();
   }
-
 
 //zamiast zapisywania do bazy należy zrobic zapis do tabeli w kreatorze
   /*saveModelWithItems() {
@@ -77,4 +87,10 @@ export class NewModelCreatorComponent extends NewModelComponent implements OnIni
     );
   }*/
 
+  onRoomsAssigned($event: EquipmentItem[]) {
+    this.eqItems=$event;
+    this.eqModel.name=this.modelName;
+    this.eqModel.items = this.eqItems;
+
+  }
 }
