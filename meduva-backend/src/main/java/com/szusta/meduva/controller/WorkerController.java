@@ -61,4 +61,12 @@ public class WorkerController {
         Date newWorkEndTime = newWorkHours.getEndTime();
         return workManager.setWorkHours(worker, newWorkStartTime, newWorkEndTime);
     }
+
+    @PostMapping("/set-absence-hours/{workerId}")
+    public WorkHours setAbsenceHours(@PathVariable Long workerId, @RequestBody TimeRange absenceHours) {
+        User worker = userService.findById(workerId);
+        Date newAbsenceStartTime = absenceHours.getStartTime();
+        Date newAbsenceEndTime = absenceHours.getEndTime();
+        return workManager.setAbsenceHours(worker, newAbsenceStartTime, newAbsenceEndTime);
+    }
 }

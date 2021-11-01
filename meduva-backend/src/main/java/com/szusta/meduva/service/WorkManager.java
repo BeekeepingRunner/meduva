@@ -3,10 +3,14 @@ package com.szusta.meduva.service;
 import com.szusta.meduva.exception.EntityRecordNotFoundException;
 import com.szusta.meduva.model.User;
 import com.szusta.meduva.model.WorkHours;
+import com.szusta.meduva.model.schedule.WorkerSchedule;
+import com.szusta.meduva.model.schedule.status.WorkerStatus;
+import com.szusta.meduva.model.schedule.status.enums.EWorkerStatus;
 import com.szusta.meduva.payload.TimeRange;
 import com.szusta.meduva.repository.ServiceRepository;
 import com.szusta.meduva.repository.UserRepository;
 import com.szusta.meduva.repository.WorkHoursRepository;
+import com.szusta.meduva.repository.schedule.worker.WorkerStatusRepository;
 import com.szusta.meduva.util.TimeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,6 +24,7 @@ public class WorkManager {
     UserRepository userRepository;
     ServiceRepository serviceRepository;
     WorkHoursRepository workHoursRepository;
+    WorkerStatusRepository workerStatusRepository;
 
     TermGenerator termGenerator;
 
@@ -27,10 +32,12 @@ public class WorkManager {
     public WorkManager(UserRepository userRepository,
                        ServiceRepository serviceRepository,
                        WorkHoursRepository workHoursRepository,
+                       WorkerStatusRepository workerStatusRepository,
                        TermGenerator termGenerator) {
         this.userRepository = userRepository;
         this.serviceRepository = serviceRepository;
         this.workHoursRepository = workHoursRepository;
+        this.workerStatusRepository = workerStatusRepository;
         this.termGenerator = termGenerator;
     }
 
@@ -77,6 +84,19 @@ public class WorkManager {
             return workHoursRepository.save(workHours);
         } else {
             throw new RuntimeException("Cannot set work hours - visits exist before or after requested work hours");
+        }
+    }
+
+    @Transactional
+    public WorkHours setAbsenceHours(User worker, Date newAbsenceStartTime, Date newAbsenceEndTime) {
+        boolean collidingVisitsExist =
+                hasVisitsBefore(newAbsenceStartTime, worker)
+                        && hasVisitsAfter(newAbsenceEndTime, worker);
+
+        if(!collidingVisitsExist){
+            WorkerSchedule workerSchedule = new WorkerSchedule(worker, newAbsenceStartTime, newAbsenceEndTime);
+            WorkerStatus workerStatus = workerStatusRepository.getById(EWorkerStatus.WORKER_ABSENT.getValue());
+            workerSchedule.setWorkerStatus(workerStatus);
         }
     }
 
@@ -160,4 +180,6 @@ public class WorkManager {
         List<WorkHours> workHours = workHoursRepository.getAllByWorkerIdBetween(worker.getId(), start, end);
         return !workHours.isEmpty();
     }
+
+
 }
