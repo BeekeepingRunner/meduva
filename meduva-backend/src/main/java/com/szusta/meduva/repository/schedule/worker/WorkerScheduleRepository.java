@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface WorkerScheduleRepository extends UndeletableRepository<WorkerSchedule> {
@@ -27,4 +28,6 @@ public interface WorkerScheduleRepository extends UndeletableRepository<WorkerSc
         nativeQuery = true
     )
     List<? super WorkerSchedule> findAnyBetween(Date start, Date end, Long workerId);
+
+    Optional<WorkerSchedule> deleteWorkerScheduleByUserId(Long id); //!!!!!!!!!!!!!
 }
