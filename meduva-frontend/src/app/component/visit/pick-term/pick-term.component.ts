@@ -1,23 +1,38 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit, ViewEncapsulation} from '@angular/core';
 import {Term, VisitService} from "../../../service/visit.service";
 import {DatePipe} from "@angular/common";
 import {Router} from "@angular/router";
 import {ServicesService} from "../../../service/services.service";
 import {Service} from "../../../model/service";
+import {MatCalendarCellClassFunction} from "@angular/material/datepicker";
 
 @Component({
   selector: 'app-pick-term',
   templateUrl: './pick-term.component.html',
-  styleUrls: ['./pick-term.component.css']
+  styleUrls: ['./pick-term.component.css'],
+  encapsulation: ViewEncapsulation.None,
 })
 export class PickTermComponent implements OnInit {
 
   selectedService!: Service | null;
+  canChooseTerm: boolean = false;
+
+  generatingTerms: boolean = false;
+  canSelectHour: boolean = false;
+
   availableTerms: Term[] = [];
   displayedColumns: string[] = ["date"];
 
-  generatingTerms: boolean = true;
   errorMessage: string = '';
+
+  dateClass: MatCalendarCellClassFunction<Date> = (cellDate, view) => {
+    if (view === 'month') {
+      let hasTerms: boolean = true;
+      // check if service can be performed given day
+      return hasTerms ? 'free-date' : 'not-available-date';
+    }
+    return '';
+  }
 
   constructor(
     private visitService: VisitService,
@@ -27,12 +42,14 @@ export class PickTermComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.selectedService = this.visitService.getSelectedService();
-    if (this.selectedService != null && this.selectedService.id) {
-      this.getTermsForService(this.selectedService.id);
-    } else {
-      // error handling?
+    if (this.serviceHasBeenSelected()) {
+      this.canChooseTerm = true;
     }
+  }
+
+  private serviceHasBeenSelected(): boolean {
+    this.selectedService = this.visitService.getSelectedService();
+    return this.selectedService != null && this.selectedService.id != null;
   }
 
   private getTermsForService(serviceId: number) {
