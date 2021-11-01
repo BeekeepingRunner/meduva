@@ -41,6 +41,7 @@ import {PickRoomComponent} from "./schedule/component/room/pick-room/pick-room.c
 import {RoomScheduleComponent} from "./schedule/component/room/room-schedule/room-schedule.component";
 import {PickItemComponent} from "./schedule/component/item/pick-item/pick-item.component";
 import {ItemScheduleComponent} from "./schedule/component/item/item-schedule/item-schedule.component";
+import {SelectWorkerComponent} from "./component/visit/select-worker/select-worker.component";
 
 export const routes: Routes = [
   { path: 'home', component: HomeComponent },
@@ -249,6 +250,14 @@ export const routes: Routes = [
   {
     path: 'visit/pick-service',
     component: ChooseServiceComponent,
+    canActivate: [RoleGuard],
+    data: {
+      expectedRole: roleNames[UserRole.ROLE_CLIENT]
+    }
+  },
+  {
+    path: 'visit/pick-worker',
+    component: SelectWorkerComponent,
     canActivate: [RoleGuard],
     data: {
       expectedRole: roleNames[UserRole.ROLE_CLIENT]

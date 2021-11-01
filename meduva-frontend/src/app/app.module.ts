@@ -70,6 +70,7 @@ import { EditClientComponent } from './component/clients/client-details/edit-cli
 import {ScheduleModule} from "./schedule/schedule.module";
 import {MatDatepickerModule} from "@angular/material/datepicker";
 import {MatNativeDateModule} from "@angular/material/core";
+import { SelectWorkerComponent } from './component/visit/select-worker/select-worker.component';
 
 @NgModule({
   declarations: [
@@ -113,6 +114,7 @@ import {MatNativeDateModule} from "@angular/material/core";
     ClientDetailsComponent,
     AddClientComponent,
     EditClientComponent,
+    SelectWorkerComponent,
   ],
   imports: [
     BrowserModule,

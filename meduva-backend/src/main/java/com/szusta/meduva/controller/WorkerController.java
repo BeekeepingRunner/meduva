@@ -5,7 +5,9 @@ import com.szusta.meduva.model.User;
 import com.szusta.meduva.model.WorkHours;
 import com.szusta.meduva.payload.TimeRange;
 import com.szusta.meduva.payload.WeekBoundaries;
+import com.szusta.meduva.service.ServicesService;
 import com.szusta.meduva.service.WorkManager;
+import com.szusta.meduva.service.WorkerService;
 import com.szusta.meduva.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -18,13 +20,25 @@ import java.util.List;
 public class WorkerController {
 
     UserService userService;
+    WorkerService workerService;
+    ServicesService servicesService;
     WorkManager workManager;
 
     @Autowired
     public WorkerController(UserService userService,
+                            WorkerService workerService,
+                            ServicesService servicesService,
                             WorkManager workManager) {
         this.userService = userService;
+        this.workerService = workerService;
+        this.servicesService = servicesService;
         this.workManager = workManager;
+    }
+
+    @GetMapping("/find-by-service/{serviceId}")
+    public List<User> findWorkersByService(@PathVariable Long serviceId) {
+        Service service = servicesService.findById(serviceId);
+        return this.workerService.findAllByService(service);
     }
 
     @GetMapping("/workerServices/{id}")

@@ -5,6 +5,7 @@ import {Router} from "@angular/router";
 import {ServicesService} from "../../../service/services.service";
 import {Service} from "../../../model/service";
 import {MatCalendarCellClassFunction} from "@angular/material/datepicker";
+import {User} from "../../../model/user";
 
 @Component({
   selector: 'app-pick-term',
@@ -15,6 +16,7 @@ import {MatCalendarCellClassFunction} from "@angular/material/datepicker";
 export class PickTermComponent implements OnInit {
 
   selectedService!: Service | null;
+  selectedWorker!: User;
   canChooseTerm: boolean = false;
 
   generatingTerms: boolean = false;
@@ -50,6 +52,10 @@ export class PickTermComponent implements OnInit {
   private serviceHasBeenSelected(): boolean {
     this.selectedService = this.visitService.getSelectedService();
     return this.selectedService != null && this.selectedService.id != null;
+  }
+
+  private workerHasBeenSelected(): boolean {
+    return this.selectedWorker != null;
   }
 
   private getTermsForService(serviceId: number) {

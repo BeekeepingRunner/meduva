@@ -15,7 +15,6 @@ public interface UserRepository extends UndeletableRepository<User> {
 
     Optional<User> findByLogin(String login);
     Optional<User> findByEmail(String email);
-    //Optional<User> findById(long id);
 
     Boolean existsByLogin(String login);
     Boolean existsByEmail(String email);
@@ -24,4 +23,7 @@ public interface UserRepository extends UndeletableRepository<User> {
 
     @Query("select distinct u, count(role) from User u join u.roles role group by u having count(role) = 1")
     Optional<List<User>> findAllClientsWithAccount();
+
+    @Query("select distinct u from User u join u.services s where s.id = ?1")
+    List<User> findAllByPerformedService(long serviceId);
 }

@@ -1,13 +1,11 @@
 <div>
   <h2>Choose service</h2>
 
-  <mat-progress-spinner *ngIf="generatingTerms" mode="indeterminate"></mat-progress-spinner>
-  <br>
   <div *ngIf="errorMessage" class="mat-warn">
     {{ errorMessage }}
   </div>
 
-  <div>
+  <div *ngIf="!errorMessage">
     <table mat-table [dataSource]="services" class="mat-elevation-z8">
 
       <ng-container matColumnDef="name">
@@ -25,7 +23,7 @@
 
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
       <tr mat-row *matRowDef="let row; let service; columns: displayedColumns;"
-          (click)="getTermsForService(service)">
+          (click)="submitService(service)">
       </tr>
     </table>
   </div>
