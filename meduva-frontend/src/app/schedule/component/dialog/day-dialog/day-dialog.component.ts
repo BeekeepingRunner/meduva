@@ -19,6 +19,7 @@ export class DayDialogComponent implements OnInit {
   dateString: string = '';
 
   settingWorkHours: boolean = false;
+  settingAbsenceHours: boolean = false;
   form!: FormGroup;
 
   workHours!: WorkHours;
@@ -61,6 +62,14 @@ export class DayDialogComponent implements OnInit {
     });
   }
 
+  startSettingAbsenceHours(){
+    this.settingAbsenceHours = true;
+    this.form = this.formBuilder.group({
+      startTime : new FormControl('', [Validators.required]),
+      endTime: new FormControl('', [Validators.required]),
+    }, { validators: startTimeBeforeEndTimeValidator });
+  }
+
   private setHoursAndMinutes(dateTime: Date, hourAndMinutes: string): Date {
     let temp: string[] = hourAndMinutes.split(':');
     let hour = Number(temp[0]);
@@ -69,5 +78,10 @@ export class DayDialogComponent implements OnInit {
     dateTime.setHours(hour);
     dateTime.setMinutes(minutes);
     return dateTime;
+  }
+
+  setWholeDay(){
+    this.form.get('startTime')?.setValue('06:00');
+    this.form.get('endTime')?.setValue('20:00');
   }
 }

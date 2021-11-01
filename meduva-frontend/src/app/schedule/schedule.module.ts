@@ -20,6 +20,7 @@ import { PickItemComponent } from './component/item/pick-item/pick-item.componen
 import { ItemScheduleComponent } from './component/item/item-schedule/item-schedule.component';
 import {ItemDayDialogComponent} from "./component/dialog/item-day-dialog/item-day-dialog.component";
 import {MatRadioModule} from "@angular/material/radio";
+import {MatCheckboxModule} from "@angular/material/checkbox";
 
 @NgModule({
   declarations: [
@@ -33,22 +34,23 @@ import {MatRadioModule} from "@angular/material/radio";
     PickItemComponent,
     ItemScheduleComponent,
   ],
-  imports: [
-    CommonModule,
-    CalendarModule.forRoot({
-      provide: DateAdapter,
-      useFactory: adapterFactory
-    }),
-    DemoUtilsModule,
-    MatTableModule,
-    RouterModule,
-    MatDialogModule,
-    MatButtonModule,
-    NgxMaterialTimepickerModule,
-    MatInputModule,
-    ReactiveFormsModule,
-    MatRadioModule,
-    FormsModule,
-  ]
+    imports: [
+        CommonModule,
+        CalendarModule.forRoot({
+            provide: DateAdapter,
+            useFactory: adapterFactory
+        }),
+        DemoUtilsModule,
+        MatTableModule,
+        RouterModule,
+        MatDialogModule,
+        MatButtonModule,
+        NgxMaterialTimepickerModule,
+        MatInputModule,
+        ReactiveFormsModule,
+        MatRadioModule,
+        FormsModule,
+        MatCheckboxModule,
+    ]
 })
 export class ScheduleModule { }
