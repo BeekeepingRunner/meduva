@@ -3,6 +3,7 @@ import {Service} from "../../../model/service";
 import {ServicesService} from "../../../service/services.service";
 import {VisitService} from "../../../service/visit.service";
 import {Router} from "@angular/router";
+import {ClientService} from "../../../service/client.service";
 
 @Component({
   selector: 'app-choose-service',

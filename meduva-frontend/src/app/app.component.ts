@@ -1,20 +1,28 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
 import {JwtStorageService, TokenUserInfo} from "./service/token/jwt-storage.service";
 import {MatSidenav} from "@angular/material/sidenav";
 import {BreakpointObserver} from "@angular/cdk/layout";
-import {UserRole} from "./model/user";
+import {Role, roleNames, User, UserRole} from "./model/user";
+import {ClientService} from "./service/client.service";
+import {Client} from "./model/client";
+import {UserService} from "./service/user.service";
+import {RoleGuardService} from "./service/auth/role-guard.service";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit, AfterViewInit {
 
   @ViewChild(MatSidenav)
   sidenav!: MatSidenav;
 
   isLoggedIn = false;
+
+  currentUser!: User;
+  userRoles: UserRole[] = [];
 
   showClientOptions = false;
   showWorkerOptions = false;
@@ -24,37 +32,31 @@ export class AppComponent implements OnInit {
   constructor(
     private observer: BreakpointObserver,
     private tokenStorageService: JwtStorageService,
+    private roleGuardService: RoleGuardService,
+    private userService: UserService,
+    private clientService: ClientService,
+    private router: Router,
   ) {
   }
 
   ngOnInit(): void {
     this.isLoggedIn = !!this.tokenStorageService.getToken();
     if (this.isLoggedIn) {
-      this.setVisibleContent();
+      // @ts-ignore
+      this.userService.getUserDetails(this.tokenStorageService.getCurrentUser()?.id).subscribe(
+        user => {
+          this.currentUser = user;
+          this.setVisibleOptions();
+        }
+      );
     }
   }
 
-  private setVisibleContent(): void {
-    let currentUser: TokenUserInfo | null = this.tokenStorageService.getCurrentUser();
-    let roles: UserRole[] = this.fetchRoles(currentUser);
-    this.setVisibleOptionsFor(roles);
-  }
-
-  private fetchRoles(currentUser: TokenUserInfo | null): UserRole[] {
-
-    let roles: UserRole[] = [];
-    currentUser!.roles.forEach(role => {
-      // we have to subtract 1, because ids of roles from DB start from 1 and UserRole values from 0
-      roles.push((role.id - 1) as UserRole);
-    });
-    return roles;
-  }
-
-  private setVisibleOptionsFor(roles: UserRole[]): void {
-    this.showClientOptions = roles.includes(UserRole.ROLE_CLIENT);
-    this.showWorkerOptions = roles.includes(UserRole.ROLE_WORKER);
-    this.showReceptionistOptions = roles.includes(UserRole.ROLE_RECEPTIONIST);
-    this.showAdminPanel = roles.includes(UserRole.ROLE_ADMIN);
+  private setVisibleOptions(): void {
+    this.showClientOptions = this.roleGuardService.hasExpectedRole(roleNames[UserRole.ROLE_CLIENT]);
+    this.showWorkerOptions = this.roleGuardService.hasExpectedRole(roleNames[UserRole.ROLE_WORKER]);
+    this.showReceptionistOptions = this.roleGuardService.hasExpectedRole(roleNames[UserRole.ROLE_RECEPTIONIST]);
+    this.showAdminPanel = this.roleGuardService.hasExpectedRole(roleNames[UserRole.ROLE_ADMIN]);
   }
 
   // Responsible for closing and opening the side menu based on width of the browser's window
@@ -76,5 +78,29 @@ export class AppComponent implements OnInit {
   logout(): void {
     this.tokenStorageService.signOut();
     window.location.reload();
+  }
+
+  onVisitPlanning(): void {
+    if (this.isClient()) {
+      this.saveUserAsClient();
+      this.router.navigate(['/visit/pick-service']);
+    } else {
+      this.router.navigate(['/visit/pick-client']);
+    }
+  }
+
+  private isClient(): boolean {
+    return !this.userRoles.includes(UserRole.ROLE_WORKER);
+  }
+
+  private saveUserAsClient(): void {
+    let currUserAsClient: Client = {
+      id: this.currentUser.id,
+      name: this.currentUser.name,
+      surname: this.currentUser.surname,
+      phoneNumber: this.currentUser.phoneNumber,
+      email: this.currentUser.email
+    };
+    this.clientService.saveSelectedClient(currUserAsClient);
   }
 }

@@ -68,6 +68,8 @@ import { ClientDetailsComponent } from './component/clients/client-details/clien
 import { AddClientComponent } from './component/clients/add-client/add-client.component';
 import { EditClientComponent } from './component/clients/client-details/edit-client/edit-client.component';
 import {ScheduleModule} from "./schedule/schedule.module";
+import {MatDatepickerModule} from "@angular/material/datepicker";
+import {MatNativeDateModule} from "@angular/material/core";
 
 @NgModule({
   declarations: [
@@ -137,6 +139,8 @@ import {ScheduleModule} from "./schedule/schedule.module";
     MatProgressSpinnerModule,
     MatSelectModule,
     ScheduleModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
   ],
   exports: [
     RouterModule
@@ -145,6 +149,7 @@ import {ScheduleModule} from "./schedule/schedule.module";
     authInterceptorProviders,
     CurrencyPipe,
     DatePipe,
+    MatDatepickerModule,
   ],
   bootstrap: [AppComponent]
 })
