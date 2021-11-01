@@ -111,13 +111,13 @@ public class UserService {
 
     @Transactional
     public User changeUserRole(Long userId, Long roleId){
-        User user = userRepository.findById(userId)
-                .orElseThrow(()-> new EntityRecordNotFoundException("User not found with id : " + userId));
+        User user = findById(userId);
 
-        Set<Role> roleSet= new HashSet<>();
-        for(Long i=1L; i<=roleId; i++){
-            Role role = roleRepository.findById(i)
-                    .orElseThrow(()-> new EntityRecordNotFoundException("Role not found with id : " + roleId));
+        Set<Role> roleSet = new HashSet<>();
+        for(Long id = 1L; id <= roleId; id++){
+            Role role = roleRepository.findById(id)
+                    .orElseThrow(() -> new EntityRecordNotFoundException(
+                            "Role not found with id : " + roleId));
             roleSet.add(role);
         }
 

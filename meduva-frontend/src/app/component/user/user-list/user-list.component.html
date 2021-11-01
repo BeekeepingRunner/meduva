@@ -1,14 +1,14 @@
 <div>
   <h2>{{ contentName }}</h2>
   <div>
-    <button mat-raised-button color="primary" (click)="getAllUndeletedUsers()">All users</button>
-    <!-- future TODO: mix clients without account -->
-    <button mat-raised-button color="primary" (click)="getAllClients()">Clients</button>
-    <!-- -->
-    <button mat-raised-button color="primary" (click)="getAllWorkers()">Workers</button>
+    <button mat-raised-button color="primary"
+            (click)="getAllUndeletedUsers()">All users</button>
+    <button mat-raised-button color="primary"
+            (click)="getAllClients()">Clients</button>
+    <button mat-raised-button color="primary"
+            (click)="getAllWorkers()">Workers</button>
 
     <table mat-table [dataSource]="users" class="mat-elevation-z8">
-
       <ng-container matColumnDef="id">
         <th mat-header-cell *matHeaderCellDef>id</th>
         <td mat-cell *matCellDef="let user">{{ user.id }}</td>
@@ -31,12 +31,13 @@
       </ng-container>
       <ng-container matColumnDef="role">
         <th mat-header-cell *matHeaderCellDef>Role</th>
-        <td mat-cell *matCellDef="let user">{{ user.masterRole.name | lowercase | slice : 5 }}</td>
+        <td mat-cell *matCellDef="let user">
+          {{ user.masterRole.name | lowercase | slice : 5 }}
+        </td>
       </ng-container>
-
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row *matRowDef="let row; let user; columns: displayedColumns;" class="element-row"
-          [routerLink]="['/specific-user/' + user.id]"></tr>
+      <tr mat-row *matRowDef="let row; let user; columns: displayedColumns;"
+          class="element-row" [routerLink]="['/specific-user/' + user.id]"></tr>
     </table>
   </div>
 </div>
