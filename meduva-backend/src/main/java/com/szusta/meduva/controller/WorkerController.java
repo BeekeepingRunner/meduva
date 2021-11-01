@@ -55,6 +55,15 @@ public class WorkerController {
         return workManager.getWeeklyOffWorkHours(worker, firstWeekDay, lastWeekDay);
     }
 
+    @PostMapping("/get-week-absence-hours/{workerId}")
+    public List<? super WorkerSchedule> getWeeklyAbsenceHours(@PathVariable Long workerId, @RequestBody WeekBoundaries weekBoundaries){
+        User worker = userService.findById(workerId);
+        Date firstWeekDay = weekBoundaries.getFirstWeekDay();
+        Date lastWeekDay = weekBoundaries.getLastWeekDay();
+        System.out.println(workManager.getWeeklyAbsenceHours(worker, firstWeekDay, lastWeekDay).isEmpty());
+        return workManager.getWeeklyAbsenceHours(worker, firstWeekDay, lastWeekDay);
+    }
+
     @PostMapping("/set-work-hours/{workerId}")
     public WorkHours setWorkHours(@PathVariable Long workerId, @RequestBody TimeRange newWorkHours) {
         User worker = userService.findById(workerId);

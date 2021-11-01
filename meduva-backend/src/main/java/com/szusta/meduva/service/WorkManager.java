@@ -145,6 +145,10 @@ public class WorkManager {
         return weeklyOffWorkHours;
     }
 
+    public List<? super WorkerSchedule> getWeeklyAbsenceHours(User worker, Date firstWeekDay, Date lastWeekDay) {
+        return workerScheduleRepository.findAnyBetween(firstWeekDay, lastWeekDay, worker.getId());
+    }
+
     private List<TimeRange> convertToOffWorkHours(List<WorkHours> weeklyWorkHours) {
         List<TimeRange> weeklyOffWorkHours = new ArrayList<>();
 
@@ -192,6 +196,7 @@ public class WorkManager {
         List<WorkHours> workHours = workHoursRepository.getAllByWorkerIdBetween(worker.getId(), start, end);
         return !workHours.isEmpty();
     }
+
 
 
 }

@@ -5,8 +5,8 @@ import {ActivatedRoute} from "@angular/router";
 import {DayDialogComponent} from "../../dialog/day-dialog/day-dialog.component";
 import {User} from "../../../../model/user";
 import {UserService} from "../../../../service/user.service";
-import {ScheduleService, TimeRange, WeekBoundaries, WorkHours} from "../../../service/schedule.service";
-import {createOffWorkHoursEvent} from "../../../util/event/creation";
+import {ScheduleService, TimeRange, WeekBoundaries, WorkHours, WorkSchedule} from "../../../service/schedule.service";
+import {createAbsenceHoursEvent, createOffWorkHoursEvent} from "../../../util/event/creation";
 
 @Component({
   selector: 'app-worker-schedule',
@@ -46,6 +46,7 @@ export class WorkerScheduleComponent implements OnInit {
       worker => {
         this.worker = worker;
         this.prepareWeekEvents();
+        this.prepareWeeklyAbsenceHours();
       }
     );
   }
@@ -75,12 +76,38 @@ export class WorkerScheduleComponent implements OnInit {
     });
   }
 
+  private prepareWeeklyAbsenceHours(): void {
+    let weekBoundaries: WeekBoundaries = {
+      firstWeekDay: this.firstDayOfWeek,
+      lastWeekDay: this.lastDayOfWeek
+    };
+
+    this.scheduleService.getWeeklyAbsenceHours(this.worker.id, weekBoundaries).subscribe(
+      (weeklyAbsenceHours: WorkSchedule[]) => {
+        console.log(weeklyAbsenceHours);
+        this.updateAbsenceHoursEvents(weeklyAbsenceHours);
+      }
+    );
+  }
+
   private updateWorkHoursEvents(weeklyOffWorkHours: WorkHours[]) {
     let newEvents = this.events;
     this.events = [];
     weeklyOffWorkHours.forEach(offWorkHours => {
       newEvents.push(
         createOffWorkHoursEvent(offWorkHours.startTime, offWorkHours.endTime));
+    });
+    this.events = [...newEvents];
+  }
+
+  private updateAbsenceHoursEvents(weeklyAbsenceHours: WorkSchedule[]) {
+    let newEvents = this.events;
+    this.events = [];
+    weeklyAbsenceHours.forEach(absenceHours => {
+      console.log(absenceHours);
+      newEvents.push(
+        createAbsenceHoursEvent(absenceHours.timeFrom, absenceHours.timeTo)
+      );
     });
     this.events = [...newEvents];
   }
@@ -130,4 +157,6 @@ export class WorkerScheduleComponent implements OnInit {
   eventClick($event: { event: CalendarEvent<any>; sourceEvent: any }) {
 
   }
+
+
 }
