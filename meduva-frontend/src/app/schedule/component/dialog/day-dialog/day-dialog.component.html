@@ -6,7 +6,7 @@
   <button mat-raised-button color="primary" *ngIf="!settingAbsenceHours && !settingWorkHours"
           (click)="startSettingAbsenceHours()">Set absence</button>
   <div *ngIf="settingWorkHours || settingAbsenceHours">
-    <form (ngSubmit)="onWorkHoursSave()" [formGroup]="form">
+    <form (ngSubmit)="chooseWorkHoursOrAbsence()" [formGroup]="form">
       <table>
         <tr>
           <td><strong>Work start:</strong></td>

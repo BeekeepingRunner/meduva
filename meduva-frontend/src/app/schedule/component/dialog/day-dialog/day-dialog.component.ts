@@ -70,6 +70,26 @@ export class DayDialogComponent implements OnInit {
     }, { validators: startTimeBeforeEndTimeValidator });
   }
 
+  onAbsenceHoursSave(){
+    let startTime: Date = new Date(this.selectedDate);
+    let endTime: Date = new Date(this.selectedDate);
+
+    let hourAndMinutes: string = this.form.get('startTime')?.value; // HH:MM
+    startTime = this.setHoursAndMinutes(startTime, hourAndMinutes);
+    hourAndMinutes = this.form.get('endTime')?.value;
+    endTime = this.setHoursAndMinutes(endTime, hourAndMinutes);
+
+    this.workHours = {
+      startTime: startTime,
+      endTime: endTime
+    }
+    this.dialogRef.close({
+      event: 'ABSENCE_HOURS',
+      data: this.workHours
+    });
+
+  }
+
   private setHoursAndMinutes(dateTime: Date, hourAndMinutes: string): Date {
     let temp: string[] = hourAndMinutes.split(':');
     let hour = Number(temp[0]);
@@ -83,5 +103,13 @@ export class DayDialogComponent implements OnInit {
   setWholeDay(){
     this.form.get('startTime')?.setValue('06:00');
     this.form.get('endTime')?.setValue('20:00');
+  }
+
+  chooseWorkHoursOrAbsence(){
+    if(this.settingWorkHours){
+      this.onWorkHoursSave()
+    } else {
+      this.onAbsenceHoursSave();
+    }
   }
 }

@@ -98,6 +98,9 @@ export class WorkerScheduleComponent implements OnInit {
         if (result.event == 'WORK_HOURS') {
           let workHoursToSave: WorkHours = result.data;
           this.saveWorkHours(workHoursToSave);
+        } else if(result.event == 'ABSENCE_HOURS'){
+          let absenceHoursToSave: WorkHours = result.data;
+          this.saveAbsenceHours(absenceHoursToSave);
         }
       }
     );
@@ -111,6 +114,17 @@ export class WorkerScheduleComponent implements OnInit {
         console.log(err);
       }
     );
+  }
+
+  private saveAbsenceHours(absenceHoursToSave: WorkHours){
+    this.scheduleService.saveAbsenceHours(this.worker.id, absenceHoursToSave).subscribe(
+      absenceHours => {
+        this.prepareWeekEvents();
+      }, err => {
+        console.log(err);
+      }
+    );
+
   }
 
   eventClick($event: { event: CalendarEvent<any>; sourceEvent: any }) {

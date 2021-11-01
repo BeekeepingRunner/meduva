@@ -32,6 +32,10 @@ export class ScheduleService {
     return this.httpClient.post(environment.API_BASE_URL + 'api/worker/set-work-hours/' + workerId, workHours);
   }
 
+  saveAbsenceHours(workerId: number, absenceHours: WorkHours) {
+    return this.httpClient.post(environment.API_BASE_URL + 'api/worker/set-absence-hours/' + workerId, absenceHours);
+  }
+
   getWeeklyWorkHours(workerId: number, weekBoundaries: WeekBoundaries): Observable<any> {
     return this.httpClient.post(environment.API_BASE_URL + 'api/worker/get-week-work-hours/' + workerId, weekBoundaries);
   }
