@@ -3,7 +3,8 @@
   <button mat-icon-button color="primary" (click)="openServicesCreatorDialog()">
     + Add new service
   </button>
-  <div>
+ <!--
+ <div>
     <table mat-table [dataSource]="services" class="mat-elevation-z8">
 
       <ng-container matColumnDef="name">
@@ -25,4 +26,11 @@
       </tr>
     </table>
   </div>
+  -->
 </div>
+<br>
+<div>
+  <button mat-button matStepperPrevious>Back</button>
+  <button mat-button matStepperNext (click)="emitConfiguration()">Next</button>
+</div>
+<br>

@@ -10,6 +10,7 @@ import {EquipmentService} from "../../service/equipment.service";
 import {Router} from "@angular/router";
 import {Room} from "../../model/room";
 import {EquipmentListCreatorComponent} from "./assign-equipment/equipment-list-creator/equipment-list-creator.component";
+import {Service} from "../../model/service";
 
 
 export interface CreatorRequest {
@@ -30,6 +31,7 @@ export class CreatorComponent implements OnInit {
 
   @Output() roomItems: Room[] = [];
   eqModels: EquipmentModel[] = [];
+  services: Service[] = [];
 
   private roomSelectComponent!: RoomSelectComponent;
   roomSelectionError: string = '';
@@ -50,15 +52,17 @@ export class CreatorComponent implements OnInit {
     this.roomItems = $event;
   }
 
-  onModelFormSubmitted($event: boolean) {
-    this.isFormValid = $event;
-  }
-
   onEquipmentModelGot($event: EquipmentModel[]){
     this.eqModels = $event;
   }
 
+  onServicesGot($event: Service[]){
+    this.services = $event;
+  }
 
+  onModelFormSubmitted($event: boolean) {
+    this.isFormValid = $event;
+  }
 
   areAllItemsDisplaced(): boolean {
 
@@ -80,5 +84,9 @@ export class CreatorComponent implements OnInit {
 
   }
 
-
+  saveConfigurationInDatabase() {
+    console.log(this.roomItems);
+    console.log(this.eqModels);
+    console.log(this.services);
+  }
 }

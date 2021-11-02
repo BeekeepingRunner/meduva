@@ -7,12 +7,18 @@ import {NewServiceComponent} from "../../../services/new-service/new-service.com
 import {Room} from "../../../../model/room";
 import {EquipmentItem, EquipmentModel} from "../../../../model/equipment";
 
+export interface NewServiceRequest {
+  service: Service,
+  equipmentModels?: EquipmentModel[],
+  roomItems: Room[]
+}
+
 @Component({
   selector: 'app-new-service-creator',
   templateUrl: './new-service-creator.component.html',
   styleUrls: ['./new-service-creator.component.css']
 })
-export class NewServiceCreatorComponent extends NewServiceComponent {
+export class NewServiceCreatorComponent extends NewServiceComponent implements NewServiceRequest {
   @Input() roomItems: Room[] = [];
   @Input() eqModels: EquipmentModel[] = [];
 
@@ -25,11 +31,29 @@ export class NewServiceCreatorComponent extends NewServiceComponent {
     deleted: false
   };
 
+
+
+
   onServiceCreated($event: Service){
     this.service=$event;
   }
 
   onItemsLinked($event: EquipmentModel[]) {
     this.eqModels=$event;
+  }
+
+  onRoomsLinked($event: Room[]) {
+    this.roomItems=$event;
+  }
+
+  onServiceReady() {
+    let newServiceRequest: NewServiceRequest = {
+      service: this.service,
+      equipmentModels: this.eqModels,
+      roomItems: this.roomItems
+    }
+    return newServiceRequest;
+
+
   }
 }

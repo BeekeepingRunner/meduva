@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {ServicesService} from "../../../../service/services.service";
 import {Service} from "../../../../model/service";
 import {ServiceListComponent} from "../../../services/service-list/service-list.component";
@@ -19,6 +19,10 @@ export class ServiceListCreatorComponent extends ServiceListComponent {
   @Input() roomItems: Room[] = [];
   @Input() eqModels: EquipmentModel[] = [];
 
+  @Output() roomConfigurationEmitter = new EventEmitter<Room[]>();
+  @Output() equipmentConfigurationEmitter = new EventEmitter<EquipmentModel[]>();
+  @Output() serviceConfigurationEmitter = new EventEmitter<Service[]>();
+
   constructor(
     servicesService: ServicesService,
     public dialog: MatDialog,
@@ -31,5 +35,16 @@ export class ServiceListCreatorComponent extends ServiceListComponent {
     const servicesCreatorDialogRef = this.dialog.open(ConfigureServicesCreatorDialogComponent,{
       data: {roomItems: this.roomItems, eqModels: this.eqModels}
     });
+    servicesCreatorDialogRef.afterClosed().subscribe(serviceRequest => {
+      this.roomItems = serviceRequest.roomItems;
+      this.eqModels = serviceRequest.equipmentModels
+      this.services.push(serviceRequest.service);
+    });
+  }
+
+  emitConfiguration() {
+    this.roomConfigurationEmitter.emit(this.roomItems);
+    this.equipmentConfigurationEmitter.emit(this.eqModels);
+    this.serviceConfigurationEmitter.emit(this.services);
   }
 }

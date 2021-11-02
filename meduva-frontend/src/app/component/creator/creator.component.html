@@ -64,34 +64,24 @@
 
     <app-service-list-creator *ngIf="roomItems.length"
                               [roomItems]="roomItems"
-                              [eqModels]="eqModels">
+                              [eqModels]="eqModels"
+                              (serviceConfigurationEmitter)="onServicesGot($event)"
+                              (equipmentConfigurationEmitter)="onEquipmentModelGot($event)"
+                              (roomConfigurationEmitter)="onItemsGeneration($event)">
 
     </app-service-list-creator>
-    <br>
-    <div>
-      <button mat-button matStepperPrevious>Back</button>
-      <button mat-button matStepperNext>Next</button>
-    </div>
-    <br>
+
     <div *ngIf="roomSelectionError" class="alert alert-warning">
       <p>{{ roomSelectionError }}</p>
     </div>
   </mat-step>
 
-  <mat-step label="Assign services to employees"
-            [completed]="areAllItemsDisplaced()">
-
-    <app-service-list-creator>
-
-    </app-service-list-creator>
-    <br>
+  <mat-step>
+    <ng-template matStepLabel>Done</ng-template>
+    <p>Everything is ready.</p>
     <div>
       <button mat-button matStepperPrevious>Back</button>
-      <button mat-button matStepperNext>Next</button>
-    </div>
-    <br>
-    <div *ngIf="roomSelectionError" class="alert alert-warning">
-      <p>{{ roomSelectionError }}</p>
+      <button mat-button (click)="saveConfigurationInDatabase()">Save</button>
     </div>
   </mat-step>
 

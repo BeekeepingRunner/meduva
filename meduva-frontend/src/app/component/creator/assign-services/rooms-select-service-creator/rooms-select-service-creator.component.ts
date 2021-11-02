@@ -15,9 +15,22 @@ export class RoomsSelectServiceCreatorComponent extends RoomListComponent {
   selectedRooms: Room[] = [];
   automatically : boolean = true;
 
-  compareFunction = (o1: any, o2: any) => o1.id === o2.id;
-  emitSelectedServicesIds() {
+  @Input() creatorRooms: Room[] = [];
+  @Input() creatorModels: EquipmentModel[] = [];
+  @Input() service!: Service;
 
+  @Output() relatedRoomsEmitter = new EventEmitter<Room[]>();
+
+  compareFunction = (o1: any, o2: any) => o1.id === o2.id;
+
+  ngOnInit() {
+    super.ngOnInit();
+    for(let newRoom of this.creatorRooms){
+      this.rooms.push(newRoom);
+    }
+  }
+
+  emitSelectedServicesIds() {
   }
 
   changeAutoState(){
@@ -26,4 +39,15 @@ export class RoomsSelectServiceCreatorComponent extends RoomListComponent {
     else
       this.automatically=true;
 }
+
+  assignRoomsToService() {
+    for (let selectedRoom of this.selectedRooms){
+      for(let properRoom of this.rooms){
+        if(selectedRoom==properRoom){
+          properRoom.services?.push(this.service);
+        }
+      }
+    }
+    this.relatedRoomsEmitter.emit(this.rooms);
+  }
 }

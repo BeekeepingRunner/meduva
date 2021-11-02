@@ -25,15 +25,14 @@
 
   <mat-step label="Assign rooms">
 
-    <app-rooms-select-service-creator>
+    <app-rooms-select-service-creator *ngIf="roomItems.length"
+                                      [creatorModels]="eqModels"
+                                      [creatorRooms]="roomItems"
+                                      [service]="service"
+                                      (relatedRoomsEmitter)="onRoomsLinked($event)">
 
     </app-rooms-select-service-creator>
-    <br>
-    <div>
-      <button mat-button matStepperPrevious>Back</button>
-      <button mat-button matStepperNext>Next</button>
-    </div>
-    <br>
+
   </mat-step>
 
   <mat-step>
@@ -41,7 +40,7 @@
     <p>Everything is ready.</p>
     <div>
       <button mat-button matStepperPrevious>Back</button>
-      <button mat-button  [mat-dialog-close]>Save</button>
+      <button mat-button  [mat-dialog-close]="onServiceReady()">Save</button>
     </div>
   </mat-step>
 
