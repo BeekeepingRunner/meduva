@@ -2,6 +2,7 @@ package com.szusta.meduva.repository.schedule.worker;
 
 import com.szusta.meduva.model.schedule.WorkerSchedule;
 import com.szusta.meduva.repository.undeletable.UndeletableRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
@@ -31,5 +32,11 @@ public interface WorkerScheduleRepository extends UndeletableRepository<WorkerSc
 
     Optional<WorkerSchedule> deleteWorkerScheduleByUserId(Long id);
 
+    @Modifying
+    @Query(
+            nativeQuery = true,
+            value = "DELETE FROM worker_schedule wh WHERE wh.worker_id = ?1 AND (wh.time_from BETWEEN ?2 AND ?3)"
+    )
+    void deleteByWorkerIdBetween(Long workerId, Date start, Date end);
 
 }

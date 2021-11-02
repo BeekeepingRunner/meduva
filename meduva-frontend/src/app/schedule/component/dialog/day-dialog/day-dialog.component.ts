@@ -102,7 +102,7 @@ export class DayDialogComponent implements OnInit {
 
   setWholeDay(){
     this.form.get('startTime')?.setValue('06:00');
-    this.form.get('endTime')?.setValue('20:00');
+    this.form.get('endTime')?.setValue('21:00');
   }
 
   chooseWorkHoursOrAbsence(){

@@ -60,7 +60,6 @@ public class WorkerController {
         User worker = userService.findById(workerId);
         Date firstWeekDay = weekBoundaries.getFirstWeekDay();
         Date lastWeekDay = weekBoundaries.getLastWeekDay();
-        System.out.println(workManager.getWeeklyAbsenceHours(worker, firstWeekDay, lastWeekDay).isEmpty());
         return workManager.getWeeklyAbsenceHours(worker, firstWeekDay, lastWeekDay);
     }
 

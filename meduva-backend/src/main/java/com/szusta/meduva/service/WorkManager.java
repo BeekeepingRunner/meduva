@@ -98,7 +98,7 @@ public class WorkManager {
                         && hasVisitsAfter(newAbsenceEndTime, worker);
 
         if(!collidingVisitsExist){
-            deleteAbsenceHours(worker);
+            deleteAbsenceHours(worker, newAbsenceStartTime);
             WorkerSchedule workerSchedule = new WorkerSchedule(worker, newAbsenceStartTime, newAbsenceEndTime);
             WorkerStatus workerStatus = workerStatusRepository.getById(EWorkerStatus.WORKER_ABSENT.getValue());
             workerSchedule.setWorkerStatus(workerStatus);
@@ -124,8 +124,10 @@ public class WorkManager {
         workHoursRepository.deleteByWorkerIdBetween(worker.getId(), dayStart, dayEnd);
     }
 
-    private void deleteAbsenceHours(User worker){
-        workerScheduleRepository.deleteWorkerScheduleByUserId(worker.getId());
+    private void deleteAbsenceHours(User worker, Date dateTime){
+        Date dayStart = TimeUtils.getDayStart(dateTime);
+        Date dayEnd = TimeUtils.getDayEnd(dateTime);
+        workerScheduleRepository.deleteByWorkerIdBetween(worker.getId(), dayStart, dayEnd);
     }
 
     public List<WorkHours> getWeeklyWorkHours(User worker, Date firstWeekDay, Date lastWeekDay) {
