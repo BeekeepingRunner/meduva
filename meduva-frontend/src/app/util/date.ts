@@ -12,3 +12,11 @@ export class DateUtil {
     return this.datePipe.transform(date, pattern);
   }
 }
+
+export function isMonthSame(date: Date | null, date1: Date): boolean {
+  if (date != null) {
+    return date.getMonth() == date1.getMonth() && date.getFullYear() == date1.getFullYear();
+  } else {
+    return false;
+  }
+}

@@ -49,6 +49,7 @@ export class SelectWorkerComponent implements OnInit {
   }
 
   submitWorker(worker: User) {
-
+    this.visitService.saveSelectedWorker(worker);
+    this.router.navigate(['/visit/pick-term']);
   }
 }

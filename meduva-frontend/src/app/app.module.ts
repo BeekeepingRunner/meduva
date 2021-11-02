@@ -55,7 +55,7 @@ import { ModelDetailsComponent } from './component/equipment/model-details/model
 import { FeedbackDialogComponent } from './component/dialog/feedback-dialog/feedback-dialog.component';
 import { ChooseServiceComponent } from './component/visit/choose-service/choose-service.component';
 import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
-import { PickTermComponent } from './component/visit/pick-term/pick-term.component';
+import {AsyncDatePickerHeader, PickTermComponent} from './component/visit/pick-term/pick-term.component';
 import {EditRoleComponent} from "./component/specific-user-profile/edit-role/edit-role.component";
 import {MatSelectModule} from "@angular/material/select";
 import { PickClientComponent } from './component/visit/pick-client/pick-client.component';
@@ -115,6 +115,7 @@ import { SelectWorkerComponent } from './component/visit/select-worker/select-wo
     AddClientComponent,
     EditClientComponent,
     SelectWorkerComponent,
+    AsyncDatePickerHeader,
   ],
   imports: [
     BrowserModule,

@@ -44,8 +44,9 @@ export class ChooseServiceComponent implements OnInit {
     const confirmationDialog = this.dialog.open(ConfirmationDialogComponent, {
       data: { message: 'Do you want to select a worker?' }
     });
-    confirmationDialog.afterClosed().subscribe(confirmed => {
-      if (confirmed) {
+
+    confirmationDialog.afterClosed().subscribe(clientWantsToSelectWorker => {
+      if (clientWantsToSelectWorker) {
         this.router.navigate(['/visit/pick-worker']);
       } else {
         this.router.navigate(['/visit/pick-term']);

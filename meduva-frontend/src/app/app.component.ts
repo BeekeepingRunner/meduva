@@ -85,6 +85,7 @@ export class AppComponent implements OnInit, AfterViewInit {
       this.saveUserAsClient();
       this.router.navigate(['/visit/pick-service']);
     } else {
+      // TODO: work on that path
       this.router.navigate(['/visit/pick-client']);
     }
   }

@@ -37,6 +37,11 @@ public class VisitController {
         return visitService.getTermsForWorker(worker, service);
     }
 
+    @GetMapping("/is-worker-available")
+    public boolean canWorkerPerformAServiceGivenDay(@RequestParam Long workerId, @RequestParam Long serviceId) {
+        return workerId != null;
+    }
+
     @PostMapping
     public ResponseEntity<Visit> saveNewVisit(@RequestBody Term term) {
         return ResponseEntity.of(visitService.saveNewVisit(term));
