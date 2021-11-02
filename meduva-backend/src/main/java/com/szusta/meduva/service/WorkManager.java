@@ -93,14 +93,15 @@ public class WorkManager {
 
     @Transactional
     public WorkerSchedule setAbsenceHours(User worker, Date newAbsenceStartTime, Date newAbsenceEndTime) {
+        deleteAbsenceHours(worker, newAbsenceStartTime);
         boolean collidingVisitsExist =
                 hasVisitsBefore(newAbsenceStartTime, worker)
                         && hasVisitsAfter(newAbsenceEndTime, worker);
 
         if(!collidingVisitsExist){
-            deleteAbsenceHours(worker, newAbsenceStartTime);
             WorkerSchedule workerSchedule = new WorkerSchedule(worker, newAbsenceStartTime, newAbsenceEndTime);
-            WorkerStatus workerStatus = workerStatusRepository.getById(EWorkerStatus.WORKER_ABSENT.getValue());
+            //WorkerStatus workerStatus = workerStatusRepository.getById(EWorkerStatus.WORKER_ABSENT.getValue());
+            WorkerStatus workerStatus = workerStatusRepository.findById(EWorkerStatus.WORKER_ABSENT.getValue()).get();
             workerSchedule.setWorkerStatus(workerStatus);
             return workerScheduleRepository.save(workerSchedule);
         } else {
@@ -127,6 +128,8 @@ public class WorkManager {
     private void deleteAbsenceHours(User worker, Date dateTime){
         Date dayStart = TimeUtils.getDayStart(dateTime);
         Date dayEnd = TimeUtils.getDayEnd(dateTime);
+        System.out.println(dayStart);
+        System.out.println(dayEnd);
         workerScheduleRepository.deleteByWorkerIdBetween(worker.getId(), dayStart, dayEnd);
     }
 
