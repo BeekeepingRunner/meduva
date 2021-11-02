@@ -41,7 +41,6 @@ export class PickTermComponent implements OnInit {
   errorMessage: string = '';
 
   asyncHeader = AsyncDatePickerHeader;
-  availableDates: Date[] = [];
 
   dateFilter = (date: Date | null): boolean => {
     let availableDates = this.visitService.getAvailableDates();
@@ -108,11 +107,6 @@ export class PickTermComponent implements OnInit {
 
   private workerHasBeenSelected(): boolean {
     return this.selectedWorker != null;
-  }
-
-  onOpenDatesArrival($event: Date[]) {
-    console.log("OPEN DATES ARRIVED FROM HEADER");
-    this.availableDates = $event;
   }
 
   private getTermsForService(serviceId: number) {
