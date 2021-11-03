@@ -11,6 +11,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -37,9 +41,12 @@ public class VisitController {
         return visitService.getTermsForWorker(worker, service);
     }
 
-    @GetMapping("/is-worker-available")
-    public boolean canWorkerPerformAServiceGivenDay(@RequestParam Long workerId, @RequestParam Long serviceId) {
-        return workerId != null;
+    @GetMapping("/get-available-days-in-month")
+    public List<Date> getAvailableDaysInMonth(@RequestParam Long workerId, @RequestParam Long serviceId, @RequestParam String dayDate) throws ParseException {
+        List<Date> availableDays =  new ArrayList<>();
+        Date date = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").parse(dayDate);
+        availableDays.add(date);
+        return availableDays;
     }
 
     @PostMapping

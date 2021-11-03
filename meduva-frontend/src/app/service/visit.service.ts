@@ -86,11 +86,11 @@ export class VisitService {
     return this.httpClient.post(environment.API_BASE_URL + 'api/visit', term);
   }
 
-  async isWorkerAvailable(workerID: number, serviceID: number, day: Date): Promise<any> {
-    return await this.httpClient.get(environment.API_BASE_URL + 'api/visit/is-worker-available', { params: {
+  getWorkerAvailableDaysInMonth(workerID: number, serviceID: number, day: string): Observable<any> {
+    return this.httpClient.get(environment.API_BASE_URL + 'api/visit/get-available-days-in-month', { params: {
         workerId: workerID,
         serviceId: serviceID,
-        // dayDate: day
-      }}).toPromise();
+        dayDate: day
+    }});
   }
 }

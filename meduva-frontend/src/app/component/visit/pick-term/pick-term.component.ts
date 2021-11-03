@@ -8,7 +8,7 @@ import {
   ViewEncapsulation
 } from '@angular/core';
 import {Term, VisitService} from "../../../service/visit.service";
-import {DatePipe} from "@angular/common";
+import {DatePipe, formatDate} from "@angular/common";
 import {Router} from "@angular/router";
 import {ServicesService} from "../../../service/services.service";
 import {Service} from "../../../model/service";
@@ -17,14 +17,15 @@ import {User} from "../../../model/user";
 import {Subject} from "rxjs";
 import {DateAdapter, MAT_DATE_FORMATS, MatDateFormats} from "@angular/material/core";
 import {takeUntil} from "rxjs/operators";
-import {isMonthSame} from "../../../util/date";
+import {addMonth, DateUtil, substractMonth} from "../../../util/date";
+import {locale} from "moment";
 
 @Component({
   selector: 'app-pick-term',
   templateUrl: './pick-term.component.html',
   styleUrls: ['./pick-term.component.css'],
   encapsulation: ViewEncapsulation.None,
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  changeDetection: ChangeDetectionStrategy.Default,
 })
 export class PickTermComponent implements OnInit {
 
@@ -45,7 +46,16 @@ export class PickTermComponent implements OnInit {
   dateFilter = (date: Date | null): boolean => {
     let availableDates = this.visitService.getAvailableDates();
     console.log(availableDates);
-    // const day = (date || new Date()).getDay();
+
+    /*
+    const filteredDayNumber = (date || new Date()).getDate();
+    let isAvailable = false;
+    availableDates.forEach(availDate => {
+      if (availDate.getDate() == filteredDayNumber)
+        isAvailable = true;
+    });
+    return isAvailable;*/
+    return true;
     /*
     if (date != null) {
       if (isMonthSame(date, this.openDates[0])) {
@@ -56,9 +66,7 @@ export class PickTermComponent implements OnInit {
     } else {
       return false;
     }
-
      */
-    return true;
   };
 
   /*
@@ -96,7 +104,23 @@ export class PickTermComponent implements OnInit {
   ngOnInit(): void {
     this.selectedService = this.visitService.getSelectedService();
     if (this.serviceHasBeenSelected()) {
-      this.canChooseTerm = true;
+      let activeDate = new Date();
+      let activeDateStr = formatDate(activeDate, 'YYYY-MM-dd HH:mm:ss', locale());
+
+      let serviceId = this.visitService.getSelectedService()?.id;
+      let workerId: number | undefined = this.visitService.getSelectedWorker()?.id;
+      if (workerId != undefined && serviceId) {
+        // TODO: check if selected worker can do that service given day
+        this.visitService.getWorkerAvailableDaysInMonth(workerId, serviceId, activeDateStr).subscribe(
+          availDays => {
+            this.visitService.saveAvailableDates(availDays);
+            this.canChooseTerm = true;
+          }
+        );
+      } else {
+        // TODO: check if service can be performed given day by anyone
+        // this.visitService.getAvailableDaysInMonth(serviceId, activeDate);
+      }
     }
     this.selectedWorker = this.visitService.getSelectedWorker();
   }
@@ -170,17 +194,46 @@ export class PickTermComponent implements OnInit {
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AsyncDatePickerHeader<D> implements OnDestroy {
+export class AsyncDatePickerHeader<D> implements OnInit, OnDestroy {
   private _destroyed = new Subject<void>();
+
+  availableDays: Date[] = [];
 
   constructor(
     private _calendar: MatCalendar<D>, private _dateAdapter: DateAdapter<D>,
     @Inject(MAT_DATE_FORMATS) private _dateFormats: MatDateFormats, cdr: ChangeDetectorRef,
     private visitService: VisitService,
+    private dateUtil: DateUtil
     ) {
     _calendar.stateChanges
       .pipe(takeUntil(this._destroyed))
       .subscribe(() => cdr.markForCheck());
+  }
+
+  ngOnInit() {
+  }
+
+  getAvailableDaysInMonth() {
+    // TODO: backend call
+    // @ts-ignore
+    let activeDate = new Date(this._calendar.activeDate);
+    let activeDateStr = formatDate(activeDate, 'YYYY-MM-dd HH:mm:ss', locale());
+
+    this.availableDays = [];
+    let serviceId = this.visitService.getSelectedService()?.id;
+    let workerId: number | undefined = this.visitService.getSelectedWorker()?.id;
+    if (workerId != undefined && serviceId) {
+      // TODO: check if selected worker can do that service given day
+      this.visitService.getWorkerAvailableDaysInMonth(workerId, serviceId, activeDateStr).subscribe(
+        availDays => {
+          this.availableDays = availDays;
+          this.visitService.saveAvailableDates(this.availableDays);
+        }
+      );
+    } else {
+      // TODO: check if service can be performed given day by anyone
+      // this.visitService.getAvailableDaysInMonth(serviceId, activeDate);
+    }
   }
 
   ngOnDestroy() {
@@ -189,25 +242,60 @@ export class AsyncDatePickerHeader<D> implements OnDestroy {
   }
 
   get periodLabel() {
-    // TODO: backend call
-    let activeDate = this._calendar.activeDate;
-    let availableDates: Date[] = [new Date()];
-    this.visitService.saveAvailableDates(availableDates);
-
     return this._dateAdapter
       .format(this._calendar.activeDate, this._dateFormats.display.monthYearLabel)
       .toLocaleUpperCase();
   }
 
   previousClicked(mode: 'month' | 'year') {
-    this._calendar.activeDate = mode === 'month' ?
-      this._dateAdapter.addCalendarMonths(this._calendar.activeDate, -1) :
-      this._dateAdapter.addCalendarYears(this._calendar.activeDate, -1);
+
+    // @ts-ignore
+    let dateToSend = new Date(this._calendar.activeDate);
+    dateToSend = substractMonth(dateToSend);
+    let dateToSendStr = formatDate(dateToSend, 'YYYY-MM-dd HH:mm:ss', locale());
+
+    let serviceId = this.visitService.getSelectedService()?.id;
+    let workerId: number | undefined = this.visitService.getSelectedWorker()?.id;
+    if (workerId != undefined && serviceId) {
+      // TODO: check if selected worker can do that service given day
+      this.visitService.getWorkerAvailableDaysInMonth(workerId, serviceId, dateToSendStr).subscribe(
+        availDays => {
+          this.visitService.saveAvailableDates(availDays);
+
+          this._calendar.activeDate = mode === 'month' ?
+            this._dateAdapter.addCalendarMonths(this._calendar.activeDate, -1) :
+            this._dateAdapter.addCalendarYears(this._calendar.activeDate, -1);
+        }
+      );
+    } else {
+      // TODO: check if service can be performed given day by anyone
+      // this.visitService.getAvailableDaysInMonth(serviceId, activeDate);
+    }
   }
 
   nextClicked(mode: 'month' | 'year') {
-    this._calendar.activeDate = mode === 'month' ?
-      this._dateAdapter.addCalendarMonths(this._calendar.activeDate, 1) :
-      this._dateAdapter.addCalendarYears(this._calendar.activeDate, 1);
+
+    // @ts-ignore
+    let dateToSend = new Date(this._calendar.activeDate);
+    dateToSend = addMonth(dateToSend);
+    let dateToSendStr = formatDate(dateToSend, 'YYYY-MM-dd HH:mm:ss', locale());
+
+    let serviceId = this.visitService.getSelectedService()?.id;
+    let workerId: number | undefined = this.visitService.getSelectedWorker()?.id;
+    if (workerId != undefined && serviceId) {
+      // TODO: check if selected worker can do that service given day
+      this.visitService.getWorkerAvailableDaysInMonth(workerId, serviceId, dateToSendStr).subscribe(
+        availDays => {
+          this.visitService.saveAvailableDates(availDays);
+
+          this._calendar.activeDate = mode === 'month' ?
+            this._dateAdapter.addCalendarMonths(this._calendar.activeDate, 1) :
+            this._dateAdapter.addCalendarYears(this._calendar.activeDate, 1);
+        }
+      );
+    } else {
+      // TODO: check if service can be performed given day by anyone
+      // this.visitService.getAvailableDaysInMonth(serviceId, activeDate);
+    }
   }
 }
