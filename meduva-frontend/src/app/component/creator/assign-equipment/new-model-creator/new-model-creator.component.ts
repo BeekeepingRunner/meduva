@@ -90,9 +90,4 @@ export class NewModelCreatorComponent extends NewModelComponent implements OnIni
 
   }
 
-  onRoomsGeneration($event: EquipmentItem[]) {
-    this.eqItems=$event;
-    console.log(this.eqItems+"EQITEMY");
-    console.log(this.roomItems+"ROOMITEMY");
-  }
 }

@@ -1,8 +1,8 @@
 <br>
-<h4>Assign equipment models:</h4>
+<h4>Assign rooms:</h4>
 <br>
-<mat-checkbox id="autoPickRooms" formControlName="autoPickRooms" (change)="changeAutoState()" [checked]="automatically">Automatically</mat-checkbox>
 
+<mat-checkbox id="autoPickRooms" (change)="changeAutoState()" [checked]="automatically">Automatically</mat-checkbox>
 
 <div class="alert alert-warning" *ngIf="!automatically">
   <mat-selection-list #selectionListServices

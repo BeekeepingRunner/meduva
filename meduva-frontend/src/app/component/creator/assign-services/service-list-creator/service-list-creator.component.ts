@@ -25,9 +25,21 @@ export class ServiceListCreatorComponent extends ServiceListComponent {
 
   constructor(
     servicesService: ServicesService,
+    private equipmentService: EquipmentService,
     public dialog: MatDialog,
   ) {
   super(servicesService)
+
+  }
+  ngOnInit() {
+    if(this.eqModels.length==0){
+      this.equipmentService.getAllUndeletedEquipmentModels().subscribe(
+        equipment => {
+          this.eqModels=equipment;
+        }
+
+      );
+    }
 
   }
 

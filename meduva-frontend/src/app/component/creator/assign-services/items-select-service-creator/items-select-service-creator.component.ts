@@ -16,6 +16,7 @@ export class ItemsSelectServiceCreatorComponent extends EquipmentListComponent {
   @Input() service!: Service;
 
   @Output() relatedItemsEmitter = new EventEmitter<EquipmentModel[]>();
+  @Output() serviceEmitter = new EventEmitter<Service>();
 
   compareFunction = (o1: any, o2: any) => o1.id === o2.id;
   emitSelectedServicesIds() {
@@ -35,5 +36,12 @@ export class ItemsSelectServiceCreatorComponent extends EquipmentListComponent {
       }
     }
     this.relatedItemsEmitter.emit(this.models);
+    this.serviceEmitter.emit(this.service);
   }
+
+  clearSelection() {
+    this.selectedModels=[];
+  }
+
+
 }

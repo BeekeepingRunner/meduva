@@ -27,7 +27,7 @@ export class EquipmentListCreatorComponent implements OnInit {
   }
 
   ngOnInit(): void {
-   // this.getModels();
+    this.getModels();
   }
 
   private getModels() {
@@ -53,9 +53,11 @@ export class EquipmentListCreatorComponent implements OnInit {
       data: { roomItems: this.roomItems }
     });
     equipmentCreatorDialogRef.afterClosed().subscribe(equipmentModel => {
-      let eqModel: EquipmentModel = equipmentModel;
-      this.models.push(eqModel)
-      this.eqModelEmitter.emit(this.models);
+      if(equipmentModel){
+        let eqModel: EquipmentModel = equipmentModel;
+        this.models.push(eqModel)
+        this.eqModelEmitter.emit(this.models);
+      }
 
     });
 

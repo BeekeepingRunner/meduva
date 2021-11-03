@@ -6,19 +6,20 @@
 <mat-stepper [linear]="true" orientation="vertical" #stepper>
 
 <mat-step label="Define new service" [completed]="!form.valid">
-  <app-new-service-details-creator
-    (newServiceEmitter)="onServiceCreated($event)">
 
+  <app-new-service-details-creator
+                                      (newServiceEmitter)="onServiceCreated($event)">
   </app-new-service-details-creator>
 
 </mat-step>
 
   <mat-step label="Assign items">
+
     <app-items-select-service-creator *ngIf="eqModels.length"
                                       [creatorModels]="eqModels"
                                       [service]="service"
-                                      (relatedItemsEmitter)="onItemsLinked($event)">
-
+                                      (relatedItemsEmitter)="onItemsLinked($event)"
+                                      (serviceEmitter)="onServiceCreated($event)">
     </app-items-select-service-creator>
 
   </mat-step>
@@ -30,7 +31,6 @@
                                       [creatorRooms]="roomItems"
                                       [service]="service"
                                       (relatedRoomsEmitter)="onRoomsLinked($event)">
-
     </app-rooms-select-service-creator>
 
   </mat-step>

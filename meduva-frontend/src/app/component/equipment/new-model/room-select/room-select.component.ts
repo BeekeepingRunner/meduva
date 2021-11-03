@@ -18,6 +18,7 @@ export class RoomSelectComponent implements OnInit {
   @Input() eqItems!: EquipmentItem[];
   @Output() selectedIdsEmitter = new EventEmitter<Array<number>>();
   @Output() itemsEmitter = new EventEmitter<EquipmentItem[]>();
+
   eqItemsOutput: EquipmentItem[] = [];
 
   @Input() rooms: Room[] = [];
