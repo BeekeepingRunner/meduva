@@ -112,7 +112,7 @@ export class WorkerScheduleComponent implements OnInit {
     this.events = [...newEvents];
   }
 
-  openDayDialog(date: Date) {////////////////////////////////////////////////////////////
+  openDayDialog(date: Date) {
     this.clickedDate = date;
 
     const dayDialog = this.dialog.open(DayDialogComponent, {

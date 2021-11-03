@@ -71,7 +71,7 @@ export class DayDialogComponent implements OnInit {
     });
   }
 
-  startSettingAbsenceHours(){ ////////////
+  startSettingAbsenceHours(){
     let dayBoundaries: WeekBoundaries = {
       firstWeekDay: this.selectedDate,
       lastWeekDay: this.selectedDate
@@ -123,9 +123,9 @@ export class DayDialogComponent implements OnInit {
   }
 
   setWholeDay(){
-    //this.form.get('startTime')?.setValue('06:00');
-    //this.form.get('endTime')?.setValue('21:00');
-
+    this.form.get('startTime')?.patchValue(this.existingWorkingHoursTable[0].startTime.toLocaleTimeString().slice(0,5));
+    this.form.get('endTime')?.patchValue(this.existingWorkingHoursTable[0].endTime.toLocaleTimeString().slice(0,5));
+    this.form.markAllAsTouched();
   }
 
   chooseWorkHoursOrAbsence(){

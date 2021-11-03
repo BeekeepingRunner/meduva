@@ -22,8 +22,8 @@ export function absenceHoursWithinWorkHoursValidator(existingWorkHours: WorkHour
 
     let dayWorkStart: string = existingWorkHours.startTime.toLocaleTimeString();
     let dayWorkEnd: string = existingWorkHours.endTime.toLocaleTimeString();
-    
-    if(!((startTime >= dayWorkStart) && (endTime < dayWorkEnd))){
+
+    if(!((startTime >= dayWorkStart) && (endTime <= dayWorkEnd))){
       return { 'absenceHoursWithinWorkHours': true}
     }else {
       return null;
