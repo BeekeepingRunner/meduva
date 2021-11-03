@@ -43,6 +43,9 @@
           <mat-error *ngIf="form.errors?.inWrongOrder && (form.dirty || form.touched)">
             Start time should be earlier than end time.
           </mat-error>
+          <mat-error *ngIf="form.errors?.absenceHoursWithinWorkHours && (form.dirty || form.touched)">
+            Absence hours must be within working hours.
+          </mat-error>
         </tr>
         <tr>
           <br>

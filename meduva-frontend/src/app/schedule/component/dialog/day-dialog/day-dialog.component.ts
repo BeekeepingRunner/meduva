@@ -1,11 +1,15 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
-import {startTimeBeforeEndTimeValidator} from "../../../util/validator/hours-input";
-import {WorkHours} from "../../../service/schedule.service";
+import {
+  absenceHoursWithinWorkHoursValidator,
+  startTimeBeforeEndTimeValidator
+} from "../../../util/validator/hours-input";
+import {ScheduleService, WeekBoundaries, WorkHours} from "../../../service/schedule.service";
 
 export interface DayDialogData {
-  date: Date
+  date: Date;
+  workerId: number;
 }
 
 @Component({
@@ -23,16 +27,21 @@ export class DayDialogComponent implements OnInit {
   form!: FormGroup;
 
   workHours!: WorkHours;
+  existingWorkingHoursTable!: WorkHours[];
+
 
   constructor(
     public dialogRef: MatDialogRef<DayDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: DayDialogData,
     private formBuilder: FormBuilder,
-  ) { }
+    private scheduleService: ScheduleService
+  ) {
+  }
 
   ngOnInit(): void {
     this.selectedDate = this.data.date;
     this.dateString = this.data.date.toDateString();
+    this.data.date
   }
 
   startSettingWorkHours() {
@@ -62,12 +71,24 @@ export class DayDialogComponent implements OnInit {
     });
   }
 
-  startSettingAbsenceHours(){
-    this.settingAbsenceHours = true;
-    this.form = this.formBuilder.group({
-      startTime : new FormControl('', [Validators.required]),
-      endTime: new FormControl('', [Validators.required]),
-    }, { validators: startTimeBeforeEndTimeValidator });
+  startSettingAbsenceHours(){ ////////////
+    let dayBoundaries: WeekBoundaries = {
+      firstWeekDay: this.selectedDate,
+      lastWeekDay: this.selectedDate
+    }
+    this.scheduleService.getWeeklyWorkHours(this.data.workerId, dayBoundaries).subscribe(
+      data => {
+        this.existingWorkingHoursTable = data;
+        let dayWorkHours: WorkHours = this.existingWorkingHoursTable[0];
+        console.log(dayWorkHours);
+        this.settingAbsenceHours = true;
+        this.form = this.formBuilder.group({
+          startTime : new FormControl('', [Validators.required]),
+          endTime: new FormControl('', [Validators.required]),
+        }, );
+        this.form.setValidators([absenceHoursWithinWorkHoursValidator(dayWorkHours),  startTimeBeforeEndTimeValidator]);
+      }
+    );
   }
 
   onAbsenceHoursSave(){
@@ -83,6 +104,7 @@ export class DayDialogComponent implements OnInit {
       startTime: startTime,
       endTime: endTime
     }
+
     this.dialogRef.close({
       event: 'ABSENCE_HOURS',
       data: this.workHours
@@ -101,8 +123,9 @@ export class DayDialogComponent implements OnInit {
   }
 
   setWholeDay(){
-    this.form.get('startTime')?.setValue('06:00');
-    this.form.get('endTime')?.setValue('21:00');
+    //this.form.get('startTime')?.setValue('06:00');
+    //this.form.get('endTime')?.setValue('21:00');
+
   }
 
   chooseWorkHoursOrAbsence(){

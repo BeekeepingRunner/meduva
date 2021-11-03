@@ -43,6 +43,8 @@ public class WorkerController {
         User worker = userService.findById(workerId);
         Date firstWeekDay = weekBoundaries.getFirstWeekDay();
         Date lastWeekDay = weekBoundaries.getLastWeekDay();
+        System.out.println(firstWeekDay);
+        System.out.println(lastWeekDay);
         return workManager.getWeeklyWorkHours(worker, firstWeekDay, lastWeekDay);
     }
 

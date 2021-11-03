@@ -46,7 +46,6 @@ export class WorkerScheduleComponent implements OnInit {
       worker => {
         this.worker = worker;
         this.prepareWeekEvents();
-        this.prepareWeeklyAbsenceHours();
       }
     );
   }
@@ -73,6 +72,7 @@ export class WorkerScheduleComponent implements OnInit {
     this.scheduleService.getWeeklyOffWorkHours(this.worker.id, weekBoundaries).subscribe(
     (weeklyOffWorkHours: WorkHours[]) => {
       this.updateWorkHoursEvents(weeklyOffWorkHours);
+      this.prepareWeeklyAbsenceHours();
     });
   }
 
@@ -112,12 +112,14 @@ export class WorkerScheduleComponent implements OnInit {
     this.events = [...newEvents];
   }
 
-  openDayDialog(date: Date) {
+  openDayDialog(date: Date) {////////////////////////////////////////////////////////////
     this.clickedDate = date;
+
     const dayDialog = this.dialog.open(DayDialogComponent, {
       width: '400px',
       panelClass: 'my-dialog',
-      data: { date: this.clickedDate }
+      data: { date: this.clickedDate,
+              workerId: this.worker.id}
     });
 
     dayDialog.afterClosed().subscribe(
