@@ -10,6 +10,7 @@
   <app-new-service-details-creator
                                       (newServiceEmitter)="onServiceCreated($event)">
   </app-new-service-details-creator>
+  <br>
 
 </mat-step>
 
@@ -19,17 +20,20 @@
                                       [creatorModels]="eqModels"
                                       [service]="service"
                                       (relatedItemsEmitter)="onItemsLinked($event)"
-                                      (serviceEmitter)="onServiceCreated($event)">
+                                      (serviceEmitter)="onServiceCreated($event)"
+                                      (selectedItemsEmitter)="onSelectedModelsGot($event)">
     </app-items-select-service-creator>
+
 
   </mat-step>
 
   <mat-step label="Assign rooms">
 
-    <app-rooms-select-service-creator *ngIf="roomItems.length"
-                                      [creatorModels]="eqModels"
+    <app-rooms-select-service-creator *ngIf="roomItems.length && eqModels.length && selectedModels.length"
                                       [creatorRooms]="roomItems"
                                       [service]="service"
+                                      [creatorModels]="eqModels"
+                                      [selectedModels]="selectedModels"
                                       (relatedRoomsEmitter)="onRoomsLinked($event)">
     </app-rooms-select-service-creator>
 

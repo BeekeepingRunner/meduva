@@ -19,13 +19,43 @@ export class RoomsSelectServiceCreatorComponent extends RoomListComponent {
   @Input() creatorModels: EquipmentModel[] = [];
   @Input() service!: Service;
 
+  @Input() selectedModels: EquipmentModel[] = [];
+
   @Output() relatedRoomsEmitter = new EventEmitter<Room[]>();
+
 
   compareFunction = (o1: any, o2: any) => o1.id === o2.id;
 
 
+  ngOnInit(): void {
+    this.getAllRooms()
+    console.log(this.creatorModels+"TU DZIALA")
+    console.log(this.selectedModels+"heheheheheh")
+  }
+
   getAllRooms() {
-    this.rooms=this.creatorRooms;
+    //this.rooms=this.creatorRooms;
+
+    let uniqueRoomNames: string[] = [];
+    let uniqueRooms = new Set<Room>();
+    for(let model of this.selectedModels){
+        let eqItems = model.items;
+        for(let item of eqItems){
+          if(item.room)
+          uniqueRooms.add(item.room);
+        }
+    }
+
+    for(let room of uniqueRooms){
+      if(uniqueRoomNames.includes(room.name)){
+        uniqueRooms.delete(room)
+      }
+      else{
+        uniqueRoomNames.push(room.name)
+      }
+    }
+
+    this.rooms=Array.from(uniqueRooms.values())
   }
 
   changeAutoState(){

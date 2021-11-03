@@ -58,5 +58,6 @@
 </form>
 
 <div>
-  <button mat-button matStepperNext (click)="onServiceCreated()">Next</button>
+  <button mat-button matStepperNext [disabled]="!form.valid" (click)="onServiceCreated()">Next</button>
 </div>
+
