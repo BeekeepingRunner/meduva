@@ -148,6 +148,8 @@ public class WorkManager {
     }
 
     public List<? super WorkerSchedule> getWeeklyAbsenceHours(User worker, Date firstWeekDay, Date lastWeekDay) {
+        firstWeekDay = TimeUtils.getDayStart(firstWeekDay);
+        lastWeekDay = TimeUtils.getDayEnd(lastWeekDay);
         return workerScheduleRepository.findAnyBetween(firstWeekDay, lastWeekDay, worker.getId());
     }
 
