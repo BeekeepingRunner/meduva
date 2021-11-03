@@ -4,6 +4,7 @@ import {EquipmentItem} from "../../../../model/equipment";
 import {MatDialog} from "@angular/material/dialog";
 import {RoomSelectionDialogComponent} from "../../../dialog/room-selection-dialog/room-selection-dialog.component";
 import {RoomService} from "../../../../service/room.service";
+import {Subscription} from "rxjs";
 
 @Component({
   selector: 'app-room-select',
@@ -19,7 +20,9 @@ export class RoomSelectComponent implements OnInit {
   @Output() itemsEmitter = new EventEmitter<EquipmentItem[]>();
   eqItemsOutput: EquipmentItem[] = [];
 
-  @Input() rooms!: Room[];
+  @Input() rooms: Room[] = [];
+
+  @Input() creatorRooms: Room[] = [];
   /**Because of the fact that this class is used in two cases, during adding the room and in the creator, there is an input annotation.
    Creator uses that class in the string of giving data among the dialogs and classes*/
 
@@ -38,13 +41,14 @@ export class RoomSelectComponent implements OnInit {
   fetchRooms() {
     this.roomService.getAllUndeletedRooms().subscribe(
       rooms => {
-        for (let room of rooms){
-          this.rooms.push(room);
-        }
-
+       this.rooms=rooms;
+       for(let creatorRoom of this.creatorRooms){
+         this.rooms.unshift(creatorRoom);
+       }
       }
     );
   }
+
 
   openRoomSelectionDialog(item: EquipmentItem) {
     const roomSelectionDialogRef = this.dialog.open(RoomSelectionDialogComponent, {

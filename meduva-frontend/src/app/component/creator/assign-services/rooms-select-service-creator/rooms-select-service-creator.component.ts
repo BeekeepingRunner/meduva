@@ -23,14 +23,9 @@ export class RoomsSelectServiceCreatorComponent extends RoomListComponent {
 
   compareFunction = (o1: any, o2: any) => o1.id === o2.id;
 
-  ngOnInit() {
-    super.ngOnInit();
-    for(let newRoom of this.creatorRooms){
-      this.rooms.push(newRoom);
-    }
-  }
 
-  emitSelectedServicesIds() {
+  getAllRooms() {
+    this.rooms=this.creatorRooms;
   }
 
   changeAutoState(){

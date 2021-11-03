@@ -20,7 +20,6 @@ export class EquipmentListCreatorComponent implements OnInit {
 
   @Output() eqModelEmitter = new EventEmitter<EquipmentModel[]>();
 
-
   constructor(
     private equipmentService: EquipmentService,
     public dialog: MatDialog,
@@ -28,7 +27,7 @@ export class EquipmentListCreatorComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.getModels();
+   // this.getModels();
   }
 
   private getModels() {

@@ -36,7 +36,6 @@ export class NewModelCreatorComponent extends NewModelComponent implements OnIni
   /**Because of the fact that this class is used in two cases, during adding the room and in the creator, there is an input annotation.
    Creator uses that class in the string of giving data among the dialogs and classes*/
 
-
   eqItems: EquipmentItem[] = [];
 
   eqModel: EquipmentModel = {
@@ -48,8 +47,6 @@ export class NewModelCreatorComponent extends NewModelComponent implements OnIni
 
   };
 
- /** @ViewChild(RoomSelectCreatorComponent)
-  private roomSelectComponent!: RoomSelectCreatorComponent;*/
   selectedRoomsIds: number[] = [];
   roomSelectionError: string = '';
 
@@ -68,7 +65,6 @@ export class NewModelCreatorComponent extends NewModelComponent implements OnIni
     super.ngOnInit();
   }
 
-//zamiast zapisywania do bazy należy zrobic zapis do tabeli w kreatorze
   /*saveModelWithItems() {
     let newModelReuqest: NewModelRequest = {
       modelName: this.modelName,
@@ -92,5 +88,11 @@ export class NewModelCreatorComponent extends NewModelComponent implements OnIni
     this.eqModel.name=this.modelName;
     this.eqModel.items = this.eqItems;
 
+  }
+
+  onRoomsGeneration($event: EquipmentItem[]) {
+    this.eqItems=$event;
+    console.log(this.eqItems+"EQITEMY");
+    console.log(this.roomItems+"ROOMITEMY");
   }
 }

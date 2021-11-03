@@ -7,8 +7,7 @@
 <div class="alert alert-warning" *ngIf="!automatically">
   <mat-selection-list #selectionListServices
                       [(ngModel)]="selectedRooms"
-                      [compareWith]="compareFunction"
-                      (selectionChange)="emitSelectedServicesIds()">
+                      [compareWith]="compareFunction">
     <mat-list-option *ngFor="let room of rooms" [value]="room">
       {{ room.name }}
     </mat-list-option>

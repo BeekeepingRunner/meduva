@@ -8,7 +8,7 @@
   <mat-step label="Define new model"
             [completed]="isFormValid">
     <app-model-form (modelNameEmitter)="onModelNameInput($event)"
-                    (eqItemsEmitter)="onItemsGeneration($event)"
+                    (eqItemsEmitter)="onRoomsGeneration($event)"
                     (stepCompletionEmitter)="onModelFormSubmitted($event)">
     </app-model-form>
     <div>
@@ -21,7 +21,7 @@
 
     <app-room-select *ngIf="eqItems.length"
                      [eqItems]="eqItems"
-                     [rooms]="roomItems"
+                     [creatorRooms]="roomItems"
                      (selectedIdsEmitter)="onRoomsSelected($event)"
                      (itemsEmitter)="onRoomsAssigned($event)">
     </app-room-select>

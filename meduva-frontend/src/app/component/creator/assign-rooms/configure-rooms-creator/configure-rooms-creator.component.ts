@@ -38,11 +38,12 @@ export class ConfigureRoomsCreatorComponent implements OnInit {
         item.name=selectedRoom.name;
         item.description=selectedRoom.description;
         this.roomItems.splice(this.roomItems.indexOf(item),1,selectedRoom)
-        // @ts-ignore
-        console.log(this.roomItems)
+
         this.roomItemsEmitter.emit(this.roomItems);
       }
 
     });
   }
+
+
 }
