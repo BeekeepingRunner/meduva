@@ -4,7 +4,7 @@
   <button mat-raised-button color="primary" *ngIf="!settingWorkHours && !settingAbsenceHours"
           (click)="startSettingWorkHours()">Set work hours</button>
   <button mat-raised-button color="primary" *ngIf="!settingAbsenceHours && !settingWorkHours"
-          (click)="startSettingAbsenceHours()">Set absence</button>
+          (click)="startSettingAbsenceHours()" >Set absence</button>
   <div *ngIf="settingWorkHours || settingAbsenceHours">
     <form (ngSubmit)="chooseWorkHoursOrAbsence()" [formGroup]="form">
       <table>
@@ -45,6 +45,9 @@
           </mat-error>
           <mat-error *ngIf="form.errors?.absenceHoursWithinWorkHours && (form.dirty || form.touched)">
             Absence hours must be within working hours.
+          </mat-error>
+          <mat-error *ngIf="form.errors?.workHoursUndefined">
+            Working hours must be set.
           </mat-error>
         </tr>
         <tr>

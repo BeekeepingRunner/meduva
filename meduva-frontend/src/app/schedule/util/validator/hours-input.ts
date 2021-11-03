@@ -11,22 +11,28 @@ export const startTimeBeforeEndTimeValidator
   return !isInCorrectOrder ? { inWrongOrder: true } : null;
 };
 
-export function absenceHoursWithinWorkHoursValidator(existingWorkHours: WorkHours): ValidatorFn {
+export function absencesValidator(existingWorkHours: WorkHours): ValidatorFn {
 
-  return (control: AbstractControl): { [key: string]: boolean } | null => {
-    const startTime: string = control.get('startTime')?.value + ":00";
-    const endTime: string = control.get('endTime')?.value + ":00";
+    return (control: AbstractControl): { [key: string]: boolean } | null => {
+        if( existingWorkHours === undefined){
+          return { 'workHoursUndefined': true};
+        } else{
+          const startTime: string = control.get('startTime')?.value + ":00";
+          const endTime: string = control.get('endTime')?.value + ":00";
 
-    existingWorkHours.startTime = new Date(existingWorkHours.startTime);
-    existingWorkHours.endTime = new Date(existingWorkHours.endTime);
+          existingWorkHours.startTime = new Date(existingWorkHours.startTime);
+          existingWorkHours.endTime = new Date(existingWorkHours.endTime);
 
-    let dayWorkStart: string = existingWorkHours.startTime.toLocaleTimeString();
-    let dayWorkEnd: string = existingWorkHours.endTime.toLocaleTimeString();
+          let dayWorkStart: string = existingWorkHours.startTime.toLocaleTimeString();
+          let dayWorkEnd: string = existingWorkHours.endTime.toLocaleTimeString();
 
-    if(!((startTime >= dayWorkStart) && (endTime <= dayWorkEnd))){
-      return { 'absenceHoursWithinWorkHours': true}
-    }else {
-      return null;
-    }
-  }
+          if(!((startTime >= dayWorkStart) && (endTime <= dayWorkEnd))){
+            return { 'absenceHoursWithinWorkHours': true}
+          }
+
+          return null;
+        }
+            }
 };
+
+

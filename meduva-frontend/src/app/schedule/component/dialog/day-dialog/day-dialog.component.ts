@@ -2,7 +2,7 @@ import {Component, Inject, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {
-  absenceHoursWithinWorkHoursValidator,
+  absencesValidator,
   startTimeBeforeEndTimeValidator
 } from "../../../util/validator/hours-input";
 import {ScheduleService, WeekBoundaries, WorkHours} from "../../../service/schedule.service";
@@ -27,7 +27,7 @@ export class DayDialogComponent implements OnInit {
   form!: FormGroup;
 
   workHours!: WorkHours;
-  existingWorkingHoursTable!: WorkHours[];
+  existingWorkingHours!: WorkHours | undefined;
 
 
   constructor(
@@ -78,15 +78,16 @@ export class DayDialogComponent implements OnInit {
     }
     this.scheduleService.getWeeklyWorkHours(this.data.workerId, dayBoundaries).subscribe(
       data => {
-        this.existingWorkingHoursTable = data;
-        let dayWorkHours: WorkHours = this.existingWorkingHoursTable[0];
-        console.log(dayWorkHours);
+        let theExistingWorkingHoursTable = data;
+        this.existingWorkingHours = theExistingWorkingHoursTable[0];
+        console.log(this.existingWorkingHours);
         this.settingAbsenceHours = true;
         this.form = this.formBuilder.group({
           startTime : new FormControl('', [Validators.required]),
           endTime: new FormControl('', [Validators.required]),
         }, );
-        this.form.setValidators([absenceHoursWithinWorkHoursValidator(dayWorkHours),  startTimeBeforeEndTimeValidator]);
+        this.form.setValidators([absencesValidator(this.existingWorkingHours!),
+                                startTimeBeforeEndTimeValidator]);
       }
     );
   }
@@ -123,8 +124,8 @@ export class DayDialogComponent implements OnInit {
   }
 
   setWholeDay(){
-    this.form.get('startTime')?.patchValue(this.existingWorkingHoursTable[0].startTime.toLocaleTimeString().slice(0,5));
-    this.form.get('endTime')?.patchValue(this.existingWorkingHoursTable[0].endTime.toLocaleTimeString().slice(0,5));
+    this.form.get('startTime')?.patchValue(this.existingWorkingHours!.startTime.toLocaleTimeString().slice(0,5));
+    this.form.get('endTime')?.patchValue(this.existingWorkingHours!.endTime.toLocaleTimeString().slice(0,5));
     this.form.markAllAsTouched();
   }
 
@@ -135,4 +136,5 @@ export class DayDialogComponent implements OnInit {
       this.onAbsenceHoursSave();
     }
   }
+
 }
