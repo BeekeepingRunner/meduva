@@ -44,8 +44,11 @@ public class VisitController {
     @GetMapping("/get-worker-available-days-in-month")
     public List<Date> getAvailableDaysInMonth(@RequestParam Long workerId, @RequestParam Long serviceId, @RequestParam String dayDate) throws ParseException {
         List<Date> availableDays =  new ArrayList<>();
-        Date date = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").parse(dayDate);
-        availableDays.add(date);
+        Date sampleDayFromMonth = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").parse(dayDate);
+        availableDays.add(sampleDayFromMonth);
+
+        
+
         return availableDays;
     }
 
