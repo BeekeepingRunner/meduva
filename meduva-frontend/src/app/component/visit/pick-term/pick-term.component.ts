@@ -17,7 +17,7 @@ import {User} from "../../../model/user";
 import {Subject} from "rxjs";
 import {DateAdapter, MAT_DATE_FORMATS, MatDateFormats} from "@angular/material/core";
 import {takeUntil} from "rxjs/operators";
-import {addMonth, DateUtil, getCurrentFormattedDate, substractMonth} from "../../../util/date";
+import {addMonth, DateUtil, getFormattedDate, substractMonth} from "../../../util/date";
 import {locale} from "moment";
 
 @Component({
@@ -98,7 +98,7 @@ export class PickTermComponent implements OnInit {
   }
 
   private waitForWorkerAvailableDays() {
-    let activeDateStr = getCurrentFormattedDate();
+    let activeDateStr = getFormattedDate(new Date());
     let serviceId = this.visitService.getSelectedService()?.id;
     let workerId = this.visitService.getSelectedWorker()?.id;
     // @ts-ignore
@@ -111,7 +111,7 @@ export class PickTermComponent implements OnInit {
   }
 
   private waitForAvailableDays() {
-    let activeDateStr = getCurrentFormattedDate();
+    let activeDateStr = getFormattedDate(new Date());
     let serviceId = this.visitService.getSelectedService()?.id;
     // @ts-ignore
     this.visitService.getAvailableDaysInMonth(serviceId, activeDateStr).subscribe(
@@ -164,19 +164,11 @@ export class PickTermComponent implements OnInit {
   `],
   template: `
     <div class="example-header">
-      <button mat-icon-button class="example-double-arrow" (click)="previousClicked('year')">
-        <mat-icon>keyboard_arrow_left</mat-icon>
-        <mat-icon>keyboard_arrow_left</mat-icon>
-      </button>
       <button mat-icon-button (click)="previousClicked('month')">
         <mat-icon>keyboard_arrow_left</mat-icon>
       </button>
       <span class="example-header-label">{{periodLabel}}</span>
       <button mat-icon-button (click)="nextClicked('month')">
-        <mat-icon>keyboard_arrow_right</mat-icon>
-      </button>
-      <button mat-icon-button class="example-double-arrow" (click)="nextClicked('year')">
-        <mat-icon>keyboard_arrow_right</mat-icon>
         <mat-icon>keyboard_arrow_right</mat-icon>
       </button>
     </div>
@@ -186,6 +178,8 @@ export class PickTermComponent implements OnInit {
 export class AsyncDatePickerHeader<D> implements OnInit, OnDestroy {
   private _destroyed = new Subject<void>();
 
+  workerId!: number | undefined;
+  serviceId!: number | undefined;
   availableDays: Date[] = [];
 
   constructor(
@@ -202,29 +196,6 @@ export class AsyncDatePickerHeader<D> implements OnInit, OnDestroy {
   ngOnInit() {
   }
 
-  getAvailableDaysInMonth() {
-    // TODO: backend call
-    // @ts-ignore
-    let activeDate = new Date(this._calendar.activeDate);
-    let activeDateStr = formatDate(activeDate, 'YYYY-MM-dd HH:mm:ss', locale());
-
-    this.availableDays = [];
-    let serviceId = this.visitService.getSelectedService()?.id;
-    let workerId: number | undefined = this.visitService.getSelectedWorker()?.id;
-    if (workerId != undefined && serviceId) {
-      // TODO: check if selected worker can do that service given day
-      this.visitService.getWorkerAvailableDaysInMonth(workerId, serviceId, activeDateStr).subscribe(
-        availDays => {
-          this.availableDays = availDays;
-          this.visitService.saveAvailableDates(this.availableDays);
-        }
-      );
-    } else {
-      // TODO: check if service can be performed given day by anyone
-      // this.visitService.getAvailableDaysInMonth(serviceId, activeDate);
-    }
-  }
-
   ngOnDestroy() {
     this._destroyed.next();
     this._destroyed.complete();
@@ -237,54 +208,60 @@ export class AsyncDatePickerHeader<D> implements OnInit, OnDestroy {
   }
 
   previousClicked(mode: 'month' | 'year') {
-
     // @ts-ignore
     let dateToSend = new Date(this._calendar.activeDate);
     dateToSend = substractMonth(dateToSend);
-    let dateToSendStr = formatDate(dateToSend, 'YYYY-MM-dd HH:mm:ss', locale());
+    let dateToSendStr = getFormattedDate(dateToSend);
 
-    let serviceId = this.visitService.getSelectedService()?.id;
-    let workerId: number | undefined = this.visitService.getSelectedWorker()?.id;
-    if (workerId != undefined && serviceId) {
-      // TODO: check if selected worker can do that service given day
-      this.visitService.getWorkerAvailableDaysInMonth(workerId, serviceId, dateToSendStr).subscribe(
-        availDays => {
-          this.visitService.saveAvailableDates(availDays);
-
-          this._calendar.activeDate = mode === 'month' ?
-            this._dateAdapter.addCalendarMonths(this._calendar.activeDate, -1) :
-            this._dateAdapter.addCalendarYears(this._calendar.activeDate, -1);
-        }
-      );
+    this.serviceId = this.visitService.getSelectedService()?.id;
+    this.workerId = this.visitService.getSelectedWorker()?.id;
+    if (this.workerId != undefined) {
+      this.waitForWorkerPreviousAvailableDays(mode, dateToSendStr);
     } else {
       // TODO: check if service can be performed given day by anyone
       // this.visitService.getAvailableDaysInMonth(serviceId, activeDate);
     }
   }
 
-  nextClicked(mode: 'month' | 'year') {
+  private waitForWorkerPreviousAvailableDays(mode: 'month' | 'year', monthDayStr: string) {
+    // @ts-ignore
+    this.visitService.getWorkerAvailableDaysInMonth(this.workerId, this.serviceId, monthDayStr).subscribe(
+      availDays => {
+        this.visitService.saveAvailableDates(availDays);
 
+        this._calendar.activeDate = mode === 'month' ?
+          this._dateAdapter.addCalendarMonths(this._calendar.activeDate, -1) :
+          this._dateAdapter.addCalendarYears(this._calendar.activeDate, -1);
+      }
+    );
+  }
+
+  nextClicked(mode: 'month' | 'year') {
     // @ts-ignore
     let dateToSend = new Date(this._calendar.activeDate);
     dateToSend = addMonth(dateToSend);
-    let dateToSendStr = formatDate(dateToSend, 'YYYY-MM-dd HH:mm:ss', locale());
+    let dateToSendStr = getFormattedDate(dateToSend);
 
-    let serviceId = this.visitService.getSelectedService()?.id;
-    let workerId: number | undefined = this.visitService.getSelectedWorker()?.id;
-    if (workerId != undefined && serviceId) {
-      // TODO: check if selected worker can do that service given day
-      this.visitService.getWorkerAvailableDaysInMonth(workerId, serviceId, dateToSendStr).subscribe(
-        availDays => {
-          this.visitService.saveAvailableDates(availDays);
-
-          this._calendar.activeDate = mode === 'month' ?
-            this._dateAdapter.addCalendarMonths(this._calendar.activeDate, 1) :
-            this._dateAdapter.addCalendarYears(this._calendar.activeDate, 1);
-        }
-      );
+    this.serviceId = this.visitService.getSelectedService()?.id;
+    this.workerId = this.visitService.getSelectedWorker()?.id;
+    if (this.workerId != undefined) {
+      this.waitForWorkerNextAvailableDays(mode, dateToSendStr);
     } else {
       // TODO: check if service can be performed given day by anyone
       // this.visitService.getAvailableDaysInMonth(serviceId, activeDate);
     }
+  }
+
+  private waitForWorkerNextAvailableDays(mode: 'month' | 'year', monthDayStr: string) {
+    // @ts-ignore
+    this.visitService.getWorkerAvailableDaysInMonth(this.workerId, this.serviceId, monthDayStr).subscribe(
+      availDays => {
+        this.visitService.saveAvailableDates(availDays);
+
+        this._calendar.activeDate = mode === 'month' ?
+          this._dateAdapter.addCalendarMonths(this._calendar.activeDate, 1) :
+          this._dateAdapter.addCalendarYears(this._calendar.activeDate, 1);
+      }
+    );
   }
 }

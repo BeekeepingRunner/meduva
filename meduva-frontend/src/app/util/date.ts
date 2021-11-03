@@ -14,9 +14,8 @@ export class DateUtil {
   }
 }
 
-export function getCurrentFormattedDate(): string {
-  let activeDate = new Date();
-  return formatDate(activeDate, 'YYYY-MM-dd HH:mm:ss', locale());
+export function getFormattedDate(date: Date): string {
+  return formatDate(date, 'YYYY-MM-dd HH:mm:ss', locale());
 }
 
 export function isMonthSame(date: Date | null, date1: Date): boolean {
