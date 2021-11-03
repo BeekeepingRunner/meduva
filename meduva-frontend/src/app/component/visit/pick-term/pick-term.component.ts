@@ -17,7 +17,7 @@ import {User} from "../../../model/user";
 import {Subject} from "rxjs";
 import {DateAdapter, MAT_DATE_FORMATS, MatDateFormats} from "@angular/material/core";
 import {takeUntil} from "rxjs/operators";
-import {addMonth, DateUtil, substractMonth} from "../../../util/date";
+import {addMonth, DateUtil, getCurrentFormattedDate, substractMonth} from "../../../util/date";
 import {locale} from "moment";
 
 @Component({
@@ -69,31 +69,6 @@ export class PickTermComponent implements OnInit {
      */
   };
 
-  /*
-  dayChecker: MatCalendarCellClassFunction<Date> = async (cellDate, view) => {
-    if (view === 'month') {
-
-      let hasTerms: boolean = true;
-      if (this.workerHasBeenSelected()) {
-        // TODO: check if selected worker can do that service given day
-        let workerId = this.selectedWorker?.id;
-        let serviceId = this.selectedService?.id;
-        if (workerId && serviceId) {
-          hasTerms = await this.visitService.isWorkerAvailable(workerId, serviceId, cellDate);
-        }
-      } else {
-        // TODO: check if service can be performed given day by anyone
-
-      }
-      console.log(hasTerms);
-      return hasTerms ? 'free-date' : 'not-available-date';
-    }
-    console.log("returning nothing");
-    return '';
-  }
-
-   */
-
   constructor(
     private visitService: VisitService,
     private servicesService: ServicesService,
@@ -104,25 +79,14 @@ export class PickTermComponent implements OnInit {
   ngOnInit(): void {
     this.selectedService = this.visitService.getSelectedService();
     if (this.serviceHasBeenSelected()) {
-      let activeDate = new Date();
-      let activeDateStr = formatDate(activeDate, 'YYYY-MM-dd HH:mm:ss', locale());
 
-      let serviceId = this.visitService.getSelectedService()?.id;
-      let workerId: number | undefined = this.visitService.getSelectedWorker()?.id;
-      if (workerId != undefined && serviceId) {
-        // TODO: check if selected worker can do that service given day
-        this.visitService.getWorkerAvailableDaysInMonth(workerId, serviceId, activeDateStr).subscribe(
-          availDays => {
-            this.visitService.saveAvailableDates(availDays);
-            this.canChooseTerm = true;
-          }
-        );
+      this.selectedWorker = this.visitService.getSelectedWorker();
+      if (this.workerHasBeenSelected()) {
+        this.waitForWorkerAvailableDays();
       } else {
-        // TODO: check if service can be performed given day by anyone
-        // this.visitService.getAvailableDaysInMonth(serviceId, activeDate);
+        this.waitForAvailableDays();
       }
     }
-    this.selectedWorker = this.visitService.getSelectedWorker();
   }
 
   private serviceHasBeenSelected(): boolean {
@@ -130,7 +94,32 @@ export class PickTermComponent implements OnInit {
   }
 
   private workerHasBeenSelected(): boolean {
-    return this.selectedWorker != null;
+    return this.selectedWorker != null && this.selectedWorker.id != null;
+  }
+
+  private waitForWorkerAvailableDays() {
+    let activeDateStr = getCurrentFormattedDate();
+    let serviceId = this.visitService.getSelectedService()?.id;
+    let workerId = this.visitService.getSelectedWorker()?.id;
+    // @ts-ignore
+    this.visitService.getWorkerAvailableDaysInMonth(workerId, serviceId, activeDateStr).subscribe(
+      availDays => {
+        this.visitService.saveAvailableDates(availDays);
+        this.canChooseTerm = true;
+      }
+    );
+  }
+
+  private waitForAvailableDays() {
+    let activeDateStr = getCurrentFormattedDate();
+    let serviceId = this.visitService.getSelectedService()?.id;
+    // @ts-ignore
+    this.visitService.getAvailableDaysInMonth(serviceId, activeDateStr).subscribe(
+      availDays => {
+        this.visitService.saveAvailableDates(availDays);
+        this.canChooseTerm = true;
+      }
+    );
   }
 
   private getTermsForService(serviceId: number) {

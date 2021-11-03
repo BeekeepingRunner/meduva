@@ -1,5 +1,6 @@
-import {DatePipe} from "@angular/common";
+import {DatePipe, formatDate} from "@angular/common";
 import {Injectable} from "@angular/core";
+import {locale} from "moment";
 
 @Injectable({
   providedIn: 'root'
@@ -11,6 +12,11 @@ export class DateUtil {
   public parseDate(date: Date, pattern: string): string | null {
     return this.datePipe.transform(date, pattern);
   }
+}
+
+export function getCurrentFormattedDate(): string {
+  let activeDate = new Date();
+  return formatDate(activeDate, 'YYYY-MM-dd HH:mm:ss', locale());
 }
 
 export function isMonthSame(date: Date | null, date1: Date): boolean {
