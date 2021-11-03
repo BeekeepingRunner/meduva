@@ -23,10 +23,11 @@ button {
 }
 
 .free-date {
-  background: green;
+  background: lightgreen;
   border-radius: 100%;
 }
 
 .not-available-date {
-  background: red;
+  background: lightcoral;
+  border-radius: 100%;
 }

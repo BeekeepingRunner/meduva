@@ -1,14 +1,14 @@
 import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
-  Component, EventEmitter,
+  Component,
   Inject,
   OnDestroy,
-  OnInit, Output,
+  OnInit,
   ViewEncapsulation
 } from '@angular/core';
 import {Term, VisitService} from "../../../service/visit.service";
-import {DatePipe, formatDate} from "@angular/common";
+import {DatePipe} from "@angular/common";
 import {Router} from "@angular/router";
 import {ServicesService} from "../../../service/services.service";
 import {Service} from "../../../model/service";
@@ -18,7 +18,6 @@ import {Subject} from "rxjs";
 import {DateAdapter, MAT_DATE_FORMATS, MatDateFormats} from "@angular/material/core";
 import {takeUntil} from "rxjs/operators";
 import {addMonth, DateUtil, getFormattedDate, substractMonth} from "../../../util/date";
-import {locale} from "moment";
 
 @Component({
   selector: 'app-pick-term',
@@ -44,30 +43,38 @@ export class PickTermComponent implements OnInit {
   asyncHeader = AsyncDatePickerHeader;
 
   dateFilter = (date: Date | null): boolean => {
-    let availableDates = this.visitService.getAvailableDates();
-    console.log(availableDates);
-
-    /*
-    const filteredDayNumber = (date || new Date()).getDate();
-    let isAvailable = false;
-    availableDates.forEach(availDate => {
-      if (availDate.getDate() == filteredDayNumber)
-        isAvailable = true;
-    });
-    return isAvailable;*/
-    return true;
-    /*
     if (date != null) {
-      if (isMonthSame(date, this.openDates[0])) {
-        return this.openDates.includes(date);
-      } else {
-        return false;
-      }
+      return this.isAvailable(date);
     } else {
       return false;
     }
-     */
   };
+
+
+  dayChecker = (date: Date) => {
+    if (date != null) {
+      return this.isAvailable(date) ? 'free-date' : 'not-available-date';
+    } else {
+      return 'not-available-date';
+    }
+  }
+
+  private isAvailable(date: Date): boolean {
+    let isAvailable = false;
+    let availableMonthDays: Date[] = this.visitService.getAvailableDates();
+    console.log(availableMonthDays);
+    if (availableMonthDays.length > 0) {
+
+      let filteredDayNumber = date.getDate();
+      availableMonthDays.forEach(availDate => {
+        if (new Date(availDate).getDate() == filteredDayNumber) {
+          isAvailable = true;
+        }
+      });
+    }
+
+    return isAvailable;
+  }
 
   constructor(
     private visitService: VisitService,
@@ -120,6 +127,19 @@ export class PickTermComponent implements OnInit {
         this.canChooseTerm = true;
       }
     );
+  }
+
+  onDatePickerClick() {
+    this.selectedService = this.visitService.getSelectedService();
+    if (this.serviceHasBeenSelected()) {
+
+      this.selectedWorker = this.visitService.getSelectedWorker();
+      if (this.workerHasBeenSelected()) {
+        this.waitForWorkerAvailableDays();
+      } else {
+        this.waitForAvailableDays();
+      }
+    }
   }
 
   private getTermsForService(serviceId: number) {
@@ -180,7 +200,6 @@ export class AsyncDatePickerHeader<D> implements OnInit, OnDestroy {
 
   workerId!: number | undefined;
   serviceId!: number | undefined;
-  availableDays: Date[] = [];
 
   constructor(
     private _calendar: MatCalendar<D>, private _dateAdapter: DateAdapter<D>,
