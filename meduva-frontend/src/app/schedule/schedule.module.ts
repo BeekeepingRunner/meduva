@@ -34,23 +34,23 @@ import {MatCheckboxModule} from "@angular/material/checkbox";
     PickItemComponent,
     ItemScheduleComponent,
   ],
-    imports: [
-        CommonModule,
-        CalendarModule.forRoot({
-            provide: DateAdapter,
-            useFactory: adapterFactory
-        }),
-        DemoUtilsModule,
-        MatTableModule,
-        RouterModule,
-        MatDialogModule,
-        MatButtonModule,
-        NgxMaterialTimepickerModule,
-        MatInputModule,
-        ReactiveFormsModule,
-        MatRadioModule,
-        FormsModule,
-        MatCheckboxModule,
-    ]
+  imports: [
+    CommonModule,
+    CalendarModule.forRoot({
+      provide: DateAdapter,
+      useFactory: adapterFactory
+    }),
+    DemoUtilsModule,
+    MatTableModule,
+    RouterModule,
+    MatDialogModule,
+    MatButtonModule,
+    NgxMaterialTimepickerModule,
+    MatInputModule,
+    ReactiveFormsModule,
+    MatRadioModule,
+    FormsModule,
+    MatCheckboxModule,
+  ]
 })
 export class ScheduleModule { }

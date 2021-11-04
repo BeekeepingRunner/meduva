@@ -11,7 +11,7 @@ export const startTimeBeforeEndTimeValidator
   return !isInCorrectOrder ? { inWrongOrder: true } : null;
 };
 
-export function absencesValidator(existingWorkHours: WorkHours): ValidatorFn {
+export function absenceValidator(existingWorkHours: WorkHours): ValidatorFn {
 
     return (control: AbstractControl): { [key: string]: boolean } | null => {
         if( existingWorkHours === undefined){

@@ -43,8 +43,6 @@ public class WorkerController {
         User worker = userService.findById(workerId);
         Date firstWeekDay = weekBoundaries.getFirstWeekDay();
         Date lastWeekDay = weekBoundaries.getLastWeekDay();
-        System.out.println(firstWeekDay);
-        System.out.println(lastWeekDay);
         return workManager.getWeeklyWorkHours(worker, firstWeekDay, lastWeekDay);
     }
 
@@ -78,6 +76,6 @@ public class WorkerController {
         User worker = userService.findById(workerId);
         Date newAbsenceStartTime = absenceHours.getStartTime();
         Date newAbsenceEndTime = absenceHours.getEndTime();
-        return workManager.setAbsenceHours(worker, newAbsenceStartTime, newAbsenceEndTime);
+        return workManager.setDailyAbsenceHours(worker, newAbsenceStartTime, newAbsenceEndTime);
     }
 }
