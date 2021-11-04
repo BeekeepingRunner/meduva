@@ -30,6 +30,7 @@ export class PickTermComponent implements OnInit {
 
   selectedService!: Service | null;
   selectedWorker!: User | null;
+  loading: boolean = true;
   canChooseTerm: boolean = false;
 
   generatingTerms: boolean = false;
@@ -112,6 +113,7 @@ export class PickTermComponent implements OnInit {
       availDays => {
         console.log("avail days " + availDays);
         this.visitService.saveAvailableDates(availDays);
+        this.loading = false;
         this.canChooseTerm = true;
       }, err => {
         console.log(err);

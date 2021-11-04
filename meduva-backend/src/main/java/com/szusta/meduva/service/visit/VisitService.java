@@ -7,7 +7,7 @@ import com.szusta.meduva.model.schedule.Visit;
 import com.szusta.meduva.payload.Term;
 import com.szusta.meduva.repository.RoomRepository;
 import com.szusta.meduva.repository.schedule.visit.VisitRepository;
-import com.szusta.meduva.service.FreeTimeScanner;
+import com.szusta.meduva.service.freetimescanner.FreeTimeScanner;
 import com.szusta.meduva.service.TermGenerator;
 import com.szusta.meduva.util.TimeUtils;
 
@@ -83,7 +83,6 @@ public class VisitService {
         Calendar currentDay = TimeUtils.getCalendar(monthStart);
         Calendar nextMonthStart = TimeUtils.getCalendar(TimeUtils.getNextMonthStart(anyDayOfMonth));
         do {
-            System.out.println(currentDay.getTime());
             if (freeTimeScanner.isWorkerDayAvailable(currentDay)) {
                 availableDaysOfMonth.add(currentDay.getTime());
             }
