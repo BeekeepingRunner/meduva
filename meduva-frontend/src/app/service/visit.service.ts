@@ -86,18 +86,18 @@ export class VisitService {
     return this.httpClient.post(environment.API_BASE_URL + 'api/visit', term);
   }
 
-  getWorkerAvailableDaysInMonth(workerID: number, serviceID: number, day: string): Observable<any> {
+  getWorkerAvailableDaysInMonth(workerID: number, serviceID: number, anyDayFromMonth: string): Observable<any> {
     return this.httpClient.get(environment.API_BASE_URL + 'api/visit/get-worker-available-days-in-month', { params: {
         workerId: workerID,
         serviceId: serviceID,
-        dayDate: day
+        anyDayFromMonth: anyDayFromMonth
     }});
   }
 
-  getAvailableDaysInMonth(serviceID: number, day: string): Observable<any> {
+  getAvailableDaysInMonth(serviceID: number, anyDayFromMonth: string): Observable<any> {
     return this.httpClient.get(environment.API_BASE_URL + 'api/visit/get-available-days-in-month', { params: {
         serviceId: serviceID,
-        dayDate: day
+        anyDayFromMonth: anyDayFromMonth
       }});
   }
 }

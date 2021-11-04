@@ -4,6 +4,7 @@ import com.szusta.meduva.model.Service;
 import com.szusta.meduva.model.User;
 import com.szusta.meduva.model.schedule.Visit;
 import com.szusta.meduva.payload.Term;
+import com.szusta.meduva.service.ScheduleChecker;
 import com.szusta.meduva.service.ServicesService;
 import com.szusta.meduva.service.user.UserService;
 import com.szusta.meduva.service.visit.VisitService;
@@ -13,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -24,14 +24,17 @@ public class VisitController {
     VisitService visitService;
     UserService userService;
     ServicesService servicesService;
+    ScheduleChecker scheduleChecker;
 
     @Autowired
     public VisitController(VisitService visitService,
                            UserService userService,
-                           ServicesService servicesService) {
+                           ServicesService servicesService,
+                           ScheduleChecker scheduleChecker) {
         this.visitService = visitService;
         this.userService = userService;
         this.servicesService = servicesService;
+        this.scheduleChecker = scheduleChecker;
     }
 
     @GetMapping("/terms-for-service/{serviceId}")
@@ -42,14 +45,12 @@ public class VisitController {
     }
 
     @GetMapping("/get-worker-available-days-in-month")
-    public List<Date> getAvailableDaysInMonth(@RequestParam Long workerId, @RequestParam Long serviceId, @RequestParam String dayDate) throws ParseException {
-        List<Date> availableDays =  new ArrayList<>();
-        Date sampleDayFromMonth = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").parse(dayDate);
-        availableDays.add(sampleDayFromMonth);
+    public List<Date> getAvailableDaysOfMonth(@RequestParam Long workerId, @RequestParam Long serviceId, @RequestParam String anyDayFromMonth) throws ParseException {
 
-        
-
-        return availableDays;
+        Date anyDayOfMonth = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").parse(anyDayFromMonth);
+        User worker = userService.findById(workerId);
+        Service service = servicesService.findById(serviceId);
+        return scheduleChecker.getAvailableDaysOfMonth(worker, service, anyDayOfMonth);
     }
 
     @PostMapping

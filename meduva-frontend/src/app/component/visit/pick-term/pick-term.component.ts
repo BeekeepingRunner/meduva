@@ -50,7 +50,6 @@ export class PickTermComponent implements OnInit {
     }
   };
 
-
   dayChecker = (date: Date) => {
     if (date != null) {
       return this.isAvailable(date) ? 'free-date' : 'not-available-date';
@@ -62,9 +61,8 @@ export class PickTermComponent implements OnInit {
   private isAvailable(date: Date): boolean {
     let isAvailable = false;
     let availableMonthDays: Date[] = this.visitService.getAvailableDates();
-    console.log(availableMonthDays);
+    // console.log(availableMonthDays);
     if (availableMonthDays.length > 0) {
-
       let filteredDayNumber = date.getDate();
       availableMonthDays.forEach(availDate => {
         if (new Date(availDate).getDate() == filteredDayNumber) {
