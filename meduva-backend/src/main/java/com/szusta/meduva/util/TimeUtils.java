@@ -40,4 +40,19 @@ public class TimeUtils {
         calendar.set(Calendar.SECOND, 59);
         return calendar.getTime();
     }
+
+    public static Date getMonthStart(Date anyDayOfMonth) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(anyDayOfMonth);
+        calendar.set(Calendar.DAY_OF_MONTH, 1);
+        return getDayStart(calendar.getTime());
+    }
+
+    public static Date getMonthEnd(Date anyDayOfMonth) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(anyDayOfMonth);
+        int maxDayNumber =  calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
+        calendar.set(Calendar.DAY_OF_MONTH, maxDayNumber);
+        return getDayEnd(calendar.getTime());
+    }
 }
