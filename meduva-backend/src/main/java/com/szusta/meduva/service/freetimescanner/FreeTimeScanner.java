@@ -45,14 +45,28 @@ public class FreeTimeScanner {
         this.equipmentItemRepository = equipmentItemRepository;
     }
 
-    private void checkInitialSettings() {
-        if (worker == null || service == null || rooms == null) {
-            throw new RuntimeException("FreeTimeScanner not set appropriately, there are null fields");
+    private void checkIfWorkerIsSet() {
+        if (worker == null) {
+            throw new RuntimeException("FreeTimeScanner not set appropriately: worker is not set");
+        }
+    }
+
+    private void checkIfServiceIsSet() {
+        if (service == null) {
+            throw new RuntimeException("FreeTimeScanner not set appropriately: service is not set");
+        }
+    }
+
+    private void checkIfRoomsAreSet() {
+        if (rooms == null) {
+            throw new RuntimeException("FreeTimeScanner not set appropriately: rooms are not set");
         }
     }
 
     public boolean isWorkerDayAvailable(Calendar dayStart) {
-        checkInitialSettings();
+        checkIfWorkerIsSet();
+        checkIfServiceIsSet();
+        checkIfRoomsAreSet();
         try {
             return hasFreeTerm(dayStart);
         } catch (NotAvailableException ex) {
