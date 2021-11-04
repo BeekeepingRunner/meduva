@@ -3,6 +3,7 @@ package com.szusta.meduva.controller;
 import com.szusta.meduva.model.Service;
 import com.szusta.meduva.model.User;
 import com.szusta.meduva.model.WorkHours;
+import com.szusta.meduva.model.schedule.WorkerSchedule;
 import com.szusta.meduva.payload.TimeRange;
 import com.szusta.meduva.payload.WeekBoundaries;
 import com.szusta.meduva.service.ServicesService;
@@ -69,11 +70,27 @@ public class WorkerController {
         return workManager.getWeeklyOffWorkHours(worker, firstWeekDay, lastWeekDay);
     }
 
+    @PostMapping("/get-week-absence-hours/{workerId}")
+    public List<? super WorkerSchedule> getWeeklyAbsenceHours(@PathVariable Long workerId, @RequestBody WeekBoundaries weekBoundaries){
+        User worker = userService.findById(workerId);
+        Date firstWeekDay = weekBoundaries.getFirstWeekDay();
+        Date lastWeekDay = weekBoundaries.getLastWeekDay();
+        return workManager.getWeeklyAbsenceHours(worker, firstWeekDay, lastWeekDay);
+    }
+
     @PostMapping("/set-work-hours/{workerId}")
     public WorkHours setWorkHours(@PathVariable Long workerId, @RequestBody TimeRange newWorkHours) {
         User worker = userService.findById(workerId);
         Date newWorkStartTime = newWorkHours.getStartTime();
         Date newWorkEndTime = newWorkHours.getEndTime();
         return workManager.setWorkHours(worker, newWorkStartTime, newWorkEndTime);
+    }
+
+    @PostMapping("/set-absence-hours/{workerId}")
+    public WorkerSchedule setAbsenceHours(@PathVariable Long workerId, @RequestBody TimeRange absenceHours) {
+        User worker = userService.findById(workerId);
+        Date newAbsenceStartTime = absenceHours.getStartTime();
+        Date newAbsenceEndTime = absenceHours.getEndTime();
+        return workManager.setDailyAbsenceHours(worker, newAbsenceStartTime, newAbsenceEndTime);
     }
 }

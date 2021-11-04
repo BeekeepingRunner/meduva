@@ -1,10 +1,12 @@
 <button class="close" mat-icon-button [mat-dialog-close]="true">X</button>
 <h3>{{ dateString }}</h3>
 <div mat-dialog-actions>
-  <button mat-raised-button color="primary" *ngIf="!settingWorkHours"
+  <button mat-raised-button color="primary" *ngIf="!settingWorkHours && !settingAbsenceHours"
           (click)="startSettingWorkHours()">Set work hours</button>
-  <div *ngIf="settingWorkHours">
-    <form (ngSubmit)="onWorkHoursSave()" [formGroup]="form">
+  <button mat-raised-button color="primary" *ngIf="!settingAbsenceHours && !settingWorkHours"
+          (click)="startSettingAbsenceHours()" >Set absence</button>
+  <div *ngIf="settingWorkHours || settingAbsenceHours">
+    <form (ngSubmit)="chooseWorkHoursOrAbsence()" [formGroup]="form">
       <table>
         <tr>
           <td><strong>Work start:</strong></td>
@@ -24,6 +26,13 @@
                                   [controlOnly]="true"></ngx-timepicker-field>
           </td>
         </tr>
+        <tr *ngIf="settingAbsenceHours">
+          <br>
+          <td>
+              <mat-checkbox (change)="setWholeDay()">Whole day</mat-checkbox><br>
+          </td>
+        </tr>
+
         <tr *ngIf="form.invalid">
           <mat-error *ngIf="form.controls.startTime.errors?.required && (form.dirty || form.touched)">
             Start time is required.
@@ -34,6 +43,12 @@
           <mat-error *ngIf="form.errors?.inWrongOrder && (form.dirty || form.touched)">
             Start time should be earlier than end time.
           </mat-error>
+          <mat-error *ngIf="form.errors?.absenceHoursWithinWorkHours && (form.dirty || form.touched)">
+            Absence hours must be within working hours.
+          </mat-error>
+          <mat-error *ngIf="form.errors?.workHoursUndefined">
+            Working hours must be set.
+          </mat-error>
         </tr>
         <tr>
           <br>
@@ -43,3 +58,5 @@
     </form>
   </div>
 </div>
+
+
