@@ -74,6 +74,11 @@ public class VisitService {
 
         Date monthStart = TimeUtils.getMonthStart(anyDayOfMonth);
         Date monthEnd = TimeUtils.getMonthEnd(anyDayOfMonth);
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(monthStart);
+        do {
+
+        } while (calendar.before(monthEnd));
 
         return availableDaysOfMonth;
     }
