@@ -84,9 +84,10 @@ export class PickTermComponent implements OnInit {
   ngOnInit(): void {
     this.selectedService = this.visitService.getSelectedService();
     if (this.serviceHasBeenSelected()) {
-
+      console.log("service selected");
       this.selectedWorker = this.visitService.getSelectedWorker();
       if (this.workerHasBeenSelected()) {
+        console.log("worker selected");
         this.waitForWorkerAvailableDays();
       } else {
         this.waitForAvailableDays();
@@ -109,8 +110,11 @@ export class PickTermComponent implements OnInit {
     // @ts-ignore
     this.visitService.getWorkerAvailableDaysInMonth(workerId, serviceId, activeDateStr).subscribe(
       availDays => {
+        console.log("avail days " + availDays);
         this.visitService.saveAvailableDates(availDays);
         this.canChooseTerm = true;
+      }, err => {
+        console.log(err);
       }
     );
   }

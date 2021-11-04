@@ -7,9 +7,9 @@ import com.szusta.meduva.model.schedule.Visit;
 import com.szusta.meduva.payload.Term;
 import com.szusta.meduva.repository.RoomRepository;
 import com.szusta.meduva.repository.schedule.visit.VisitRepository;
+import com.szusta.meduva.service.FreeTimeScanner;
 import com.szusta.meduva.service.TermGenerator;
 import com.szusta.meduva.util.TimeUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.transaction.Transactional;
 import java.time.ZoneId;
@@ -26,17 +26,20 @@ public class VisitService {
     private TermGenerator termGenerator;
     private VisitScheduleGenerator visitScheduleGenerator;
 
-    @Autowired
+    private FreeTimeScanner freeTimeScanner;
+
     public VisitService(VisitRepository visitRepository,
                         VisitBuilder visitBuilder,
-                        VisitScheduleGenerator visitScheduleGenerator,
                         RoomRepository roomRepository,
-                        TermGenerator termGenerator) {
+                        TermGenerator termGenerator,
+                        VisitScheduleGenerator visitScheduleGenerator,
+                        FreeTimeScanner freeTimeScanner) {
         this.visitRepository = visitRepository;
         this.visitBuilder = visitBuilder;
-        this.visitScheduleGenerator = visitScheduleGenerator;
         this.roomRepository = roomRepository;
         this.termGenerator = termGenerator;
+        this.visitScheduleGenerator = visitScheduleGenerator;
+        this.freeTimeScanner = freeTimeScanner;
     }
 
     // Checks subsequent time-intervals in range of several days, starting from now.
@@ -66,19 +69,26 @@ public class VisitService {
         return possibleTerms;
     }
 
-    public List<Date> getAvailableDaysOfMonth(User worker, Service service, Date anyDayOfMonth) {
+    public List<Date> getWorkerAvailableDaysOfMonth(User worker, Service service, Date anyDayOfMonth) {
         checkIfCanPerform(worker, service);
         List<Room> suitableRooms = getSuitableRooms(service);
+
+        freeTimeScanner.setWorker(worker);
+        freeTimeScanner.setService(service);
+        freeTimeScanner.setRooms(suitableRooms);
 
         List<Date> availableDaysOfMonth = new ArrayList<>();
 
         Date monthStart = TimeUtils.getMonthStart(anyDayOfMonth);
-        Date monthEnd = TimeUtils.getMonthEnd(anyDayOfMonth);
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(monthStart);
+        Calendar currentDay = TimeUtils.getCalendar(monthStart);
+        Calendar nextMonthStart = TimeUtils.getCalendar(TimeUtils.getNextMonthStart(anyDayOfMonth));
         do {
-
-        } while (calendar.before(monthEnd));
+            System.out.println(currentDay.getTime());
+            if (freeTimeScanner.isWorkerDayAvailable(currentDay)) {
+                availableDaysOfMonth.add(currentDay.getTime());
+            }
+            currentDay.add(Calendar.DAY_OF_MONTH, 1);
+        } while (currentDay.before(nextMonthStart));
 
         return availableDaysOfMonth;
     }

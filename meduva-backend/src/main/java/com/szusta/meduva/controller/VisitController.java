@@ -45,12 +45,12 @@ public class VisitController {
     }
 
     @GetMapping("/get-worker-available-days-in-month")
-    public List<Date> getAvailableDaysOfMonth(@RequestParam Long workerId, @RequestParam Long serviceId, @RequestParam String anyDayFromMonth) throws ParseException {
+    public List<Date> getWorkerAvailableDaysOfMonth(@RequestParam Long workerId, @RequestParam Long serviceId, @RequestParam String anyDayFromMonth) throws ParseException {
 
         Date anyDayOfMonth = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").parse(anyDayFromMonth);
         User worker = userService.findById(workerId);
         Service service = servicesService.findById(serviceId);
-        return visitService.getAvailableDaysOfMonth(worker, service, anyDayOfMonth);
+        return visitService.getWorkerAvailableDaysOfMonth(worker, service, anyDayOfMonth);
     }
 
     @PostMapping

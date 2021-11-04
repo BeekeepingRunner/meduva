@@ -58,6 +58,27 @@ public class TimeUtils {
     }
 
     /**
+     *  Returns the next day with time equal to 00:00:00
+     */
+    public static Date getNextDayStart(Date date) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.add(Calendar.DAY_OF_MONTH, 1);
+        return getDayStart(calendar.getTime());
+    }
+
+    /**
+     *  Returns the first day of the next month with time equal to 00:00:00
+     */
+    public static Date getNextMonthStart(Date anyDayOfMonth) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(anyDayOfMonth);
+        calendar.add(Calendar.MONTH, 1);
+        calendar.set(Calendar.DAY_OF_MONTH, 1);
+        return getDayStart(calendar.getTime());
+    }
+
+    /**
      *  Returns the last day of month with time equal to 23:59:59
      */
     public static Date getMonthEnd(Date anyDayOfMonth) {
@@ -66,5 +87,11 @@ public class TimeUtils {
         int maxDayNumber =  calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
         calendar.set(Calendar.DAY_OF_MONTH, maxDayNumber);
         return getDayEnd(calendar.getTime());
+    }
+
+    public static Calendar getCalendar(Date date) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        return calendar;
     }
 }
