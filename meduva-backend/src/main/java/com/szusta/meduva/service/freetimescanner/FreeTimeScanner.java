@@ -78,7 +78,8 @@ public class FreeTimeScanner {
 
                 currentTimeStamp.add(Calendar.MINUTE, 30);
                 potentialTermStart = currentTimeStamp.getTime();
-            } while (potentialTermStart.before(workEndTime));
+                potentialTermEnd = getPotentialTermEnd(potentialTermEnd, service.getDurationInMin());
+            } while (potentialTermEnd.before(workEndTime));
 
             return false;
 
@@ -89,7 +90,6 @@ public class FreeTimeScanner {
     }
 
     private Calendar getWorkStartTime(Calendar dayStartCal) throws NotAvailableException {
-        System.out.println(dayStartCal.getTime());
         WorkHours workHours = getWorkHours(dayStartCal);
         return TimeUtils.getCalendar(workHours.getStartTime());
     }
