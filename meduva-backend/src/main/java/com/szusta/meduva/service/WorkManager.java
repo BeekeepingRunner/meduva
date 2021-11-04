@@ -34,20 +34,6 @@ public class WorkManager {
         this.termGenerator = termGenerator;
     }
 
-    public com.szusta.meduva.model.Service[] getWorkerServices(Long userId) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new EntityRecordNotFoundException("User not found with id : " + userId));
-
-        Set<com.szusta.meduva.model.Service> serviceSet = user.getServices();
-
-        com.szusta.meduva.model.Service[] serviceIdTable = new com.szusta.meduva.model.Service[serviceSet.size()];
-
-        int ItemInTableCounter=0;
-        for (com.szusta.meduva.model.Service s : serviceSet) {
-            serviceIdTable[ItemInTableCounter++]=s;
-        }
-        return serviceIdTable;
-    }
-
     @Transactional
     public User assignServicesToWorker(Long userId, Long[] servicesId){
         User user = userRepository.findById(userId).orElseThrow(()-> new EntityRecordNotFoundException("User not found with id : " + userId));

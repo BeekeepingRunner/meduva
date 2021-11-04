@@ -8,6 +8,7 @@ import com.szusta.meduva.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
+import java.util.Set;
 
 @org.springframework.stereotype.Service
 public class WorkerService {
@@ -27,5 +28,20 @@ public class WorkerService {
 
     public List<User> findAllByService(Service service) {
         return userRepository.findAllByPerformedService(service.getId());
+    }
+
+    public Service[] getWorkerServices(User worker) {
+
+        Set<Service> serviceSet = worker.getServices();
+        return asArray(serviceSet);
+    }
+
+    private Service[] asArray(Set<Service> services) {
+        Service[] serviceArr = new Service[services.size()];
+        int ItemInTableCounter = 0;
+        for (Service s : services) {
+            serviceArr[ItemInTableCounter++] = s;
+        }
+        return serviceArr;
     }
 }

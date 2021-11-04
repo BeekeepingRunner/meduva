@@ -43,7 +43,8 @@ public class WorkerController {
 
     @GetMapping("/workerServices/{id}")
     public Service[] getWorkerServices(@PathVariable Long id) {
-        return workManager.getWorkerServices(id);
+        User worker = userService.findById(id);
+        return workerService.getWorkerServices(worker);
     }
 
     @PostMapping("/assignServicesToWorker/{id}")
