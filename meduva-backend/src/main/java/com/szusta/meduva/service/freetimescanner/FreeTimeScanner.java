@@ -84,10 +84,7 @@ public class FreeTimeScanner {
             TimeRange potentialTermTimeRange = new TimeRange(potentialTermStart.getTime(), potentialTermEnd);
 
             if (scheduleChecker.isWorkerFree(potentialTermTimeRange, worker)) {
-                Room availableRoom = getFirstAvailableRoom(rooms, potentialTermTimeRange);
-                if (!service.isItemless()) {
-                    return doesFreeItemExist(availableRoom, potentialTermTimeRange);
-                }
+                return doesFreeRoomExist(potentialTermTimeRange);
             }
 
             potentialTermStart.add(Calendar.MINUTE, 30);
@@ -130,6 +127,15 @@ public class FreeTimeScanner {
         return temp.getTime();
     }
 
+    private boolean doesFreeRoomExist(TimeRange potentialTermTimeRange) throws NotAvailableException {
+        Room availableRoom = getFirstAvailableRoom(rooms, potentialTermTimeRange);
+        if (service.isItemless()) {
+            return true;
+        } else {
+            return doesFreeItemExist(availableRoom, potentialTermTimeRange);
+        }
+    }
+
     private Room getFirstAvailableRoom(List<Room> suitableRooms, TimeRange timeRange)
             throws NotAvailableException {
         for (Room room : suitableRooms) {
@@ -150,6 +156,7 @@ public class FreeTimeScanner {
             throws NotAvailableException {
         for (EquipmentItem item : suitableEqItems) {
             if (scheduleChecker.isEqItemFree(timeRange, item)) {
+                System.out.println(item.getName() + "is free between " + timeRange.getStartTime() + " and " + timeRange.getEndTime());
                 return item;
             }
         }

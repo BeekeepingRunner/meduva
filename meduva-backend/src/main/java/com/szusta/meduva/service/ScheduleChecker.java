@@ -54,11 +54,10 @@ public class ScheduleChecker {
 
     public boolean isEqItemFree(TimeRange timeRange, EquipmentItem eqItem) {
         return equipmentScheduleRepository
-                .findAllBetween(
+                .findAllDuring(
                         timeRange.getStartTime(),
                         timeRange.getEndTime(),
-                        eqItem.getId(),
-                        EEquipmentStatus.EQUIPMENT_OCCUPIED.getValue())
+                        eqItem.getId())
                 .isEmpty();
     }
 
