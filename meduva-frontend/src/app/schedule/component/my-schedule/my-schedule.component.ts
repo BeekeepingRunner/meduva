@@ -10,7 +10,7 @@ import {DayDialogComponent} from "../dialog/day-dialog/day-dialog.component";
 @Component({
   selector: 'app-my-schedule',
   changeDetection: ChangeDetectionStrategy.Default,
-  templateUrl: '../worker/worker-schedule/worker-schedule.component.html',
+  templateUrl: './my-schedule.component.html',
   styleUrls: ['./my-schedule.component.css']
 })
 export class MyScheduleComponent implements OnInit {

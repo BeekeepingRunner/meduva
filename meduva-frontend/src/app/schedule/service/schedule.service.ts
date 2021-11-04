@@ -18,6 +18,11 @@ export interface WeekBoundaries {
   lastWeekDay: Date
 }
 
+export interface WorkSchedule {
+  timeFrom: Date,
+  timeTo: Date
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -32,12 +37,20 @@ export class ScheduleService {
     return this.httpClient.post(environment.API_BASE_URL + 'api/worker/set-work-hours/' + workerId, workHours);
   }
 
+  saveAbsenceHours(workerId: number, absenceHours: TimeRange) {
+    return this.httpClient.post(environment.API_BASE_URL + 'api/worker/set-absence-hours/' + workerId, absenceHours);
+  }
+
   getWeeklyWorkHours(workerId: number, weekBoundaries: WeekBoundaries): Observable<any> {
     return this.httpClient.post(environment.API_BASE_URL + 'api/worker/get-week-work-hours/' + workerId, weekBoundaries);
   }
 
   getWeeklyOffWorkHours(workerId: number, weekBoundaries: WeekBoundaries): Observable<any> {
     return this.httpClient.post(environment.API_BASE_URL + 'api/worker/get-week-off-work-hours/' + workerId, weekBoundaries);
+  }
+
+  getWeeklyAbsenceHours(workerId: number, weekBoundaries: WeekBoundaries): Observable<any>  {
+    return this.httpClient.post(environment.API_BASE_URL + 'api/worker/get-week-absence-hours/' + workerId, weekBoundaries);
   }
 
   getWeeklyItemUnavailability(itemId: number, weekBoundaries: TimeRange): Observable<any> {
@@ -55,4 +68,6 @@ export class ScheduleService {
   setRoomDayUnavailability(roomId: number, day: Date): Observable<any> {
     return this.httpClient.post(environment.API_BASE_URL + 'api/room/set-day-unavailability/' + roomId, day);
   }
+
+
 }

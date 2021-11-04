@@ -30,3 +30,19 @@ export function createOffWorkHoursEvent(start: Date, end: Date): CalendarEvent {
     }
   };
 }
+
+export function createAbsenceHoursEvent(start: Date, end: Date): CalendarEvent {
+
+  return {
+    draggable: false,
+    end: new Date(end),
+    id: undefined,
+    meta: undefined,
+    start: new Date(start),
+    title: "Absence",
+    color: {
+      primary: "#FF9191",
+      secondary: "#FF9191"
+    }
+  };
+}

@@ -3,10 +3,15 @@ package com.szusta.meduva.service;
 import com.szusta.meduva.exception.EntityRecordNotFoundException;
 import com.szusta.meduva.model.User;
 import com.szusta.meduva.model.WorkHours;
+import com.szusta.meduva.model.schedule.WorkerSchedule;
+import com.szusta.meduva.model.schedule.status.WorkerStatus;
+import com.szusta.meduva.model.schedule.status.enums.EWorkerStatus;
 import com.szusta.meduva.payload.TimeRange;
 import com.szusta.meduva.repository.ServiceRepository;
 import com.szusta.meduva.repository.UserRepository;
 import com.szusta.meduva.repository.WorkHoursRepository;
+import com.szusta.meduva.repository.schedule.worker.WorkerScheduleRepository;
+import com.szusta.meduva.repository.schedule.worker.WorkerStatusRepository;
 import com.szusta.meduva.util.TimeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,6 +25,8 @@ public class WorkManager {
     UserRepository userRepository;
     ServiceRepository serviceRepository;
     WorkHoursRepository workHoursRepository;
+    WorkerStatusRepository workerStatusRepository;
+    WorkerScheduleRepository workerScheduleRepository;
 
     TermGenerator termGenerator;
 
@@ -27,10 +34,14 @@ public class WorkManager {
     public WorkManager(UserRepository userRepository,
                        ServiceRepository serviceRepository,
                        WorkHoursRepository workHoursRepository,
+                       WorkerStatusRepository workerStatusRepository,
+                       WorkerScheduleRepository workerScheduleRepository,
                        TermGenerator termGenerator) {
         this.userRepository = userRepository;
         this.serviceRepository = serviceRepository;
         this.workHoursRepository = workHoursRepository;
+        this.workerStatusRepository = workerStatusRepository;
+        this.workerScheduleRepository = workerScheduleRepository;
         this.termGenerator = termGenerator;
     }
 
@@ -80,6 +91,23 @@ public class WorkManager {
         }
     }
 
+    @Transactional
+    public WorkerSchedule setDailyAbsenceHours(User worker, Date newAbsenceStartTime, Date newAbsenceEndTime) {
+        deleteDailyAbsenceHours(worker, newAbsenceStartTime);
+        boolean collidingVisitsExist =
+                hasVisitsBefore(newAbsenceStartTime, worker)
+                        && hasVisitsAfter(newAbsenceEndTime, worker);
+
+        if(!collidingVisitsExist){
+            WorkerSchedule workerSchedule = new WorkerSchedule(worker, newAbsenceStartTime, newAbsenceEndTime);
+            WorkerStatus workerStatus = workerStatusRepository.findById(EWorkerStatus.WORKER_ABSENT.getValue()).get();
+            workerSchedule.setWorkerStatus(workerStatus);
+            return workerScheduleRepository.save(workerSchedule);
+        } else {
+            throw new RuntimeException("Cannot set absence hours - visits exist before or after requested absence hours");
+        }
+    }
+
     private boolean hasVisitsBefore(Date newWorkStartTime, User worker) {
         Date dayStart = TimeUtils.getDayStart(newWorkStartTime);
         return !termGenerator.isWorkerFreeBeetween(dayStart, newWorkStartTime, worker);
@@ -94,6 +122,12 @@ public class WorkManager {
         Date dayStart = TimeUtils.getDayStart(dateTime);
         Date dayEnd = TimeUtils.getDayEnd(dateTime);
         workHoursRepository.deleteByWorkerIdBetween(worker.getId(), dayStart, dayEnd);
+    }
+
+    private void deleteDailyAbsenceHours(User worker, Date dateTime){
+        Date dayStart = TimeUtils.getDayStart(dateTime);
+        Date dayEnd = TimeUtils.getDayEnd(dateTime);
+        workerScheduleRepository.deleteByWorkerIdBetween(worker.getId(), dayStart, dayEnd);
     }
 
     public List<WorkHours> getWeeklyWorkHours(User worker, Date firstWeekDay, Date lastWeekDay) {
@@ -111,6 +145,12 @@ public class WorkManager {
         weeklyOffWorkHours.addAll(allDayOffWorkHours);
 
         return weeklyOffWorkHours;
+    }
+
+    public List<? super WorkerSchedule> getWeeklyAbsenceHours(User worker, Date firstWeekDay, Date lastWeekDay) {
+        firstWeekDay = TimeUtils.getDayStart(firstWeekDay);
+        lastWeekDay = TimeUtils.getDayEnd(lastWeekDay);
+        return workerScheduleRepository.findAnyBetween(firstWeekDay, lastWeekDay, worker.getId());
     }
 
     private List<TimeRange> convertToOffWorkHours(List<WorkHours> weeklyWorkHours) {
@@ -160,4 +200,7 @@ public class WorkManager {
         List<WorkHours> workHours = workHoursRepository.getAllByWorkerIdBetween(worker.getId(), start, end);
         return !workHours.isEmpty();
     }
+
+
+
 }

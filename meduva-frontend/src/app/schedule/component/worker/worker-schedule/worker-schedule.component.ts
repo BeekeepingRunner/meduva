@@ -5,8 +5,8 @@ import {ActivatedRoute} from "@angular/router";
 import {DayDialogComponent} from "../../dialog/day-dialog/day-dialog.component";
 import {User} from "../../../../model/user";
 import {UserService} from "../../../../service/user.service";
-import {ScheduleService, WeekBoundaries, WorkHours} from "../../../service/schedule.service";
-import {createOffWorkHoursEvent} from "../../../util/event/creation";
+import {ScheduleService, TimeRange, WeekBoundaries, WorkHours, WorkSchedule} from "../../../service/schedule.service";
+import {createAbsenceHoursEvent, createOffWorkHoursEvent} from "../../../util/event/creation";
 
 @Component({
   selector: 'app-worker-schedule',
@@ -72,7 +72,22 @@ export class WorkerScheduleComponent implements OnInit {
     this.scheduleService.getWeeklyOffWorkHours(this.worker.id, weekBoundaries).subscribe(
     (weeklyOffWorkHours: WorkHours[]) => {
       this.updateWorkHoursEvents(weeklyOffWorkHours);
+      this.prepareWeeklyAbsenceHours();
     });
+  }
+
+  private prepareWeeklyAbsenceHours(): void {
+    let weekBoundaries: WeekBoundaries = {
+      firstWeekDay: this.firstDayOfWeek,
+      lastWeekDay: this.lastDayOfWeek
+    };
+
+    this.scheduleService.getWeeklyAbsenceHours(this.worker.id, weekBoundaries).subscribe(
+      (weeklyAbsenceHours: WorkSchedule[]) => {
+        console.log(weeklyAbsenceHours);
+        this.updateAbsenceHoursEvents(weeklyAbsenceHours);
+      }
+    );
   }
 
   private updateWorkHoursEvents(weeklyOffWorkHours: WorkHours[]) {
@@ -85,12 +100,26 @@ export class WorkerScheduleComponent implements OnInit {
     this.events = [...newEvents];
   }
 
+  private updateAbsenceHoursEvents(weeklyAbsenceHours: WorkSchedule[]) {
+    let newEvents = this.events;
+    this.events = [];
+    weeklyAbsenceHours.forEach(absenceHours => {
+      console.log(absenceHours);
+      newEvents.push(
+        createAbsenceHoursEvent(absenceHours.timeFrom, absenceHours.timeTo)
+      );
+    });
+    this.events = [...newEvents];
+  }
+
   openDayDialog(date: Date) {
     this.clickedDate = date;
+
     const dayDialog = this.dialog.open(DayDialogComponent, {
       width: '400px',
       panelClass: 'my-dialog',
-      data: { date: this.clickedDate }
+      data: { date: this.clickedDate,
+              workerId: this.worker.id}
     });
 
     dayDialog.afterClosed().subscribe(
@@ -98,6 +127,9 @@ export class WorkerScheduleComponent implements OnInit {
         if (result.event == 'WORK_HOURS') {
           let workHoursToSave: WorkHours = result.data;
           this.saveWorkHours(workHoursToSave);
+        } else if(result.event == 'ABSENCE_HOURS'){
+          let absenceHoursToSave: TimeRange = result.data;
+          this.saveAbsenceHours(absenceHoursToSave);
         }
       }
     );
@@ -113,7 +145,20 @@ export class WorkerScheduleComponent implements OnInit {
     );
   }
 
+  private saveAbsenceHours(absenceHoursToSave: TimeRange){
+    this.scheduleService.saveAbsenceHours(this.worker.id, absenceHoursToSave).subscribe(
+      data => {
+        this.prepareWeekEvents();
+      }, err => {
+        console.log(err);
+      }
+    );
+
+  }
+
   eventClick($event: { event: CalendarEvent<any>; sourceEvent: any }) {
 
   }
+
+
 }
