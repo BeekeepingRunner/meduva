@@ -66,6 +66,33 @@ public class VisitService {
         return possibleTerms;
     }
 
+    public List<Date> getAvailableDaysOfMonth(User worker, Service service, Date anyDayOfMonth) {
+        checkIfCanPerform(worker, service);
+        List<Room> suitableRooms = getSuitableRooms(service);
+
+        List<Date> availableDaysOfMonth = new ArrayList<>();
+
+        Date monthStart = TimeUtils.getMonthStart(anyDayOfMonth);
+        Date monthEnd = TimeUtils.getMonthEnd(anyDayOfMonth);
+
+        return availableDaysOfMonth;
+    }
+
+    private void checkIfCanPerform(User worker, Service service) {
+        if (!worker.canPerform(service)) {
+            throw new RuntimeException("Cannot find available month days for visit: given worker cannot perform given service");
+        }
+    }
+
+    private List<Room> getSuitableRooms(Service service) {
+        List<Room> suitableRooms = roomRepository.findAllSuitableForService(service.getId());
+        if (suitableRooms.isEmpty()) {
+            throw new RuntimeException("Cannot find available days of month: no room suitable for a given service exist");
+        } else {
+            return suitableRooms;
+        }
+    }
+
     @Transactional
     public Optional<Visit> saveNewVisit(Term term) {
         Visit visit = visitBuilder.buildVisit(term);

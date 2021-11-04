@@ -82,4 +82,8 @@ public class User extends ScheduleSubject {
         this.phoneNumber = phoneNumber;
         this.deleted = false;
     }
+
+    public boolean canPerform(Service service) {
+        return services.contains(service);
+    }
 }

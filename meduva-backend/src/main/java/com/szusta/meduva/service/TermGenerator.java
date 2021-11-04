@@ -31,19 +31,23 @@ public class TermGenerator {
     private RoomScheduleRepository roomScheduleRepository;
     private WorkerScheduleRepository workerScheduleRepository;
 
+    private ScheduleChecker scheduleChecker;
+
     @Autowired
     public TermGenerator(EquipmentItemRepository equipmentItemRepository,
                          EquipmentModelRepository equipmentModelRepository,
                          UserService userService,
                          EquipmentScheduleRepository equipmentScheduleRepository,
                          RoomScheduleRepository roomScheduleRepository,
-                         WorkerScheduleRepository workerScheduleRepository) {
+                         WorkerScheduleRepository workerScheduleRepository,
+                         ScheduleChecker scheduleChecker) {
         this.equipmentItemRepository = equipmentItemRepository;
         this.equipmentModelRepository = equipmentModelRepository;
         this.userService = userService;
         this.equipmentScheduleRepository = equipmentScheduleRepository;
         this.roomScheduleRepository = roomScheduleRepository;
         this.workerScheduleRepository = workerScheduleRepository;
+        this.scheduleChecker = scheduleChecker;
     }
 
     public Optional<Term> getTermForWorker(User worker, Service service, List<Room> suitableRooms, Calendar currentlyCheckedTime) {

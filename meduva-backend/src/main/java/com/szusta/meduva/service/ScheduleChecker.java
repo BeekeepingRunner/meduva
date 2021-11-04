@@ -1,7 +1,6 @@
 package com.szusta.meduva.service;
 
 import com.szusta.meduva.model.Room;
-import com.szusta.meduva.model.Service;
 import com.szusta.meduva.model.User;
 import com.szusta.meduva.model.equipment.EquipmentItem;
 import com.szusta.meduva.model.schedule.EquipmentSchedule;
@@ -15,7 +14,6 @@ import com.szusta.meduva.repository.schedule.room.RoomScheduleRepository;
 import com.szusta.meduva.repository.schedule.worker.WorkerScheduleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -78,15 +76,5 @@ public class ScheduleChecker {
                 weekBoundaries.getEndTime(),
                 room.getId(),
                 ERoomStatus.ROOM_UNAVAILABLE.getValue());
-    }
-
-
-    public List<Date> getAvailableDaysOfMonth(User worker, Service service, Date anyDayOfMonth) {
-
-        List<Date> availableDaysOfMonth = new ArrayList<>();
-
-        // TODO: algorithmmmm
-
-        return availableDaysOfMonth;
     }
 }

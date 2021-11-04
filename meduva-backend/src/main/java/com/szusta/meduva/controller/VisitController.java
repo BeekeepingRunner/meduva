@@ -50,7 +50,7 @@ public class VisitController {
         Date anyDayOfMonth = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").parse(anyDayFromMonth);
         User worker = userService.findById(workerId);
         Service service = servicesService.findById(serviceId);
-        return scheduleChecker.getAvailableDaysOfMonth(worker, service, anyDayOfMonth);
+        return visitService.getAvailableDaysOfMonth(worker, service, anyDayOfMonth);
     }
 
     @PostMapping
