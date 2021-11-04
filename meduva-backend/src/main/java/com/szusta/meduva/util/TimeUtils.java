@@ -23,6 +23,9 @@ public class TimeUtils {
         return now.before(tempSomeday);
     }
 
+    /**
+     *  Returns the same date with time equal to 00:00:00
+     */
     public static Date getDayStart(Date dateTime) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(dateTime);
@@ -32,6 +35,9 @@ public class TimeUtils {
         return calendar.getTime();
     }
 
+    /**
+     *  Returns the same date with time equal to 23:59:59
+     */
     public static Date getDayEnd(Date dateTime) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(dateTime);
@@ -41,6 +47,9 @@ public class TimeUtils {
         return calendar.getTime();
     }
 
+    /**
+     *  Returns the first day of month with time equal to 00:00:00
+     */
     public static Date getMonthStart(Date anyDayOfMonth) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(anyDayOfMonth);
@@ -48,6 +57,9 @@ public class TimeUtils {
         return getDayStart(calendar.getTime());
     }
 
+    /**
+     *  Returns the last day of month with time equal to 23:59:59
+     */
     public static Date getMonthEnd(Date anyDayOfMonth) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(anyDayOfMonth);
