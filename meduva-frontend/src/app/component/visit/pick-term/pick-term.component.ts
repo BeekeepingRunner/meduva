@@ -18,7 +18,6 @@ import {Subject} from "rxjs";
 import {DateAdapter, MAT_DATE_FORMATS, MatDateFormats} from "@angular/material/core";
 import {takeUntil} from "rxjs/operators";
 import {addMonth, DateUtil, getFormattedDate, substractMonth} from "../../../util/date";
-import {FormControl} from "@angular/forms";
 
 @Component({
   selector: 'app-pick-term',
@@ -179,6 +178,17 @@ export class PickTermComponent implements OnInit {
     this.lastPickedDay = $event.value;
     this.asyncHeader.lastPickedDay = $event.value;
     console.log(this.lastPickedDay);
+
+    // @ts-ignore
+    this.visitService.getWorkerTermsForDay(this.selectedWorker?.id,
+      this.selectedService?.id,
+      this.lastPickedDay).subscribe(
+        possibleHours => {
+            console.log(possibleHours);
+          }, err => {
+            console.log(err);
+          }
+        );
   }
 }
 
@@ -291,7 +301,6 @@ export class AsyncDatePickerHeader<D> implements OnInit, OnDestroy {
     let dateToSend = new Date(this._calendar.activeDate);
     dateToSend = addMonth(dateToSend);
     let dateToSendStr = getFormattedDate(dateToSend);
-    console.log(dateToSendStr);
 
     this.serviceId = this.visitService.getSelectedService()?.id;
     this.workerId = this.visitService.getSelectedWorker()?.id;
