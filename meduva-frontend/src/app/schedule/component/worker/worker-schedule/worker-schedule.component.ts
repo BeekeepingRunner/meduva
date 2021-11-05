@@ -7,6 +7,7 @@ import {User} from "../../../../model/user";
 import {UserService} from "../../../../service/user.service";
 import {ScheduleService, TimeRange, WeekBoundaries, WorkHours, WorkSchedule} from "../../../service/schedule.service";
 import {createAbsenceHoursEvent, createOffWorkHoursEvent} from "../../../util/event/creation";
+import {MatSnackBar} from "@angular/material/snack-bar";
 
 @Component({
   selector: 'app-worker-schedule',
@@ -116,7 +117,7 @@ export class WorkerScheduleComponent implements OnInit {
     this.clickedDate = date;
 
     const dayDialog = this.dialog.open(DayDialogComponent, {
-      width: '400px',
+      width: '500px',
       panelClass: 'my-dialog',
       data: { date: this.clickedDate,
               workerId: this.worker.id}
@@ -124,12 +125,26 @@ export class WorkerScheduleComponent implements OnInit {
 
     dayDialog.afterClosed().subscribe(
       result => {
-        if (result.event == 'WORK_HOURS') {
+        /*if (result.event == 'WORK_HOURS') {
           let workHoursToSave: WorkHours = result.data;
           this.saveWorkHours(workHoursToSave);
         } else if(result.event == 'ABSENCE_HOURS'){
           let absenceHoursToSave: TimeRange = result.data;
           this.saveAbsenceHours(absenceHoursToSave);
+        }*/
+
+        switch(result.event){
+          case 'WORK_HOURS':
+            let workHoursToSave: WorkHours = result.data;
+            this.saveWorkHours(workHoursToSave);
+            break;
+          case 'ABSENCE_HOURS':
+            let absenceHoursToSave: TimeRange = result.data;
+            this.saveAbsenceHours(absenceHoursToSave);
+            break;
+          case 'DELETE_ABSENCE_HOURS':
+            let absenceDayDate: Date = result.data;
+            break;
         }
       }
     );

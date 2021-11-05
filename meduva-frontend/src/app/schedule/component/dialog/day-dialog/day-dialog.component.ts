@@ -7,6 +7,7 @@ import {
 } from "../../../util/validator/hours-input";
 import {ScheduleService, WeekBoundaries, WorkHours} from "../../../service/schedule.service";
 
+
 export interface DayDialogData {
   date: Date;
   workerId: number;
@@ -24,17 +25,20 @@ export class DayDialogComponent implements OnInit {
 
   settingWorkHours: boolean = false;
   settingAbsenceHours: boolean = false;
+  deletingWorkOrAbsenceHours: boolean = false;
   form!: FormGroup;
 
   workHours!: WorkHours;
   existingWorkingHours!: WorkHours | undefined;
+
+  noAbsenceHoursError: boolean = false;
 
 
   constructor(
     public dialogRef: MatDialogRef<DayDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: DayDialogData,
     private formBuilder: FormBuilder,
-    private scheduleService: ScheduleService
+    private scheduleService: ScheduleService,
   ) {
   }
 
@@ -143,5 +147,33 @@ export class DayDialogComponent implements OnInit {
       this.onAbsenceHoursSave();
     }
   }
+
+  startDeletingHours(){
+    this.deletingWorkOrAbsenceHours = true;
+  }
+
+  tryToDeleteDailyAbsenceHours(){
+      //sprawdzic czy absence hours są: jesli tak zakmniac okno, jesli nie wyswietlic komunikat ze takowych nie ma
+    let dayBoundaries: WeekBoundaries = {
+      firstWeekDay: this.selectedDate,
+      lastWeekDay: this.selectedDate
+    }
+
+    this.scheduleService.getWeeklyAbsenceHours(this.data.workerId, dayBoundaries).subscribe(
+      data => {
+        if(data.length != 0){
+          console.log("przeszlo");
+          this.dialogRef.close({
+            event: 'DELETE_ABSENCE_HOURS',
+            data: this.selectedDate
+          });
+        } else{
+          this.noAbsenceHoursError = true;
+          console.log("blad?");
+        }
+      }
+    );
+  }
+
 
 }
