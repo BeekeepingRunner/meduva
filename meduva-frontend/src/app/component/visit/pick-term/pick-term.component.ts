@@ -12,12 +12,13 @@ import {DatePipe} from "@angular/common";
 import {Router} from "@angular/router";
 import {ServicesService} from "../../../service/services.service";
 import {Service} from "../../../model/service";
-import {MatCalendar} from "@angular/material/datepicker";
+import {MatCalendar, MatDatepickerInputEvent} from "@angular/material/datepicker";
 import {User} from "../../../model/user";
 import {Subject} from "rxjs";
 import {DateAdapter, MAT_DATE_FORMATS, MatDateFormats} from "@angular/material/core";
 import {takeUntil} from "rxjs/operators";
 import {addMonth, DateUtil, getFormattedDate, substractMonth} from "../../../util/date";
+import {FormControl} from "@angular/forms";
 
 @Component({
   selector: 'app-pick-term',
@@ -32,6 +33,8 @@ export class PickTermComponent implements OnInit {
   selectedWorker!: User | null;
   loading: boolean = true;
   canChooseTerm: boolean = false;
+
+  lastPickedDay!: Date | null;
 
   generatingTerms: boolean = false;
   canSelectHour: boolean = false;
@@ -62,7 +65,7 @@ export class PickTermComponent implements OnInit {
   private isAvailable(date: Date): boolean {
     let isAvailable = false;
     let availableMonthDays: Date[] = this.visitService.getAvailableDates();
-    // console.log(availableMonthDays);
+    console.log(availableMonthDays);
     if (availableMonthDays.length > 0) {
       let filteredDayNumber = date.getDate();
       availableMonthDays.forEach(availDate => {
@@ -105,7 +108,7 @@ export class PickTermComponent implements OnInit {
   }
 
   private waitForWorkerAvailableDays() {
-    let activeDateStr = getFormattedDate(new Date());
+    let activeDateStr = getFormattedDate(this.getLastPickedDayOrNow());
     let serviceId = this.visitService.getSelectedService()?.id;
     let workerId = this.visitService.getSelectedWorker()?.id;
     // @ts-ignore
@@ -119,6 +122,14 @@ export class PickTermComponent implements OnInit {
         console.log(err);
       }
     );
+  }
+
+  private getLastPickedDayOrNow(): Date {
+    if (this.lastPickedDay != null) {
+      return this.lastPickedDay;
+    } else {
+      return new Date();
+    }
   }
 
   private waitForAvailableDays() {
@@ -163,6 +174,12 @@ export class PickTermComponent implements OnInit {
     this.visitService.saveSelectedTerm(term);
     this.router.navigate(['/visit/pick-client']);
   }
+
+  onDayPick($event: MatDatepickerInputEvent<Date, Date | null>) {
+    this.lastPickedDay = $event.value;
+    this.asyncHeader.lastPickedDay = $event.value;
+    console.log(this.lastPickedDay);
+  }
 }
 
 /** Custom header component for datepicker. */
@@ -204,6 +221,16 @@ export class AsyncDatePickerHeader<D> implements OnInit, OnDestroy {
 
   workerId!: number | undefined;
   serviceId!: number | undefined;
+
+  static lastPickedDay: Date | null;
+
+  static getLastPickedDayOrNow() {
+    if (this.lastPickedDay != null) {
+      return this.lastPickedDay;
+    } else {
+      return new Date();
+    }
+  }
 
   constructor(
     private _calendar: MatCalendar<D>, private _dateAdapter: DateAdapter<D>,
@@ -264,6 +291,7 @@ export class AsyncDatePickerHeader<D> implements OnInit, OnDestroy {
     let dateToSend = new Date(this._calendar.activeDate);
     dateToSend = addMonth(dateToSend);
     let dateToSendStr = getFormattedDate(dateToSend);
+    console.log(dateToSendStr);
 
     this.serviceId = this.visitService.getSelectedService()?.id;
     this.workerId = this.visitService.getSelectedWorker()?.id;

@@ -7,8 +7,10 @@
     <div>
       <mat-form-field appearance="fill">
         <mat-label>Choose a date</mat-label>
-        <input matInput [matDatepicker]="picker" [matDatepickerFilter]="dateFilter" required>
-        <mat-datepicker-toggle matSuffix [for]="picker"  (click)="onDatePickerClick()"></mat-datepicker-toggle>
+        <input matInput [matDatepicker]="picker"
+               [matDatepickerFilter]="dateFilter"
+               (dateInput)="onDayPick($event)" required>
+        <mat-datepicker-toggle matSuffix [for]="picker" (click)="onDatePickerClick()"></mat-datepicker-toggle>
         <mat-datepicker #picker [dateClass]="dayChecker" [calendarHeaderComponent]="asyncHeader"></mat-datepicker>
       </mat-form-field>
 
