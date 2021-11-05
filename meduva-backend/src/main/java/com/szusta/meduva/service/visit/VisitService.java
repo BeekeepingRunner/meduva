@@ -107,10 +107,17 @@ public class VisitService {
         }
     }
 
+    public List<Date> getWorkerAvailableTermsForDay(User worker, Service service, Date day) {
+        // TODO
+        return null;
+    }
+
     @Transactional
     public Optional<Visit> saveNewVisit(Term term) {
         Visit visit = visitBuilder.buildVisit(term);
         visitScheduleGenerator.generateVisitSchedules(visit);
         return Optional.of(visitRepository.save(visit));
     }
+
+
 }

@@ -53,6 +53,15 @@ public class VisitController {
         return visitService.getWorkerAvailableDaysOfMonth(worker, service, anyDayOfMonth);
     }
 
+    @GetMapping("/get-available-worker-terms-for-day")
+    public List<Date> getWorkerAvailableTermsForDay(@RequestParam Long workerId, @RequestParam Long serviceId, @RequestParam String dayDate) throws ParseException {
+
+        Date day = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").parse(dayDate);
+        User worker = userService.findById(workerId);
+        Service service = servicesService.findById(serviceId);
+        return visitService.getWorkerAvailableTermsForDay(worker, service, day);
+    }
+
     @PostMapping
     public ResponseEntity<Visit> saveNewVisit(@RequestBody Term term) {
         return ResponseEntity.of(visitService.saveNewVisit(term));

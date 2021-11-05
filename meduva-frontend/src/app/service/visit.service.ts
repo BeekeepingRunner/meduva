@@ -107,7 +107,7 @@ export class VisitService {
         params: {
           workerId: workerId,
           serviceId: serviceId,
-          day: dayDate
+          dayDate: dayDate
         }});
   }
 }
