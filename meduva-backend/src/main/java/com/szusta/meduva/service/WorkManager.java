@@ -28,7 +28,7 @@ public class WorkManager {
     WorkerStatusRepository workerStatusRepository;
     WorkerScheduleRepository workerScheduleRepository;
 
-    TermGenerator termGenerator;
+    ScheduleChecker scheduleChecker;
 
     @Autowired
     public WorkManager(UserRepository userRepository,
@@ -36,13 +36,13 @@ public class WorkManager {
                        WorkHoursRepository workHoursRepository,
                        WorkerStatusRepository workerStatusRepository,
                        WorkerScheduleRepository workerScheduleRepository,
-                       TermGenerator termGenerator) {
+                       ScheduleChecker scheduleChecker) {
         this.userRepository = userRepository;
         this.serviceRepository = serviceRepository;
         this.workHoursRepository = workHoursRepository;
         this.workerStatusRepository = workerStatusRepository;
         this.workerScheduleRepository = workerScheduleRepository;
-        this.termGenerator = termGenerator;
+        this.scheduleChecker = scheduleChecker;
     }
 
     @Transactional
@@ -96,12 +96,14 @@ public class WorkManager {
 
     private boolean hasVisitsBefore(Date newWorkStartTime, User worker) {
         Date dayStart = TimeUtils.getDayStart(newWorkStartTime);
-        return !termGenerator.isWorkerFreeBeetween(dayStart, newWorkStartTime, worker);
+        TimeRange timeRange = new TimeRange(dayStart, newWorkStartTime);
+        return !scheduleChecker.isWorkerFree(timeRange, worker);
     }
 
     private boolean hasVisitsAfter(Date newWorkEndTime, User worker) {
         Date dayEnd = TimeUtils.getDayEnd(newWorkEndTime);
-        return !termGenerator.isWorkerFreeBeetween(newWorkEndTime, dayEnd, worker);
+        TimeRange timeRange = new TimeRange(newWorkEndTime, dayEnd);
+        return !scheduleChecker.isWorkerFree(timeRange, worker);
     }
 
     private void deleteWorkHoursAt(Date dateTime, User worker) {
@@ -136,7 +138,7 @@ public class WorkManager {
     public List<? super WorkerSchedule> getWeeklyAbsenceHours(User worker, Date firstWeekDay, Date lastWeekDay) {
         firstWeekDay = TimeUtils.getDayStart(firstWeekDay);
         lastWeekDay = TimeUtils.getDayEnd(lastWeekDay);
-        return workerScheduleRepository.findAnyBetween(firstWeekDay, lastWeekDay, worker.getId());
+        return workerScheduleRepository.findAllDuring(firstWeekDay, lastWeekDay, worker.getId());
     }
 
     private List<TimeRange> convertToOffWorkHours(List<WorkHours> weeklyWorkHours) {
@@ -186,7 +188,5 @@ public class WorkManager {
         List<WorkHours> workHours = workHoursRepository.getAllByWorkerIdBetween(worker.getId(), start, end);
         return !workHours.isEmpty();
     }
-
-
 
 }

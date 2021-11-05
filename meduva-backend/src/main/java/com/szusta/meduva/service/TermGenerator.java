@@ -5,7 +5,6 @@ import com.szusta.meduva.model.Service;
 import com.szusta.meduva.model.User;
 import com.szusta.meduva.model.equipment.EquipmentItem;
 import com.szusta.meduva.model.equipment.EquipmentModel;
-import com.szusta.meduva.model.schedule.Schedule;
 import com.szusta.meduva.payload.Term;
 import com.szusta.meduva.repository.equipment.EquipmentItemRepository;
 import com.szusta.meduva.repository.equipment.EquipmentModelRepository;
@@ -118,20 +117,17 @@ public class TermGenerator {
     }
 
     public boolean isWorkerFreeBeetween(Date start, Date end, User worker) {
-        List<Schedule> existingWorkerEvents =
-                (List<Schedule>) workerScheduleRepository.findAnyBetween(start, end, worker.getId());
-        return existingWorkerEvents.isEmpty();
+        return workerScheduleRepository.findAllDuring(start, end, worker.getId())
+                .isEmpty();
     }
 
     private boolean isRoomFree(Date start, Date end, Room room) {
-        List<Schedule> existingRoomEvents =
-                (List<Schedule>) roomScheduleRepository.findAnyBetween(start, end, room.getId());
-        return existingRoomEvents.isEmpty();
+        return roomScheduleRepository.findAllDuring(start, end, room.getId())
+                .isEmpty();
     }
 
     public boolean isEqItemFree(Date start, Date end, EquipmentItem suitableItem) {
-        List<Schedule> existingItemEvents =
-                (List<Schedule>) equipmentScheduleRepository.findAnyBetween(start, end, suitableItem.getId());
-        return existingItemEvents.isEmpty();
+        return equipmentScheduleRepository.findAllDuring(start, end, suitableItem.getId())
+                .isEmpty();
     }
 }

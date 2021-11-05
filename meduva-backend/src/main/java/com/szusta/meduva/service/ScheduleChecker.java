@@ -7,6 +7,7 @@ import com.szusta.meduva.model.schedule.EquipmentSchedule;
 import com.szusta.meduva.model.schedule.RoomSchedule;
 import com.szusta.meduva.model.schedule.status.enums.EEquipmentStatus;
 import com.szusta.meduva.model.schedule.status.enums.ERoomStatus;
+import com.szusta.meduva.model.schedule.status.enums.EWorkerStatus;
 import com.szusta.meduva.payload.TimeRange;
 import com.szusta.meduva.repository.WorkHoursRepository;
 import com.szusta.meduva.repository.schedule.equipment.EquipmentScheduleRepository;
@@ -40,7 +41,7 @@ public class ScheduleChecker {
         Date startTime = timeRange.getStartTime();
         Date endTime = timeRange.getEndTime();
         return workerScheduleRepository
-                .findAnyBetween(startTime, endTime, worker.getId())
+                .findAllDuring(startTime, endTime, worker.getId())
                 .isEmpty();
     }
 
@@ -48,7 +49,7 @@ public class ScheduleChecker {
         Date startTime = timeRange.getStartTime();
         Date endTime = timeRange.getEndTime();
         return roomScheduleRepository
-                .findAnyBetween(startTime, endTime, room.getId())
+                .findAllDuring(startTime, endTime, room.getId())
                 .isEmpty();
     }
 
@@ -61,6 +62,36 @@ public class ScheduleChecker {
                 .isEmpty();
     }
 
+    public boolean isBusyWith(User worker, EWorkerStatus workerStatus, TimeRange timeRange) {
+        return !workerScheduleRepository
+                .findAllDuring(
+                        timeRange.getStartTime(),
+                        timeRange.getEndTime(),
+                        worker.getId(),
+                        workerStatus.getValue())
+                .isEmpty();
+    }
+
+    public boolean isBusyWith(Room room, ERoomStatus roomStatus, TimeRange timeRange) {
+        return !roomScheduleRepository
+                .findAllDuring(
+                        timeRange.getStartTime(),
+                        timeRange.getEndTime(),
+                        room.getId(),
+                        roomStatus.getValue())
+                .isEmpty();
+    }
+
+    public boolean isBusyWith(EquipmentItem eqItem, EEquipmentStatus equipmentStatus, TimeRange timeRange) {
+        return !equipmentScheduleRepository
+                .findAllDuring(
+                        timeRange.getStartTime(),
+                        timeRange.getEndTime(),
+                        eqItem.getId(),
+                        equipmentStatus.getValue())
+                .isEmpty();
+    }
+
     public List<EquipmentSchedule> getItemUnavailabilityIn(EquipmentItem item, TimeRange weekBoundaries) {
         return equipmentScheduleRepository.findAllBetween(
                 weekBoundaries.getStartTime(),
@@ -70,7 +101,7 @@ public class ScheduleChecker {
     }
 
     public List<RoomSchedule> getRoomUnavailabilityIn(Room room, TimeRange weekBoundaries) {
-        return roomScheduleRepository.findAllBetween(
+        return roomScheduleRepository.findAllDuring(
                 weekBoundaries.getStartTime(),
                 weekBoundaries.getEndTime(),
                 room.getId(),

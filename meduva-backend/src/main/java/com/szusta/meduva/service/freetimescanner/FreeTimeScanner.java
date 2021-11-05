@@ -149,7 +149,8 @@ public class FreeTimeScanner {
     private boolean doesFreeItemExist(Room availableRoom, TimeRange potentialTermTimeRange) throws NotAvailableException {
         List<EquipmentItem> suitableEqItems =
                 equipmentItemRepository.findAllSuitableForServiceInRoom(service.getId(), availableRoom.getId());
-        return getFirstAvailableEqItem(suitableEqItems, potentialTermTimeRange) != null;
+        getFirstAvailableEqItem(suitableEqItems, potentialTermTimeRange);
+        return true;
     }
 
     private EquipmentItem getFirstAvailableEqItem(List<EquipmentItem> suitableEqItems, TimeRange timeRange)

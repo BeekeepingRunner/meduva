@@ -11,6 +11,8 @@ import com.szusta.meduva.repository.schedule.equipment.EquipmentStatusRepository
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
+
 @Service
 public class ItemScheduleManager {
 
@@ -24,10 +26,13 @@ public class ItemScheduleManager {
         this.equipmentScheduleRepository = equipmentScheduleRepository;
     }
 
+    @Transactional
     public EquipmentSchedule setUnavailability(EquipmentItem eqItem, TimeRange allDay) {
         Long eqStatusId = EEquipmentStatus.EQUIPMENT_UNAVAILABLE.getValue();
         EquipmentStatus eqStatus = equipmentStatusRepository.findById(eqStatusId)
                 .orElseThrow(() -> new EntityRecordNotFoundException("Cannot set item unavailability: equipment status not found in DB with id : " + eqStatusId));
+
+        equipmentScheduleRepository.deleteByEqItemIdBetween(eqItem.getId(), eqStatusId, allDay.getStartTime(), allDay.getEndTime());
 
         EquipmentSchedule equipmentSchedule = new EquipmentSchedule(eqItem, allDay, eqStatus);
         return equipmentScheduleRepository.save(equipmentSchedule);

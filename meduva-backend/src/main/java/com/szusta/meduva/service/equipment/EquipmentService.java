@@ -4,6 +4,7 @@ import com.szusta.meduva.exception.EntityRecordNotFoundException;
 import com.szusta.meduva.model.equipment.EquipmentItem;
 import com.szusta.meduva.model.equipment.EquipmentModel;
 import com.szusta.meduva.model.schedule.EquipmentSchedule;
+import com.szusta.meduva.model.schedule.status.enums.EEquipmentStatus;
 import com.szusta.meduva.payload.TimeRange;
 import com.szusta.meduva.repository.equipment.EquipmentItemRepository;
 import com.szusta.meduva.repository.equipment.EquipmentModelRepository;
@@ -95,7 +96,7 @@ public class EquipmentService {
                 .orElseThrow(() -> new EntityRecordNotFoundException("Cannot set item unavailability: item not found in DB with id : " + itemId));
 
         TimeRange allDay = new TimeRange(TimeUtils.getDayStart(day), TimeUtils.getDayEnd(day));
-        if (scheduleChecker.isEqItemFree(allDay, eqItem)) {
+        if (!scheduleChecker.isBusyWith(eqItem, EEquipmentStatus.EQUIPMENT_OCCUPIED, allDay)) {
             return itemScheduleManager.setUnavailability(eqItem, allDay);
         } else {
             throw new RuntimeException("Couldn't set item unavailability: item is occupied that day");
