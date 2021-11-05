@@ -23,6 +23,7 @@ export class NewServiceCreatorComponent extends NewServiceComponent implements N
   @Input() eqModels: EquipmentModel[] = [];
 
   @Input() selectedModels: EquipmentModel[] = [];
+  serviceModels: EquipmentModel[] = [];
 
    service: Service = {
     name: '',
@@ -42,16 +43,15 @@ export class NewServiceCreatorComponent extends NewServiceComponent implements N
 
   onItemsLinked($event: EquipmentModel[]) {
     this.eqModels=$event;
-    console.log(this.eqModels+"wszystkie modele")
   }
 
   onRoomsLinked($event: Room[]) {
     this.roomItems=$event;
   }
 
+
   onSelectedModelsGot($event: EquipmentModel[]) {
     this.selectedModels=$event;
-    console.log(this.selectedModels+"wybrane modele")
   }
 
   onServiceReady() {
@@ -65,4 +65,7 @@ export class NewServiceCreatorComponent extends NewServiceComponent implements N
   }
 
 
+  serviceModelsGot($event: EquipmentModel[]) {
+    this.serviceModels = $event;
+  }
 }

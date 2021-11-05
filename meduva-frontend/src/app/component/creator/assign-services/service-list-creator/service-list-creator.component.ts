@@ -48,9 +48,12 @@ export class ServiceListCreatorComponent extends ServiceListComponent {
       data: {roomItems: this.roomItems, eqModels: this.eqModels}
     });
     servicesCreatorDialogRef.afterClosed().subscribe(serviceRequest => {
-      this.roomItems = serviceRequest.roomItems;
-      this.eqModels = serviceRequest.equipmentModels
-      this.services.push(serviceRequest.service);
+      if(serviceRequest){
+        this.roomItems = serviceRequest.roomItems;
+        this.eqModels = serviceRequest.equipmentModels
+        this.services.push(serviceRequest.service);
+      }
+
     });
   }
 

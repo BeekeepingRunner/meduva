@@ -11,17 +11,24 @@ import {EquipmentModel} from "../../../../model/equipment";
 })
 export class ItemsSelectServiceCreatorComponent extends EquipmentListComponent {
 
-  selectedModels: EquipmentModel[] = [];
-  @Input() creatorModels: EquipmentModel[] = [];
   @Input() service!: Service;
 
   @Output() relatedItemsEmitter = new EventEmitter<EquipmentModel[]>();
   @Output() serviceEmitter = new EventEmitter<Service>();
   @Output() selectedItemsEmitter = new EventEmitter<EquipmentModel[]>();
+  @Output() serviceModelsEmitter = new EventEmitter<EquipmentModel[]>();
+
+  @Input() creatorModels: EquipmentModel[] = [];
+  @Input() doNotMultiplyServiceInModels: EquipmentModel[] = [];
+  selectedModels: EquipmentModel[] = [];
+
+
 
   compareFunction = (o1: any, o2: any) => o1.id === o2.id;
   emitSelectedServicesIds() {
   }
+
+
   ngOnInit() {
     for(let model of this.creatorModels){
       this.models.push(model);
@@ -29,16 +36,30 @@ export class ItemsSelectServiceCreatorComponent extends EquipmentListComponent {
   }
 
   assignEquipmentToService() {
-    for (let selectedModel of this.selectedModels){
-      for(let properModel of this.models){
-        if(selectedModel==properModel){
-          properModel.services.push(this.service);
+
+    for(let clearRecentlyAddedServiceFromModel of this.models){
+      for(let checkInModelsOfServiceArray of this.doNotMultiplyServiceInModels){
+        if(checkInModelsOfServiceArray.name==clearRecentlyAddedServiceFromModel.name){
+          clearRecentlyAddedServiceFromModel.services.pop();
         }
       }
     }
+
+    this.doNotMultiplyServiceInModels=[];
+
+    for (let selectedModel of this.selectedModels){
+      for(let properModel of this.models){
+        if(selectedModel==properModel){
+            this.doNotMultiplyServiceInModels.push(properModel);
+            properModel.services.push(this.service);
+        }
+      }
+    }
+
     this.relatedItemsEmitter.emit(this.models);
     this.serviceEmitter.emit(this.service);
     this.selectedItemsEmitter.emit(this.selectedModels);
+    this.serviceModelsEmitter.emit(this.doNotMultiplyServiceInModels);
   }
 
   clearSelection() {

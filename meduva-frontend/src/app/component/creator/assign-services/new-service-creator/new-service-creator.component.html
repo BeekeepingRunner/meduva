@@ -5,7 +5,8 @@
 
 <mat-stepper [linear]="true" orientation="vertical" #stepper>
 
-<mat-step label="Define new service" [completed]="!form.valid">
+<mat-step #first_step label="Define new service" [completed]="service.name.length>0">
+
 
   <app-new-service-details-creator
                                       (newServiceEmitter)="onServiceCreated($event)">
@@ -14,22 +15,35 @@
 
 </mat-step>
 
-  <mat-step label="Assign items">
+  <mat-step #second_step label="Assign items" [completed]="service.itemless==true || selectedModels.length>0">
 
-    <app-items-select-service-creator *ngIf="eqModels.length"
+    <ng-container *ngIf="stepper.selected == second_step">
+
+    <app-items-select-service-creator *ngIf="eqModels.length && service.name.length>0"
                                       [creatorModels]="eqModels"
                                       [service]="service"
+                                      [doNotMultiplyServiceInModels]="serviceModels"
                                       (relatedItemsEmitter)="onItemsLinked($event)"
                                       (serviceEmitter)="onServiceCreated($event)"
-                                      (selectedItemsEmitter)="onSelectedModelsGot($event)">
+                                      (selectedItemsEmitter)="onSelectedModelsGot($event)"
+                                      (serviceModelsEmitter)="serviceModelsGot($event)">
     </app-items-select-service-creator>
 
+    <mat-label *ngIf="eqModels.length==0 && service.name.length>0">
+
+      U have no equipment
+
+    </mat-label>
+
+    </ng-container>
 
   </mat-step>
 
-  <mat-step label="Assign rooms">
+  <mat-step #third_step label="Assign rooms" >
 
-    <app-rooms-select-service-creator *ngIf="roomItems.length && eqModels.length && selectedModels.length"
+    <ng-container *ngIf="stepper.selected == third_step">
+
+    <app-rooms-select-service-creator *ngIf="roomItems.length"
                                       [creatorRooms]="roomItems"
                                       [service]="service"
                                       [creatorModels]="eqModels"
@@ -37,9 +51,11 @@
                                       (relatedRoomsEmitter)="onRoomsLinked($event)">
     </app-rooms-select-service-creator>
 
+    </ng-container>
+
   </mat-step>
 
-  <mat-step>
+  <mat-step #fourth_step>
     <ng-template matStepLabel>Done</ng-template>
     <p>Everything is ready.</p>
     <div>

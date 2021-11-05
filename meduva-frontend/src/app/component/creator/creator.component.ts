@@ -11,6 +11,9 @@ import {Router} from "@angular/router";
 import {Room} from "../../model/room";
 import {EquipmentListCreatorComponent} from "./assign-equipment/equipment-list-creator/equipment-list-creator.component";
 import {Service} from "../../model/service";
+import {ConfigureServicesCreatorDialogComponent} from "../dialog/configure-services-creator-dialog/configure-services-creator-dialog.component";
+import {ConfirmationDialogComponent} from "../dialog/confirmation-dialog/confirmation-dialog.component";
+import {MatDialog} from "@angular/material/dialog";
 
 
 export interface CreatorRequest {
@@ -42,6 +45,7 @@ export class CreatorComponent implements OnInit {
     private roomService: RoomService,
     private equipmentService: EquipmentService,
     private router: Router,
+    public dialog: MatDialog,
   ) { }
 
   ngOnInit(): void {
@@ -88,5 +92,15 @@ export class CreatorComponent implements OnInit {
     console.log(this.roomItems);
     console.log(this.eqModels);
     console.log(this.services);
+
+    const confirmConfigurationDialogRef = this.dialog.open(ConfirmationDialogComponent, {
+      data: { message: 'Are u sure you want to save that configuration?' }
+    });
+
+    confirmConfigurationDialogRef.afterClosed().subscribe(confirmed => {
+      if (confirmed) {
+        console.log("Hurra")
+      }
+    });
   }
 }

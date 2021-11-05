@@ -3,7 +3,7 @@
 <mat-selection-list #selectionListServices
                     [(ngModel)]="selectedModels"
                     [compareWith]="compareFunction"
-                    (selectionChange)="emitSelectedServicesIds()">
+                    (selectionChange)="assignEquipmentToService()">
   <mat-list-option *ngFor="let model of models" [value]="model">
     {{ model.name }}
   </mat-list-option>
@@ -18,7 +18,7 @@
 <br>
 <div>
   <button mat-button matStepperPrevious>Back</button>
-  <button mat-button matStepperNext [disabled]="selectedModels.length<=0 && service.itemless==false" (click)="assignEquipmentToService()">Next</button>
+  <button mat-button matStepperNext [disabled]="selectedModels.length<=0 && service.itemless==false">Next</button>
 </div>
 <br>
 <div *ngIf="selectedModels.length<=0 && service.itemless==false" class="alert alert-warning">

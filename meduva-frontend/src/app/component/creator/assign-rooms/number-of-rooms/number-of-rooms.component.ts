@@ -1,6 +1,7 @@
 import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {Room} from "../../../../model/room";
+import {Service} from "../../../../model/service";
 
 @Component({
   selector: 'app-number-of-rooms',
@@ -45,7 +46,8 @@ export class NumberOfRoomsComponent implements OnInit {
       let roomItem: Room = {
         name: "Room " + i,
         description: "",
-        deleted: false
+        deleted: false,
+        services: []
 
       }
       this.roomItems.push(roomItem);

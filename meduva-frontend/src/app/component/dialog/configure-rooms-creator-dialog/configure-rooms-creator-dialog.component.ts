@@ -30,6 +30,8 @@ export class ConfigureRoomsCreatorDialogComponent extends NewRoomComponent{
     @Inject(MAT_DIALOG_DATA) public data: ConfigureRoomsCreatorDialogData,
   ) {
     super(formBuilder,roomService);
+    //selectedRoom.name = data.name
+    //selectedRoom.description = data.description
   }
 
 

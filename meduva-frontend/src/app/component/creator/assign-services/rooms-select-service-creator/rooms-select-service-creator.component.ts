@@ -12,8 +12,7 @@ import {Room} from "../../../../model/room";
 })
 export class RoomsSelectServiceCreatorComponent extends RoomListComponent {
 
-  selectedRooms: Room[] = [];
-  automatically : boolean = true;
+  @Output() relatedRoomsEmitter = new EventEmitter<Room[]>();
 
   @Input() creatorRooms: Room[] = [];
   @Input() creatorModels: EquipmentModel[] = [];
@@ -21,20 +20,21 @@ export class RoomsSelectServiceCreatorComponent extends RoomListComponent {
 
   @Input() selectedModels: EquipmentModel[] = [];
 
-  @Output() relatedRoomsEmitter = new EventEmitter<Room[]>();
+  selectedRooms: Room[] = [];
+  roomsToSelect: Room[] = []
 
+  automatically : boolean = true;
 
   compareFunction = (o1: any, o2: any) => o1.id === o2.id;
 
 
   ngOnInit(): void {
-    this.getAllRooms()
-    console.log(this.creatorModels+"TU DZIALA")
-    console.log(this.selectedModels+"heheheheheh")
+
+    this.getAllRoomsAssociatedWithSelectedServices();
+    this.fetchRoomsFromDatabaseAndMergeWithRoomsFromCreator();
   }
 
-  getAllRooms() {
-    //this.rooms=this.creatorRooms;
+  getAllRoomsAssociatedWithSelectedServices() {
 
     let uniqueRoomNames: string[] = [];
     let uniqueRooms = new Set<Room>();
@@ -55,24 +55,39 @@ export class RoomsSelectServiceCreatorComponent extends RoomListComponent {
       }
     }
 
-    this.rooms=Array.from(uniqueRooms.values())
+    this.roomsToSelect=Array.from(uniqueRooms.values())
   }
 
-  changeAutoState(){
-    if(this.automatically)
-    this.automatically=false;
-    else
-      this.automatically=true;
-}
+
+
+
+  fetchRoomsFromDatabaseAndMergeWithRoomsFromCreator() {
+    this.roomService.getAllUndeletedRooms().subscribe(
+      rooms => {
+        this.rooms=rooms;
+        for(let creatorRoom of this.creatorRooms){
+          this.rooms.unshift(creatorRoom);
+        }
+      }
+    );
+  }
 
   assignRoomsToService() {
     for (let selectedRoom of this.selectedRooms){
       for(let properRoom of this.rooms){
-        if(selectedRoom==properRoom){
-          properRoom.services?.push(this.service);
+        if(selectedRoom.name==properRoom.name){
+          if(!properRoom.services?.includes(this.service))
+            properRoom.services?.push(this.service);
         }
       }
     }
     this.relatedRoomsEmitter.emit(this.rooms);
+  }
+
+  changeAutoState(){
+    if(this.automatically)
+      this.automatically=false;
+    else
+      this.automatically=true;
   }
 }

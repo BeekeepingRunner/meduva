@@ -15,14 +15,13 @@ export class RoomSelectComponent implements OnInit {
 
   displayedColumns: string[] = ['itemName', 'room', 'buttons'];
 
-  @Input() eqItems!: EquipmentItem[];
   @Output() selectedIdsEmitter = new EventEmitter<Array<number>>();
   @Output() itemsEmitter = new EventEmitter<EquipmentItem[]>();
 
+  @Input() eqItems!: EquipmentItem[];
   eqItemsOutput: EquipmentItem[] = [];
 
   @Input() rooms: Room[] = [];
-
   @Input() creatorRooms: Room[] = [];
   /**Because of the fact that this class is used in two cases, during adding the room and in the creator, there is an input annotation.
    Creator uses that class in the string of giving data among the dialogs and classes*/
@@ -59,14 +58,20 @@ export class RoomSelectComponent implements OnInit {
     roomSelectionDialogRef.afterClosed().subscribe(room => {
       let selectedRoom: Room = room[0];
       item.room = selectedRoom;
-      this.eqItemsOutput.push(item);
+
+      /** To creator purposes */
+      if(!this.eqItemsOutput.includes(item))
+        this.eqItemsOutput.push(item);
+
+      if(this.eqItemsOutput.length==this.eqItems.length)
+        this.itemsEmitter.emit(this.eqItemsOutput)
+
 
       // @ts-ignore
       this.selectedRoomIds[item.id - 1] = selectedRoom.id;
       this.selectedIdsEmitter.emit(this.selectedRoomIds);
 
-      if(this.eqItemsOutput.length==this.eqItems.length)
-      this.itemsEmitter.emit(this.eqItemsOutput)
+
 
     });
   }

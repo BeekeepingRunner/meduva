@@ -1,7 +1,5 @@
 import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
-import {
-  FormBuilder,
-} from "@angular/forms";
+import {FormBuilder} from "@angular/forms";
 import {ServicesService} from "../../../../service/services.service";
 import {RoomService} from "../../../../service/room.service";
 import {EquipmentItem, EquipmentModel} from "../../../../model/equipment";
@@ -15,7 +13,6 @@ import {Room} from "../../../../model/room";
 export interface NewModelRequest {
   modelName: string,
   itemCount: number,
-  servicesIds: number[],
   selectedRoomsIds: number[]
 }
 
@@ -29,7 +26,6 @@ export class NewModelCreatorComponent extends NewModelComponent implements OnIni
   modelName: string = '';
   isFormValid: boolean = false;
 
-  selectedServicesIds: number[] = [];
   serviceSelectionError: string = '';
 
   @Input() roomItems: Room[] = [];
@@ -44,7 +40,6 @@ export class NewModelCreatorComponent extends NewModelComponent implements OnIni
     deleted: false,
     items: [],
     services: []
-
   };
 
   selectedRoomsIds: number[] = [];
@@ -64,24 +59,6 @@ export class NewModelCreatorComponent extends NewModelComponent implements OnIni
   ngOnInit() {
     super.ngOnInit();
   }
-
-  /*saveModelWithItems() {
-    let newModelReuqest: NewModelRequest = {
-      modelName: this.modelName,
-      itemCount: this.eqItems.length,
-      servicesIds: this.selectedServicesIds,
-      selectedRoomsIds: this.selectedRoomsIds
-    };
-
-    this.equipmentService.saveNewModel(newModelReuqest).subscribe(
-      data => {
-        this.router.navigate(['/equipment']);
-      },
-      err => {
-        // TODO: do something with error
-      }
-    );
-  }*/
 
   onRoomsAssigned($event: EquipmentItem[]) {
     this.eqItems=$event;

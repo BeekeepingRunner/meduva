@@ -8,9 +8,19 @@
   <mat-selection-list #selectionListServices
                       [(ngModel)]="selectedRooms"
                       [compareWith]="compareFunction">
-    <mat-list-option *ngFor="let room of rooms" [value]="room">
+
+    <div *ngIf="this.service.itemless==false">
+      <mat-list-option *ngFor="let room of roomsToSelect" [value]="room">
       {{ room.name }}
-    </mat-list-option>
+      </mat-list-option>
+    </div>
+
+    <div *ngIf="this.service.itemless==true">
+      <mat-list-option *ngFor="let room of rooms" [value]="room">
+        {{ room.name }}
+      </mat-list-option>
+    </div>
+
   </mat-selection-list>
 </div>
 
