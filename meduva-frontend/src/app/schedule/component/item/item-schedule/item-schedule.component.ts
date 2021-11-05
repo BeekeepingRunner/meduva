@@ -48,7 +48,7 @@ export class ItemScheduleComponent implements OnInit {
     );
   }
 
-  private getWeeklyEvents() {
+  public getWeeklyEvents() {
     this.events = [];
     this.setFirstAndLastDayOfWeek();
     this.pushWeeklyUnavailability();
@@ -111,6 +111,7 @@ export class ItemScheduleComponent implements OnInit {
         (dayTimeRange: TimeRange) => {
           console.log(dayTimeRange); // git gud
           this.pushUnavailableDayToEvents(dayTimeRange);
+          this.getWeeklyEvents();
         }
       )
     }

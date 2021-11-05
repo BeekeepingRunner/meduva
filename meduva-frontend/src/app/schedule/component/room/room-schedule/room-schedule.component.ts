@@ -48,7 +48,7 @@ export class RoomScheduleComponent implements OnInit {
     );
   }
 
-  private getWeeklyEvents() {
+  public getWeeklyEvents() {
     this.events = [];
     this.setFirstAndLastDayOfWeek();
     this.pushWeeklyUnavailability();
@@ -76,12 +76,12 @@ export class RoomScheduleComponent implements OnInit {
 
   private pushUnavailabilities(weeklyUnavailability: TimeRange[]) {
     let newEvents = this.events;
+    this.events = [];
     weeklyUnavailability.forEach(unavailability => {
       newEvents.push(
         createUnavailabilityEvent(unavailability.startTime, unavailability.endTime)
       );
     });
-    this.events = [];
     this.events = [...newEvents];
   }
 
@@ -110,6 +110,7 @@ export class RoomScheduleComponent implements OnInit {
       this.scheduleService.setRoomDayUnavailability(this.room.id, this.clickedDate).subscribe(
         (dayTimeRange: TimeRange) => {
           this.pushUnavailableDayToEvents(dayTimeRange);
+          this.getWeeklyEvents();
         }
       )
     }

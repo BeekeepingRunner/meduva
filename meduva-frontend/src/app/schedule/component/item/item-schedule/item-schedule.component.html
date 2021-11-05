@@ -2,7 +2,9 @@
 <br>
 
 <mwl-demo-utils-calendar-header [(view)]="view"
-                                [(viewDate)]="viewDate">
+                                [(viewDate)]="viewDate"
+                                (viewDateChange)="getWeeklyEvents()"
+                                (viewChange)="getWeeklyEvents()">
 </mwl-demo-utils-calendar-header>
 
 <div class="alert alert-info">

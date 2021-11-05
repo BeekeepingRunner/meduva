@@ -50,7 +50,7 @@ export class WorkerScheduleComponent implements OnInit {
     );
   }
 
-  prepareWeekEvents() {
+  public prepareWeekEvents() {
     this.events = [];
     this.setFirstAndLastDayOfWeek();
     this.prepareWeeklyOffWorkHours();
