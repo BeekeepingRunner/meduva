@@ -50,7 +50,7 @@ export class EquipmentListCreatorComponent implements OnInit {
 
   openConfigureEquipmentCreatorDialog() {
     const equipmentCreatorDialogRef = this.dialog.open(ConfigureEquipmentCreatorDialogComponent,{
-      data: { roomItems: this.roomItems }
+      data: { roomItems: this.roomItems, eqModelsToCheck: this.models }
     });
     equipmentCreatorDialogRef.afterClosed().subscribe(equipmentModel => {
       if(equipmentModel){

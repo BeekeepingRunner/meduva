@@ -22,6 +22,7 @@ export class RoomsSelectServiceCreatorComponent extends RoomListComponent {
 
   selectedRooms: Room[] = [];
   roomsToSelect: Room[] = []
+  roomsToUncheck: string[] = [];
 
   automatically : boolean = true;
 
@@ -29,9 +30,9 @@ export class RoomsSelectServiceCreatorComponent extends RoomListComponent {
 
 
   ngOnInit(): void {
-
     this.getAllRoomsAssociatedWithSelectedServices();
     this.fetchRoomsFromDatabaseAndMergeWithRoomsFromCreator();
+    this.getRoomsNotAssosciatedWithAnyEquipment();
   }
 
   getAllRoomsAssociatedWithSelectedServices() {
@@ -55,7 +56,8 @@ export class RoomsSelectServiceCreatorComponent extends RoomListComponent {
       }
     }
 
-    this.roomsToSelect=Array.from(uniqueRooms.values())
+    this.roomsToSelect=Array.from(uniqueRooms.values());
+
   }
 
 
@@ -72,16 +74,43 @@ export class RoomsSelectServiceCreatorComponent extends RoomListComponent {
     );
   }
 
-  assignRoomsToService() {
-    for (let selectedRoom of this.selectedRooms){
-      for(let properRoom of this.rooms){
-        if(selectedRoom.name==properRoom.name){
-          if(!properRoom.services?.includes(this.service))
-            properRoom.services?.push(this.service);
-        }
+  getRoomsNotAssosciatedWithAnyEquipment(){
+
+    let uniqueRoomNames: string[] = [];
+    for(let model of this.creatorModels){
+      let eqItems = model.items;
+      for(let item of eqItems){
+        if(item.room && !uniqueRoomNames.includes(item.room.name))
+          uniqueRoomNames.push(item.room.name);
       }
     }
-    this.relatedRoomsEmitter.emit(this.rooms);
+    this.roomsToUncheck = uniqueRoomNames;
+  }
+
+  assignRoomsToService() {
+
+    if(!this.automatically){
+      for (let selectedRoom of this.selectedRooms){
+        for(let properRoom of this.rooms){
+          if(selectedRoom.name==properRoom.name){
+            if(!properRoom.services?.includes(this.service))
+              properRoom.services?.push(this.service);
+          }
+        }
+      }
+      this.relatedRoomsEmitter.emit(this.rooms);
+    }
+
+    else{
+      for(let anyRoom of this.rooms){
+        if(!this.roomsToUncheck.includes(anyRoom.name)){
+          if(!anyRoom.services?.includes(this.service))
+            anyRoom.services?.push(this.service);
+        }
+      }
+      this.relatedRoomsEmitter.emit(this.rooms);
+    }
+
   }
 
   changeAutoState(){
@@ -89,5 +118,12 @@ export class RoomsSelectServiceCreatorComponent extends RoomListComponent {
       this.automatically=false;
     else
       this.automatically=true;
+  }
+
+  ifRoomIsAssignedToAnyEquipment(room: Room) {
+    if(this.roomsToUncheck.includes(room.name))
+      return false;
+    else
+      return true;
   }
 }

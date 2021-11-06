@@ -29,7 +29,7 @@
 
 
   <div mat-dialog-actions>
-    <button mat-button [mat-dialog-close]="selectedRoom" [disabled]="!form.valid" >Ok</button>
+    <button mat-button [mat-dialog-close]="selectedRoom" [disabled]="!form.valid || checkIfRoomNameIsTaken()">Ok</button>
   </div>
   <br>
 

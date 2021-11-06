@@ -23,6 +23,8 @@ export class ServiceListCreatorComponent extends ServiceListComponent {
   @Output() equipmentConfigurationEmitter = new EventEmitter<EquipmentModel[]>();
   @Output() serviceConfigurationEmitter = new EventEmitter<Service[]>();
 
+  servicesFromDB : Service[] = [];
+
   constructor(
     servicesService: ServicesService,
     private equipmentService: EquipmentService,
@@ -32,20 +34,23 @@ export class ServiceListCreatorComponent extends ServiceListComponent {
 
   }
   ngOnInit() {
+    this.servicesService.getAllUndeletedServices().subscribe(
+      services => {
+        this.servicesFromDB = services;
+      }
+    )
     if(this.eqModels.length==0){
       this.equipmentService.getAllUndeletedEquipmentModels().subscribe(
         equipment => {
           this.eqModels=equipment;
         }
-
       );
     }
-
   }
 
   openServicesCreatorDialog() {
     const servicesCreatorDialogRef = this.dialog.open(ConfigureServicesCreatorDialogComponent,{
-      data: {roomItems: this.roomItems, eqModels: this.eqModels}
+      data: {roomItems: this.roomItems, eqModels: this.eqModels, services: this.servicesFromDB}
     });
     servicesCreatorDialogRef.afterClosed().subscribe(serviceRequest => {
       if(serviceRequest){

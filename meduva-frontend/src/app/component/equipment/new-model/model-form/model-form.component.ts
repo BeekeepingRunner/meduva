@@ -39,7 +39,6 @@ export class ModelFormComponent implements OnInit {
 
   validateForm(): void {
     this.modelName = this.modelFormGroup.controls.modelName.value;
-
     this.equipmentService.doesModelExistByName(this.modelName).subscribe(
       doesExist => {
         if (!doesExist) {

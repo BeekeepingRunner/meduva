@@ -26,6 +26,8 @@ export class NewModelCreatorComponent extends NewModelComponent implements OnIni
   modelName: string = '';
   isFormValid: boolean = false;
 
+  @Input() eqModelsFromDB: EquipmentModel[] = [];
+
   serviceSelectionError: string = '';
 
   @Input() roomItems: Room[] = [];

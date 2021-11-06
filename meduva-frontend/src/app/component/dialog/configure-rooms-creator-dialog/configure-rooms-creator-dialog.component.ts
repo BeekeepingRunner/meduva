@@ -8,6 +8,7 @@ import {FormBuilder} from "@angular/forms";
 export interface ConfigureRoomsCreatorDialogData {
   name: string
   description: string
+  roomItems: Room[]
 }
 
 @Component({
@@ -17,11 +18,13 @@ export interface ConfigureRoomsCreatorDialogData {
 })
 export class ConfigureRoomsCreatorDialogComponent extends NewRoomComponent{
 
+  defaultRoomName: string = '';
   rooms: Room[] = [];
   selectedRoom: Room = {
     name: "",
     description: "",
-    deleted: false
+    deleted: false,
+    services: []
   };
 
   constructor(
@@ -30,10 +33,21 @@ export class ConfigureRoomsCreatorDialogComponent extends NewRoomComponent{
     @Inject(MAT_DIALOG_DATA) public data: ConfigureRoomsCreatorDialogData,
   ) {
     super(formBuilder,roomService);
-    //selectedRoom.name = data.name
-    //selectedRoom.description = data.description
+    this.rooms = data.roomItems;
+    this.selectedRoom.name = data.name;
+    this.defaultRoomName = data.name;
+    this.selectedRoom.description = data.description;
   }
 
 
-
+  checkIfRoomNameIsTaken() {
+    for(let anyRoom of this.rooms){
+      if(anyRoom.name == this.defaultRoomName){
+        continue;
+      }
+      if(this.selectedRoom.name==anyRoom.name)
+        return true;
+    }
+    return false;
+  }
 }

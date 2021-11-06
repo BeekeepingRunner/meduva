@@ -14,6 +14,7 @@ import {Service} from "../../model/service";
 import {ConfigureServicesCreatorDialogComponent} from "../dialog/configure-services-creator-dialog/configure-services-creator-dialog.component";
 import {ConfirmationDialogComponent} from "../dialog/confirmation-dialog/confirmation-dialog.component";
 import {MatDialog} from "@angular/material/dialog";
+import {NewModelRequest} from "../equipment/new-model/new-model.component";
 
 
 export interface CreatorRequest {
@@ -28,16 +29,24 @@ export interface CreatorRequest {
   templateUrl: './creator.component.html',
   styleUrls: ['./creator.component.css']
 })
-export class CreatorComponent implements OnInit {
+export class CreatorComponent implements OnInit, NewModelRequest {
+
+  roomsFromDB: Room[] = [];
 
   isFormValid: boolean = false;
+  isRoomsValid: boolean = false;
 
   @Output() roomItems: Room[] = [];
   eqModels: EquipmentModel[] = [];
   services: Service[] = [];
 
-  private roomSelectComponent!: RoomSelectComponent;
   roomSelectionError: string = '';
+
+  /** Implementation of NewModelRequest requirements*/
+  itemCount!: number;
+  modelName!: string;
+  selectedRoomsIds!: number[];
+  servicesIds!: number[];
 
   constructor(
     private formBuilder: FormBuilder,
@@ -49,6 +58,9 @@ export class CreatorComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.roomService.getAllUndeletedRooms().subscribe(roomsForGetRoomNames => {
+      this.roomsFromDB = roomsForGetRoomNames;
+    });
 
   }
 
@@ -77,9 +89,10 @@ export class CreatorComponent implements OnInit {
           return false;
         }
       }
-      this.roomSelectionError = '';
 
-      return true;
+        this.roomSelectionError = '';
+        return true;
+
 
     } else {
       this.roomSelectionError = 'You must add minimum one room';
@@ -98,9 +111,86 @@ export class CreatorComponent implements OnInit {
     });
 
     confirmConfigurationDialogRef.afterClosed().subscribe(confirmed => {
+
       if (confirmed) {
-        console.log("Hurra")
       }
     });
+
+    this.servicesService.getAllUndeletedServices().subscribe(
+      services => {
+        for(let anyService of services){
+          allServicesIds.set(anyService.name, anyService.id);
+        }
+      }
+    );
+
+    this.roomService.getAllUndeletedRooms().subscribe(
+      rooms => {
+        for(let anyRoom of rooms){
+          allRoomsIds.set(anyRoom.name, anyRoom.id);
+        }
+      }
+    );
+
+
+
+
+    for(let service of this.services){
+          this.servicesService.addNewService(service).subscribe();
+        }
+        for(let room of this.roomItems){
+          this.roomService.addNewRoom(room).subscribe();
+        }
+
+        let allServicesIds = new Map();
+        let allRoomsIds = new Map();
+
+
+
+
+        for(let model of this.eqModels){
+
+          let modelServicesIds: number[] = [];
+          let modelRoomsIds: number[] = [];
+
+          for(let modelService of model.services){
+            modelServicesIds.push(allServicesIds.get(modelService.name));
+          }
+          for(let modelEquipment of model.items){
+            modelRoomsIds.push(allRoomsIds.get(modelEquipment.room?.name))
+          }
+          let modelRequest: NewModelRequest = {
+            modelName: model.name,
+            itemCount:model.items.length,
+            servicesIds:modelServicesIds,
+            selectedRoomsIds:modelRoomsIds
+          }
+
+          this.equipmentService.saveNewModel(modelRequest).subscribe();
+        }
+
+    this.router.navigate(['/home']);
+  }
+
+
+  checkIfNoRoomExistsInDatabase() {
+    let sameRoomNamesCounter: number = 0;
+    for(let anyRoom of this.roomItems){
+      for (let roomFromDB of this.roomsFromDB){
+        if(anyRoom.name==roomFromDB.name){
+          sameRoomNamesCounter++;
+        }
+      }
+    }
+    if(sameRoomNamesCounter == 0){
+      this.roomSelectionError = '';
+      return true;
+    }
+    else{
+      this.roomSelectionError = "One of these rooms has already been added";
+      return false;
+    }
+
+
   }
 }

@@ -32,6 +32,11 @@ public class ServicesController {
     @GetMapping("/all/itemless")
     public List<Service> findAllItemlessServices(){ return this.servicesService.findAllItemless(); }
 
+    @GetMapping("/service/doesExistWithName/{serviceName}")
+    public boolean doesExist(@PathVariable String serviceName) {
+        return servicesService.doesServiceExistByName(serviceName);
+    }
+
     @PostMapping
     public Service saveNewService(@RequestBody NewServiceRequest request) {
         Service service = new Service(

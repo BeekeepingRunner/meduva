@@ -13,7 +13,7 @@ export class ServiceListComponent implements OnInit {
   displayedColumns: string[] = ['name', 'duration', 'price'];
 
   constructor(
-    private servicesService: ServicesService
+    protected servicesService: ServicesService
   ) { }
 
   ngOnInit(): void {

@@ -16,7 +16,7 @@
 
 
   <mat-step label="Configure your rooms"
-            [completed]="areAllItemsDisplaced()">
+            [completed]="checkIfNoRoomExistsInDatabase()">
 
     <app-configure-rooms-creator *ngIf="roomItems.length"
                                  [roomItems]="roomItems"
@@ -37,8 +37,7 @@
 
 
 
-  <mat-step label="Add the equipment"
-            [completed]="areAllItemsDisplaced()">
+  <mat-step label="Add the equipment">
 
     <app-equipment-list-creator *ngIf="roomItems.length"
                                 [roomItems]="roomItems"
@@ -58,8 +57,7 @@
 
 
 
-  <mat-step label="Personalize services"
-            [completed]="areAllItemsDisplaced()">
+  <mat-step label="Personalize services">
 
     <app-service-list-creator *ngIf="roomItems.length"
                               [roomItems]="roomItems"

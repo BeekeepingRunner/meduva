@@ -38,6 +38,10 @@ public class RoomService {
                 .orElseThrow(() -> new EntityRecordNotFoundException("Room not found with id : " + id));
     }
 
+    public boolean doesRoomExistByName(String roomName) {
+        return this.roomRepository.existsByName(roomName);
+    }
+
     public Room saveNewRoom(Room room) {
 
         if (UndeletableWithNameUtils.canBeSaved(this.roomRepository, room.getName())) {

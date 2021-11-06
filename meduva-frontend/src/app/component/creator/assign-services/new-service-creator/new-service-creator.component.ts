@@ -21,6 +21,7 @@ export interface NewServiceRequest {
 export class NewServiceCreatorComponent extends NewServiceComponent implements NewServiceRequest {
   @Input() roomItems: Room[] = [];
   @Input() eqModels: EquipmentModel[] = [];
+  @Input() services: Service[] = [];
 
   @Input() selectedModels: EquipmentModel[] = [];
   serviceModels: EquipmentModel[] = [];
@@ -39,6 +40,7 @@ export class NewServiceCreatorComponent extends NewServiceComponent implements N
 
   onServiceCreated($event: Service){
     this.service=$event;
+    console.log(this.services+"tgu")
   }
 
   onItemsLinked($event: EquipmentModel[]) {

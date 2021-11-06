@@ -43,6 +43,10 @@ public class ServicesService {
                 .orElseThrow(() -> new EntityRecordNotFoundException("Service not found with id : " + serviceId));
     }
 
+    public boolean doesServiceExistByName(String serviceName) {
+        return this.serviceRepository.existsByName(serviceName);
+    }
+
     public Service save(Service service) {
 
         if (UndeletableWithNameUtils.canBeSaved(this.serviceRepository, service.getName())) {

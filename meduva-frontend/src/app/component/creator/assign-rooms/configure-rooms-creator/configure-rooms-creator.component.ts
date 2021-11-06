@@ -29,7 +29,7 @@ export class ConfigureRoomsCreatorComponent implements OnInit {
 
   openRoomSelectionDialog(item: Room) {
     const roomSelectionDialogRef = this.dialog.open(ConfigureRoomsCreatorDialogComponent, {
-      data: { name: item.name, description: item.description }
+      data: { name: item.name, description: item.description, roomItems: this.roomItems }
     });
     roomSelectionDialogRef.afterClosed().subscribe(room => {
 

@@ -1,4 +1,4 @@
-import {Component, EventEmitter, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {forbidValuesBetweenStep} from "../../../../util/validator/number-step";
 import {ServicesService} from "../../../../service/services.service";
@@ -13,7 +13,10 @@ import {EquipmentItem} from "../../../../model/equipment";
 })
 export class NewServiceDetailsCreatorComponent extends NewServiceComponent{
   @Output() newServiceEmitter = new EventEmitter<Service>();
+  @Input() services: Service[] = [];
 
+  serviceNameError: string = '';
+  successMessage: string = '';
 
   onServiceCreated() {
     let service: Service = {
@@ -24,6 +27,26 @@ export class NewServiceDetailsCreatorComponent extends NewServiceComponent{
       itemless: this.form.controls.itemless.value,
       deleted: false
     };
-    this.newServiceEmitter.emit(service);
+
+      this.newServiceEmitter.emit(service);
+
+  }
+
+  checkIfServiceNameAlreadyExists(){
+    let serviceName: string = this.form.controls.name.value;
+    let isNameTaken: boolean = false;
+    for(let everyService of this.services){
+      if(serviceName==everyService.name){
+        this.serviceNameError="A service with this name already exists";
+        this.successMessage='';
+        isNameTaken = true;
+      }
+    }
+    if(!isNameTaken){
+      this.serviceNameError='';
+      this.successMessage = 'Success! Move to the next step';
+      this.onServiceCreated();
+    }
+
   }
 }

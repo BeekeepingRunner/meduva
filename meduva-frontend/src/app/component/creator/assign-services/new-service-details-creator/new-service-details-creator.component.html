@@ -59,9 +59,16 @@
 <br>
 <button mat-raised-button color="primary" type="button"
         [disabled]="!form.valid"
-        (click)="onServiceCreated()">Save</button>
+        (click)="checkIfServiceNameAlreadyExists()">Save</button>
 
 <div>
   <button mat-button matStepperNext>Next</button>
 </div>
 
+<br>
+<div *ngIf="serviceNameError" class="alert alert-warning">
+  <p>{{ serviceNameError }}</p>
+</div>
+<div *ngIf="successMessage" class="alert alert-success">
+  <p>{{ successMessage }}</p>
+</div>

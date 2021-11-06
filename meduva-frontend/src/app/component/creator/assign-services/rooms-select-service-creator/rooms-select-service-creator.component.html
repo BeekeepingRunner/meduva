@@ -4,19 +4,21 @@
 
 <mat-checkbox id="autoPickRooms" (change)="changeAutoState()" [checked]="automatically">Automatically</mat-checkbox>
 
-<div class="alert alert-warning" *ngIf="!automatically">
+<br>
+
+<div class="alert alert-primary" *ngIf="!automatically">
   <mat-selection-list #selectionListServices
                       [(ngModel)]="selectedRooms"
                       [compareWith]="compareFunction">
 
     <div *ngIf="this.service.itemless==false">
-      <mat-list-option *ngFor="let room of roomsToSelect" [value]="room">
+      <mat-list-option *ngFor="let room of roomsToSelect" [value]="room" [selected]="true">
       {{ room.name }}
       </mat-list-option>
     </div>
 
     <div *ngIf="this.service.itemless==true">
-      <mat-list-option *ngFor="let room of rooms" [value]="room">
+      <mat-list-option *ngFor="let room of rooms" [value]="room" [selected]="ifRoomIsAssignedToAnyEquipment(room)">
         {{ room.name }}
       </mat-list-option>
     </div>
@@ -24,6 +26,10 @@
   </mat-selection-list>
 </div>
 
+<br>
+<div class="alert alert-warning">
+  <p>{{ "Attention! Choosing custom rooms for the service may cause inaccuracies when making appointments, choose carefully." }}</p>
+</div>
 <br>
 <div>
   <button mat-button matStepperPrevious>Back</button>

@@ -9,7 +9,8 @@
 
 
   <app-new-service-details-creator
-                                      (newServiceEmitter)="onServiceCreated($event)">
+                                      (newServiceEmitter)="onServiceCreated($event)"
+                                      [services]="services">
   </app-new-service-details-creator>
   <br>
 
