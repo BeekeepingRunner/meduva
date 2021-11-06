@@ -18,6 +18,7 @@ import {Subject} from "rxjs";
 import {DateAdapter, MAT_DATE_FORMATS, MatDateFormats} from "@angular/material/core";
 import {takeUntil} from "rxjs/operators";
 import {addMonth, DateUtil, getFormattedDate, substractMonth} from "../../../util/date";
+import {JwtStorageService} from "../../../service/token/jwt-storage.service";
 
 @Component({
   selector: 'app-pick-term',
@@ -28,6 +29,7 @@ import {addMonth, DateUtil, getFormattedDate, substractMonth} from "../../../uti
 })
 export class PickTermComponent implements OnInit {
 
+  clientId!: number | undefined;
   selectedService!: Service | null;
   selectedWorker!: User | null;
   loading: boolean = true;
@@ -39,7 +41,7 @@ export class PickTermComponent implements OnInit {
   canSelectTerm: boolean = false;
 
   availableTerms: Term[] = [];
-  displayedColumns: string[] = ["date"];
+  hourSelected: boolean = false;
 
   errorMessage: string = '';
 
@@ -78,11 +80,13 @@ export class PickTermComponent implements OnInit {
   constructor(
     private visitService: VisitService,
     private servicesService: ServicesService,
+    private jwtStorageService: JwtStorageService,
     private datePipe: DatePipe,
     private router: Router,
   ) { }
 
   ngOnInit(): void {
+    this.clientId = this.jwtStorageService.getCurrentUser()?.id;
     this.selectedService = this.visitService.getSelectedService();
     if (this.serviceHasBeenSelected()) {
       console.log("service selected");
@@ -155,11 +159,11 @@ export class PickTermComponent implements OnInit {
   }
 
   selectTerm(term: Term) {
-    this.visitService.saveSelectedTerm(term);
     this.router.navigate(['/visit/pick-client']);
   }
 
   onDayPick($event: MatDatepickerInputEvent<Date, Date | null>) {
+    this.hourSelected = false;
     this.lastPickedDay = $event.value;
     this.asyncHeader.lastPickedDay = $event.value;
     this.generatingTerms = true;
@@ -167,7 +171,11 @@ export class PickTermComponent implements OnInit {
     let dayStr = getFormattedDate(this.lastPickedDay);
     // @ts-ignore
     this.visitService.getWorkerTermsForDay(this.selectedWorker?.id, this.selectedService?.id, dayStr).subscribe(
-      possibleTerms => {
+      (possibleTerms: Term[]) => {
+        possibleTerms.forEach(term => {
+          // @ts-ignore
+          term.clientId = this.clientId;
+        });
         console.log(possibleTerms);
         this.availableTerms = possibleTerms;
         this.canSelectTerm = true;
@@ -175,6 +183,15 @@ export class PickTermComponent implements OnInit {
         }, err => {
         console.log(err);
       });
+  }
+
+  onTermClick(term: Term) {
+    this.visitService.saveSelectedTerm(term);
+    this.hourSelected = true;
+  }
+
+  onSubmit() {
+    console.log(this.visitService.getSelectedTerm());
   }
 }
 
