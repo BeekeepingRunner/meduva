@@ -34,6 +34,7 @@ export class SelectWorkerComponent implements OnInit {
       this.workerService.getAllByPerformedService(this.selectedService?.id).subscribe(
         workers => {
           this.workers = workers;
+          this.deleteCurrentUserFromList();
         }, err => {
           this.errorMessage = 'There are no workers for selected service';
         }
@@ -46,6 +47,11 @@ export class SelectWorkerComponent implements OnInit {
   private serviceHasBeenSelected(): boolean {
     this.selectedService = this.visitService.getSelectedService();
     return this.selectedService != null && this.selectedService.id != null;
+  }
+
+  private deleteCurrentUserFromList() {
+    let currentUserId = this.jwtTokenStorageService.getCurrentUser()?.id;
+    this.workers = this.workers.filter(client => client.id != currentUserId);
   }
 
   submitWorker(worker: User) {
