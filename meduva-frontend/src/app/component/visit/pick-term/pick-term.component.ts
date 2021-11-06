@@ -191,7 +191,7 @@ export class PickTermComponent implements OnInit {
   }
 
   onSubmit() {
-    console.log(this.visitService.getSelectedTerm());
+    this.router.navigate(['/visit/summary']);
   }
 }
 
