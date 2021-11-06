@@ -148,7 +148,6 @@ export class PickTermComponent implements OnInit {
   onDatePickerClick() {
     this.selectedService = this.visitService.getSelectedService();
     if (this.serviceHasBeenSelected()) {
-
       this.selectedWorker = this.visitService.getSelectedWorker();
       if (this.workerHasBeenSelected()) {
         this.waitForWorkerAvailableDays();
@@ -156,10 +155,6 @@ export class PickTermComponent implements OnInit {
         this.waitForAvailableDays();
       }
     }
-  }
-
-  selectTerm(term: Term) {
-    this.router.navigate(['/visit/pick-client']);
   }
 
   onDayPick($event: MatDatepickerInputEvent<Date, Date | null>) {
@@ -176,7 +171,6 @@ export class PickTermComponent implements OnInit {
           // @ts-ignore
           term.clientId = this.clientId;
         });
-        console.log(possibleTerms);
         this.availableTerms = possibleTerms;
         this.canSelectTerm = true;
         this.generatingTerms = false;
@@ -249,7 +243,6 @@ export class AsyncDatePickerHeader<D> implements OnInit, OnDestroy {
     private _calendar: MatCalendar<D>, private _dateAdapter: DateAdapter<D>,
     @Inject(MAT_DATE_FORMATS) private _dateFormats: MatDateFormats, cdr: ChangeDetectorRef,
     private visitService: VisitService,
-    private dateUtil: DateUtil
     ) {
     _calendar.stateChanges
       .pipe(takeUntil(this._destroyed))
@@ -281,7 +274,7 @@ export class AsyncDatePickerHeader<D> implements OnInit, OnDestroy {
     if (this.workerId != undefined) {
       this.waitForWorkerPreviousAvailableDays(mode, dateToSendStr);
     } else {
-      // TODO: check if service can be performed given day by anyone
+      // TODO: SOMEDAY - check if service can be performed given day by anyone
       // this.visitService.getAvailableDaysInMonth(serviceId, activeDate);
     }
   }
