@@ -106,6 +106,9 @@ export class CreatorComponent implements OnInit, NewModelRequest {
     console.log(this.eqModels);
     console.log(this.services);
 
+    let allServicesIds = new Map();
+    let allRoomsIds = new Map();
+
     const confirmConfigurationDialogRef = this.dialog.open(ConfirmationDialogComponent, {
       data: { message: 'Are u sure you want to save that configuration?' }
     });
@@ -116,14 +119,41 @@ export class CreatorComponent implements OnInit, NewModelRequest {
       }
     });
 
-    this.servicesService.getAllUndeletedServices().subscribe(
-      services => {
+        for(let service of this.services){
+          this.servicesService.addNewService(service).subscribe();
+        }
+
+        this.servicesService.getAllUndeletedServices().subscribe(
+        services => {
         for(let anyService of services){
           allServicesIds.set(anyService.name, anyService.id);
-        }
-      }
-    );
+           }
+          }
+        );
 
+        for(let room of this.roomItems){
+          if(room.id==undefined)
+          this.roomService.addNewRoom(room).subscribe(
+            data => {
+              if(data.id && room.services){
+                for(let anyRoomService of room.services){
+                  anyRoomService.id=allServicesIds.get(anyRoomService.name);
+                }
+                this.roomService.editServices(data.id, room.services).subscribe()
+              }
+            }
+          );
+          else{
+            if(room.services){
+              for(let anyRoomService of room.services){
+                anyRoomService.id=allServicesIds.get(anyRoomService.name);
+              }
+              //powoduje duplikacje uslug (kazda usluga dodaje sie od nowa i przypisuje do roomu - trzeba napisac nowa funkcje na backendzie)
+              this.roomService.editServices(room.id, room.services).subscribe()
+            }
+          }
+        }
+    /**
     this.roomService.getAllUndeletedRooms().subscribe(
       rooms => {
         for(let anyRoom of rooms){
@@ -131,24 +161,9 @@ export class CreatorComponent implements OnInit, NewModelRequest {
         }
       }
     );
+*/
 
-
-
-
-    for(let service of this.services){
-          this.servicesService.addNewService(service).subscribe();
-        }
-        for(let room of this.roomItems){
-          this.roomService.addNewRoom(room).subscribe();
-        }
-
-        let allServicesIds = new Map();
-        let allRoomsIds = new Map();
-
-
-
-
-        for(let model of this.eqModels){
+       /** for(let model of this.eqModels){
 
           let modelServicesIds: number[] = [];
           let modelRoomsIds: number[] = [];
@@ -168,7 +183,7 @@ export class CreatorComponent implements OnInit, NewModelRequest {
 
           this.equipmentService.saveNewModel(modelRequest).subscribe();
         }
-
+*/
     this.router.navigate(['/home']);
   }
 
