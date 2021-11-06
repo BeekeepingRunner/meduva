@@ -45,8 +45,9 @@ public class VisitController {
     }
 
     @GetMapping("/get-worker-available-days-in-month")
-    public List<Date> getWorkerAvailableDaysOfMonth(@RequestParam Long workerId, @RequestParam Long serviceId, @RequestParam String anyDayFromMonth) throws ParseException {
-
+    public List<Date> getWorkerAvailableDaysOfMonth(@RequestParam Long workerId,
+                                                    @RequestParam Long serviceId,
+                                                    @RequestParam String anyDayFromMonth) throws ParseException {
         Date anyDayOfMonth = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").parse(anyDayFromMonth);
         User worker = userService.findById(workerId);
         Service service = servicesService.findById(serviceId);
@@ -54,8 +55,9 @@ public class VisitController {
     }
 
     @GetMapping("/get-available-worker-terms-for-day")
-    public List<Date> getWorkerAvailableTermsForDay(@RequestParam Long workerId, @RequestParam Long serviceId, @RequestParam String dayDate) throws ParseException {
-
+    public List<Term> getWorkerAvailableTermsForDay(@RequestParam Long workerId,
+                                                    @RequestParam Long serviceId,
+                                                    @RequestParam String dayDate) throws ParseException {
         Date day = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").parse(dayDate);
         User worker = userService.findById(workerId);
         Service service = servicesService.findById(serviceId);

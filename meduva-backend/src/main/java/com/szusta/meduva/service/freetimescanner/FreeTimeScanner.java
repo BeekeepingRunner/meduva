@@ -5,6 +5,7 @@ import com.szusta.meduva.model.Service;
 import com.szusta.meduva.model.User;
 import com.szusta.meduva.model.WorkHours;
 import com.szusta.meduva.model.equipment.EquipmentItem;
+import com.szusta.meduva.payload.Term;
 import com.szusta.meduva.payload.TimeRange;
 import com.szusta.meduva.repository.WorkHoursRepository;
 import com.szusta.meduva.repository.equipment.EquipmentItemRepository;
@@ -15,9 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * Make sure that before using FreeTimeScanner, its fields are set appropriately
@@ -33,8 +32,12 @@ public class FreeTimeScanner {
 
     private ScheduleChecker scheduleChecker;
     private WorkHoursRepository workHoursRepository;
-
     private EquipmentItemRepository equipmentItemRepository;
+
+    private Room availableRoom;
+    private EquipmentItem availableEqItem;
+    private Calendar potentialTermStart;
+    private Calendar potentialTermEnd;
 
     @Autowired
     public FreeTimeScanner(ScheduleChecker scheduleChecker,
@@ -94,21 +97,21 @@ public class FreeTimeScanner {
         return false;
     }
 
-    private Calendar getWorkStartTime(Calendar dayStartCal) throws NotAvailableException {
-        WorkHours workHours = getWorkHours(dayStartCal);
+    private Calendar getWorkStartTime(Calendar day) throws NotAvailableException {
+        WorkHours workHours = getWorkHours(day);
         return TimeUtils.getCalendar(workHours.getStartTime());
     }
 
-    private Date getWorkEndTime(Calendar dayStartCal) throws NotAvailableException {
-        WorkHours workHours = getWorkHours(dayStartCal);
+    private Date getWorkEndTime(Calendar day) throws NotAvailableException {
+        WorkHours workHours = getWorkHours(day);
         Calendar cal = Calendar.getInstance();
         cal.setTime(workHours.getEndTime());
         cal.add(Calendar.MINUTE, 1); // because service could end exactly at work end time
         return cal.getTime();
     }
 
-    private WorkHours getWorkHours(Calendar dayStartCal) throws NotAvailableException {
-        Date dayStart = dayStartCal.getTime();
+    private WorkHours getWorkHours(Calendar day) throws NotAvailableException {
+        Date dayStart = TimeUtils.getDayStart(day.getTime());
         Date dayEnd = TimeUtils.getDayEnd(dayStart);
 
         List<WorkHours> dayWorkHours =
@@ -162,5 +165,64 @@ public class FreeTimeScanner {
             }
         }
         throw new NotAvailableException("There are no available equipment items");
+    }
+
+    public List<Term> getWorkerPossibleTerms(Date day) {
+        try {
+            List<Term> possibleTerms = new ArrayList<>();
+            this.potentialTermStart = getWorkStartTime(TimeUtils.getCalendar(day));
+
+            Date potentialTermEnd = getPotentialTermEnd(potentialTermStart.getTime(), service.getDurationInMin());
+            this.potentialTermEnd = TimeUtils.getCalendar(potentialTermEnd);
+            Date workEndTime = getWorkEndTime(TimeUtils.getCalendar(day));
+            do {
+                TimeRange potentialTermTimeRange = new TimeRange(
+                        this.potentialTermStart.getTime(),
+                        this.potentialTermEnd.getTime());
+
+                if (scheduleChecker.isWorkerFree(potentialTermTimeRange, worker)) {
+
+                    this.availableRoom = getFirstAvailableRoom(rooms, potentialTermTimeRange);
+                    if (service.isItemless()) {
+                        possibleTerms.add(createTermWithoutItem());
+                    } else {
+                        List<EquipmentItem> suitableEqItems =
+                                equipmentItemRepository.findAllSuitableForServiceInRoom(service.getId(), availableRoom.getId());
+                        this.availableEqItem = getFirstAvailableEqItem(suitableEqItems, potentialTermTimeRange);
+                        possibleTerms.add(createTermWithItem());
+                    }
+                }
+
+                potentialTermStart.add(Calendar.MINUTE, 30);
+                potentialTermEnd = getPotentialTermEnd(potentialTermEnd, service.getDurationInMin());
+                this.potentialTermEnd = TimeUtils.getCalendar(potentialTermEnd);
+            } while (potentialTermEnd.before(workEndTime));
+
+            return possibleTerms;
+        } catch (NotAvailableException ex) {
+            System.out.println(ex.getMessage());
+            return Collections.emptyList();
+        }
+    }
+
+    private Term createTermWithItem() {
+        Term term = new Term();
+        term.setWorkerId(worker.getId());
+        term.setServiceId(service.getId());
+        term.setStartTime(potentialTermStart.getTime());
+        term.setEndTime(this.potentialTermEnd.getTime());
+        term.setRoomId(availableRoom.getId());
+        term.setEqItemId(availableEqItem.getId());
+        return term;
+    }
+
+    private Term createTermWithoutItem() {
+        Term term = new Term();
+        term.setWorkerId(worker.getId());
+        term.setServiceId(service.getId());
+        term.setStartTime(this.potentialTermStart.getTime());
+        term.setEndTime(this.potentialTermEnd.getTime());
+        term.setRoomId(this.availableRoom.getId());
+        return term;
     }
 }

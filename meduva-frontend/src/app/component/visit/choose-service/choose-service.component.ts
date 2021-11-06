@@ -49,7 +49,8 @@ export class ChooseServiceComponent implements OnInit {
       if (clientWantsToSelectWorker) {
         this.router.navigate(['/visit/pick-worker']);
       } else {
-        this.router.navigate(['/visit/pick-term']);
+        // TODO: someday - generate terms without particular worker
+        this.router.navigate(['/visit/pick-worker']);
       }
     });
   }

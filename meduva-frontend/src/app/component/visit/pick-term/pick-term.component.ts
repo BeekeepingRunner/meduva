@@ -31,19 +31,17 @@ export class PickTermComponent implements OnInit {
   selectedService!: Service | null;
   selectedWorker!: User | null;
   loading: boolean = true;
-  canChooseTerm: boolean = false;
+  canChooseDay: boolean = false;
 
+  asyncHeader = AsyncDatePickerHeader;
   lastPickedDay!: Date | null;
-
   generatingTerms: boolean = false;
-  canSelectHour: boolean = false;
+  canSelectTerm: boolean = false;
 
   availableTerms: Term[] = [];
   displayedColumns: string[] = ["date"];
 
   errorMessage: string = '';
-
-  asyncHeader = AsyncDatePickerHeader;
 
   dateFilter = (date: Date | null): boolean => {
     if (date != null) {
@@ -116,7 +114,7 @@ export class PickTermComponent implements OnInit {
         console.log("avail days " + availDays);
         this.visitService.saveAvailableDates(availDays);
         this.loading = false;
-        this.canChooseTerm = true;
+        this.canChooseDay = true;
       }, err => {
         console.log(err);
       }
@@ -138,7 +136,7 @@ export class PickTermComponent implements OnInit {
     this.visitService.getAvailableDaysInMonth(serviceId, activeDateStr).subscribe(
       availDays => {
         this.visitService.saveAvailableDates(availDays);
-        this.canChooseTerm = true;
+        this.canChooseDay = true;
       }
     );
   }
@@ -156,19 +154,6 @@ export class PickTermComponent implements OnInit {
     }
   }
 
-  private getTermsForService(serviceId: number) {
-    this.servicesService.getTermsForService(serviceId).subscribe(
-      terms => {
-        this.availableTerms = terms;
-        this.generatingTerms = false;
-      },
-      err => {
-        this.errorMessage = err.error.message;
-        this.generatingTerms = false;
-      }
-    );
-  }
-
   selectTerm(term: Term) {
     this.visitService.saveSelectedTerm(term);
     this.router.navigate(['/visit/pick-client']);
@@ -177,18 +162,19 @@ export class PickTermComponent implements OnInit {
   onDayPick($event: MatDatepickerInputEvent<Date, Date | null>) {
     this.lastPickedDay = $event.value;
     this.asyncHeader.lastPickedDay = $event.value;
-    console.log(this.lastPickedDay);
-
+    this.generatingTerms = true;
     // @ts-ignore
-    this.visitService.getWorkerTermsForDay(this.selectedWorker?.id,
-      this.selectedService?.id,
-      this.lastPickedDay).subscribe(
-        possibleHours => {
-            console.log(possibleHours);
-          }, err => {
-            console.log(err);
-          }
-        );
+    let dayStr = getFormattedDate(this.lastPickedDay);
+    // @ts-ignore
+    this.visitService.getWorkerTermsForDay(this.selectedWorker?.id, this.selectedService?.id, dayStr).subscribe(
+      possibleTerms => {
+        console.log(possibleTerms);
+        this.availableTerms = possibleTerms;
+        this.canSelectTerm = true;
+        this.generatingTerms = false;
+        }, err => {
+        console.log(err);
+      });
   }
 }
 
