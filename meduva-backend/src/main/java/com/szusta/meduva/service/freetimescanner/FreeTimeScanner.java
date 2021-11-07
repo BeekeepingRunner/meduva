@@ -26,6 +26,8 @@ import java.util.*;
 @Setter
 public class FreeTimeScanner {
 
+    public static int TIME_STEP_IN_MINUTES = 15;
+
     private User worker;
     private Service service;
     private List<Room> rooms;
@@ -90,8 +92,8 @@ public class FreeTimeScanner {
                 return doesFreeRoomExist(potentialTermTimeRange);
             }
 
-            this.potentialTermStart.add(Calendar.MINUTE, 30);
-            this.potentialTermEnd = getPotentialTermEnd(this.potentialTermEnd, service.getDurationInMin());
+            this.potentialTermStart.add(Calendar.MINUTE, TIME_STEP_IN_MINUTES);
+            this.potentialTermEnd = getPotentialTermEnd(this.potentialTermStart, service.getDurationInMin());
         } while (this.potentialTermEnd.before(workEndTime));
 
         return false;
@@ -132,39 +134,41 @@ public class FreeTimeScanner {
 
     private boolean doesFreeRoomExist(TimeRange potentialTermTimeRange) throws NotAvailableException {
         Room availableRoom = getFirstAvailableRoom(rooms, potentialTermTimeRange);
-        if (service.isItemless()) {
-            return true;
+        if (availableRoom != null) {
+            if (service.isItemless()) {
+                return true;
+            } else {
+                return doesFreeItemExist(availableRoom, potentialTermTimeRange);
+            }
         } else {
-            return doesFreeItemExist(availableRoom, potentialTermTimeRange);
+            return false;
         }
     }
 
-    private Room getFirstAvailableRoom(List<Room> suitableRooms, TimeRange timeRange)
-            throws NotAvailableException {
+    private Room getFirstAvailableRoom(List<Room> suitableRooms, TimeRange timeRange) {
         for (Room room : suitableRooms) {
             if (scheduleChecker.isRoomFree(timeRange, room)) {
                 return room;
             }
         }
-        throw new NotAvailableException("There are no available rooms");
+        return null;
     }
 
-    private boolean doesFreeItemExist(Room availableRoom, TimeRange potentialTermTimeRange) throws NotAvailableException {
+    private boolean doesFreeItemExist(Room availableRoom, TimeRange potentialTermTimeRange) {
         List<EquipmentItem> suitableEqItems =
                 equipmentItemRepository.findAllSuitableForServiceInRoom(service.getId(), availableRoom.getId());
-        getFirstAvailableEqItem(suitableEqItems, potentialTermTimeRange);
-        return true;
+        EquipmentItem availableEqItem = getFirstAvailableEqItem(suitableEqItems, potentialTermTimeRange);
+        return availableEqItem != null;
     }
 
-    private EquipmentItem getFirstAvailableEqItem(List<EquipmentItem> suitableEqItems, TimeRange timeRange)
-            throws NotAvailableException {
+    private EquipmentItem getFirstAvailableEqItem(List<EquipmentItem> suitableEqItems, TimeRange timeRange) {
         for (EquipmentItem item : suitableEqItems) {
             if (scheduleChecker.isEqItemFree(timeRange, item)) {
                 System.out.println(item.getName() + "is free between " + timeRange.getStartTime() + " and " + timeRange.getEndTime());
                 return item;
             }
         }
-        throw new NotAvailableException("There are no available equipment items");
+        return null;
     }
 
     public List<Term> getWorkerPossibleTerms(Date day) {
@@ -182,19 +186,24 @@ public class FreeTimeScanner {
                 if (scheduleChecker.isWorkerFree(potentialTermTimeRange, worker)) {
 
                     this.availableRoom = getFirstAvailableRoom(rooms, potentialTermTimeRange);
-                    if (service.isItemless()) {
-                        possibleTerms.add(createTermWithoutItem());
-                    } else {
-                        List<EquipmentItem> suitableEqItems =
-                                equipmentItemRepository.findAllSuitableForServiceInRoom(service.getId(), availableRoom.getId());
-                        this.availableEqItem = getFirstAvailableEqItem(suitableEqItems, potentialTermTimeRange);
-                        possibleTerms.add(createTermWithItem());
+                    if (this.availableRoom != null) {
+
+                        if (service.isItemless()) {
+                            possibleTerms.add(createTermWithoutItem());
+                        } else {
+                            List<EquipmentItem> suitableEqItems =
+                                    equipmentItemRepository.findAllSuitableForServiceInRoom(service.getId(), availableRoom.getId());
+                            this.availableEqItem = getFirstAvailableEqItem(suitableEqItems, potentialTermTimeRange);
+                            if (this.availableEqItem != null) {
+                                possibleTerms.add(createTermWithItem());
+                            }
+                        }
                     }
                 }
 
-                this.potentialTermStart.add(Calendar.MINUTE, 30);
-                this.potentialTermEnd = getPotentialTermEnd(this.potentialTermEnd, service.getDurationInMin());
-            } while (this.potentialTermEnd.before(workEndTime));
+                this.potentialTermStart.add(Calendar.MINUTE, 15);
+                this.potentialTermEnd = getPotentialTermEnd(this.potentialTermStart, service.getDurationInMin());
+            } while (this.potentialTermEnd.before(TimeUtils.getCalendar(workEndTime)));
 
             return possibleTerms;
         } catch (NotAvailableException ex) {
