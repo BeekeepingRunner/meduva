@@ -75,9 +75,9 @@ export class ScheduleService {
     const httpOptions: any = {
       headers: new HttpHeaders({ 'Content-Type' : 'application/json',
          }),
-      body: {absenceDay: absenceDayDate.toString()}
+      body: {absenceDay: absenceDayDate}
     };
-    
+
     return this.httpClient.delete(environment.API_BASE_URL + 'api/worker/delete-daily-absence-hours/' + WorkerId, httpOptions);
   }
 }

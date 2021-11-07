@@ -6,6 +6,7 @@ import com.szusta.meduva.model.WorkHours;
 import com.szusta.meduva.model.schedule.WorkerSchedule;
 import com.szusta.meduva.payload.TimeRange;
 import com.szusta.meduva.payload.WeekBoundaries;
+import com.szusta.meduva.payload.request.DeleteDailyAbsenceHoursRequest;
 import com.szusta.meduva.service.ServicesService;
 import com.szusta.meduva.service.WorkManager;
 import com.szusta.meduva.service.WorkerService;
@@ -92,5 +93,11 @@ public class WorkerController {
         Date newAbsenceStartTime = absenceHours.getStartTime();
         Date newAbsenceEndTime = absenceHours.getEndTime();
         return workManager.setDailyAbsenceHours(worker, newAbsenceStartTime, newAbsenceEndTime);
+    }
+
+    @DeleteMapping("/delete-daily-absence-hours/{workerId}")
+    public WorkerSchedule deleteDailyAbsenceHours(@PathVariable Long workerId, @RequestBody DeleteDailyAbsenceHoursRequest request) {
+
+        return null;
     }
 }

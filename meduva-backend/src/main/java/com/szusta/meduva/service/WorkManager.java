@@ -63,7 +63,7 @@ public class WorkManager {
 
     @Transactional
     public WorkHours setWorkHours(User worker, Date newWorkStartTime, Date newWorkEndTime) {
-        boolean collidingVisitsExist =
+      boolean collidingVisitsExist =
                 hasVisitsBefore(newWorkStartTime, worker)
                 && hasVisitsAfter(newWorkEndTime, worker);
 
@@ -79,12 +79,17 @@ public class WorkManager {
 
     @Transactional
     public WorkerSchedule setDailyAbsenceHours(User worker, Date newAbsenceStartTime, Date newAbsenceEndTime) {
-        deleteDailyAbsenceHours(worker, newAbsenceStartTime);
+
+        TimeRange wantedAbsenceTimeRange = new TimeRange(newAbsenceStartTime, newAbsenceEndTime);
         boolean collidingVisitsExist =
-                hasVisitsBefore(newAbsenceStartTime, worker)
-                        && hasVisitsAfter(newAbsenceEndTime, worker);
+                scheduleChecker.isBusyWith(worker, EWorkerStatus.WORKER_OCCUPIED, wantedAbsenceTimeRange);
+
+        System.out.println(collidingVisitsExist);
+        System.out.println(wantedAbsenceTimeRange.getStartTime().toString());
+        System.out.println(wantedAbsenceTimeRange.getEndTime().toString());
 
         if(!collidingVisitsExist){
+            deleteDailyAbsenceHours(worker, newAbsenceStartTime);
             WorkerSchedule workerSchedule = new WorkerSchedule(worker, newAbsenceStartTime, newAbsenceEndTime);
             WorkerStatus workerStatus = workerStatusRepository.findById(EWorkerStatus.WORKER_ABSENT.getValue()).get();
             workerSchedule.setWorkerStatus(workerStatus);
@@ -138,7 +143,11 @@ public class WorkManager {
     public List<? super WorkerSchedule> getWeeklyAbsenceHours(User worker, Date firstWeekDay, Date lastWeekDay) {
         firstWeekDay = TimeUtils.getDayStart(firstWeekDay);
         lastWeekDay = TimeUtils.getDayEnd(lastWeekDay);
-        return workerScheduleRepository.findAllDuring(firstWeekDay, lastWeekDay, worker.getId());
+        return workerScheduleRepository.findAllDuring(
+                firstWeekDay,
+                lastWeekDay,
+                worker.getId(),
+                EWorkerStatus.WORKER_ABSENT.getValue());
     }
 
     private List<TimeRange> convertToOffWorkHours(List<WorkHours> weeklyWorkHours) {
