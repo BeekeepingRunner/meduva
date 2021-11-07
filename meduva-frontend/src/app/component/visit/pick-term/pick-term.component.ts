@@ -17,7 +17,7 @@ import {User} from "../../../model/user";
 import {Subject} from "rxjs";
 import {DateAdapter, MAT_DATE_FORMATS, MatDateFormats} from "@angular/material/core";
 import {takeUntil} from "rxjs/operators";
-import {addMonth, DateUtil, getFormattedDate, substractMonth} from "../../../util/date";
+import {addMonth, DateUtil, getFormattedDate, isInThePast, substractMonth} from "../../../util/date";
 import {JwtStorageService} from "../../../service/token/jwt-storage.service";
 
 @Component({
@@ -62,6 +62,10 @@ export class PickTermComponent implements OnInit {
   }
 
   private isAvailable(date: Date): boolean {
+    if (isInThePast(date)) {
+      return false;
+    }
+
     let isAvailable = false;
     let availableMonthDays: Date[] = this.visitService.getAvailableDates();
     console.log(availableMonthDays);

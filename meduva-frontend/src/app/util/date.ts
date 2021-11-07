@@ -40,3 +40,7 @@ export function substractMonth(date: Date): Date {
 export function addMonth(date: Date): Date {
   return add(date, {months: 1});
 }
+
+export function isInThePast(date: Date): boolean {
+  return date < new Date();
+}
