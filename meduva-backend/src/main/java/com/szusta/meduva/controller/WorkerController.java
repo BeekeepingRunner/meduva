@@ -96,8 +96,9 @@ public class WorkerController {
     }
 
     @DeleteMapping("/delete-daily-absence-hours/{workerId}")
-    public WorkerSchedule deleteDailyAbsenceHours(@PathVariable Long workerId, @RequestBody DeleteDailyAbsenceHoursRequest request) {
-
-        return null;
+    public void deleteDailyAbsenceHours(@PathVariable Long workerId, @RequestBody DeleteDailyAbsenceHoursRequest request) {
+        User user = userService.findById(workerId);
+        Date absenceDay = request.getAbsenceDay();
+        workManager.deleteDailyAbsenceHours(user, absenceDay);
     }
 }

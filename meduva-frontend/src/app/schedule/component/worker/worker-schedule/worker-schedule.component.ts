@@ -173,7 +173,13 @@ export class WorkerScheduleComponent implements OnInit {
   }
 
   private deleteDailyAbsenceHours(absenceDayDate: Date){
-    this.scheduleService.deleteDailyAbsenceHours(this.worker.id, absenceDayDate);
+    this.scheduleService.deleteDailyAbsenceHours(this.worker.id, absenceDayDate).subscribe(
+      data => {
+        this.prepareWeekEvents();
+      }, err => {
+        console.log(err);
+      }
+    )
   }
 
   eventClick($event: { event: CalendarEvent<any>; sourceEvent: any }) {
