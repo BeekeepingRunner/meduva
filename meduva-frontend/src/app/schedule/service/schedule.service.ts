@@ -1,7 +1,9 @@
 import { Injectable } from '@angular/core';
-import {HttpClient} from "@angular/common/http";
+import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {environment} from "../../../environments/environment";
 import {Observable} from "rxjs";
+
+
 
 export interface TimeRange {
   startTime: Date,
@@ -70,6 +72,12 @@ export class ScheduleService {
   }
 
   deleteDailyAbsenceHours(WorkerId: number, absenceDayDate: Date) {
-    return this.httpClient.delete(environment.API_BASE_URL + 'api/worker/delete-daily-absence-hours/' + WorkerId, absenceDayDate);
+    const httpOptions: any = {
+      headers: new HttpHeaders({ 'Content-Type' : 'application/json',
+         }),
+      body: {absenceDay: absenceDayDate.toString()}
+    };
+    
+    return this.httpClient.delete(environment.API_BASE_URL + 'api/worker/delete-daily-absence-hours/' + WorkerId, httpOptions);
   }
 }
