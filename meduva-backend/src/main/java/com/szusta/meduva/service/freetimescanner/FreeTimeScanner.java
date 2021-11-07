@@ -82,7 +82,6 @@ public class FreeTimeScanner {
 
     private boolean hasFreeTerm(Calendar dayStart) throws NotAvailableException {
         this.potentialTermStart = getWorkStartTime(dayStart);
-
         this.potentialTermEnd = getPotentialTermEnd(potentialTermStart, service.getDurationInMin());
         Date workEndTime = getWorkEndTime(dayStart);
         do {
@@ -94,7 +93,7 @@ public class FreeTimeScanner {
 
             this.potentialTermStart.add(Calendar.MINUTE, TIME_STEP_IN_MINUTES);
             this.potentialTermEnd = getPotentialTermEnd(this.potentialTermStart, service.getDurationInMin());
-        } while (this.potentialTermEnd.before(workEndTime));
+        } while (this.potentialTermEnd.before(TimeUtils.getCalendar(workEndTime)));
 
         return false;
     }
