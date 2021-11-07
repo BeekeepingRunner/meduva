@@ -69,5 +69,7 @@ export class ScheduleService {
     return this.httpClient.post(environment.API_BASE_URL + 'api/room/set-day-unavailability/' + roomId, day);
   }
 
-
+  deleteDailyAbsenceHours(WorkerId: number, absenceDayDate: Date) {
+    return this.httpClient.delete(environment.API_BASE_URL + 'api/worker/delete-daily-absence-hours/' + WorkerId, absenceDayDate);
+  }
 }

@@ -144,6 +144,7 @@ export class WorkerScheduleComponent implements OnInit {
             break;
           case 'DELETE_ABSENCE_HOURS':
             let absenceDayDate: Date = result.data;
+            this.deleteDailyAbsenceHours(absenceDayDate);
             break;
         }
       }
@@ -169,6 +170,10 @@ export class WorkerScheduleComponent implements OnInit {
       }
     );
 
+  }
+
+  private deleteDailyAbsenceHours(absenceDayDate: Date){
+    this.scheduleService.deleteDailyAbsenceHours(this.worker.id, absenceDayDate);
   }
 
   eventClick($event: { event: CalendarEvent<any>; sourceEvent: any }) {
