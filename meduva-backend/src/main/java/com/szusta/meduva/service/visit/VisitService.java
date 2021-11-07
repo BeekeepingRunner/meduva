@@ -1,5 +1,6 @@
 package com.szusta.meduva.service.visit;
 
+import com.szusta.meduva.exception.EntityRecordNotFoundException;
 import com.szusta.meduva.model.Room;
 import com.szusta.meduva.model.Service;
 import com.szusta.meduva.model.User;
@@ -119,9 +120,9 @@ public class VisitService {
     @Transactional
     public Optional<Visit> saveNewVisit(Term term) {
         Visit visit = visitBuilder.buildVisit(term);
-        // visit = visitRepository.findById(visit.getId())
-                // .orElseThrow(() -> new EntityRecordNotFoundException("Visit wasn't saved"));
-        //visitScheduleGenerator.generateVisitSchedules(visit);
+        visit = visitRepository.findById(visit.getId())
+                .orElseThrow(() -> new EntityRecordNotFoundException("Visit wasn't saved"));
+        visitScheduleGenerator.generateVisitSchedules(visit);
         return Optional.of(visit);
     }
 

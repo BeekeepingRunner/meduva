@@ -79,20 +79,6 @@ public class VisitBuilder {
                     .orElseThrow(() -> new EntityRecordNotFoundException("Equipment item not found in DB with id = " + term.getEqItemId()));
             visit.setEqItems(Collections.singletonList(eqItem));
         }
-
-        visit = visitRepository.save(visit);
-
-        // visit = visitRepository.findById(visit.getId()).orElseThrow();
-        // visit.addUserVisit(workerUserVisit);
-        // visit.addUserVisit(clientUserVisit);
-        // visit = visitRepository.save(visit);
-        // visit.getUserVisits().forEach(userVisit -> System.out.println(userVisit));
-
-        // worker.addUserVisit(workerUserVisit);
-        // client.addUserVisit(clientUserVisit);
-        // client = userRepository.save(client);
-        // worker = userRepository.save(worker);
-
-        return visit;
+        return visitRepository.save(visit);
     }
 }
