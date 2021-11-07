@@ -268,7 +268,7 @@ export const routes: Routes = [
     component: PickTermComponent,
     canActivate: [RoleGuard],
     data: {
-      expectedRole: roleNames[UserRole.ROLE_WORKER]
+      expectedRole: roleNames[UserRole.ROLE_CLIENT]
     }
   },
   {
@@ -284,7 +284,7 @@ export const routes: Routes = [
     component: SummaryComponent,
     canActivate: [RoleGuard],
     data: {
-      expectedRole: roleNames[UserRole.ROLE_WORKER]
+      expectedRole: roleNames[UserRole.ROLE_CLIENT]
     }
   },
   {

@@ -82,10 +82,6 @@ export class VisitService {
     }
   }
 
-  saveVisit(term: Term | null): Observable<any> {
-    return this.httpClient.post(environment.API_BASE_URL + 'api/visit', term);
-  }
-
   getWorkerAvailableDaysInMonth(workerID: number, serviceID: number, anyDayFromMonth: string): Observable<any> {
     return this.httpClient.get(environment.API_BASE_URL + 'api/visit/get-worker-available-days-in-month', { params: {
         workerId: workerID,
@@ -109,5 +105,9 @@ export class VisitService {
           serviceId: serviceId,
           dayDate: dayDate
         }});
+  }
+
+  saveVisit(term: Term | null): Observable<any> {
+    return this.httpClient.post(environment.API_BASE_URL + 'api/visit', term);
   }
 }

@@ -2,7 +2,7 @@
   <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
 </div>
 <div *ngIf="!loading">
-  <div *ngIf="canChooseTerm">
+  <div *ngIf="canChooseDay">
     <h3>Choose term for {{ selectedService?.name }}:</h3>
     <div>
       <mat-form-field appearance="fill">
@@ -15,24 +15,26 @@
       </mat-form-field>
 
       <mat-progress-spinner *ngIf="generatingTerms" mode="indeterminate"></mat-progress-spinner>
+      <div *ngIf="canSelectTerm">
+        <h3>Select an hour</h3>
+        <div class="hour-buttons">
+          <div *ngFor="let term of availableTerms">
+            <div class="hour-button">
+              <button mat-raised-button (click)="onTermClick(term)">
+                {{ term.startTime | date: 'HH:mm' }}
+              </button>
+            </div>
+          </div>
+        </div>
 
-      <div *ngIf="canSelectHour">
-        <table mat-table [dataSource]="availableTerms" class="mat-elevation-z8">
-
-          <ng-container matColumnDef="date">
-            <th mat-header-cell *matHeaderCellDef>Date</th>
-            <td mat-cell *matCellDef="let term"><b>{{ term.startTime | date: 'dd/MM/yyyy HH:mm' }}</b></td>
-          </ng-container>
-
-          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-          <tr mat-row *matRowDef="let row; let term; columns: displayedColumns;"
-              (click)="selectTerm(term)" >
-          </tr>
-        </table>
+        <br>
+        <div *ngIf="hourSelected">
+          <button mat-raised-button color="primary" (click)="onSubmit()">Submit</button>
+        </div>
       </div>
     </div>
   </div>
-  <div *ngIf="!canChooseTerm">
+  <div *ngIf="!canChooseDay">
     Something went wrong, please try again later.
   </div>
 </div>

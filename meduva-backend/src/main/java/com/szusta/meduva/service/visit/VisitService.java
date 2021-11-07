@@ -71,11 +71,7 @@ public class VisitService {
 
     public List<Date> getWorkerAvailableDaysOfMonth(User worker, Service service, Date anyDayOfMonth) {
         checkIfCanPerform(worker, service);
-        List<Room> suitableRooms = getSuitableRooms(service);
-
-        freeTimeScanner.setWorker(worker);
-        freeTimeScanner.setService(service);
-        freeTimeScanner.setRooms(suitableRooms);
+        setAuxiliaryData(worker, service);
 
         List<Date> availableDaysOfMonth = new ArrayList<>();
 
@@ -90,6 +86,13 @@ public class VisitService {
         } while (currentDay.before(nextMonthStart));
 
         return availableDaysOfMonth;
+    }
+
+    private void setAuxiliaryData(User worker, Service service) {
+        List<Room> suitableRooms = getSuitableRooms(service);
+        freeTimeScanner.setWorker(worker);
+        freeTimeScanner.setService(service);
+        freeTimeScanner.setRooms(suitableRooms);
     }
 
     private void checkIfCanPerform(User worker, Service service) {
@@ -107,9 +110,10 @@ public class VisitService {
         }
     }
 
-    public List<Date> getWorkerAvailableTermsForDay(User worker, Service service, Date day) {
-        // TODO
-        return null;
+    public List<Term> getWorkerAvailableTermsForDay(User worker, Service service, Date day) {
+        checkIfCanPerform(worker, service);
+        setAuxiliaryData(worker, service);
+        return freeTimeScanner.getWorkerPossibleTerms(day);
     }
 
     @Transactional
