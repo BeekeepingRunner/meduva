@@ -3,12 +3,12 @@ package com.szusta.meduva.service.visit;
 import com.szusta.meduva.model.Room;
 import com.szusta.meduva.model.Service;
 import com.szusta.meduva.model.User;
-import com.szusta.meduva.model.schedule.Visit;
+import com.szusta.meduva.model.schedule.visit.Visit;
 import com.szusta.meduva.payload.Term;
 import com.szusta.meduva.repository.RoomRepository;
 import com.szusta.meduva.repository.schedule.visit.VisitRepository;
-import com.szusta.meduva.service.freetimescanner.FreeTimeScanner;
 import com.szusta.meduva.service.TermGenerator;
+import com.szusta.meduva.service.freetimescanner.FreeTimeScanner;
 import com.szusta.meduva.util.TimeUtils;
 
 import javax.transaction.Transactional;
@@ -119,9 +119,15 @@ public class VisitService {
     @Transactional
     public Optional<Visit> saveNewVisit(Term term) {
         Visit visit = visitBuilder.buildVisit(term);
-        visitScheduleGenerator.generateVisitSchedules(visit);
-        return Optional.of(visitRepository.save(visit));
+        // visit = visitRepository.findById(visit.getId())
+                // .orElseThrow(() -> new EntityRecordNotFoundException("Visit wasn't saved"));
+        //visitScheduleGenerator.generateVisitSchedules(visit);
+        return Optional.of(visit);
     }
 
 
+    public List<Visit> getAllAsClient(User client) {
+
+        return null;
+    }
 }

@@ -110,4 +110,8 @@ export class VisitService {
   saveVisit(term: Term | null): Observable<any> {
     return this.httpClient.post(environment.API_BASE_URL + 'api/visit', term);
   }
+
+  getAllAsClientByUserId(userId: number): Observable<any>  {
+    return this.httpClient.get(environment.API_BASE_URL + 'api/visit/all-as-client-by-user-id/' + userId);
+  }
 }
