@@ -71,13 +71,23 @@ export class ScheduleService {
     return this.httpClient.post(environment.API_BASE_URL + 'api/room/set-day-unavailability/' + roomId, day);
   }
 
-  deleteDailyAbsenceHours(WorkerId: number, absenceDayDate: Date) {
+  deleteDailyAbsenceHours(workerId: number, absenceDayDate: Date) {
     const httpOptions: any = {
       headers: new HttpHeaders({ 'Content-Type' : 'application/json',
          }),
-      body: {absenceDay: absenceDayDate}
+      body: {day: absenceDayDate}
     };
 
-    return this.httpClient.delete(environment.API_BASE_URL + 'api/worker/delete-daily-absence-hours/' + WorkerId, httpOptions);
+    return this.httpClient.delete(environment.API_BASE_URL + 'api/worker/delete-daily-absence-hours/' + workerId, httpOptions);
+  }
+
+  deleteDailyWorkHours(workerId: number, workDay: Date) {
+    const httpOptions: any = {
+      headers: new HttpHeaders({ 'Content-Type' : 'application/json',
+      }),
+      body: {day: workDay}
+    };
+
+    return this.httpClient.delete(environment.API_BASE_URL + 'api/worker/delete-daily-work-hours/'+ workerId, httpOptions);
   }
 }

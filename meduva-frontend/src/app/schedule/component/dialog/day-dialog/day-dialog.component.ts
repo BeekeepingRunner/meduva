@@ -32,6 +32,7 @@ export class DayDialogComponent implements OnInit {
   existingWorkingHours!: WorkHours | undefined;
 
   noAbsenceHoursError: boolean = false;
+  noWorkingHoursError: boolean = false;
 
 
   constructor(
@@ -153,26 +154,45 @@ export class DayDialogComponent implements OnInit {
   }
 
   tryToDeleteDailyAbsenceHours(){
-      //sprawdzic czy absence hours są: jesli tak zakmniac okno, jesli nie wyswietlic komunikat ze takowych nie ma
     let dayBoundaries: WeekBoundaries = {
       firstWeekDay: this.selectedDate,
       lastWeekDay: this.selectedDate
     }
 
     this.scheduleService.getWeeklyAbsenceHours(this.data.workerId, dayBoundaries).subscribe(
+      /* returns array with one object because it checks only one day */
       data => {
         if(data.length != 0){
-          console.log("przeszlo");
           this.dialogRef.close({
             event: 'DELETE_ABSENCE_HOURS',
             data: this.selectedDate
           });
         } else{
           this.noAbsenceHoursError = true;
-          console.log("blad?");
         }
       }
     );
+  }
+
+  tryToDeleteWorkingHours(){
+    let dayBoudnaries: WeekBoundaries = {
+      firstWeekDay: this.selectedDate,
+      lastWeekDay: this.selectedDate
+    }
+
+    this.scheduleService.getWeeklyWorkHours(this.data.workerId, dayBoudnaries).subscribe(
+      /* returns array with one object because it checks only one day */
+      data => {
+        if(data.length != 0){
+          this.dialogRef.close({
+            event: 'DELETE_WORK_HOURS',
+            data: this.selectedDate
+          });
+        } else {
+            this.noWorkingHoursError = true;
+        }
+      }
+    )
   }
 
 

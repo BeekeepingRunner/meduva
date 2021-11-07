@@ -63,11 +63,19 @@ public class WorkManager {
 
     @Transactional
     public WorkHours setWorkHours(User worker, Date newWorkStartTime, Date newWorkEndTime) {
-      boolean collidingVisitsExist =
-                hasVisitsBefore(newWorkStartTime, worker)
-                && hasVisitsAfter(newWorkEndTime, worker);
 
-        if (!collidingVisitsExist) {
+
+        boolean collidingEventsExist =
+                hasEventsBefore(newWorkStartTime, worker)
+                && hasEventsAfter(newWorkEndTime, worker);
+
+        System.out.println(TimeUtils.getDayStart(newWorkStartTime));
+        System.out.println(newWorkStartTime);
+        System.out.println(newWorkEndTime);
+        System.out.println(TimeUtils.getDayEnd(newWorkEndTime));
+        System.out.println(collidingEventsExist);
+
+        if (!collidingEventsExist) {
             deleteWorkHoursAt(newWorkStartTime, worker);
             WorkHours workHours = new WorkHours(newWorkStartTime, newWorkEndTime);
             workHours.setWorker(worker);
@@ -95,13 +103,13 @@ public class WorkManager {
         }
     }
 
-    private boolean hasVisitsBefore(Date newWorkStartTime, User worker) {
+    private boolean hasEventsBefore(Date newWorkStartTime, User worker) {
         Date dayStart = TimeUtils.getDayStart(newWorkStartTime);
         TimeRange timeRange = new TimeRange(dayStart, newWorkStartTime);
         return !scheduleChecker.isWorkerFree(timeRange, worker);
     }
 
-    private boolean hasVisitsAfter(Date newWorkEndTime, User worker) {
+    private boolean hasEventsAfter(Date newWorkEndTime, User worker) {
         Date dayEnd = TimeUtils.getDayEnd(newWorkEndTime);
         TimeRange timeRange = new TimeRange(newWorkEndTime, dayEnd);
         return !scheduleChecker.isWorkerFree(timeRange, worker);
@@ -118,6 +126,19 @@ public class WorkManager {
         Date dayStart = TimeUtils.getDayStart(dateTime);
         Date dayEnd = TimeUtils.getDayEnd(dateTime);
         workerScheduleRepository.deleteByWorkerIdBetween(worker.getId(), EWorkerStatus.WORKER_ABSENT.getValue(), dayStart, dayEnd);
+    }
+    
+    @Transactional
+    public void deleteDailyWorkHours(Date dateTime, User worker){
+        boolean collidingEventsExist =
+                hasEventsBefore(dateTime, worker)
+                        && hasEventsAfter(dateTime, worker);
+        
+        if(!collidingEventsExist){
+            deleteWorkHoursAt(dateTime, worker);
+        } else {
+            throw new RuntimeException("Cannot delete work hours - events exist before or after requested work hours");
+        }
     }
 
     public List<WorkHours> getWeeklyWorkHours(User worker, Date firstWeekDay, Date lastWeekDay) {

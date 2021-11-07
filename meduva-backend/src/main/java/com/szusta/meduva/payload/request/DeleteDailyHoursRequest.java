@@ -7,7 +7,7 @@ import java.util.Date;
 
 @Getter
 @Setter
-public class DeleteDailyAbsenceHoursRequest {
+public class DeleteDailyHoursRequest {
 
-    private Date absenceDay;
+    private Date Day;
 }
