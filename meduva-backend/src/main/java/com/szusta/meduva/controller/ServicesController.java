@@ -54,4 +54,8 @@ public class ServicesController {
     public void deleteService(@PathVariable Long id) {
         this.servicesService.markAsDeleted(id);
     }
+    @DeleteMapping("/all")
+    public void deleteAllServicesPermanently() {
+        this.servicesService.deleteAllServicesPermanently();
+    }
 }

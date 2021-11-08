@@ -64,4 +64,9 @@ public class EquipmentController {
     public void deleteModel(@PathVariable Long id) {
         this.equipmentService.markModelAsDeleted(id);
     }
+
+    @DeleteMapping("/models/all")
+    public void deleteAllModelsPermanently() {
+        this.equipmentService.deleteAllModelsPermanently();
+    }
 }

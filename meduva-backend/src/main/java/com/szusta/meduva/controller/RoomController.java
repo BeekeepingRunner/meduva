@@ -60,4 +60,9 @@ public class RoomController {
     public void deleteRoom(@PathVariable Long id) {
         this.roomService.markAsDeleted(id);
     }
+
+    @DeleteMapping("/all")
+    public void deleteAllRoomsPermanently() {
+        this.roomService.deleteAllRoomsPermanently();
+    }
 }

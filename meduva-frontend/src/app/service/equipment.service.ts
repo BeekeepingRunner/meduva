@@ -45,4 +45,8 @@ export class EquipmentService {
   saveModelConnections(newModelReuqest: NewModelRequest): Observable<EquipmentModel> {
     return this.httpClient.post<EquipmentModel>(environment.API_BASE_URL + 'api/equipment/model/connect', newModelReuqest);
   }
+
+  public deleteAllModelsPermanently(): Observable<any> {
+    return this.httpClient.delete(environment.API_BASE_URL + 'api/equipment/models/all');
+  }
 }

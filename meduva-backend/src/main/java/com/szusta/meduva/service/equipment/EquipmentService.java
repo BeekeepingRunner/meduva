@@ -70,4 +70,9 @@ public class EquipmentService {
             equipmentItemRepository.save(item);
         });
     }
+
+    public void deleteAllModelsPermanently() {
+        this.equipmentItemRepository.deleteAll();
+        this.equipmentModelRepository.deleteAll();
+    }
 }

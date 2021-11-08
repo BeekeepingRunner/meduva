@@ -63,4 +63,8 @@ public class RoomService {
         room.markAsDeleted();
         roomRepository.save(room);
     }
+
+    public void deleteAllRoomsPermanently() {
+        this.roomRepository.deleteAll();
+    }
 }

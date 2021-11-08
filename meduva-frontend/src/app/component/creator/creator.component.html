@@ -15,7 +15,7 @@
 
 
   <mat-step label="Configure your rooms"
-            [completed]="checkIfNoRoomExistsInDatabase()">
+            [completed]="checkIfNoRoomExistsInDatabase() && areAllItemsDisplaced()">
 
     <app-configure-rooms-creator *ngIf="roomItems.length"
                                  [roomItems]="roomItems"

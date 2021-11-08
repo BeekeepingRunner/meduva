@@ -16,7 +16,7 @@ export class EquipmentListCreatorComponent implements OnInit {
   @Output() eqModelEmitter = new EventEmitter<EquipmentModel[]>();
   @Input() roomItems!: Room[];
   models: EquipmentModel[] = [];
-  modelTableColumns: string[] = ['name'];
+  justAddedModels: EquipmentModel[] = [];
 
   constructor(
     private equipmentService: EquipmentService,
@@ -53,7 +53,8 @@ export class EquipmentListCreatorComponent implements OnInit {
     equipmentCreatorDialogRef.afterClosed().subscribe(equipmentModel => {
       if(equipmentModel){
         let eqModel: EquipmentModel = equipmentModel;
-        this.models.push(eqModel)
+        this.models.push(eqModel);
+        this.justAddedModels.push(eqModel);
         this.eqModelEmitter.emit(this.models);
       }
 

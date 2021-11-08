@@ -65,4 +65,8 @@ public class ServicesService {
         service.markAsDeleted();
         serviceRepository.save(service);
     }
+
+    public void deleteAllServicesPermanently() {
+        this.serviceRepository.deleteAll();
+    }
 }

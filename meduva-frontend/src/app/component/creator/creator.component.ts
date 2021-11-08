@@ -16,6 +16,7 @@ import {ConfirmationDialogComponent} from "../dialog/confirmation-dialog/confirm
 import {MatDialog} from "@angular/material/dialog";
 import {NewModelRequest} from "../equipment/new-model/new-model.component";
 import {FeedbackDialogComponent} from "../dialog/feedback-dialog/feedback-dialog.component";
+import {CreatorService} from "../../service/creator.service";
 
 
 export interface CreatorRequest {
@@ -54,6 +55,7 @@ export class CreatorComponent implements OnInit, NewModelRequest {
     private servicesService: ServicesService,
     private roomService: RoomService,
     private equipmentService: EquipmentService,
+    private creatorService: CreatorService,
     private router: Router,
     public dialog: MatDialog,
   ) { }
@@ -61,6 +63,18 @@ export class CreatorComponent implements OnInit, NewModelRequest {
   ngOnInit(): void {
     this.roomService.getAllUndeletedRooms().subscribe(roomsForGetRoomNames => {
       this.roomsFromDB = roomsForGetRoomNames;
+    });
+
+
+    const clearDatabaseDialogRef = this.dialog.open(ConfirmationDialogComponent, {
+      data: { message: 'Do u want to clear your previous configuration? Attention! The change cannot be undone' }
+    });
+
+    clearDatabaseDialogRef.afterClosed().subscribe(confirmed => {
+      if(confirmed){
+        this.creatorService.deleteAllConfigurationPermanently().subscribe();
+      }
+
     });
 
   }
@@ -180,7 +194,6 @@ export class CreatorComponent implements OnInit, NewModelRequest {
             this.equipmentService.saveModelConnections(modelRequest).subscribe();
           }
         }
-
 
     });
 
