@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS client (
+CREATE TABLE IF NOT EXISTS unregistered_client (
     id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(30) NOT NULL,
     surname VARCHAR(30) NOT NULL,
@@ -32,8 +32,8 @@ CREATE TABLE IF NOT EXISTS visit (
     FOREIGN KEY (service_id) REFERENCES service (id),
     room_id INT NOT NULL,
     FOREIGN KEY (room_id) REFERENCES room (id),
-    client_id INT,
-    FOREIGN KEY (client_id) REFERENCES client (id)
+    unregistered_client_id INT,
+    FOREIGN KEY (unregistered_client_id) REFERENCES unregistered_client (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=UTF8;
 
 CREATE TABLE IF NOT EXISTS user_visit (
@@ -118,3 +118,12 @@ INSERT INTO worker_status values
 INSERT INTO equipment_status values
 (1, "EQUIPMENT_OCCUPIED"),
 (2, "EQUIPMENT_UNAVAILABLE");
+
+CREATE TABLE IF NOT EXISTS work_hours (
+    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    start_time TIMESTAMP NOT NULL,
+    end_time TIMESTAMP NOT NULL,
+
+    worker_id INT NOT NULL,
+    FOREIGN KEY (worker_id) REFERENCES user (id)
+) ENGINE=InnoDB DEFAULT CHARSET=UTF8;

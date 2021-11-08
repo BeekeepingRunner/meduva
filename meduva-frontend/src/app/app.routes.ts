@@ -6,7 +6,7 @@ import {PasswordResetEmailInputComponent} from "./component/login-data/password-
 import {PasswordResetComponent} from "./component/login-data/password-reset/password-reset.component";
 import {RegisterComponent} from "./component/register/register.component";
 import {ProfileComponent} from "./component/profile/profile.component";
-import {UserListComponent} from "./component/user-list/user-list.component";
+import {UserListComponent} from "./component/user/user-list/user-list.component";
 import {roleNames, UserRole} from "./model/user";
 import {AccessDeniedComponent} from "./component/access-denied/access-denied.component";
 import {ServiceListComponent} from "./component/services/service-list/service-list.component";
@@ -32,6 +32,18 @@ import {EditPerformedServicesComponent} from "./component/rooms/edit-performed-s
 import {ChangePasswordComponent} from "./component/profile/change-password/change-password.component";
 import {CreatorComponent} from "./component/creator/creator.component";
 import {NewModelCreatorComponent} from "./component/creator/assign-equipment/new-model-creator/new-model-creator.component";
+import {ClientListComponent} from "./component/clients/client-list/client-list.component";
+import {ClientDetailsComponent} from "./component/clients/client-details/client-details.component";
+import {AddClientComponent} from "./component/clients/add-client/add-client.component";
+import {EditClientComponent} from "./component/clients/client-details/edit-client/edit-client.component";
+import {WorkerScheduleComponent} from "./schedule/component/worker/worker-schedule/worker-schedule.component";
+import {PickWorkerComponent} from "./schedule/component/worker/pick-worker/pick-worker.component";
+import {MyScheduleComponent} from "./schedule/component/my-schedule/my-schedule.component";
+import {PickRoomComponent} from "./schedule/component/room/pick-room/pick-room.component";
+import {RoomScheduleComponent} from "./schedule/component/room/room-schedule/room-schedule.component";
+import {PickItemComponent} from "./schedule/component/item/pick-item/pick-item.component";
+import {ItemScheduleComponent} from "./schedule/component/item/item-schedule/item-schedule.component";
+import {SelectWorkerComponent} from "./component/visit/select-worker/select-worker.component";
 
 export const routes: Routes = [
   { path: 'home', component: HomeComponent },
@@ -92,6 +104,38 @@ export const routes: Routes = [
   {
     path: 'new-email-activation/:token',
     component: ActivateNewEmailComponent,
+  },
+  {
+    path: 'client/list',
+    component: ClientListComponent,
+    canActivate: [RoleGuard],
+    data: {
+      expectedRole: roleNames[UserRole.ROLE_WORKER]
+    }
+  },
+  {
+    path: 'client/details',
+    component: ClientDetailsComponent,
+    canActivate: [RoleGuard],
+    data: {
+      expectedRole: roleNames[UserRole.ROLE_WORKER]
+    }
+  },
+  {
+    path: 'client/new',
+    component: AddClientComponent,
+    canActivate: [RoleGuard],
+    data: {
+      expectedRole: roleNames[UserRole.ROLE_RECEPTIONIST]
+    }
+  },
+  {
+    path: 'client/edit/:id',
+    component: EditClientComponent,
+    canActivate: [RoleGuard],
+    data: {
+      expectedRole: roleNames[UserRole.ROLE_RECEPTIONIST]
+    }
   },
   {
     path: 'users',
@@ -230,11 +274,19 @@ export const routes: Routes = [
     }
   },
   {
+    path: 'visit/pick-worker',
+    component: SelectWorkerComponent,
+    canActivate: [RoleGuard],
+    data: {
+      expectedRole: roleNames[UserRole.ROLE_CLIENT]
+    }
+  },
+  {
     path: 'visit/pick-term',
     component: PickTermComponent,
     canActivate: [RoleGuard],
     data: {
-      expectedRole: roleNames[UserRole.ROLE_WORKER]
+      expectedRole: roleNames[UserRole.ROLE_CLIENT]
     }
   },
   {
@@ -250,7 +302,63 @@ export const routes: Routes = [
     component: SummaryComponent,
     canActivate: [RoleGuard],
     data: {
+      expectedRole: roleNames[UserRole.ROLE_CLIENT]
+    }
+  },
+  {
+    path: 'schedule/my',
+    component: MyScheduleComponent,
+    canActivate: [RoleGuard],
+    data: {
       expectedRole: roleNames[UserRole.ROLE_WORKER]
+    }
+  },
+  {
+    path: 'schedule/worker/:id',
+    component: WorkerScheduleComponent,
+    canActivate: [RoleGuard],
+    data: {
+      expectedRole: roleNames[UserRole.ROLE_WORKER]
+    }
+  },
+  {
+    path: 'schedule/workers/pick-worker',
+    component: PickWorkerComponent,
+    canActivate: [RoleGuard],
+    data: {
+      expectedRole: roleNames[UserRole.ROLE_RECEPTIONIST]
+    }
+  },
+  {
+    path: 'schedule/room/pick-room',
+    component: PickRoomComponent,
+    canActivate: [RoleGuard],
+    data: {
+      expectedRole: roleNames[UserRole.ROLE_RECEPTIONIST]
+    }
+  },
+  {
+    path: 'schedule/room/:id',
+    component: RoomScheduleComponent,
+    canActivate: [RoleGuard],
+    data: {
+      expectedRole: roleNames[UserRole.ROLE_RECEPTIONIST]
+    }
+  },
+  {
+    path: 'schedule/item/pick-item',
+    component: PickItemComponent,
+    canActivate: [RoleGuard],
+    data: {
+      expectedRole: roleNames[UserRole.ROLE_RECEPTIONIST]
+    }
+  },
+  {
+    path: 'schedule/item/:id',
+    component: ItemScheduleComponent,
+    canActivate: [RoleGuard],
+    data: {
+      expectedRole: roleNames[UserRole.ROLE_RECEPTIONIST]
     }
   },
   { path: '', redirectTo: 'home', pathMatch: 'full' }

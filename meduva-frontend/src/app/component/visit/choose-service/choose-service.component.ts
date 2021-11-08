@@ -3,6 +3,10 @@ import {Service} from "../../../model/service";
 import {ServicesService} from "../../../service/services.service";
 import {VisitService} from "../../../service/visit.service";
 import {Router} from "@angular/router";
+import {ClientService} from "../../../service/client.service";
+import {MatDialog} from "@angular/material/dialog";
+import {ItemDayDialogComponent} from "../../../schedule/component/dialog/item-day-dialog/item-day-dialog.component";
+import {ConfirmationDialogComponent} from "../../dialog/confirmation-dialog/confirmation-dialog.component";
 
 @Component({
   selector: 'app-choose-service',
@@ -13,13 +17,13 @@ export class ChooseServiceComponent implements OnInit {
 
   services: Service[] = [];
   displayedColumns: string[] = ['name', 'duration', 'price'];
-  generatingTerms: boolean = false;
 
   errorMessage: string = '';
 
   constructor(
     private servicesService: ServicesService,
     private visitService: VisitService,
+    private dialog: MatDialog,
     private router: Router,
   ) { }
 
@@ -34,9 +38,20 @@ export class ChooseServiceComponent implements OnInit {
     )
   }
 
-  getTermsForService(service: Service): void {
-    this.generatingTerms = true;
+  submitService(service: Service): void {
     this.visitService.saveSelectedService(service);
-    this.router.navigate(['/visit/pick-term']);
+
+    const confirmationDialog = this.dialog.open(ConfirmationDialogComponent, {
+      data: { message: 'Do you want to select a worker?' }
+    });
+
+    confirmationDialog.afterClosed().subscribe(clientWantsToSelectWorker => {
+      if (clientWantsToSelectWorker) {
+        this.router.navigate(['/visit/pick-worker']);
+      } else {
+        // TODO: someday - generate terms without particular worker
+        this.router.navigate(['/visit/pick-worker']);
+      }
+    });
   }
 }

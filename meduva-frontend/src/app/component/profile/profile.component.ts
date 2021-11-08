@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {JwtTokenStorageService, TokenUserInfo} from "../../service/token/jwt-token-storage.service";
+import {JwtStorageService, TokenUserInfo} from "../../service/token/jwt-storage.service";
 import {UserService} from "../../service/user.service";
 import {Role, User} from "../../model/user";
 
@@ -17,7 +17,7 @@ export class ProfileComponent implements OnInit {
   error!: string;
 
   constructor(
-    private token: JwtTokenStorageService,
+    private token: JwtStorageService,
     private userService: UserService
     ) { }
 

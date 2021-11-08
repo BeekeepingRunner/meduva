@@ -1,11 +1,10 @@
 package com.szusta.meduva.service.user;
 
 import com.szusta.meduva.exception.EntityRecordNotFoundException;
+import com.szusta.meduva.model.User;
 import com.szusta.meduva.model.role.ERole;
 import com.szusta.meduva.model.role.Role;
-import com.szusta.meduva.model.User;
 import com.szusta.meduva.repository.RoleRepository;
-import com.szusta.meduva.repository.ServiceRepository;
 import com.szusta.meduva.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -21,13 +20,11 @@ public class UserService {
 
     UserRepository userRepository;
     RoleRepository roleRepository;
-    ServiceRepository serviceRepository;
 
     @Autowired
-    public UserService(UserRepository userRepository, RoleRepository roleRepository, ServiceRepository serviceRepository) {
+    public UserService(UserRepository userRepository, RoleRepository roleRepository) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
-        this.serviceRepository = serviceRepository;
     }
 
     public User findByLogin(String login) {
@@ -111,13 +108,13 @@ public class UserService {
 
     @Transactional
     public User changeUserRole(Long userId, Long roleId){
-        User user = userRepository.findById(userId)
-                .orElseThrow(()-> new EntityRecordNotFoundException("User not found with id : " + userId));
+        User user = findById(userId);
 
-        Set<Role> roleSet= new HashSet<>();
-        for(Long i=1L; i<=roleId; i++){
-            Role role = roleRepository.findById(i)
-                    .orElseThrow(()-> new EntityRecordNotFoundException("Role not found with id : " + roleId));
+        Set<Role> roleSet = new HashSet<>();
+        for(Long id = 1L; id <= roleId; id++){
+            Role role = roleRepository.findById(id)
+                    .orElseThrow(() -> new EntityRecordNotFoundException(
+                            "Role not found with id : " + roleId));
             roleSet.add(role);
         }
 

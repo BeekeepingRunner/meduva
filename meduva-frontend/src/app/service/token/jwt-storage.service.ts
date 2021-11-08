@@ -10,7 +10,7 @@ const USER_KEY = 'auth-user';
 @Injectable({
   providedIn: 'root'
 })
-export class JwtTokenStorageService {
+export class JwtStorageService {
 
   constructor(
     private http: HttpClient,

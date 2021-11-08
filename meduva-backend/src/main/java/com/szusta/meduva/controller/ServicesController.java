@@ -1,7 +1,7 @@
 package com.szusta.meduva.controller;
 
 import com.szusta.meduva.model.Service;
-import com.szusta.meduva.payload.request.NewServiceRequest;
+import com.szusta.meduva.payload.request.add.NewServiceRequest;
 import com.szusta.meduva.service.ServicesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -36,6 +36,9 @@ public class ServicesController {
     public boolean doesExist(@PathVariable String serviceName) {
         return servicesService.doesServiceExistByName(serviceName);
     }
+
+    @GetMapping("/all/nonitemless")
+    public List<Service> findAllNonItemlessServices(){ return this.servicesService.findAllNonItemless(); }
 
     @PostMapping
     public Service saveNewService(@RequestBody NewServiceRequest request) {

@@ -1,133 +1,110 @@
 package com.szusta.meduva.service;
 
 import com.szusta.meduva.model.Room;
-import com.szusta.meduva.model.Service;
 import com.szusta.meduva.model.User;
 import com.szusta.meduva.model.equipment.EquipmentItem;
-import com.szusta.meduva.model.equipment.EquipmentModel;
-import com.szusta.meduva.model.schedule.Schedule;
-import com.szusta.meduva.payload.Term;
-import com.szusta.meduva.repository.equipment.EquipmentItemRepository;
-import com.szusta.meduva.repository.equipment.EquipmentModelRepository;
+import com.szusta.meduva.model.schedule.EquipmentSchedule;
+import com.szusta.meduva.model.schedule.RoomSchedule;
+import com.szusta.meduva.model.schedule.status.enums.EEquipmentStatus;
+import com.szusta.meduva.model.schedule.status.enums.ERoomStatus;
+import com.szusta.meduva.model.schedule.status.enums.EWorkerStatus;
+import com.szusta.meduva.payload.TimeRange;
+import com.szusta.meduva.repository.WorkHoursRepository;
 import com.szusta.meduva.repository.schedule.equipment.EquipmentScheduleRepository;
 import com.szusta.meduva.repository.schedule.room.RoomScheduleRepository;
 import com.szusta.meduva.repository.schedule.worker.WorkerScheduleRepository;
-import com.szusta.meduva.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 @org.springframework.stereotype.Service
 public class ScheduleChecker {
 
-    private EquipmentItemRepository equipmentItemRepository;
-    private EquipmentModelRepository equipmentModelRepository;
-    private UserService userService;
-
     private EquipmentScheduleRepository equipmentScheduleRepository;
     private RoomScheduleRepository roomScheduleRepository;
     private WorkerScheduleRepository workerScheduleRepository;
+    private WorkHoursRepository workHoursRepository;
 
     @Autowired
-    public ScheduleChecker(EquipmentItemRepository equipmentItemRepository,
-                           EquipmentModelRepository equipmentModelRepository,
-                           UserService userService,
-                           EquipmentScheduleRepository equipmentScheduleRepository,
+    public ScheduleChecker(EquipmentScheduleRepository equipmentScheduleRepository,
                            RoomScheduleRepository roomScheduleRepository,
-                           WorkerScheduleRepository workerScheduleRepository) {
-        this.equipmentItemRepository = equipmentItemRepository;
-        this.equipmentModelRepository = equipmentModelRepository;
-        this.userService = userService;
+                           WorkerScheduleRepository workerScheduleRepository,
+                           WorkHoursRepository workHoursRepository) {
         this.equipmentScheduleRepository = equipmentScheduleRepository;
         this.roomScheduleRepository = roomScheduleRepository;
         this.workerScheduleRepository = workerScheduleRepository;
+        this.workHoursRepository = workHoursRepository;
     }
 
-    public Optional<Term> getTermForWorker(User worker, Service service, List<Room> suitableRooms, Calendar currentlyCheckedTime) {
-
-        Date currentCheckStart = currentlyCheckedTime.getTime();
-        Date currentCheckEnd = getIntervalEnd(currentlyCheckedTime, service.getDurationInMin());
-
-        if (!isWorkerFree(currentCheckStart, currentCheckEnd, worker)) {
-            return Optional.empty();
-        }
-        // get first available room
-        Optional<Room> availableRoom = getFirstAvailableRoom(suitableRooms, currentCheckStart, currentCheckEnd);
-        if (availableRoom.isEmpty()) {
-            return Optional.empty();
-        }
-
-        boolean itemless = isServiceItemless(service.getId());
-        Optional<EquipmentItem> availableEqItem = Optional.empty();
-        if (!itemless) {
-            List<EquipmentItem> suitableEqItems =
-                    equipmentItemRepository.findAllSuitableForServiceInRoom(service.getId(), availableRoom.get().getId());
-            availableEqItem = getFirstAvailableEqItem(suitableEqItems, currentCheckStart, currentCheckEnd);
-            if (availableEqItem.isEmpty()) {
-                return Optional.empty();
-            }
-        }
-
-        Term term = new Term(currentCheckStart, currentCheckEnd);
-        term.setServiceId(service.getId());
-        term.setWorkerId(worker.getId());
-        term.setRoomId(availableRoom.get().getId());
-        if (!itemless) {
-            term.setEqItemId(availableEqItem.get().getId());
-        }
-        return Optional.of(term);
+    public boolean isWorkerFree(TimeRange timeRange, User worker) {
+        Date startTime = timeRange.getStartTime();
+        Date endTime = timeRange.getEndTime();
+        return workerScheduleRepository
+                .findAllDuring(startTime, endTime, worker.getId())
+                .isEmpty();
     }
 
-    private Date getIntervalEnd(Calendar currentlyCheckedTime, int serviceDurationInMinutes) {
-        Calendar temp = (Calendar) currentlyCheckedTime.clone();
-        temp.add(Calendar.MINUTE, serviceDurationInMinutes);
-        return temp.getTime();
+    public boolean isRoomFree(TimeRange timeRange, Room room) {
+        Date startTime = timeRange.getStartTime();
+        Date endTime = timeRange.getEndTime();
+        return roomScheduleRepository
+                .findAllDuring(startTime, endTime, room.getId())
+                .isEmpty();
     }
 
-    // TODO: refactor - code repetition
-    //
-
-    private Optional<Room> getFirstAvailableRoom(List<Room> suitableRooms, Date currentCheckStart, Date currentCheckEnd) {
-        for (Room room : suitableRooms) {
-            if (isRoomFree(currentCheckStart, currentCheckEnd, room)) {
-                return Optional.of(room);
-            }
-        }
-        return Optional.empty();
+    public boolean isEqItemFree(TimeRange timeRange, EquipmentItem eqItem) {
+        return equipmentScheduleRepository
+                .findAllDuring(
+                        timeRange.getStartTime(),
+                        timeRange.getEndTime(),
+                        eqItem.getId())
+                .isEmpty();
     }
 
-    private Optional<EquipmentItem> getFirstAvailableEqItem(List<EquipmentItem> suitableEqItems, Date currentCheckStart, Date currentCheckEnd) {
-        for (EquipmentItem item : suitableEqItems) {
-            if (isEqItemFree(currentCheckStart, currentCheckEnd, item)) {
-                return Optional.of(item);
-            }
-        }
-        return Optional.empty();
+    public boolean isBusyWith(User worker, EWorkerStatus workerStatus, TimeRange timeRange) {
+        return !workerScheduleRepository
+                .findAllDuring(
+                        timeRange.getStartTime(),
+                        timeRange.getEndTime(),
+                        worker.getId(),
+                        workerStatus.getValue())
+                .isEmpty();
     }
 
-    private boolean isServiceItemless(Long serviceId) {
-        List<EquipmentModel> models = this.equipmentModelRepository.findByService(serviceId);
-        return models.isEmpty();
+    public boolean isBusyWith(Room room, ERoomStatus roomStatus, TimeRange timeRange) {
+        return !roomScheduleRepository
+                .findAllDuring(
+                        timeRange.getStartTime(),
+                        timeRange.getEndTime(),
+                        room.getId(),
+                        roomStatus.getValue())
+                .isEmpty();
     }
 
-    public boolean isWorkerFree(Date start, Date end, User worker) {
-        List<Schedule> existingWorkerEvents =
-                (List<Schedule>) workerScheduleRepository.findAnyBetween(start, end, worker.getId());
-        return existingWorkerEvents.isEmpty();
+    public boolean isBusyWith(EquipmentItem eqItem, EEquipmentStatus equipmentStatus, TimeRange timeRange) {
+        return !equipmentScheduleRepository
+                .findAllDuring(
+                        timeRange.getStartTime(),
+                        timeRange.getEndTime(),
+                        eqItem.getId(),
+                        equipmentStatus.getValue())
+                .isEmpty();
     }
 
-    private boolean isRoomFree(Date start, Date end, Room room) {
-        List<Schedule> existingRoomEvents =
-                (List<Schedule>) roomScheduleRepository.findAnyBetween(start, end, room.getId());
-        return existingRoomEvents.isEmpty();
+    public List<EquipmentSchedule> getItemUnavailabilityIn(EquipmentItem item, TimeRange weekBoundaries) {
+        return equipmentScheduleRepository.findAllBetween(
+                weekBoundaries.getStartTime(),
+                weekBoundaries.getEndTime(),
+                item.getId(),
+                EEquipmentStatus.EQUIPMENT_UNAVAILABLE.getValue());
     }
 
-    public boolean isEqItemFree(Date start, Date end, EquipmentItem suitableItem) {
-        List<Schedule> existingItemEvents =
-                (List<Schedule>) equipmentScheduleRepository.findAnyBetween(start, end, suitableItem.getId());
-        return existingItemEvents.isEmpty();
+    public List<RoomSchedule> getRoomUnavailabilityIn(Room room, TimeRange weekBoundaries) {
+        return roomScheduleRepository.findAllDuring(
+                weekBoundaries.getStartTime(),
+                weekBoundaries.getEndTime(),
+                room.getId(),
+                ERoomStatus.ROOM_UNAVAILABLE.getValue());
     }
 }

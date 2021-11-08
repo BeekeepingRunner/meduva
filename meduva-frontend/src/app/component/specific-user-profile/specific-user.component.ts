@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {JwtTokenStorageService, TokenUserInfo} from "../../service/token/jwt-token-storage.service";
+import {JwtStorageService, TokenUserInfo} from "../../service/token/jwt-storage.service";
 import {UserService} from "../../service/user.service";
 import {Role, User} from "../../model/user";
 import {ActivatedRoute, Router} from "@angular/router";

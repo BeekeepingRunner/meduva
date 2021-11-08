@@ -1,10 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import {Term, VisitService} from "../../../service/visit.service";
-import {DatePipe} from "@angular/common";
 import {Router} from "@angular/router";
 import {Client} from "../../../model/client";
 import {UserService} from "../../../service/user.service";
-import {JwtTokenStorageService} from "../../../service/token/jwt-token-storage.service";
+import {JwtStorageService} from "../../../service/token/jwt-storage.service";
 
 @Component({
   selector: 'app-pick-client',
@@ -20,7 +19,7 @@ export class PickClientComponent implements OnInit {
   constructor(
     private visitService: VisitService,
     private userService: UserService,
-    private jwtTokenStorageService: JwtTokenStorageService,
+    private jwtTokenStorageService: JwtStorageService,
     private router: Router,
   ) { }
 

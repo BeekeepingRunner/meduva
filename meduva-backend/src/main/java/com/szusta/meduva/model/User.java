@@ -1,7 +1,7 @@
 package com.szusta.meduva.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.szusta.meduva.model.common.Undeletable;
+import com.szusta.meduva.model.common.ScheduleSubject;
 import com.szusta.meduva.model.role.Role;
 import com.szusta.meduva.model.schedule.Visit;
 import com.szusta.meduva.model.schedule.WorkerSchedule;
@@ -27,7 +27,7 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class User extends Undeletable {
+public class User extends ScheduleSubject {
 
     private String login;
     private String email;
@@ -81,5 +81,9 @@ public class User extends Undeletable {
         this.surname = surname;
         this.phoneNumber = phoneNumber;
         this.deleted = false;
+    }
+
+    public boolean canPerform(Service service) {
+        return services.contains(service);
     }
 }

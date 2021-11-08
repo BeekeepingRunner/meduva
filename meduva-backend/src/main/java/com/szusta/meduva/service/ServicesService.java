@@ -38,6 +38,10 @@ public class ServicesService {
         return this.serviceRepository.findByItemlessTrue();
     }
 
+    public List<Service> findAllNonItemless() {
+        return this.serviceRepository.findByItemlessFalse();
+    }
+
     public Service findById(Long serviceId) {
         return this.serviceRepository.findById(serviceId)
                 .orElseThrow(() -> new EntityRecordNotFoundException("Service not found with id : " + serviceId));

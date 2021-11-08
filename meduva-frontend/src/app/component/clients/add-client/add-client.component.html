@@ -1,0 +1,66 @@
+<div class="centered-content">
+
+  <form class="basic-form" *ngIf="!isSuccessful" (ngSubmit)="onSubmit()" [formGroup]="form">
+    <br>
+    <h3>{{ heading }}</h3>
+    <br>
+    <mat-form-field class="wide-element" appearance="outline">
+      <mat-label>First name:</mat-label>
+      <input matInput id="name" type="text" formControlName="name">
+      <mat-error *ngIf="form.controls.name.invalid &&
+                          (form.controls.name.dirty || form.controls.name.touched)">
+        <mat-error *ngIf="form.controls.name.errors?.required ">
+          First name is required
+        </mat-error>
+        <mat-error *ngIf="(form.controls.name.errors?.minlength || form.controls.name.errors?.maxlength) && !form.controls.name.errors?.pattern">
+          First name must be between 1 and 30 characters long
+        </mat-error>
+        <mat-error *ngIf="form.controls.name.errors?.pattern">
+          First name must not contain forbidden characters
+        </mat-error>
+
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field class="wide-element" appearance="outline">
+      <mat-label>Surname:</mat-label>
+      <input matInput id="surname" type="text" formControlName="surname">
+      <mat-error *ngIf="form.controls.surname.invalid &&
+                          (form.controls.surname.dirty || form.controls.surname.touched)">
+
+        <mat-error *ngIf="form.controls.surname.errors?.required ">
+          Surname is required
+        </mat-error>
+        <mat-error *ngIf="(form.controls.surname.errors?.minlength || form.controls.surname.errors?.maxlength) && !form.controls.surname.errors?.pattern">
+          Surname must be between 1 and 30 characters long
+        </mat-error>
+        <mat-error *ngIf="form.controls.surname.errors?.pattern">
+          Surname must not contain forbidden characters
+        </mat-error>
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field class="wide-element" appearance="outline">
+      <mat-label>Phone number:</mat-label>
+      <input matInput id="phoneNumber" type="text" formControlName="phoneNumber">
+      <mat-error *ngIf="form.controls.phoneNumber.invalid &&
+                          (form.controls.phoneNumber.dirty || form.controls.phoneNumber.touched)">
+
+        <mat-error *ngIf="form.controls.phoneNumber.errors?.required ">
+          Phone number is required
+        </mat-error>
+        <mat-error *ngIf="form.controls.phoneNumber.errors?.pattern">
+          Phone number must contain between 6 and 12 digits
+        </mat-error>
+      </mat-error>
+    </mat-form-field>
+
+    <button class="btn btn-primary btn-block" type="submit">{{ submitButtonText }}</button>
+
+    <br><br>
+    <div class="alert alert-warning" *ngIf="isSignUpFailed">
+      {{ errorMessage }}
+    </div>
+
+  </form>
+</div>

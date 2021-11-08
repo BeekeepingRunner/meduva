@@ -10,4 +10,5 @@ import java.util.List;
 public interface ServiceRepository extends UndeletableWithNameRepository<Service> {
 
     List<Service> findByItemlessTrue();
+    List<Service> findByItemlessFalse();
 }

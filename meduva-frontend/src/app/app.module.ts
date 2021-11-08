@@ -28,7 +28,7 @@ import { PasswordResetEmailInputComponent } from './component/login-data/passwor
 import { PasswordResetComponent } from './component/login-data/password-reset/password-reset.component';
 import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatInputModule} from "@angular/material/input";
-import { UserListComponent } from './component/user-list/user-list.component';
+import { UserListComponent } from './component/user/user-list/user-list.component';
 import {MatTableModule} from "@angular/material/table";
 
 import {routes} from "./app.routes";
@@ -53,11 +53,9 @@ import { ServicesSelectComponent } from './component/equipment/new-model/service
 import { ModelFormComponent } from './component/equipment/new-model/model-form/model-form.component';
 import { ModelDetailsComponent } from './component/equipment/model-details/model-details.component';
 import { FeedbackDialogComponent } from './component/dialog/feedback-dialog/feedback-dialog.component';
-import { CalendarModule, DateAdapter } from 'angular-calendar';
-import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 import { ChooseServiceComponent } from './component/visit/choose-service/choose-service.component';
 import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
-import { PickTermComponent } from './component/visit/pick-term/pick-term.component';
+import {AsyncDatePickerHeader, PickTermComponent} from './component/visit/pick-term/pick-term.component';
 import {EditRoleComponent} from "./component/specific-user-profile/edit-role/edit-role.component";
 import {MatSelectModule} from "@angular/material/select";
 import { PickClientComponent } from './component/visit/pick-client/pick-client.component';
@@ -78,6 +76,15 @@ import {ConfigureServicesCreatorDialogComponent} from "./component/dialog/config
 import {NewServiceDetailsCreatorComponent} from "./component/creator/assign-services/new-service-details-creator/new-service-details-creator.component";
 import {ItemsSelectServiceCreatorComponent} from "./component/creator/assign-services/items-select-service-creator/items-select-service-creator.component";
 import {RoomsSelectServiceCreatorComponent} from "./component/creator/assign-services/rooms-select-service-creator/rooms-select-service-creator.component";
+import { ClientListComponent } from './component/clients/client-list/client-list.component';
+import { ClientDetailsComponent } from './component/clients/client-details/client-details.component';
+import { AddClientComponent } from './component/clients/add-client/add-client.component';
+import { EditClientComponent } from './component/clients/client-details/edit-client/edit-client.component';
+import {ScheduleModule} from "./schedule/schedule.module";
+import {MatDatepickerModule} from "@angular/material/datepicker";
+import {MatNativeDateModule} from "@angular/material/core";
+import { SelectWorkerComponent } from './component/visit/select-worker/select-worker.component';
+
 
 @NgModule({
   declarations: [
@@ -133,6 +140,13 @@ import {RoomsSelectServiceCreatorComponent} from "./component/creator/assign-ser
     RoomsSelectServiceCreatorComponent,
 
 
+    ClientListComponent,
+    ClientDetailsComponent,
+    AddClientComponent,
+    EditClientComponent,
+    SelectWorkerComponent,
+    AsyncDatePickerHeader,
+
   ],
   imports: [
     BrowserModule,
@@ -156,9 +170,11 @@ import {RoomsSelectServiceCreatorComponent} from "./component/creator/assign-ser
     MatListModule,
     MatDialogModule,
     MatStepperModule,
-    CalendarModule.forRoot({provide: DateAdapter, useFactory: adapterFactory}),
     MatProgressSpinnerModule,
     MatSelectModule,
+    ScheduleModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
   ],
   exports: [
     RouterModule
@@ -167,6 +183,7 @@ import {RoomsSelectServiceCreatorComponent} from "./component/creator/assign-ser
     authInterceptorProviders,
     CurrencyPipe,
     DatePipe,
+    MatDatepickerModule,
   ],
   bootstrap: [AppComponent]
 })

@@ -1,12 +1,8 @@
 package com.szusta.meduva.controller;
 
-import com.szusta.meduva.model.equipment.EquipmentItem;
-import com.szusta.meduva.model.equipment.EquipmentModel;
-import com.szusta.meduva.payload.request.NewEqModelRequest;
-import com.szusta.meduva.service.RoomService;
 import com.szusta.meduva.service.ServicesService;
-import com.szusta.meduva.service.equipment.EquipmentMaker;
 import com.szusta.meduva.service.equipment.EquipmentService;
+import com.szusta.meduva.service.room.RoomService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

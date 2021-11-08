@@ -35,13 +35,16 @@ public class PasswordResetController {
 
     // Triggered when user sends email for the reset link
     @PostMapping("/request")
-    public ResponseEntity<MessageResponse> sendResetPasswordEmail(@RequestBody final String email) {
+    public ResponseEntity<MessageResponse> sendResetPasswordEmail(
+            @RequestBody final String email) {
 
         User user = userService.findByEmail(email);
         passwordResetService.deletePreviousResetTokens(user);
-        PasswordResetToken resetToken = passwordResetService.createPasswordResetToken(user);
+        PasswordResetToken resetToken
+                = passwordResetService.createPasswordResetToken(user);
         passwordResetService.sendResetPasswordEmail(email, resetToken);
-        return ResponseEntity.ok(new MessageResponse("Password reset link has been sent to your email"));
+        return ResponseEntity.ok(
+                new MessageResponse("Password reset link has been sent to your email"));
     }
 
     // Triggered after user clicks reset link
@@ -59,7 +62,8 @@ public class PasswordResetController {
 
     // Triggered when user sends new password
     @PostMapping("/change")
-    public ResponseEntity<MessageResponse> handlePasswordChangeRequest(@Valid @RequestBody ResetPasswordRequest resetPasswordRequest)
+    public ResponseEntity<MessageResponse> handlePasswordChangeRequest(
+            @Valid @RequestBody ResetPasswordRequest resetPasswordRequest)
     {
         String resetToken = resetPasswordRequest.getResetToken();
         passwordResetService.resetPassword(resetToken, resetPasswordRequest.getPassword());

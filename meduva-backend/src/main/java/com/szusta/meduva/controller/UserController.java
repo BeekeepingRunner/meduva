@@ -51,8 +51,8 @@ public class UserController {
     }
 
     @PostMapping("/edit/{id}")
-    public User editUser(@PathVariable Long id, @Valid @RequestBody UpdatedUserRequest request){
-
+    public User editUser(@PathVariable Long id,
+                         @Valid @RequestBody UpdatedUserRequest request) {
         User user = userService.getUser(id);
 
         user.setName(request.getName());
@@ -68,9 +68,7 @@ public class UserController {
     }
 
     @PostMapping("/edit-role/{id}")
-    public User editRole(@PathVariable Long id, @Valid @RequestBody ChangeRoleRequest request){
-        return userService.changeUserRole(id,request.getRoleId());
-
+    public User editRole(@PathVariable Long id, @Valid @RequestBody ChangeRoleRequest request) {
+        return userService.changeUserRole(id, request.getRoleId());
     }
-
 }

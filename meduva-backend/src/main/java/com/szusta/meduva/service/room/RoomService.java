@@ -1,28 +1,43 @@
-package com.szusta.meduva.service;
+package com.szusta.meduva.service.room;
 
 import com.szusta.meduva.exception.AlreadyExistsException;
 import com.szusta.meduva.exception.EntityRecordNotFoundException;
 import com.szusta.meduva.model.Room;
+import com.szusta.meduva.model.equipment.EquipmentItem;
+import com.szusta.meduva.model.schedule.EquipmentSchedule;
+import com.szusta.meduva.model.schedule.RoomSchedule;
+import com.szusta.meduva.model.schedule.Schedule;
+import com.szusta.meduva.payload.TimeRange;
 import com.szusta.meduva.repository.RoomRepository;
+import com.szusta.meduva.service.ScheduleChecker;
 import com.szusta.meduva.service.equipment.ItemsDisconnector;
+import com.szusta.meduva.util.TimeUtils;
 import com.szusta.meduva.util.UndeletableWithNameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class RoomService {
 
     private RoomRepository roomRepository;
     private ItemsDisconnector itemsDisconnector;
+    private ScheduleChecker scheduleChecker;
+    private RoomScheduleManager roomScheduleManager;
 
     @Autowired
     public RoomService(RoomRepository roomRepository,
-                       ItemsDisconnector itemsDisconnector) {
+                       ItemsDisconnector itemsDisconnector,
+                       ScheduleChecker scheduleChecker,
+                       RoomScheduleManager roomScheduleManager) {
         this.roomRepository = roomRepository;
         this.itemsDisconnector = itemsDisconnector;
+        this.scheduleChecker = scheduleChecker;
+        this.roomScheduleManager = roomScheduleManager;
     }
 
     public List<Room> findAllRooms() {
@@ -64,7 +79,30 @@ public class RoomService {
         roomRepository.save(room);
     }
 
+
     public void deleteAllRoomsPermanently() {
         this.roomRepository.deleteAll();
+    }
+
+    public List<TimeRange> getRoomWeeklyUnavailability(Room room, TimeRange weekBoundaries) {
+        List<RoomSchedule> weeklyUnavailability = scheduleChecker.getRoomUnavailabilityIn(room, weekBoundaries);
+        return weeklyUnavailability.stream()
+                .map(unavailableTimeRange ->
+                        new TimeRange(unavailableTimeRange.getTimeFrom(), unavailableTimeRange.getTimeTo())
+                ).collect(Collectors.toList());
+    }
+
+    @Transactional
+    public RoomSchedule setRoomDayUnavailability(Long roomId, Date day) {
+        Room room = roomRepository.findById(roomId)
+                .orElseThrow(() -> new EntityRecordNotFoundException("Cannot set room unavailability: room not found in DB with id : " + roomId));
+
+        TimeRange allDay = new TimeRange(TimeUtils.getDayStart(day), TimeUtils.getDayEnd(day));
+        if (scheduleChecker.isRoomFree(allDay, room)) {
+            return roomScheduleManager.setUnavailability(room, allDay);
+        } else {
+            throw new RuntimeException("Couldn't set room unavailability: room is occupied that day");
+        }
+
     }
 }

@@ -2,11 +2,14 @@ package com.szusta.meduva.controller;
 
 import com.szusta.meduva.model.Room;
 import com.szusta.meduva.model.Service;
-import com.szusta.meduva.payload.request.NewRoomRequest;
-import com.szusta.meduva.service.RoomService;
+import com.szusta.meduva.model.schedule.RoomSchedule;
+import com.szusta.meduva.payload.TimeRange;
+import com.szusta.meduva.payload.request.add.NewRoomRequest;
+import com.szusta.meduva.service.room.RoomService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -64,5 +67,16 @@ public class RoomController {
     @DeleteMapping("/all")
     public void deleteAllRoomsPermanently() {
         this.roomService.deleteAllRoomsPermanently();
+    }
+    @PostMapping("/get-weekly-unavailability/{roomId}")
+    public List<TimeRange> getItemWeeklyUnavailability(@PathVariable Long roomId, @RequestBody TimeRange weekBoundaries) {
+        Room room = roomService.findById(roomId);
+        return roomService.getRoomWeeklyUnavailability(room, weekBoundaries);
+    }
+
+    @PostMapping("/set-day-unavailability/{roomId}")
+    public TimeRange setItemDayUnavailability(@PathVariable Long roomId, @RequestBody Date day) {
+        RoomSchedule roomUnavailSchedule = roomService.setRoomDayUnavailability(roomId, day);
+        return new TimeRange(roomUnavailSchedule.getTimeFrom(), roomUnavailSchedule.getTimeTo());
     }
 }

@@ -2,13 +2,16 @@ package com.szusta.meduva.controller;
 
 import com.szusta.meduva.model.equipment.EquipmentItem;
 import com.szusta.meduva.model.equipment.EquipmentModel;
-import com.szusta.meduva.payload.request.NewEqModelRequest;
+import com.szusta.meduva.model.schedule.EquipmentSchedule;
+import com.szusta.meduva.payload.TimeRange;
+import com.szusta.meduva.payload.request.add.NewEqModelRequest;
 import com.szusta.meduva.service.equipment.EquipmentMaker;
 import com.szusta.meduva.service.equipment.EquipmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -65,8 +68,22 @@ public class EquipmentController {
         this.equipmentService.markModelAsDeleted(id);
     }
 
+
     @DeleteMapping("/models/all")
     public void deleteAllModelsPermanently() {
-        this.equipmentService.deleteAllModelsPermanently();
+            this.equipmentService.deleteAllModelsPermanently();
+        }
+
+    @PostMapping("item/get-weekly-unavailability/{itemId}")
+    public List<TimeRange> getItemWeeklyUnavailability(@PathVariable Long itemId, @RequestBody TimeRange weekBoundaries) {
+        EquipmentItem item = equipmentService.findItemById(itemId);
+        return equipmentService.getItemWeeklyUnavailability(item, weekBoundaries);
+    }
+
+    @PostMapping("item/set-day-unavailability/{itemId}")
+    public TimeRange setItemDayUnavailability(@PathVariable Long itemId, @RequestBody Date day) {
+        EquipmentSchedule eqSchedule = equipmentService.setItemDayUnavailability(itemId, day);
+        return new TimeRange(eqSchedule.getTimeFrom(), eqSchedule.getTimeTo());
+
     }
 }

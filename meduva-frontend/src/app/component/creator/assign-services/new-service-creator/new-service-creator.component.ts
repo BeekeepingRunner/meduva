@@ -39,7 +39,6 @@ export class NewServiceCreatorComponent extends NewServiceComponent implements N
 
   onServiceCreated($event: Service){
     this.service=$event;
-    console.log(this.services+"tgu")
   }
 
   onItemsLinked($event: EquipmentModel[]) {

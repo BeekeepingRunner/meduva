@@ -8,7 +8,7 @@ th.mat-header-cell {
   font-size: medium;
 }
 
-table {
+.hours-table {
   width: 90%;
   max-width: 600px;
   min-width: 450px;
@@ -20,4 +20,28 @@ button {
 
 .mat-row:hover {
   background-color: rgba(100,93,154,0.45);
+}
+
+.free-date {
+  background: lightgreen;
+  border-radius: 100%;
+}
+
+.not-available-date {
+  background: lightcoral;
+  border-radius: 100%;
+}
+
+.hour-buttons {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.hour-button {
+  padding: 5px;
+}
+
+.hour-button > button {
+  font-size: larger;
 }

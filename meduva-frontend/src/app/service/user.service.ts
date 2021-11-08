@@ -79,13 +79,13 @@ export class UserService {
   }
 
   getWorkerServices(userId: number){
-    return this.http.get<Service[]>(environment.API_BASE_URL + "api/user/workerServices/" + userId);
+    return this.http.get<Service[]>(environment.API_BASE_URL + "api/worker/workerServices/" + userId);
   }
 
   assignServicesToWorker(serviceList: number[],
            id: number){
 
-    return this.http.post( environment.API_BASE_URL+"api/user/assignServicesToWorker/" + id,
+    return this.http.post( environment.API_BASE_URL+"api/worker/assignServicesToWorker/" + id,
       serviceList
     , httpOptions);
   }

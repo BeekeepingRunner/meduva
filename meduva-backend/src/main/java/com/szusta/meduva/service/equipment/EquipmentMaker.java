@@ -4,7 +4,7 @@ import com.szusta.meduva.exception.EntityRecordNotFoundException;
 import com.szusta.meduva.model.Room;
 import com.szusta.meduva.model.equipment.EquipmentItem;
 import com.szusta.meduva.model.equipment.EquipmentModel;
-import com.szusta.meduva.payload.request.NewEqModelRequest;
+import com.szusta.meduva.payload.request.add.NewEqModelRequest;
 import com.szusta.meduva.repository.RoomRepository;
 import com.szusta.meduva.repository.ServiceRepository;
 import com.szusta.meduva.repository.equipment.EquipmentItemRepository;
