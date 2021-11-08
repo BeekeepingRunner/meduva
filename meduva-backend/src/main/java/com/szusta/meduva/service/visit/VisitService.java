@@ -10,6 +10,7 @@ import com.szusta.meduva.repository.RoomRepository;
 import com.szusta.meduva.repository.schedule.visit.VisitRepository;
 import com.szusta.meduva.service.TermGenerator;
 import com.szusta.meduva.service.freetimescanner.FreeTimeScanner;
+import com.szusta.meduva.service.freetimescanner.NotAvailableException;
 import com.szusta.meduva.util.TimeUtils;
 
 import javax.transaction.Transactional;
@@ -70,7 +71,9 @@ public class VisitService {
         return possibleTerms;
     }
 
-    public List<Date> getWorkerAvailableDaysOfMonth(User worker, Service service, Date anyDayOfMonth) {
+    public List<Date> getWorkerAvailableDaysOfMonth(User worker,
+                                                    Service service,
+                                                    Date anyDayOfMonth) {
         checkIfCanPerform(worker, service);
         setAuxiliaryData(worker, service);
 
@@ -78,7 +81,8 @@ public class VisitService {
 
         Date monthStart = TimeUtils.getMonthStart(anyDayOfMonth);
         Calendar currentDay = TimeUtils.getCalendar(monthStart);
-        Calendar nextMonthStart = TimeUtils.getCalendar(TimeUtils.getNextMonthStart(anyDayOfMonth));
+        Calendar nextMonthStart = TimeUtils.getCalendar(
+                TimeUtils.getNextMonthStart(anyDayOfMonth));
         do {
             if (freeTimeScanner.isWorkerDayAvailable(currentDay)) {
                 availableDaysOfMonth.add(currentDay.getTime());
@@ -112,9 +116,13 @@ public class VisitService {
     }
 
     public List<Term> getWorkerAvailableTermsForDay(User worker, Service service, Date day) {
-        checkIfCanPerform(worker, service);
-        setAuxiliaryData(worker, service);
-        return freeTimeScanner.getWorkerPossibleTerms(day);
+        try {
+            checkIfCanPerform(worker, service);
+            setAuxiliaryData(worker, service);
+            return freeTimeScanner.getWorkerPossibleTerms(day);
+        } catch (NotAvailableException ex) {
+            throw new RuntimeException("Worker doesn't have work hours on " + day);
+        }
     }
 
     @Transactional

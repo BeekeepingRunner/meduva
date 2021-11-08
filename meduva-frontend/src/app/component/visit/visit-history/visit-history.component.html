@@ -4,7 +4,7 @@
   <table mat-table [dataSource]="visits" class="mat-elevation-z8">
     <ng-container matColumnDef="date">
       <th mat-header-cell *matHeaderCellDef>Date</th>
-      <td mat-cell *matCellDef="let visit">{{ visit.timeFrom | date: 'dd.MM.yy' }}</td>
+      <td mat-cell *matCellDef="let visit">{{ visit.timeFrom | date: 'dd.MM.yyyy' }}</td>
     </ng-container>
     <ng-container matColumnDef="hour">
       <th mat-header-cell *matHeaderCellDef>Hour</th>
