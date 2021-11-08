@@ -15,6 +15,7 @@ import {ConfigureServicesCreatorDialogComponent} from "../dialog/configure-servi
 import {ConfirmationDialogComponent} from "../dialog/confirmation-dialog/confirmation-dialog.component";
 import {MatDialog} from "@angular/material/dialog";
 import {NewModelRequest} from "../equipment/new-model/new-model.component";
+import {FeedbackDialogComponent} from "../dialog/feedback-dialog/feedback-dialog.component";
 
 
 export interface CreatorRequest {
@@ -64,7 +65,7 @@ export class CreatorComponent implements OnInit, NewModelRequest {
 
   }
 
-  onItemsGeneration($event: Room[]) {
+  onRoomsGeneration($event: Room[]) {
     this.roomItems = $event;
   }
 
@@ -98,13 +99,9 @@ export class CreatorComponent implements OnInit, NewModelRequest {
       this.roomSelectionError = 'You must add minimum one room';
       return false;
     }
-
   }
 
   saveConfigurationInDatabase() {
-    console.log(this.roomItems);
-    console.log(this.eqModels);
-    console.log(this.services);
 
     let allServicesIds = new Map();
     let allRoomsIds = new Map();
@@ -136,22 +133,27 @@ export class CreatorComponent implements OnInit, NewModelRequest {
       }
     }
 
-
-    const confirmConfigurationDialogRef = this.dialog.open(ConfirmationDialogComponent, {
+    const confirmConfigurationDialogRef = this.dialog.open(FeedbackDialogComponent, {
       data: { message: 'Configuration has saved' }
     });
 
     confirmConfigurationDialogRef.afterClosed().subscribe(confirmed => {
 
-      if (confirmed) {
 
         for(let room of this.roomItems){
             room.id = allRoomsIds.get(room.name)
             if(room.id && room.services){
+              let roomServicesToAdd: Service[] = [];
               for(let anyRoomService of room.services){
-                anyRoomService.id=allServicesIds.get(anyRoomService.name);
+                for(let serviceToAssign of this.services){
+                  if(anyRoomService.name==serviceToAssign.name){
+                    anyRoomService.id=allServicesIds.get(anyRoomService.name);
+                    roomServicesToAdd.push(anyRoomService);
+                  }
+                }
               }
-              this.roomService.editServices(room.id, room.services).subscribe()
+
+              this.roomService.editServices(room.id, roomServicesToAdd).subscribe()
             }
         }
         for(let model of this.eqModels){
@@ -174,11 +176,12 @@ export class CreatorComponent implements OnInit, NewModelRequest {
           if(model.id==undefined)
           this.equipmentService.saveNewModel(modelRequest).subscribe();
           else{
-            //tutaj w przypadku gdy model istnieje to na backendzie wywoluje error 500 bo sa multiply references, dlatego trzeba albo usuwac istniejacy model i dodawac ten, albo zbudowac funkcje na backendzie ktora tylko linkuje model
+
+            this.equipmentService.saveModelConnections(modelRequest).subscribe();
           }
         }
 
-      }
+
     });
 
 

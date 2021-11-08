@@ -1,5 +1,5 @@
 <div>
-  <h2>Services</h2>
+
   <br>
   <button mat-icon-button color="primary" (click)="openServicesCreatorDialog()">
     + Add new service
@@ -32,6 +32,9 @@
 <br>
 <div>
   <button mat-button matStepperPrevious>Back</button>
-  <button mat-button matStepperNext (click)="emitConfiguration()">Next</button>
+  <button mat-button matStepperNext [disabled]="services.length==0" (click)="emitConfiguration()">Next</button>
 </div>
 <br>
+<div *ngIf="services.length==0" class="alert alert-warning">
+  <p>{{ "Minimum one service must be added" }}</p>
+</div>

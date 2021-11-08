@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class EquipmentMaker {
@@ -109,5 +110,19 @@ public class EquipmentMaker {
             item = equipmentItemRepository.save(item);
         }
         return items;
+    }
+
+    public EquipmentModel connectModelWithServices(NewEqModelRequest eqModelRequest) {
+
+        String modelName = eqModelRequest.getModelName();
+        List<Long> servicesIds = eqModelRequest.getServicesIds();
+
+        Optional<EquipmentModel> eqModelOptional = equipmentModelRepository.findByName(modelName);
+        EquipmentModel eqModel = eqModelOptional.get();
+        List<com.szusta.meduva.model.Service> services = serviceRepository.findAllById(servicesIds);
+
+        eqModel = connect(eqModel, services);
+
+        return equipmentModelRepository.save(eqModel);
     }
 }

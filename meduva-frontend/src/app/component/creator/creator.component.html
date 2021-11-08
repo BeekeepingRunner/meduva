@@ -1,11 +1,10 @@
 
-<mat-stepper [linear]="true" orientation="vertical" #stepper>\
-
+<mat-stepper [linear]="true" orientation="vertical" #stepper>
 
 
   <mat-step label="Number of rooms"
             [completed]="isFormValid">
-    <app-number-of-rooms (roomItemsEmitter)="onItemsGeneration($event)"
+    <app-number-of-rooms (roomItemsEmitter)="onRoomsGeneration($event)"
                     (stepCompletionEmitter)="onModelFormSubmitted($event)">
     </app-number-of-rooms>
     <div>
@@ -20,7 +19,7 @@
 
     <app-configure-rooms-creator *ngIf="roomItems.length"
                                  [roomItems]="roomItems"
-                                 (roomItemsEmitter)="onItemsGeneration($event)">
+                                 (roomItemsEmitter)="onRoomsGeneration($event)">
     </app-configure-rooms-creator>
     <br>
     <div>
@@ -54,20 +53,19 @@
 
 
 
-  <mat-step label="Personalize services">
+  <mat-step label="Personalize services"
+            [completed]="services.length>0">
 
     <app-service-list-creator *ngIf="roomItems.length"
                               [roomItems]="roomItems"
                               [eqModels]="eqModels"
                               (serviceConfigurationEmitter)="onServicesGot($event)"
                               (equipmentConfigurationEmitter)="onEquipmentModelGot($event)"
-                              (roomConfigurationEmitter)="onItemsGeneration($event)">
+                              (roomConfigurationEmitter)="onRoomsGeneration($event)">
 
     </app-service-list-creator>
 
-    <div *ngIf="roomSelectionError" class="alert alert-warning">
-      <p>{{ roomSelectionError }}</p>
-    </div>
+
   </mat-step>
 
 
@@ -77,7 +75,7 @@
     <br>
     <p>Are u sure you want to save that configuration?</p>
     <div>
-      <button mat-button matStepperPrevious>Back</button>
+      <button mat-button >Back</button>
       <button mat-button (click)="saveConfigurationInDatabase()">Save</button>
     </div>
   </mat-step>

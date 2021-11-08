@@ -59,6 +59,7 @@ export class ServiceListCreatorComponent extends ServiceListComponent {
         this.roomItems = serviceRequest.roomItems;
         this.eqModels = serviceRequest.equipmentModels
         this.services.push(serviceRequest.service);
+        this.serviceConfigurationEmitter.emit(this.services);
       }
     });
   }

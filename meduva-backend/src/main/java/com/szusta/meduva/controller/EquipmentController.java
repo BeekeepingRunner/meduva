@@ -50,6 +50,11 @@ public class EquipmentController {
         return equipmentMaker.createModelWithItems(eqModelRequest);
     }
 
+    @PostMapping("/model/connect")
+    public EquipmentModel configureEqModelConnections(@RequestBody @Valid NewEqModelRequest eqModelRequest) {
+        return equipmentMaker.connectModelWithServices(eqModelRequest);
+    }
+
     @GetMapping("/model/doesExistWithName/{modelName}")
     public boolean doesExist(@PathVariable String modelName) {
         return equipmentService.doesModelExistByName(modelName);
