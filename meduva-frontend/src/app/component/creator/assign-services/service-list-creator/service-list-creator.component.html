@@ -4,7 +4,7 @@
   <button mat-icon-button color="primary" (click)="openServicesCreatorDialog()">
     + Add new service
   </button>
- <!--
+
  <div>
     <table mat-table [dataSource]="services" class="mat-elevation-z8">
 
@@ -22,12 +22,12 @@
       </ng-container>
 
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row *matRowDef="let row; let service; columns: displayedColumns;"
-          [routerLink]="['/service/' + service.id]">
+      <tr mat-row *matRowDef="let row; let service; columns: displayedColumns;">
       </tr>
+
     </table>
   </div>
-  -->
+
 </div>
 <br>
 <div>

@@ -19,11 +19,12 @@ export interface NewServiceRequest {
   styleUrls: ['./new-service-creator.component.css']
 })
 export class NewServiceCreatorComponent extends NewServiceComponent implements NewServiceRequest {
+
   @Input() roomItems: Room[] = [];
   @Input() eqModels: EquipmentModel[] = [];
   @Input() services: Service[] = [];
-
   @Input() selectedModels: EquipmentModel[] = [];
+
   serviceModels: EquipmentModel[] = [];
 
    service: Service = {
@@ -34,8 +35,6 @@ export class NewServiceCreatorComponent extends NewServiceComponent implements N
     itemless: false,
     deleted: false
   };
-
-
 
 
   onServiceCreated($event: Service){
@@ -65,7 +64,6 @@ export class NewServiceCreatorComponent extends NewServiceComponent implements N
     return newServiceRequest;
 
   }
-
 
   serviceModelsGot($event: EquipmentModel[]) {
     this.serviceModels = $event;

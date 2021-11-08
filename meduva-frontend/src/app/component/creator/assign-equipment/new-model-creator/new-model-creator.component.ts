@@ -23,16 +23,16 @@ export interface NewModelRequest {
 })
 export class NewModelCreatorComponent extends NewModelComponent implements OnInit {
 
-  modelName: string = '';
-  isFormValid: boolean = false;
+  @Output() itemsEmitter = new EventEmitter<EquipmentItem[]>();
 
   @Input() eqModelsFromDB: EquipmentModel[] = [];
-
-  serviceSelectionError: string = '';
-
   @Input() roomItems: Room[] = [];
   /**Because of the fact that this class is used in two cases, during adding the room and in the creator, there is an input annotation.
    Creator uses that class in the string of giving data among the dialogs and classes*/
+
+  modelName: string = '';
+  isFormValid: boolean = false;
+  roomSelectionError: string = '';
 
   eqItems: EquipmentItem[] = [];
 
@@ -45,9 +45,6 @@ export class NewModelCreatorComponent extends NewModelComponent implements OnIni
   };
 
   selectedRoomsIds: number[] = [];
-  roomSelectionError: string = '';
-
-  @Output() itemsEmitter = new EventEmitter<EquipmentItem[]>();
 
   constructor(
      formBuilder: FormBuilder,
@@ -58,6 +55,7 @@ export class NewModelCreatorComponent extends NewModelComponent implements OnIni
   ) {
     super(formBuilder,servicesService,roomService,equipmentService,router)
   }
+
   ngOnInit() {
     super.ngOnInit();
   }

@@ -10,17 +10,12 @@
 </mat-selection-list>
 
 <br>
+
 <mat-checkbox id="itemless" [(ngModel)]="service.itemless"
-                            (change)="clearSelection()">
+                            (change)="clearSelection()"
+                            [checked]="selectedModels.length==0 && service.itemless==true">
   Service is itemless
+
 </mat-checkbox>
 
-<br>
-<div>
-  <button mat-button matStepperPrevious>Back</button>
-  <button mat-button matStepperNext [disabled]="selectedModels.length<=0 && service.itemless==false">Next</button>
-</div>
-<br>
-<div *ngIf="selectedModels.length<=0 && service.itemless==false" class="alert alert-warning">
-  <p>{{ "The service must be associated with any device or itemless" }}</p>
-</div>
+

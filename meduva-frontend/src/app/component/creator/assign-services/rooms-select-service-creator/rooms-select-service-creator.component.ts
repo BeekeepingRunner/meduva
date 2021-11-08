@@ -61,8 +61,6 @@ export class RoomsSelectServiceCreatorComponent extends RoomListComponent {
   }
 
 
-
-
   fetchRoomsFromDatabaseAndMergeWithRoomsFromCreator() {
     this.roomService.getAllUndeletedRooms().subscribe(
       rooms => {

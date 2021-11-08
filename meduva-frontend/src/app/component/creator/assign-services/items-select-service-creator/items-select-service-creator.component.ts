@@ -22,11 +22,7 @@ export class ItemsSelectServiceCreatorComponent extends EquipmentListComponent {
   @Input() doNotMultiplyServiceInModels: EquipmentModel[] = [];
   selectedModels: EquipmentModel[] = [];
 
-
-
   compareFunction = (o1: any, o2: any) => o1.id === o2.id;
-  emitSelectedServicesIds() {
-  }
 
 
   ngOnInit() {
@@ -56,15 +52,19 @@ export class ItemsSelectServiceCreatorComponent extends EquipmentListComponent {
       }
     }
 
+    this.emitServiceConfiguration();
+  }
+
+  clearSelection() {
+    this.selectedModels.length=0;
+    this.selectedModels = [];
+  }
+
+  emitServiceConfiguration(){
     this.relatedItemsEmitter.emit(this.models);
     this.serviceEmitter.emit(this.service);
     this.selectedItemsEmitter.emit(this.selectedModels);
     this.serviceModelsEmitter.emit(this.doNotMultiplyServiceInModels);
   }
-
-  clearSelection() {
-    this.selectedModels=[];
-  }
-
 
 }

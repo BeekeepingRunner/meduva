@@ -109,61 +109,52 @@ export class CreatorComponent implements OnInit, NewModelRequest {
     let allServicesIds = new Map();
     let allRoomsIds = new Map();
 
+    this.servicesService.getAllUndeletedServices().subscribe(data => {
+      for(let anyService of data){
+        allServicesIds.set(anyService.name, anyService.id);
+      }
+    })
+
+    for(let service of this.services){
+      this.servicesService.addNewService(service).subscribe(
+        data => {
+          allServicesIds.set(data.name, data.id);
+        }
+      );
+    }
+
+    for(let room of this.roomItems){
+      if(room.id==undefined){
+        this.roomService.addNewRoom(room).subscribe(
+          data => {
+            allRoomsIds.set(data.name, data.id);
+          }
+        );
+      }
+      else{
+        allRoomsIds.set(room.name,room.id)
+      }
+    }
+
+
     const confirmConfigurationDialogRef = this.dialog.open(ConfirmationDialogComponent, {
-      data: { message: 'Are u sure you want to save that configuration?' }
+      data: { message: 'Configuration has saved' }
     });
 
     confirmConfigurationDialogRef.afterClosed().subscribe(confirmed => {
 
       if (confirmed) {
-      }
-    });
-
-        for(let service of this.services){
-          this.servicesService.addNewService(service).subscribe();
-        }
-
-        this.servicesService.getAllUndeletedServices().subscribe(
-        services => {
-        for(let anyService of services){
-          allServicesIds.set(anyService.name, anyService.id);
-           }
-          }
-        );
 
         for(let room of this.roomItems){
-          if(room.id==undefined)
-          this.roomService.addNewRoom(room).subscribe(
-            data => {
-              if(data.id && room.services){
-                for(let anyRoomService of room.services){
-                  anyRoomService.id=allServicesIds.get(anyRoomService.name);
-                }
-                this.roomService.editServices(data.id, room.services).subscribe()
-              }
-            }
-          );
-          else{
-            if(room.services){
+            room.id = allRoomsIds.get(room.name)
+            if(room.id && room.services){
               for(let anyRoomService of room.services){
                 anyRoomService.id=allServicesIds.get(anyRoomService.name);
               }
-              //powoduje duplikacje uslug (kazda usluga dodaje sie od nowa i przypisuje do roomu - trzeba napisac nowa funkcje na backendzie)
               this.roomService.editServices(room.id, room.services).subscribe()
             }
-          }
         }
-    /**
-    this.roomService.getAllUndeletedRooms().subscribe(
-      rooms => {
-        for(let anyRoom of rooms){
-          allRoomsIds.set(anyRoom.name, anyRoom.id);
-        }
-      }
-    );
-*/
-
-       /** for(let model of this.eqModels){
+        for(let model of this.eqModels){
 
           let modelServicesIds: number[] = [];
           let modelRoomsIds: number[] = [];
@@ -180,10 +171,17 @@ export class CreatorComponent implements OnInit, NewModelRequest {
             servicesIds:modelServicesIds,
             selectedRoomsIds:modelRoomsIds
           }
-
+          if(model.id==undefined)
           this.equipmentService.saveNewModel(modelRequest).subscribe();
+          else{
+            //tutaj w przypadku gdy model istnieje to na backendzie wywoluje error 500 bo sa multiply references, dlatego trzeba albo usuwac istniejacy model i dodawac ten, albo zbudowac funkcje na backendzie ktora tylko linkuje model
+          }
         }
-*/
+
+      }
+    });
+
+
     this.router.navigate(['/home']);
   }
 

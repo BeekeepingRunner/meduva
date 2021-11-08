@@ -13,18 +13,15 @@ import {Room} from "../../../../model/room";
 })
 export class EquipmentListCreatorComponent implements OnInit {
 
+  @Output() eqModelEmitter = new EventEmitter<EquipmentModel[]>();
   @Input() roomItems!: Room[];
   models: EquipmentModel[] = [];
   modelTableColumns: string[] = ['name'];
-  itemTableColumns: string[] = ['name', 'room', 'status'];
-
-  @Output() eqModelEmitter = new EventEmitter<EquipmentModel[]>();
 
   constructor(
     private equipmentService: EquipmentService,
     public dialog: MatDialog,
-  ) {
-  }
+  ) { }
 
   ngOnInit(): void {
     this.getModels();
@@ -45,6 +42,7 @@ export class EquipmentListCreatorComponent implements OnInit {
     models.forEach(model => {
       model.items = model.items.filter(item => !item.deleted);
     });
+
     return models;
   }
 

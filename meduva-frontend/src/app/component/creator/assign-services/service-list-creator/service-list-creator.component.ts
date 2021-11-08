@@ -29,16 +29,18 @@ export class ServiceListCreatorComponent extends ServiceListComponent {
     servicesService: ServicesService,
     private equipmentService: EquipmentService,
     public dialog: MatDialog,
-  ) {
-  super(servicesService)
-
+  )
+  {
+    super(servicesService)
   }
+
   ngOnInit() {
     this.servicesService.getAllUndeletedServices().subscribe(
       services => {
         this.servicesFromDB = services;
       }
     )
+
     if(this.eqModels.length==0){
       this.equipmentService.getAllUndeletedEquipmentModels().subscribe(
         equipment => {
@@ -58,7 +60,6 @@ export class ServiceListCreatorComponent extends ServiceListComponent {
         this.eqModels = serviceRequest.equipmentModels
         this.services.push(serviceRequest.service);
       }
-
     });
   }
 

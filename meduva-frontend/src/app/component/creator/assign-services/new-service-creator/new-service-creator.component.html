@@ -1,8 +1,3 @@
-<button mat-icon-button color="primary" routerLink='/services'>
-  <- Back to configuration
-</button>
-
-
 <mat-stepper [linear]="true" orientation="vertical" #stepper>
 
 <mat-step #first_step label="Define new service" [completed]="service.name.length>0">
@@ -36,6 +31,16 @@
 
     </mat-label>
 
+      <br>
+      <div>
+        <button mat-button matStepperPrevious>Back</button>
+        <button mat-button matStepperNext [disabled]="selectedModels.length==0 && service.itemless==false">Next</button>
+      </div>
+      <br>
+      <div *ngIf="selectedModels.length==0 && service.itemless==false" class="alert alert-warning">
+        <p>{{ "The service must be associated with any device or itemless" }}</p>
+      </div>
+
     </ng-container>
 
   </mat-step>
@@ -57,11 +62,14 @@
   </mat-step>
 
   <mat-step #fourth_step>
+
     <ng-template matStepLabel>Done</ng-template>
     <p>Everything is ready.</p>
+
     <div>
       <button mat-button matStepperPrevious>Back</button>
       <button mat-button  [mat-dialog-close]="onServiceReady()">Save</button>
+
     </div>
   </mat-step>
 

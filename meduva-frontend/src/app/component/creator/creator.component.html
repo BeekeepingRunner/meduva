@@ -34,9 +34,6 @@
   </mat-step>
 
 
-
-
-
   <mat-step label="Add the equipment">
 
     <app-equipment-list-creator *ngIf="roomItems.length"
@@ -73,9 +70,12 @@
     </div>
   </mat-step>
 
+
   <mat-step>
     <ng-template matStepLabel>Done</ng-template>
     <p>Everything is ready.</p>
+    <br>
+    <p>Are u sure you want to save that configuration?</p>
     <div>
       <button mat-button matStepperPrevious>Back</button>
       <button mat-button (click)="saveConfigurationInDatabase()">Save</button>
