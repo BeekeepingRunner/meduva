@@ -14,7 +14,8 @@ public interface VisitRepository extends UndeletableRepository<Visit> {
             nativeQuery = true,
             value = "SELECT * FROM visit v "
                     + "INNER JOIN user_visit uv ON visit_id = v.id "
-                    + "WHERE as_client = 1 AND uv.user_id = ?1"
+                    + "WHERE as_client = 1 AND uv.user_id = ?1 "
+                    + "ORDER BY v.time_from ASC "
     )
     List<Visit> findAllWhereUserIsClient(Long userClientId);
 }

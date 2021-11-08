@@ -1,6 +1,11 @@
 <div>
   <h3>Your Visits</h3>
 
+  <button mat-raised-button color="primary"
+          (click)="getAllVisitsAsClient()">As client</button>
+  <button mat-raised-button color="primary"
+          (click)="getAllVisitsAsWorker()">As worker</button>
+
   <table mat-table [dataSource]="visits" class="mat-elevation-z8">
     <ng-container matColumnDef="date">
       <th mat-header-cell *matHeaderCellDef>Date</th>
