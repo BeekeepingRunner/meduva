@@ -127,8 +127,7 @@ public class VisitService {
     }
 
 
-    public List<Visit> getAllAsClient(User client) {
-
-        return null;
+    public List<Visit> findAllWhereUserIsClient(User client) {
+        return visitRepository.findAllWhereUserIsClient(client.getId());
     }
 }

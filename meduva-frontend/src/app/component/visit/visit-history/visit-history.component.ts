@@ -3,6 +3,7 @@ import {VisitService} from "../../../service/visit.service";
 import {JwtStorageService} from "../../../service/token/jwt-storage.service";
 import {User} from "../../../model/user";
 import {UserService} from "../../../service/user.service";
+import {Visit} from "../../../model/visit";
 
 @Component({
   selector: 'app-visit-history',
@@ -12,6 +13,9 @@ import {UserService} from "../../../service/user.service";
 export class VisitHistoryComponent implements OnInit {
 
   currentUserId!: number | undefined;
+
+  visits: Visit[] = [];
+  displayedColumns: string[] = ['date', 'hour', 'serviceName', 'room', 'status'];
 
   constructor(
     private visitService: VisitService,
@@ -25,6 +29,7 @@ export class VisitHistoryComponent implements OnInit {
       this.visitService.getAllAsClientByUserId(this.currentUserId).subscribe(
         visits => {
           console.log(visits);
+          this.visits = visits
         }, err => {
           console.log(err);
         }

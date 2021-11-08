@@ -70,8 +70,8 @@ public class VisitController {
     }
 
     @GetMapping("/all-as-client-by-user-id/{userId}")
-    public List<Visit> getAllAsClientByUserId(@PathVariable Long userId) {
+    public List<Visit> findAllWhereUserIsClient(@PathVariable Long userId) {
         User client = userService.findById(userId);
-        return visitService.getAllAsClient(client);
+        return visitService.findAllWhereUserIsClient(client);
     }
 }

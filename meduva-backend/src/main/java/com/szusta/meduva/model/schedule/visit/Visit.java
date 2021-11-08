@@ -42,19 +42,6 @@ public class Visit extends Schedule {
     @JoinColumn(name = "unregistered_client_id")
     private AccountlessClient unregisteredClient;
 
-    /*
-    @ManyToMany(
-            fetch = FetchType.LAZY,
-            cascade = CascadeType.ALL
-    )
-    @JoinTable(
-            name = "user_visit",
-            joinColumns = @JoinColumn(name = "visit_id"),
-            inverseJoinColumns = @JoinColumn(name = "user_id")
-    )
-    private List<User> users = new ArrayList<>();
-     */
-
     @OneToMany(mappedBy = "visit", cascade = CascadeType.ALL)
     private List<UserVisit> userVisits;
 

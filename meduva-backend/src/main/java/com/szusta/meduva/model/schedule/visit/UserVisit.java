@@ -22,11 +22,11 @@ public class UserVisit {
     @Column(name = "as_client")
     private boolean asClient;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne
     @JoinColumn(name = "visit_id")
     @JsonIgnore
     private Visit visit;
