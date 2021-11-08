@@ -16,6 +16,7 @@ export class VisitHistoryComponent implements OnInit {
   currentUserId!: number | undefined;
 
   visits: Visit[] = [];
+
   displayedColumns: string[] = ['date', 'hour', 'serviceName', 'room', 'status'];
 
   isWorker: boolean = false;
