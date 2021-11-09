@@ -48,12 +48,6 @@ public class User extends ScheduleSubject {
     )
     private Set<Role> roles = new HashSet<>();
 
-/*
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JsonIgnore
-    private List<Visit> visits;
- */
-
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     @JsonIgnore
     private List<UserVisit> userVisits;
