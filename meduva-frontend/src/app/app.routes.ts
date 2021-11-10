@@ -42,6 +42,7 @@ import {RoomScheduleComponent} from "./schedule/component/room/room-schedule/roo
 import {PickItemComponent} from "./schedule/component/item/pick-item/pick-item.component";
 import {ItemScheduleComponent} from "./schedule/component/item/item-schedule/item-schedule.component";
 import {SelectWorkerComponent} from "./component/visit/select-worker/select-worker.component";
+import {VisitHistoryComponent} from "./component/visit/visit-history/visit-history.component";
 
 export const routes: Routes = [
   { path: 'home', component: HomeComponent },
@@ -282,6 +283,14 @@ export const routes: Routes = [
   {
     path: 'visit/summary',
     component: SummaryComponent,
+    canActivate: [RoleGuard],
+    data: {
+      expectedRole: roleNames[UserRole.ROLE_CLIENT]
+    }
+  },
+  {
+    path: 'visit-history',
+    component: VisitHistoryComponent,
     canActivate: [RoleGuard],
     data: {
       expectedRole: roleNames[UserRole.ROLE_CLIENT]

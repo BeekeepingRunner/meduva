@@ -2,7 +2,7 @@ package com.szusta.meduva.controller;
 
 import com.szusta.meduva.model.Service;
 import com.szusta.meduva.model.User;
-import com.szusta.meduva.model.schedule.Visit;
+import com.szusta.meduva.model.schedule.visit.Visit;
 import com.szusta.meduva.payload.Term;
 import com.szusta.meduva.service.ScheduleChecker;
 import com.szusta.meduva.service.ServicesService;
@@ -67,5 +67,11 @@ public class VisitController {
     @PostMapping
     public ResponseEntity<Visit> saveNewVisit(@RequestBody Term term) {
         return ResponseEntity.of(visitService.saveNewVisit(term));
+    }
+
+    @GetMapping("/all-as-client-by-user-id/{userId}")
+    public List<Visit> findAllWhereUserIsClient(@PathVariable Long userId) {
+        User client = userService.findById(userId);
+        return visitService.findAllWhereUserIsClient(client);
     }
 }
