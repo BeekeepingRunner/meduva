@@ -68,6 +68,7 @@ public class RoomController {
     public void deleteAllRoomsPermanently() {
         this.roomService.deleteAllRoomsPermanently();
     }
+
     @PostMapping("/get-weekly-unavailability/{roomId}")
     public List<TimeRange> getItemWeeklyUnavailability(@PathVariable Long roomId, @RequestBody TimeRange weekBoundaries) {
         Room room = roomService.findById(roomId);

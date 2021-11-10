@@ -82,6 +82,13 @@ public class EquipmentService {
         });
     }
 
+    public void deleteAllModels() {
+        List<EquipmentModel> modelsToDelete = this.equipmentModelRepository.findAllUndeleted();
+        for (EquipmentModel model:modelsToDelete) {
+            markModelItemsAsDeleted(model);
+            markModelAsDeleted(model.getId());
+        }
+    }
 
     public void deleteAllModelsPermanently() {
         this.equipmentItemRepository.deleteAll();

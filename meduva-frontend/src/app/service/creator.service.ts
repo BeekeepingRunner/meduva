@@ -18,7 +18,7 @@ export class CreatorService {
     private httpClient: HttpClient
   ) { }
 
-  public deleteAllConfigurationPermanently(): Observable<any> {
+  public deleteAllConfiguration(): Observable<any> {
     return this.httpClient.delete(environment.API_BASE_URL + 'api/creator/all');
   }
 }

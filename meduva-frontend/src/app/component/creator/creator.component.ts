@@ -72,7 +72,7 @@ export class CreatorComponent implements OnInit, NewModelRequest {
 
     clearDatabaseDialogRef.afterClosed().subscribe(confirmed => {
       if(confirmed){
-        this.creatorService.deleteAllConfigurationPermanently().subscribe();
+        this.creatorService.deleteAllConfiguration().subscribe();
       }
 
     });

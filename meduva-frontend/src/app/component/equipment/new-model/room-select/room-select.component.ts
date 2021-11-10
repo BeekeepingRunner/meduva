@@ -56,21 +56,22 @@ export class RoomSelectComponent implements OnInit {
     });
 
     roomSelectionDialogRef.afterClosed().subscribe(room => {
-      let selectedRoom: Room = room[0];
-      item.room = selectedRoom;
+      if(room!=undefined) {
+        let selectedRoom: Room = room[0];
+        item.room = selectedRoom;
 
-      /** To creator purposes */
-      if(!this.eqItemsOutput.includes(item))
-        this.eqItemsOutput.push(item);
+        /** To creator purposes */
+        if (!this.eqItemsOutput.includes(item))
+          this.eqItemsOutput.push(item);
 
-      if(this.eqItemsOutput.length==this.eqItems.length)
-        this.itemsEmitter.emit(this.eqItemsOutput)
+        if (this.eqItemsOutput.length == this.eqItems.length)
+          this.itemsEmitter.emit(this.eqItemsOutput)
 
 
-      // @ts-ignore
-      this.selectedRoomIds[item.id - 1] = selectedRoom.id;
-      this.selectedIdsEmitter.emit(this.selectedRoomIds);
-
+        // @ts-ignore
+        this.selectedRoomIds[item.id - 1] = selectedRoom.id;
+        this.selectedIdsEmitter.emit(this.selectedRoomIds);
+      }
 
 
     });

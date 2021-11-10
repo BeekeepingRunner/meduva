@@ -20,7 +20,7 @@ export class ItemsSelectServiceCreatorComponent extends EquipmentListComponent {
 
   @Input() creatorModels: EquipmentModel[] = [];
   @Input() doNotMultiplyServiceInModels: EquipmentModel[] = [];
-  selectedModels: EquipmentModel[] = [];
+  @Input() selectedModels: EquipmentModel[] = [];
 
   compareFunction = (o1: any, o2: any) => o1.id === o2.id;
 

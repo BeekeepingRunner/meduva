@@ -1,5 +1,6 @@
 package com.szusta.meduva.service.equipment;
 
+import com.szusta.meduva.exception.AlreadyExistsException;
 import com.szusta.meduva.exception.EntityRecordNotFoundException;
 import com.szusta.meduva.model.Room;
 import com.szusta.meduva.model.equipment.EquipmentItem;
@@ -50,6 +51,13 @@ public class EquipmentMaker {
         List<com.szusta.meduva.model.Service> services = serviceRepository.findAllById(servicesIds);
         List<Room> rooms = findRoomsByIdsInOrder(roomsIds);
         List<EquipmentItem> eqItems = createItemsWithNames(itemCount, modelName);
+
+
+        for (com.szusta.meduva.model.Service itemlessService:services) {
+            if(itemlessService.isItemless()==true){
+                throw new IllegalArgumentException("Cannot link itemless service with equipment: ");
+            }
+        }
 
         eqModel = connect(eqModel, services);
         rooms = connect(rooms, services);
@@ -120,6 +128,12 @@ public class EquipmentMaker {
         Optional<EquipmentModel> eqModelOptional = equipmentModelRepository.findByName(modelName);
         EquipmentModel eqModel = eqModelOptional.get();
         List<com.szusta.meduva.model.Service> services = serviceRepository.findAllById(servicesIds);
+
+        for (com.szusta.meduva.model.Service itemlessService:services) {
+            if(itemlessService.isItemless()==true){
+                throw new IllegalArgumentException("Cannot link itemless service with equipment");
+            }
+        }
 
         eqModel = connect(eqModel, services);
 

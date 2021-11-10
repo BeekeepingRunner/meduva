@@ -27,9 +27,9 @@ public class CreatorController {
     }
 
     @DeleteMapping("/all")
-    public void deleteAllModelsPermanently() {
-        this.equipmentService.deleteAllModelsPermanently();
-        this.roomService.deleteAllRoomsPermanently();
-        this.servicesService.deleteAllServicesPermanently();
+    public void deleteAllModels() {
+        this.equipmentService.deleteAllModels();
+        this.roomService.deleteAllRooms();
+        this.servicesService.deleteAllServices();
     }
 }

@@ -79,6 +79,12 @@ public class RoomService {
         roomRepository.save(room);
     }
 
+    public void deleteAllRooms(){
+        List<Room> roomsToDelete = this.roomRepository.findAllUndeleted();
+        for (Room room:roomsToDelete) {
+            markAsDeleted(room.getId());
+        }
+    }
 
     public void deleteAllRoomsPermanently() {
         this.roomRepository.deleteAll();

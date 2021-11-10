@@ -1,3 +1,4 @@
+
 <mat-stepper [linear]="true" orientation="vertical" #stepper>
 
 <mat-step #first_step label="Define new service" [completed]="service.name.length>0">
@@ -18,6 +19,7 @@
     <app-items-select-service-creator *ngIf="eqModels.length && service.name.length>0"
                                       [creatorModels]="eqModels"
                                       [service]="service"
+                                      [selectedModels]="selectedModels"
                                       [doNotMultiplyServiceInModels]="serviceModels"
                                       (relatedItemsEmitter)="onItemsLinked($event)"
                                       (serviceEmitter)="onServiceCreated($event)"
@@ -76,3 +78,4 @@
 
 
 </mat-stepper>
+

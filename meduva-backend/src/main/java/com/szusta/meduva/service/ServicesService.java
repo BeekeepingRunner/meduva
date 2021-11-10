@@ -70,6 +70,13 @@ public class ServicesService {
         serviceRepository.save(service);
     }
 
+    public void deleteAllServices() {
+        List<Service> servicesToDelete = this.serviceRepository.findAllUndeleted();
+        for (Service service:servicesToDelete) {
+            markAsDeleted(service.getId());
+        }
+    }
+
     public void deleteAllServicesPermanently() {
         this.serviceRepository.deleteAll();
     }
