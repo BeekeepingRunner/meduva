@@ -36,7 +36,6 @@ export class CreatorComponent implements OnInit, NewModelRequest {
   roomsFromDB: Room[] = [];
 
   isFormValid: boolean = false;
-  isRoomsValid: boolean = false;
 
   @Output() roomItems: Room[] = [];
   eqModels: EquipmentModel[] = [];
@@ -50,6 +49,9 @@ export class CreatorComponent implements OnInit, NewModelRequest {
   selectedRoomsIds!: number[];
   servicesIds!: number[];
 
+  private allServicesIds: Map<string, number>;
+  private allRoomsIds: Map<string, number>;
+
   constructor(
     private formBuilder: FormBuilder,
     private servicesService: ServicesService,
@@ -58,13 +60,15 @@ export class CreatorComponent implements OnInit, NewModelRequest {
     private creatorService: CreatorService,
     private router: Router,
     public dialog: MatDialog,
-  ) { }
+  ) {
+    this.allServicesIds = new Map();
+    this.allRoomsIds = new Map();
+  }
 
   ngOnInit(): void {
     this.roomService.getAllUndeletedRooms().subscribe(roomsForGetRoomNames => {
       this.roomsFromDB = roomsForGetRoomNames;
     });
-
 
     const clearDatabaseDialogRef = this.dialog.open(ConfirmationDialogComponent, {
       data: { message: 'Do u want to clear your previous configuration? Attention! The change cannot be undone' }
@@ -74,9 +78,7 @@ export class CreatorComponent implements OnInit, NewModelRequest {
       if(confirmed){
         this.creatorService.deleteAllConfiguration().subscribe();
       }
-
     });
-
   }
 
   onRoomsGeneration($event: Room[]) {
@@ -96,7 +98,6 @@ export class CreatorComponent implements OnInit, NewModelRequest {
   }
 
   areAllItemsDisplaced(): boolean {
-
     if (this.roomItems.length > 0) {
       for(let anyRoom of this.roomItems){
         if(anyRoom.name == '' || anyRoom.name == null){
@@ -104,103 +105,14 @@ export class CreatorComponent implements OnInit, NewModelRequest {
           return false;
         }
       }
-
         this.roomSelectionError = '';
         return true;
-
 
     } else {
       this.roomSelectionError = 'You must add minimum one room';
       return false;
     }
   }
-
-  saveConfigurationInDatabase() {
-
-    let allServicesIds = new Map();
-    let allRoomsIds = new Map();
-
-    this.servicesService.getAllUndeletedServices().subscribe(data => {
-      for(let anyService of data){
-        allServicesIds.set(anyService.name, anyService.id);
-      }
-    })
-
-    for(let service of this.services){
-      this.servicesService.addNewService(service).subscribe(
-        data => {
-          allServicesIds.set(data.name, data.id);
-        }
-      );
-    }
-
-    for(let room of this.roomItems){
-      if(room.id==undefined){
-        this.roomService.addNewRoom(room).subscribe(
-          data => {
-            allRoomsIds.set(data.name, data.id);
-          }
-        );
-      }
-      else{
-        allRoomsIds.set(room.name,room.id)
-      }
-    }
-
-    const confirmConfigurationDialogRef = this.dialog.open(FeedbackDialogComponent, {
-      data: { message: 'Configuration has saved' }
-    });
-
-    confirmConfigurationDialogRef.afterClosed().subscribe(confirmed => {
-
-
-        for(let room of this.roomItems){
-            room.id = allRoomsIds.get(room.name)
-            if(room.id && room.services){
-              let roomServicesToAdd: Service[] = [];
-              for(let anyRoomService of room.services){
-                for(let serviceToAssign of this.services){
-                  if(anyRoomService.name==serviceToAssign.name){
-                    anyRoomService.id=allServicesIds.get(anyRoomService.name);
-                    roomServicesToAdd.push(anyRoomService);
-                  }
-                }
-              }
-
-              this.roomService.editServices(room.id, roomServicesToAdd).subscribe()
-            }
-        }
-        for(let model of this.eqModels){
-
-          let modelServicesIds: number[] = [];
-          let modelRoomsIds: number[] = [];
-
-          for(let modelService of model.services){
-            modelServicesIds.push(allServicesIds.get(modelService.name));
-          }
-          for(let modelEquipment of model.items){
-            modelRoomsIds.push(allRoomsIds.get(modelEquipment.room?.name))
-          }
-          let modelRequest: NewModelRequest = {
-            modelName: model.name,
-            itemCount:model.items.length,
-            servicesIds:modelServicesIds,
-            selectedRoomsIds:modelRoomsIds
-          }
-          if(model.id==undefined)
-          this.equipmentService.saveNewModel(modelRequest).subscribe();
-          else{
-
-            this.equipmentService.saveModelConnections(modelRequest).subscribe();
-          }
-        }
-
-    });
-
-
-    this.router.navigate(['/home']);
-  }
-
 
   checkIfNoRoomExistsInDatabase() {
     let sameRoomNamesCounter: number = 0;
@@ -211,6 +123,7 @@ export class CreatorComponent implements OnInit, NewModelRequest {
         }
       }
     }
+
     if(sameRoomNamesCounter == 0){
       this.roomSelectionError = '';
       return true;
@@ -219,7 +132,115 @@ export class CreatorComponent implements OnInit, NewModelRequest {
       this.roomSelectionError = "One of these rooms has already been added";
       return false;
     }
+  }
 
+  addServicesToDatabaseAndGetIds() {
+    this.servicesService.getAllUndeletedServices().subscribe(data => {
+      for(let anyService of data){
+        if(anyService.id!=undefined)
+        this.allServicesIds.set(anyService.name, anyService.id);
+      }
+    })
 
+    for(let service of this.services){
+      this.servicesService.addNewService(service).subscribe(
+        data => {
+          if(data.id!=undefined)
+          this.allServicesIds.set(data.name, data.id);
+        }
+      );
+    }
+  }
+
+  addRoomsToDatabaseAndGetIds(){
+    for(let room of this.roomItems){
+      if(room.id==undefined){
+        this.roomService.addNewRoom(room).subscribe(
+          data => {
+            if(data.id!=undefined)
+            this.allRoomsIds.set(data.name, data.id);
+          }
+        );
+      }
+      else{
+        this.allRoomsIds.set(room.name,room.id)
+      }
+    }
+  }
+
+  linkServicesAndRooms() {
+    for(let room of this.roomItems){
+      room.id = this.allRoomsIds.get(room.name)
+      if(room.id && room.services){
+        let roomServicesToAdd: Service[] = [];
+        for(let anyRoomService of room.services){
+          for(let serviceToAssign of this.services){
+            if(anyRoomService.name==serviceToAssign.name){
+              anyRoomService.id=this.allServicesIds.get(anyRoomService.name);
+              roomServicesToAdd.push(anyRoomService);
+            }
+          }
+        }
+
+        this.roomService.editServices(room.id, roomServicesToAdd).subscribe()
+      }
+    }
+  }
+
+  addAndLinkEquipment() {
+    for(let model of this.eqModels){
+
+      let modelServicesIds: number[] = [];
+      let modelRoomsIds: number[] = [];
+
+      for(let modelService of model.services){
+        let modelId = this.allServicesIds.get(modelService.name);
+        if(modelId!=undefined)
+        modelServicesIds.push(modelId);
+      }
+
+      for(let modelEquipment of model.items){
+        if(modelEquipment.room?.name!=undefined){
+          let roomId = this.allRoomsIds.get(modelEquipment.room?.name);
+          if(roomId!=undefined)
+          modelRoomsIds.push(roomId)
+        }
+      }
+
+      let modelRequest: NewModelRequest = {
+        modelName: model.name,
+        itemCount:model.items.length,
+        servicesIds:modelServicesIds,
+        selectedRoomsIds:modelRoomsIds
+      }
+
+      if(model.id==undefined)
+        this.equipmentService.saveNewModel(modelRequest).subscribe();
+      else{
+        this.equipmentService.saveModelConnections(modelRequest).subscribe();
+      }
+    }
+  }
+
+  saveConfigurationInDatabase() {
+
+    this.allServicesIds = new Map();
+    this.allRoomsIds = new Map();
+
+    this.addServicesToDatabaseAndGetIds();
+    this.addRoomsToDatabaseAndGetIds();
+
+    const confirmConfigurationDialogRef = this.dialog.open(FeedbackDialogComponent, {
+      data: { message: 'Configuration has saved' }
+    });
+
+    confirmConfigurationDialogRef.afterClosed().subscribe(confirmed => {
+
+      this.linkServicesAndRooms();
+      this.addAndLinkEquipment();
+
+    });
+
+    this.router.navigate(['/home']);
   }
 }
