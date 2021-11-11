@@ -8,6 +8,7 @@ import {Client} from "./model/client";
 import {UserService} from "./service/user.service";
 import {RoleGuardService} from "./service/auth/role-guard.service";
 import {Router} from "@angular/router";
+import {VisitService} from "./service/visit.service";
 
 @Component({
   selector: 'app-root',
@@ -37,6 +38,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     private roleGuardService: RoleGuardService,
     private userService: UserService,
     private clientService: ClientService,
+    private visitService: VisitService,
     private router: Router,
   ) {
   }
@@ -55,10 +57,10 @@ export class AppComponent implements OnInit, AfterViewInit {
   }
 
   private setVisibleOptions(): void {
-    this.showClientOptions = this.roleGuardService.hasExpectedRole(roleNames[UserRole.ROLE_CLIENT]);
-    this.showWorkerOptions = this.roleGuardService.hasExpectedRole(roleNames[UserRole.ROLE_WORKER]);
-    this.showReceptionistOptions = this.roleGuardService.hasExpectedRole(roleNames[UserRole.ROLE_RECEPTIONIST]);
-    this.showAdminPanel = this.roleGuardService.hasExpectedRole(roleNames[UserRole.ROLE_ADMIN]);
+    this.showClientOptions = this.roleGuardService.hasCurrentUserExpectedRole(roleNames[UserRole.ROLE_CLIENT]);
+    this.showWorkerOptions = this.roleGuardService.hasCurrentUserExpectedRole(roleNames[UserRole.ROLE_WORKER]);
+    this.showReceptionistOptions = this.roleGuardService.hasCurrentUserExpectedRole(roleNames[UserRole.ROLE_RECEPTIONIST]);
+    this.showAdminPanel = this.roleGuardService.hasCurrentUserExpectedRole(roleNames[UserRole.ROLE_ADMIN]);
   }
 
   // Responsible for closing and opening the side menu based on width of the browser's window
@@ -82,14 +84,10 @@ export class AppComponent implements OnInit, AfterViewInit {
     window.location.reload();
   }
 
-  onVisitPlanning(): void {
-    if (this.isClient()) {
-      this.saveUserAsClient();
-      this.router.navigate(['/visit/pick-service']);
-    } else {
-      // TODO: work on that path
-      this.router.navigate(['/visit/pick-client']);
-    }
+  onAppointmentMaking(): void {
+    this.visitService.clearAllVisitData();
+    this.saveUserAsClient();
+    this.router.navigate(['/visit/pick-service']);
   }
 
   private isClient(): boolean {
@@ -104,6 +102,11 @@ export class AppComponent implements OnInit, AfterViewInit {
       phoneNumber: this.currentUser.phoneNumber,
       email: this.currentUser.email
     };
-    this.clientService.saveSelectedClient(currUserAsClient);
+    this.visitService.saveSelectedClient(currUserAsClient);
+  }
+
+  onVisitPlanning() {
+    this.visitService.clearAllVisitData();
+    this.router.navigate(['/visit/pick-client']);
   }
 }

@@ -11,7 +11,7 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 
 @Entity
-@Table( name = "client")
+@Table( name = "unregistered_client")
 @Getter
 @Setter
 @NoArgsConstructor

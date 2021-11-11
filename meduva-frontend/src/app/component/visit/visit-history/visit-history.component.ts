@@ -29,7 +29,7 @@ export class VisitHistoryComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    if (this.roleGuardService.hasExpectedRole(roleNames[UserRole.ROLE_WORKER])) {
+    if (this.roleGuardService.hasCurrentUserExpectedRole(roleNames[UserRole.ROLE_WORKER])) {
       this.isWorker = true;
     }
 

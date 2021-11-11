@@ -7,6 +7,10 @@ import {ClientService} from "../../../service/client.service";
 import {MatDialog} from "@angular/material/dialog";
 import {ItemDayDialogComponent} from "../../../schedule/component/dialog/item-day-dialog/item-day-dialog.component";
 import {ConfirmationDialogComponent} from "../../dialog/confirmation-dialog/confirmation-dialog.component";
+import {RoleGuardService} from "../../../service/auth/role-guard.service";
+import {JwtStorageService, TokenUserInfo} from "../../../service/token/jwt-storage.service";
+import {roleNames, UserRole} from "../../../model/user";
+import {UserService} from "../../../service/user.service";
 
 @Component({
   selector: 'app-choose-service',
@@ -14,6 +18,8 @@ import {ConfirmationDialogComponent} from "../../dialog/confirmation-dialog/conf
   styleUrls: ['./choose-service.component.css']
 })
 export class ChooseServiceComponent implements OnInit {
+
+  currentUser!: TokenUserInfo | null;
 
   services: Service[] = [];
   displayedColumns: string[] = ['name', 'duration', 'price'];
@@ -23,11 +29,16 @@ export class ChooseServiceComponent implements OnInit {
   constructor(
     private servicesService: ServicesService,
     private visitService: VisitService,
+    private userService: UserService,
+    private roleGuard: RoleGuardService,
+    private jwtStorage: JwtStorageService,
     private dialog: MatDialog,
     private router: Router,
   ) { }
 
   ngOnInit(): void {
+    this.currentUser = this.jwtStorage.getCurrentUser();
+
     this.servicesService.getAllUndeletedServices().subscribe(
       services => {
         this.services = services;
@@ -41,6 +52,20 @@ export class ChooseServiceComponent implements OnInit {
   submitService(service: Service): void {
     this.visitService.saveSelectedService(service);
 
+    if (this.isUserMakingAnAppointment()) {
+      this.askToPickWorker();
+    } else {
+      // @ts-ignore
+      this.userService.getUserDetails(this.jwtStorage.getCurrentUser()?.id).subscribe(
+        currentWorker => {
+          this.visitService.saveSelectedWorker(currentWorker);
+          this.router.navigate(['/visit/pick-term']);
+        }
+      );
+    }
+  }
+
+  private askToPickWorker() {
     const confirmationDialog = this.dialog.open(ConfirmationDialogComponent, {
       data: { message: 'Do you want to select a worker?' }
     });
@@ -53,5 +78,12 @@ export class ChooseServiceComponent implements OnInit {
         this.router.navigate(['/visit/pick-worker']);
       }
     });
+  }
+
+  private isUserMakingAnAppointment(): boolean {
+    let visitClient = this.visitService.getSelectedClient();
+    console.log(visitClient);
+    return visitClient?.id == this.currentUser?.id
+      && visitClient?.email != null;
   }
 }

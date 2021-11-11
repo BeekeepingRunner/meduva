@@ -4,6 +4,9 @@ import {Router} from "@angular/router";
 import {Client} from "../../../model/client";
 import {UserService} from "../../../service/user.service";
 import {JwtStorageService} from "../../../service/token/jwt-storage.service";
+import {User} from "../../../model/user";
+import {trimJSON} from "../../../util/json/trim";
+import {ClientService} from "../../../service/client.service";
 
 @Component({
   selector: 'app-pick-client',
@@ -20,40 +23,43 @@ export class PickClientComponent implements OnInit {
     private visitService: VisitService,
     private userService: UserService,
     private jwtTokenStorageService: JwtStorageService,
+    private clientService: ClientService,
     private router: Router,
   ) { }
 
   ngOnInit(): void {
-    this.fetchSelectedTerm();
-    // For now, all clients have account
-    this.userService.getAllUsers().subscribe(
-      clientUsers => {
-        this.clients = clientUsers;
-        this.deleteCurrentUserFromClients();
+    this.getAllClients();
+  }
+
+  getAllClients(): void {
+    this.clients = [];
+    this.userService.getAllUndeletedUsers().subscribe(
+      registeredClients => {
+        registeredClients = this.deleteCurrentUser(registeredClients);
+        this.combineWithUnregisteredClients(registeredClients);
       }
     );
   }
 
-  private fetchSelectedTerm() {
-    let maybeTerm = this.visitService.getSelectedTerm();
-    if (maybeTerm != null) {
-      this.selectedTerm = maybeTerm;
-    } else {
-      // possible error display
-    }
-  }
-
-  private deleteCurrentUserFromClients() {
+  private deleteCurrentUser(registeredClients: User[]): User[] {
     let currentUserId = this.jwtTokenStorageService.getCurrentUser()?.id;
-    this.clients = this.clients.filter(client => client.id != currentUserId);
+    return registeredClients.filter(client => client.id != currentUserId);
   }
 
-  summarize(client: Client) {
-    let selectedTerm = this.visitService.getSelectedTerm();
-    if (selectedTerm != null) {
-      selectedTerm.clientId = client.id;
-      this.visitService.saveSelectedTerm(selectedTerm);
-      this.router.navigate(['/visit/summary']);
-    }
+  private combineWithUnregisteredClients(registeredClients: User[]): void {
+
+    registeredClients.forEach(registeredClient => {
+      let client = trimJSON(registeredClient, ["login", "password", "roles", "services"]);
+      this.clients.push(client);
+    });
+
+    this.clientService.getAllUnregisteredClients().subscribe(unregisteredClients => {
+      this.clients = this.clients.concat(unregisteredClients);
+    });
+  }
+
+  onClientPick(client: Client) {
+    this.visitService.saveSelectedClient(client);
+    this.router.navigate(['/visit/pick-service']);
   }
 }

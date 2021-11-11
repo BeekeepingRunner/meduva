@@ -8,6 +8,7 @@ import {EquipmentService} from "../../../service/equipment.service";
 import {Router} from "@angular/router";
 import {MatDialog} from "@angular/material/dialog";
 import {FeedbackDialogComponent} from "../../dialog/feedback-dialog/feedback-dialog.component";
+import {ClientService} from "../../../service/client.service";
 
 @Component({
   selector: 'app-summary',
@@ -26,6 +27,7 @@ export class SummaryComponent implements OnInit {
   constructor(
     private visitService: VisitService,
     private userService: UserService,
+    private clientService: ClientService,
     private servicesService: ServicesService,
     private roomService: RoomService,
     private equipmentService: EquipmentService,
@@ -45,14 +47,26 @@ export class SummaryComponent implements OnInit {
   }
 
   private setClientInfo() {
-    this.userService.getUserDetails(this.term!.clientId).subscribe(
-      client => {
-        this.clientInfo = client.name + ' ' + client.surname + ' (' + client.phoneNumber + ')';
-      },
-      err => {
-        console.log(err);
-      }
-    );
+    if (this.term?.clientUnregistered) {
+      this.clientService.getClientById(this.term.clientId).subscribe(
+        client => {
+          this.clientInfo = client.name + ' ' + client.surname + ' (' + client.phoneNumber + ')';
+        },
+        err => {
+          console.log(err);
+        }
+      );
+    } else {
+      this.userService.getUserDetails(this.term!.clientId).subscribe(
+        client => {
+          this.clientInfo = client.name + ' ' + client.surname + ' (' + client.phoneNumber + ')'
+            + ' (' + client.email + ')';
+        },
+        err => {
+          console.log(err);
+        }
+      );
+    }
   }
 
   private setWorkerInfo() {

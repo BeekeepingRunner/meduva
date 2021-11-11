@@ -27,10 +27,10 @@ export class RoleGuardService implements CanActivate {
   }
 
   isUserAuthorizedWith(expectedRole: string): boolean {
-    return !this.auth.hasJwtExpired() && this.hasExpectedRole(expectedRole);
+    return !this.auth.hasJwtExpired() && this.hasCurrentUserExpectedRole(expectedRole);
   }
 
-  hasExpectedRole(expectedRole: string): boolean {
+  hasCurrentUserExpectedRole(expectedRole: string): boolean {
     let user: TokenUserInfo | null = this.jwtStorage.getCurrentUser();
     if (user != null) {
       return this.hasRole(user, expectedRole);

@@ -4,6 +4,7 @@ import {environment} from "../../environments/environment";
 import {Observable} from "rxjs";
 import {Service} from "../model/service";
 import {User} from "../model/user";
+import {Client} from "../model/client";
 
 export interface Term {
   startTime: string,
@@ -12,6 +13,7 @@ export interface Term {
   serviceId: number,
   workerId: number,
   clientId: number,
+  clientUnregistered: boolean,
   roomId: number,
   eqItemId: number,
 }
@@ -22,6 +24,7 @@ enum VisitKey {
   SELECTED_TERM_KEY = "SELECTED_TERM",
   SELECTED_SERVICE_KEY = "SELECTED_SERVICE_KEY",
   SELECTED_WORKER_KEY = "SELECTED_WORKER_KEY",
+  SELECTED_CLIENT_KEY = "SELECTED_CLIENT_KEY",
 }
 
 @Injectable({
@@ -43,8 +46,18 @@ export class VisitService {
     window.sessionStorage.setItem(VisitKey.SELECTED_WORKER_KEY, JSON.stringify(worker));
   }
 
+  saveSelectedClient(client: Client) {
+    window.sessionStorage.setItem(VisitKey.SELECTED_CLIENT_KEY, JSON.stringify(client));
+  }
+
   saveAvailableDates(dates: Date[]) : void {
     this.availableDates = dates;
+  }
+
+  clearAllVisitData(): void {
+    window.sessionStorage.removeItem(VisitKey.SELECTED_SERVICE_KEY);
+    window.sessionStorage.removeItem(VisitKey.SELECTED_WORKER_KEY);
+    window.sessionStorage.removeItem(VisitKey.SELECTED_CLIENT_KEY);
   }
 
   getAvailableDates() : Date[] {
@@ -68,6 +81,15 @@ export class VisitService {
     let workerJSON: string | null = window.sessionStorage.getItem(VisitKey.SELECTED_WORKER_KEY);
     if (workerJSON) {
       return JSON.parse(workerJSON);
+    } else {
+      return null;
+    }
+  }
+
+  getSelectedClient() : Client | null {
+    let clientJSON: string | null = window.sessionStorage.getItem(VisitKey.SELECTED_CLIENT_KEY);
+    if (clientJSON) {
+      return JSON.parse(clientJSON);
     } else {
       return null;
     }

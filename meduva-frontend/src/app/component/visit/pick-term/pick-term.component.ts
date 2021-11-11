@@ -90,13 +90,11 @@ export class PickTermComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.clientId = this.jwtStorageService.getCurrentUser()?.id;
+    // this.clientId = this.jwtStorageService.getCurrentUser()?.id;
     this.selectedService = this.visitService.getSelectedService();
     if (this.serviceHasBeenSelected()) {
-      console.log("service selected");
       this.selectedWorker = this.visitService.getSelectedWorker();
       if (this.workerHasBeenSelected()) {
-        console.log("worker selected");
         this.waitForWorkerAvailableDays();
       } else {
         this.waitForAvailableDays();
@@ -171,10 +169,6 @@ export class PickTermComponent implements OnInit {
     // @ts-ignore
     this.visitService.getWorkerTermsForDay(this.selectedWorker?.id, this.selectedService?.id, dayStr).subscribe(
       (possibleTerms: Term[]) => {
-        possibleTerms.forEach(term => {
-          // @ts-ignore
-          term.clientId = this.clientId;
-        });
         this.availableTerms = possibleTerms;
         this.canSelectTerm = true;
         this.generatingTerms = false;
@@ -184,7 +178,14 @@ export class PickTermComponent implements OnInit {
   }
 
   onTermClick(term: Term) {
+    // @ts-ignore
+    term.clientId = this.visitService.getSelectedClient()?.id;
+    console.log(this.visitService.getSelectedClient());
+    if (this.visitService.getSelectedClient()?.email == null || this.visitService.getSelectedClient()?.email == undefined) {
+      term.clientUnregistered = true;
+    }
     this.visitService.saveSelectedTerm(term);
+    console.log(term);
     this.hourSelected = true;
   }
 
