@@ -1,1 +1,71 @@
-<p>plan-your-visit works!</p>
+<h3>Plan Your visit</h3>
+<br>
+<mat-stepper [linear]="true" orientation="vertical" #stepper>
+
+  <mat-step label="Select a Client"
+            [completed]="client != null">
+    <br>
+    <app-client-selection (clientEmitter)="onClientSelection($event)">
+    </app-client-selection>
+    <div>
+      <br>
+      <p *ngIf="client">
+        Selected client:
+        <b>
+          {{ client.name + ' ' + client.surname + ' ' }}
+          <span *ngIf="client.email">{{ '(' + client.email + ')' }}</span>
+          <span *ngIf="!client.email">{{ '(without account)' }}</span>
+        </b>
+      </p>
+      <button mat-button matStepperNext>Next</button>
+    </div>
+  </mat-step>
+
+  <mat-step label="Select a service"
+            [completed]="service != null">
+    <br>
+    <app-service-selection *ngIf="worker != null"
+                           [worker]="worker"
+                           (reRenderSignalEmitter)="onReRenderSignal($event)"
+                           (serviceEmitter)="onServiceSelection($event)">
+    </app-service-selection>
+    <div>
+      <br>
+      <p *ngIf="service">Selected service: <b>{{ service.name }}</b></p>
+      <button mat-button matStepperNext (click)="makeTermSelectionVisible()">Next</button>
+    </div>
+  </mat-step>
+
+  <mat-step label="Select a term"
+            [completed]="term != null">
+
+    <div *ngIf="isTermSelectionVisible">
+      <app-term-selection *ngIf="worker != null && service != null && client != null"
+                          [client]="client"
+                          [service]="service"
+                          [worker]="worker"
+                          (termEmitter)="onTermSelection($event)">
+      </app-term-selection>
+    </div>
+    <br>
+    <div>
+      <button mat-button matStepperPrevious>Back</button>
+      <button mat-button matStepperNext>Next</button>
+    </div>
+  </mat-step>
+
+  <mat-step label="Visit summary">
+    <app-visit-summary *ngIf="term != null && worker != null && service != null && client != null"
+                       [client]="client"
+                       [worker]="worker"
+                       [service]="service"
+                       [term]="term">
+    </app-visit-summary>
+    <br>
+    <div>
+      <button mat-button matStepperPrevious>Back</button>
+      <button mat-button (click)="onVisitSubmit()">Submit</button>
+    </div>
+  </mat-step>
+
+</mat-stepper>

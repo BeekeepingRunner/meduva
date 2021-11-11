@@ -55,11 +55,8 @@ import { ModelDetailsComponent } from './component/equipment/model-details/model
 import { FeedbackDialogComponent } from './component/dialog/feedback-dialog/feedback-dialog.component';
 import { ChooseServiceComponent } from './component/visit/choose-service/choose-service.component';
 import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
-import {PickTermComponent} from './component/visit/pick-term/pick-term.component';
 import {EditRoleComponent} from "./component/specific-user-profile/edit-role/edit-role.component";
 import {MatSelectModule} from "@angular/material/select";
-import { PickClientComponent } from './component/visit/pick-client/pick-client.component';
-import { SummaryComponent } from './component/visit/summary/summary.component';
 import {WorkerServicesComponent} from "./component/specific-user-profile/worker-services/worker-services.component";
 import { EditPerformedServicesComponent } from './component/rooms/edit-performed-services/edit-performed-services.component';
 import { ChangePasswordComponent } from './component/profile/change-password/change-password.component';
@@ -70,7 +67,6 @@ import { EditClientComponent } from './component/clients/client-details/edit-cli
 import {ScheduleModule} from "./schedule/schedule.module";
 import {MatDatepickerModule} from "@angular/material/datepicker";
 import {MatNativeDateModule} from "@angular/material/core";
-import { SelectWorkerComponent } from './component/visit/select-worker/select-worker.component';
 import { VisitHistoryComponent } from './component/visit/visit-history/visit-history.component';
 import { MakeAppointmentComponent } from './component/visit/make-appointment/make-appointment.component';
 import { PlanYourVisitComponent } from './component/visit/plan-your-visit/plan-your-visit.component';
@@ -81,6 +77,7 @@ import {
   TermSelectionComponent
 } from './component/visit/make-appointment/term-selection/term-selection.component';
 import { VisitSummaryComponent } from './component/visit/make-appointment/visit-summary/visit-summary.component';
+import { ClientSelectionComponent } from './component/visit/plan-your-visit/client-selection/client-selection.component';
 
 @NgModule({
   declarations: [
@@ -113,10 +110,7 @@ import { VisitSummaryComponent } from './component/visit/make-appointment/visit-
     ModelDetailsComponent,
     FeedbackDialogComponent,
     ChooseServiceComponent,
-    PickTermComponent,
     EditRoleComponent,
-    PickClientComponent,
-    SummaryComponent,
     WorkerServicesComponent,
     EditPerformedServicesComponent,
     ChangePasswordComponent,
@@ -124,7 +118,6 @@ import { VisitSummaryComponent } from './component/visit/make-appointment/visit-
     ClientDetailsComponent,
     AddClientComponent,
     EditClientComponent,
-    SelectWorkerComponent,
     AsyncDatePickerHeader,
     VisitHistoryComponent,
     MakeAppointmentComponent,
@@ -133,6 +126,7 @@ import { VisitSummaryComponent } from './component/visit/make-appointment/visit-
     WorkerSelectionComponent,
     TermSelectionComponent,
     VisitSummaryComponent,
+    ClientSelectionComponent,
   ],
   imports: [
     BrowserModule,

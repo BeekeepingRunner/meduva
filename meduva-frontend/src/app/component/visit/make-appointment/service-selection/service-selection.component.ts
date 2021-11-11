@@ -1,6 +1,7 @@
-import {Component, EventEmitter, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {ServicesService} from "../../../../service/services.service";
 import {Service} from "../../../../model/service";
+import {User} from "../../../../model/user";
 
 @Component({
   selector: 'app-service-selection',
@@ -9,8 +10,12 @@ import {Service} from "../../../../model/service";
 })
 export class ServiceSelectionComponent implements OnInit {
 
+  @Input()
+  worker!: User;
+
   services: Service[] = [];
 
+  @Output() reRenderSignalEmitter = new EventEmitter<boolean>();
   @Output() serviceEmitter = new EventEmitter<Service>();
   displayedColumns: string[] = ['name', 'duration', 'price'];
 
@@ -19,16 +24,35 @@ export class ServiceSelectionComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    if (this.worker == null) {
+      this.getAllServices();
+    } else {
+      this.getServicesForWorker();
+    }
+  }
+
+  private getAllServices() {
     this.servicesService.getAllUndeletedServices().subscribe(
       services => {
         this.services = services;
       }, err => {
         console.log(err);
       }
-    )
+    );
+  }
+
+  private getServicesForWorker() {
+    this.servicesService.getAllPossibleWithWorker(this.worker.id).subscribe(
+      services => {
+        this.services = services;
+      }, err => {
+        console.log(err);
+      }
+    );
   }
 
   onServiceSelect(service: Service) {
+    this.reRenderSignalEmitter.emit(true);
     this.serviceEmitter.emit(service);
   }
 }

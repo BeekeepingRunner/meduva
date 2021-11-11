@@ -1,30 +1,30 @@
-import { Component, OnInit } from '@angular/core';
-import {Term, VisitService} from "../../../service/visit.service";
-import {Router} from "@angular/router";
-import {Client} from "../../../model/client";
-import {UserService} from "../../../service/user.service";
-import {JwtStorageService} from "../../../service/token/jwt-storage.service";
-import {User} from "../../../model/user";
-import {trimJSON} from "../../../util/json/trim";
-import {ClientService} from "../../../service/client.service";
+import {Component, OnInit, Output, EventEmitter} from '@angular/core';
+import {Client} from "../../../../model/client";
+import {VisitService} from "../../../../service/visit.service";
+import {UserService} from "../../../../service/user.service";
+import {JwtStorageService} from "../../../../service/token/jwt-storage.service";
+import {ClientService} from "../../../../service/client.service";
+import {User} from "../../../../model/user";
+import {trimJSON} from "../../../../util/json/trim";
 
 @Component({
-  selector: 'app-pick-client',
-  templateUrl: './pick-client.component.html',
-  styleUrls: ['./pick-client.component.css']
+  selector: 'app-client-selection',
+  templateUrl: './client-selection.component.html',
+  styleUrls: ['./client-selection.component.css']
 })
-export class PickClientComponent implements OnInit {
+export class ClientSelectionComponent implements OnInit {
 
-  selectedTerm!: Term;
   clients: Client[] = [];
   displayedColumns: string[] = ["name", "surname", "phoneNumber", "email"];
+
+  @Output()
+  clientEmitter = new EventEmitter<Client>();
 
   constructor(
     private visitService: VisitService,
     private userService: UserService,
     private jwtTokenStorageService: JwtStorageService,
     private clientService: ClientService,
-    private router: Router,
   ) { }
 
   ngOnInit(): void {
@@ -59,7 +59,6 @@ export class PickClientComponent implements OnInit {
   }
 
   onClientPick(client: Client) {
-    this.visitService.saveSelectedClient(client);
-    this.router.navigate(['/visit/pick-service']);
+    this.clientEmitter.emit(client);
   }
 }
