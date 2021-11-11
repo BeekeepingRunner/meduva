@@ -43,6 +43,8 @@ import {PickItemComponent} from "./schedule/component/item/pick-item/pick-item.c
 import {ItemScheduleComponent} from "./schedule/component/item/item-schedule/item-schedule.component";
 import {SelectWorkerComponent} from "./component/visit/select-worker/select-worker.component";
 import {VisitHistoryComponent} from "./component/visit/visit-history/visit-history.component";
+import {MakeAppointmentComponent} from "./component/visit/make-appointment/make-appointment.component";
+import {PlanYourVisitComponent} from "./component/visit/plan-your-visit/plan-your-visit.component";
 
 export const routes: Routes = [
   { path: 'home', component: HomeComponent },
@@ -246,6 +248,22 @@ export const routes: Routes = [
     canActivate: [RoleGuard],
     data: {
       expectedRole: roleNames[UserRole.ROLE_ADMIN]
+    }
+  },
+  {
+    path: 'visit/make-appointment',
+    component: MakeAppointmentComponent,
+    canActivate: [RoleGuard],
+    data: {
+      expectedRole: roleNames[UserRole.ROLE_CLIENT]
+    }
+  },
+  {
+    path: 'visit/plan-your-visit',
+    component: PlanYourVisitComponent,
+    canActivate: [RoleGuard],
+    data: {
+      expectedRole: roleNames[UserRole.ROLE_WORKER]
     }
   },
   {
