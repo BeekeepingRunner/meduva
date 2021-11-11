@@ -12,7 +12,7 @@ export class RoomListComponent implements OnInit {
   rooms: Room[] = [];
   displayedColumns: string[] = ['name'];
 
-  constructor(private roomService: RoomService) { }
+  constructor(protected roomService: RoomService) { }
 
   ngOnInit(): void {
     this.getAllRooms()

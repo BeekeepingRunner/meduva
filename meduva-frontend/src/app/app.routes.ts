@@ -30,6 +30,8 @@ import {SummaryComponent} from "./component/visit/summary/summary.component";
 import {WorkerServicesComponent} from "./component/specific-user-profile/worker-services/worker-services.component";
 import {EditPerformedServicesComponent} from "./component/rooms/edit-performed-services/edit-performed-services.component";
 import {ChangePasswordComponent} from "./component/profile/change-password/change-password.component";
+import {CreatorComponent} from "./component/creator/creator.component";
+import {NewModelCreatorComponent} from "./component/creator/assign-equipment/new-model-creator/new-model-creator.component";
 import {ClientListComponent} from "./component/clients/client-list/client-list.component";
 import {ClientDetailsComponent} from "./component/clients/client-details/client-details.component";
 import {AddClientComponent} from "./component/clients/add-client/add-client.component";
@@ -243,6 +245,22 @@ export const routes: Routes = [
   {
     path: 'equipment/add-model',
     component: NewModelComponent,
+    canActivate: [RoleGuard],
+    data: {
+      expectedRole: roleNames[UserRole.ROLE_ADMIN]
+    }
+  },
+  {
+    path: 'creator',
+    component: CreatorComponent,
+    canActivate: [RoleGuard],
+    data: {
+      expectedRole: roleNames[UserRole.ROLE_ADMIN]
+    }
+  },
+  {
+    path: 'creator/add-model',
+    component: NewModelCreatorComponent,
     canActivate: [RoleGuard],
     data: {
       expectedRole: roleNames[UserRole.ROLE_ADMIN]

@@ -32,6 +32,11 @@ public class ServicesController {
     @GetMapping("/all/itemless")
     public List<Service> findAllItemlessServices(){ return this.servicesService.findAllItemless(); }
 
+    @GetMapping("/service/doesExistWithName/{serviceName}")
+    public boolean doesExist(@PathVariable String serviceName) {
+        return servicesService.doesServiceExistByName(serviceName);
+    }
+
     @GetMapping("/all/nonitemless")
     public List<Service> findAllNonItemlessServices(){ return this.servicesService.findAllNonItemless(); }
 
@@ -51,5 +56,9 @@ public class ServicesController {
     @DeleteMapping("/{id}")
     public void deleteService(@PathVariable Long id) {
         this.servicesService.markAsDeleted(id);
+    }
+    @DeleteMapping("/all")
+    public void deleteAllServicesPermanently() {
+        this.servicesService.deleteAllServicesPermanently();
     }
 }
