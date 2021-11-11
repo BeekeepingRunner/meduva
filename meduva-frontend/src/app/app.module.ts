@@ -72,6 +72,8 @@ import {MatDatepickerModule} from "@angular/material/datepicker";
 import {MatNativeDateModule} from "@angular/material/core";
 import { SelectWorkerComponent } from './component/visit/select-worker/select-worker.component';
 import { VisitHistoryComponent } from './component/visit/visit-history/visit-history.component';
+import { MakeAppointmentComponent } from './component/visit/make-appointment/make-appointment.component';
+import { PlanYourVisitComponent } from './component/visit/plan-your-visit/plan-your-visit.component';
 
 @NgModule({
   declarations: [
@@ -118,6 +120,8 @@ import { VisitHistoryComponent } from './component/visit/visit-history/visit-his
     SelectWorkerComponent,
     AsyncDatePickerHeader,
     VisitHistoryComponent,
+    MakeAppointmentComponent,
+    PlanYourVisitComponent,
   ],
   imports: [
     BrowserModule,
