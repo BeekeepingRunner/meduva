@@ -84,6 +84,7 @@ import {ScheduleModule} from "./schedule/schedule.module";
 import {MatDatepickerModule} from "@angular/material/datepicker";
 import {MatNativeDateModule} from "@angular/material/core";
 import { SelectWorkerComponent } from './component/visit/select-worker/select-worker.component';
+import { VisitHistoryComponent } from './component/visit/visit-history/visit-history.component';
 
 
 @NgModule({
@@ -146,7 +147,7 @@ import { SelectWorkerComponent } from './component/visit/select-worker/select-wo
     EditClientComponent,
     SelectWorkerComponent,
     AsyncDatePickerHeader,
-
+    VisitHistoryComponent,
   ],
   imports: [
     BrowserModule,

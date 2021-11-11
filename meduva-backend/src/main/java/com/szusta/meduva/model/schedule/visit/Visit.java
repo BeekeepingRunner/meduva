@@ -1,12 +1,11 @@
-package com.szusta.meduva.model.schedule;
+package com.szusta.meduva.model.schedule.visit;
 
 import com.szusta.meduva.model.AccountlessClient;
 import com.szusta.meduva.model.Room;
 import com.szusta.meduva.model.Service;
-import com.szusta.meduva.model.User;
 import com.szusta.meduva.model.equipment.EquipmentItem;
+import com.szusta.meduva.model.schedule.Schedule;
 import com.szusta.meduva.model.schedule.status.VisitStatus;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -15,13 +14,14 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Entity
 @Table(name = "visit")
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
 public class Visit extends Schedule {
 
     private boolean paid = false;
@@ -42,16 +42,8 @@ public class Visit extends Schedule {
     @JoinColumn(name = "unregistered_client_id")
     private AccountlessClient unregisteredClient;
 
-    @ManyToMany(
-            fetch = FetchType.LAZY,
-            cascade = CascadeType.ALL
-    )
-    @JoinTable(
-            name = "user_visit",
-            joinColumns = @JoinColumn(name = "visit_id"),
-            inverseJoinColumns = @JoinColumn(name = "user_id")
-    )
-    private List<User> users = new ArrayList<>();
+    @OneToMany(mappedBy = "visit", cascade = CascadeType.ALL)
+    private List<UserVisit> userVisits;
 
     @ManyToMany(
             fetch = FetchType.LAZY,
@@ -64,8 +56,11 @@ public class Visit extends Schedule {
     )
     private List<EquipmentItem> eqItems = new ArrayList<>();
 
-    public Visit(Date timeFrom, Date timeTo) {
+    public Visit(Date timeFrom, Date timeTo, UserVisit... userVisits) {
         this.timeFrom = timeFrom;
         this.timeTo = timeTo;
+        for(UserVisit userVisit : userVisits)
+            userVisit.setVisit(this);
+        this.userVisits = Stream.of(userVisits).collect(Collectors.toList());
     }
 }

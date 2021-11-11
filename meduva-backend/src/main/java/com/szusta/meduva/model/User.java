@@ -3,14 +3,14 @@ package com.szusta.meduva.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.szusta.meduva.model.common.ScheduleSubject;
 import com.szusta.meduva.model.role.Role;
-import com.szusta.meduva.model.schedule.Visit;
 import com.szusta.meduva.model.schedule.WorkerSchedule;
-import lombok.AllArgsConstructor;
+import com.szusta.meduva.model.schedule.visit.UserVisit;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -26,7 +26,6 @@ import java.util.Set;
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
 public class User extends ScheduleSubject {
 
     private String login;
@@ -49,10 +48,9 @@ public class User extends ScheduleSubject {
     )
     private Set<Role> roles = new HashSet<>();
 
-
-    @ManyToMany(fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     @JsonIgnore
-    List<Visit> visits;
+    private List<UserVisit> userVisits;
 
     @OneToMany(mappedBy = "user")
     @JsonIgnore
@@ -85,5 +83,12 @@ public class User extends ScheduleSubject {
 
     public boolean canPerform(Service service) {
         return services.contains(service);
+    }
+
+    public void addUserVisit(UserVisit userVisit) {
+        if (userVisits == null) {
+            userVisits = new ArrayList<>();
+        }
+        userVisits.add(userVisit);
     }
 }

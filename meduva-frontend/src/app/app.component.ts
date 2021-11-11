@@ -21,6 +21,8 @@ export class AppComponent implements OnInit, AfterViewInit {
 
   isLoggedIn = false;
 
+  pageTitle = 'Meduva';
+
   currentUser!: User;
   userRoles: UserRole[] = [];
 
