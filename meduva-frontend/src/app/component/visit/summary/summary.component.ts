@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import {Term, VisitService} from "../../../service/visit.service";
-import {Client} from "../../../model/client";
 import {UserService} from "../../../service/user.service";
 import {ServicesService} from "../../../service/services.service";
 import {RoomService} from "../../../service/room.service";

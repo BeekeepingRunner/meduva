@@ -1,0 +1,23 @@
+.free-date {
+  background: lightgreen;
+  border-radius: 100%;
+}
+
+.not-available-date {
+  background: lightcoral;
+  border-radius: 100%;
+}
+
+.hour-buttons {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.hour-button {
+  padding: 5px;
+}
+
+.hour-button > button {
+  font-size: larger;
+}

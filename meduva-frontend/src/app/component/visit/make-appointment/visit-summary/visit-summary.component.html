@@ -1,0 +1,29 @@
+<table>
+  <tr>
+    <td><b>Date: </b></td>
+    <td>{{ term?.startTime | date: 'dd/MM/yyyy HH:mm' }}</td>
+  </tr>
+  <tr>
+    <td><b>Client: </b></td>
+    <td>
+      {{ client.name + ' ' + client.surname + ' ' }}
+      <span *ngIf="client.email">{{ '(' + client.email + ')' }}</span>
+    </td>
+  </tr>
+  <tr>
+    <td><b>Worker: </b></td>
+    <td>{{ worker.name + ' ' + worker.surname + ' (' + worker.email + ')' }}</td>
+  </tr>
+  <tr>
+    <td><b>Service: </b></td>
+    <td>{{ service.name }}</td>
+  </tr>
+  <tr>
+    <td><b>Room: </b></td>
+    <td>{{ roomName }}</td>
+  </tr>
+  <tr *ngIf="term?.eqItemId">
+    <td><b>Equipment item code: </b></td>
+    <td>{{ eqItemName }}</td>
+  </tr>
+</table>

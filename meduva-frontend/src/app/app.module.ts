@@ -55,7 +55,7 @@ import { ModelDetailsComponent } from './component/equipment/model-details/model
 import { FeedbackDialogComponent } from './component/dialog/feedback-dialog/feedback-dialog.component';
 import { ChooseServiceComponent } from './component/visit/choose-service/choose-service.component';
 import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
-import {AsyncDatePickerHeader, PickTermComponent} from './component/visit/pick-term/pick-term.component';
+import {PickTermComponent} from './component/visit/pick-term/pick-term.component';
 import {EditRoleComponent} from "./component/specific-user-profile/edit-role/edit-role.component";
 import {MatSelectModule} from "@angular/material/select";
 import { PickClientComponent } from './component/visit/pick-client/pick-client.component';
@@ -74,6 +74,13 @@ import { SelectWorkerComponent } from './component/visit/select-worker/select-wo
 import { VisitHistoryComponent } from './component/visit/visit-history/visit-history.component';
 import { MakeAppointmentComponent } from './component/visit/make-appointment/make-appointment.component';
 import { PlanYourVisitComponent } from './component/visit/plan-your-visit/plan-your-visit.component';
+import { ServiceSelectionComponent } from './component/visit/make-appointment/service-selection/service-selection.component';
+import { WorkerSelectionComponent } from './component/visit/make-appointment/worker-selection/worker-selection.component';
+import {
+  AsyncDatePickerHeader,
+  TermSelectionComponent
+} from './component/visit/make-appointment/term-selection/term-selection.component';
+import { VisitSummaryComponent } from './component/visit/make-appointment/visit-summary/visit-summary.component';
 
 @NgModule({
   declarations: [
@@ -122,6 +129,10 @@ import { PlanYourVisitComponent } from './component/visit/plan-your-visit/plan-y
     VisitHistoryComponent,
     MakeAppointmentComponent,
     PlanYourVisitComponent,
+    ServiceSelectionComponent,
+    WorkerSelectionComponent,
+    TermSelectionComponent,
+    VisitSummaryComponent,
   ],
   imports: [
     BrowserModule,
