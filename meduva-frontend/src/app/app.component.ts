@@ -83,30 +83,4 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.tokenStorageService.signOut();
     window.location.reload();
   }
-
-  onAppointmentMaking(): void {
-    this.visitService.clearAllVisitData();
-    this.saveUserAsClient();
-    this.router.navigate(['/visit/pick-service']);
-  }
-
-  private isClient(): boolean {
-    return !this.userRoles.includes(UserRole.ROLE_WORKER);
-  }
-
-  private saveUserAsClient(): void {
-    let currUserAsClient: Client = {
-      id: this.currentUser.id,
-      name: this.currentUser.name,
-      surname: this.currentUser.surname,
-      phoneNumber: this.currentUser.phoneNumber,
-      email: this.currentUser.email
-    };
-    this.visitService.saveSelectedClient(currUserAsClient);
-  }
-
-  onVisitPlanning() {
-    this.visitService.clearAllVisitData();
-    this.router.navigate(['/visit/pick-client']);
-  }
 }
