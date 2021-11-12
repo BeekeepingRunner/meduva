@@ -5,5 +5,5 @@ export interface Room {
   name: string,
   description: string,
   services?: Service[];
-  deleted: boolean
+  deleted?: boolean
 }

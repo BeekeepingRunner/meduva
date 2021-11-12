@@ -60,6 +60,19 @@ import {MatSelectModule} from "@angular/material/select";
 import {WorkerServicesComponent} from "./component/specific-user-profile/worker-services/worker-services.component";
 import { EditPerformedServicesComponent } from './component/rooms/edit-performed-services/edit-performed-services.component';
 import { ChangePasswordComponent } from './component/profile/change-password/change-password.component';
+import {CreatorComponent} from "./component/creator/creator.component";
+import {NumberOfRoomsComponent} from "./component/creator/assign-rooms/number-of-rooms/number-of-rooms.component";
+import {ConfigureRoomsCreatorComponent} from "./component/creator/assign-rooms/configure-rooms-creator/configure-rooms-creator.component";
+import {ConfigureRoomsCreatorDialogComponent} from "./component/dialog/configure-rooms-creator-dialog/configure-rooms-creator-dialog.component";
+import {EquipmentListCreatorComponent} from "./component/creator/assign-equipment/equipment-list-creator/equipment-list-creator.component";
+import {NewModelCreatorComponent} from "./component/creator/assign-equipment/new-model-creator/new-model-creator.component";
+import {ConfigureEquipmentCreatorDialogComponent} from "./component/dialog/configure-equipment-creator-dialog/configure-equipment-creator-dialog.component";
+import {ServiceListCreatorComponent} from "./component/creator/assign-services/service-list-creator/service-list-creator.component";
+import {NewServiceCreatorComponent} from "./component/creator/assign-services/new-service-creator/new-service-creator.component";
+import {ConfigureServicesCreatorDialogComponent} from "./component/dialog/configure-services-creator-dialog/configure-services-creator-dialog.component";
+import {NewServiceDetailsCreatorComponent} from "./component/creator/assign-services/new-service-details-creator/new-service-details-creator.component";
+import {ItemsSelectServiceCreatorComponent} from "./component/creator/assign-services/items-select-service-creator/items-select-service-creator.component";
+import {RoomsSelectServiceCreatorComponent} from "./component/creator/assign-services/rooms-select-service-creator/rooms-select-service-creator.component";
 import { ClientListComponent } from './component/clients/client-list/client-list.component';
 import { ClientDetailsComponent } from './component/clients/client-details/client-details.component';
 import { AddClientComponent } from './component/clients/add-client/add-client.component';
@@ -78,6 +91,7 @@ import {
 } from './component/visit/make-appointment/term-selection/term-selection.component';
 import { VisitSummaryComponent } from './component/visit/make-appointment/visit-summary/visit-summary.component';
 import { ClientSelectionComponent } from './component/visit/plan-your-visit/client-selection/client-selection.component';
+
 
 @NgModule({
   declarations: [
@@ -114,6 +128,22 @@ import { ClientSelectionComponent } from './component/visit/plan-your-visit/clie
     WorkerServicesComponent,
     EditPerformedServicesComponent,
     ChangePasswordComponent,
+
+    CreatorComponent,
+    NumberOfRoomsComponent,
+    ConfigureRoomsCreatorComponent,
+    ConfigureRoomsCreatorDialogComponent,
+    EquipmentListCreatorComponent,
+    NewModelCreatorComponent,
+    ConfigureEquipmentCreatorDialogComponent,
+    ServiceListCreatorComponent,
+    NewServiceCreatorComponent,
+    NewServiceDetailsCreatorComponent,
+    ConfigureServicesCreatorDialogComponent,
+    ItemsSelectServiceCreatorComponent,
+    RoomsSelectServiceCreatorComponent,
+
+
     ClientListComponent,
     ClientDetailsComponent,
     AddClientComponent,

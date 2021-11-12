@@ -47,6 +47,10 @@ public class ServicesService {
                 .orElseThrow(() -> new EntityRecordNotFoundException("Service not found with id : " + serviceId));
     }
 
+    public boolean doesServiceExistByName(String serviceName) {
+        return this.serviceRepository.existsByName(serviceName);
+    }
+
     public Service save(Service service) {
 
         if (UndeletableWithNameUtils.canBeSaved(this.serviceRepository, service.getName())) {
@@ -64,5 +68,16 @@ public class ServicesService {
         service.setEquipmentModel(Collections.emptyList()); // won't that connection be useful in the future though?
         service.markAsDeleted();
         serviceRepository.save(service);
+    }
+
+    public void deleteAllServices() {
+        List<Service> servicesToDelete = this.serviceRepository.findAllUndeleted();
+        for (Service service:servicesToDelete) {
+            markAsDeleted(service.getId());
+        }
+    }
+
+    public void deleteAllServicesPermanently() {
+        this.serviceRepository.deleteAll();
     }
 }

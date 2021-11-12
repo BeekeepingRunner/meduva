@@ -1,0 +1,17 @@
+<div>
+  <br>
+  <h5>Equipment Models</h5>
+  <br>
+  <button mat-icon-button color="primary" (click)="openConfigureEquipmentCreatorDialog()">
+    + Add new equipment model
+  </button>
+  <br>
+ <div>
+   <mat-selection-list #modelsList>
+     <mat-list-option *ngFor="let model of justAddedModels" [value]="model">
+       {{ model.name }}
+     </mat-list-option>
+   </mat-selection-list>
+  </div>
+
+</div>

@@ -6,10 +6,10 @@
     <mat-label>Model name</mat-label>
     <input matInput formControlName="modelName" required>
   </mat-form-field>
+  <br>
   <div *ngIf="modelNotAvailableErr" class="alert alert-warning">
     <p>{{ modelNotAvailableErr }}</p>
   </div>
-  <br>
 
   <mat-form-field appearance="fill">
     <mat-label>Item count</mat-label>

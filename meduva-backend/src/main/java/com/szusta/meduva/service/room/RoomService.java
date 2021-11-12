@@ -53,6 +53,10 @@ public class RoomService {
                 .orElseThrow(() -> new EntityRecordNotFoundException("Room not found with id : " + id));
     }
 
+    public boolean doesRoomExistByName(String roomName) {
+        return this.roomRepository.existsByName(roomName);
+    }
+
     public Room saveNewRoom(Room room) {
 
         if (UndeletableWithNameUtils.canBeSaved(this.roomRepository, room.getName())) {
@@ -75,6 +79,17 @@ public class RoomService {
         roomRepository.save(room);
     }
 
+    public void deleteAllRooms(){
+        List<Room> roomsToDelete = this.roomRepository.findAllUndeleted();
+        for (Room room:roomsToDelete) {
+            markAsDeleted(room.getId());
+        }
+    }
+
+    public void deleteAllRoomsPermanently() {
+        this.roomRepository.deleteAll();
+    }
+
     public List<TimeRange> getRoomWeeklyUnavailability(Room room, TimeRange weekBoundaries) {
         List<RoomSchedule> weeklyUnavailability = scheduleChecker.getRoomUnavailabilityIn(room, weekBoundaries);
         return weeklyUnavailability.stream()
@@ -94,5 +109,6 @@ public class RoomService {
         } else {
             throw new RuntimeException("Couldn't set room unavailability: room is occupied that day");
         }
+
     }
 }

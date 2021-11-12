@@ -1,0 +1,81 @@
+
+<mat-stepper [linear]="true" orientation="vertical" #stepper>
+
+<mat-step #first_step label="Define new service" [completed]="service.name.length>0">
+
+
+  <app-new-service-details-creator
+                                      (newServiceEmitter)="onServiceCreated($event)"
+                                      [services]="services">
+  </app-new-service-details-creator>
+  <br>
+
+</mat-step>
+
+  <mat-step #second_step label="Assign items" [completed]="service.itemless==true || selectedModels.length>0">
+
+    <ng-container *ngIf="stepper.selected == second_step">
+
+    <app-items-select-service-creator *ngIf="eqModels.length && service.name.length>0"
+                                      [creatorModels]="eqModels"
+                                      [service]="service"
+                                      [selectedModels]="selectedModels"
+                                      [doNotMultiplyServiceInModels]="serviceModels"
+                                      (relatedItemsEmitter)="onItemsLinked($event)"
+                                      (serviceEmitter)="onServiceCreated($event)"
+                                      (selectedItemsEmitter)="onSelectedModelsGot($event)"
+                                      (serviceModelsEmitter)="serviceModelsGot($event)">
+    </app-items-select-service-creator>
+
+    <mat-label *ngIf="eqModels.length==0 && service.name.length>0">
+
+      U have no equipment
+
+    </mat-label>
+
+      <br>
+      <div>
+        <button mat-button matStepperPrevious>Back</button>
+        <button mat-button matStepperNext [disabled]="selectedModels.length==0 && service.itemless==false">Next</button>
+      </div>
+      <br>
+      <div *ngIf="selectedModels.length==0 && service.itemless==false" class="alert alert-warning">
+        <p>{{ "The service must be associated with any device or itemless" }}</p>
+      </div>
+
+    </ng-container>
+
+  </mat-step>
+
+  <mat-step #third_step label="Assign rooms" >
+
+    <ng-container *ngIf="stepper.selected == third_step">
+
+    <app-rooms-select-service-creator *ngIf="roomItems.length"
+                                      [creatorRooms]="roomItems"
+                                      [service]="service"
+                                      [creatorModels]="eqModels"
+                                      [selectedModels]="selectedModels"
+                                      (relatedRoomsEmitter)="onRoomsLinked($event)">
+    </app-rooms-select-service-creator>
+
+    </ng-container>
+
+  </mat-step>
+
+  <mat-step #fourth_step>
+
+    <ng-template matStepLabel>Done</ng-template>
+    <p>Everything is ready.</p>
+
+    <div>
+      <button mat-button matStepperPrevious>Back</button>
+      <button mat-button  [mat-dialog-close]="onServiceReady()">Save</button>
+
+    </div>
+  </mat-step>
+
+
+
+</mat-stepper>
+

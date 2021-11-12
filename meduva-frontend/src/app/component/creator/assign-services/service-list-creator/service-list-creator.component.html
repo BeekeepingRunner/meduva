@@ -1,0 +1,26 @@
+<div>
+  <br>
+  <h5>Services</h5>
+  <br>
+  <button mat-icon-button color="primary" (click)="openServicesCreatorDialog()">
+    + Add new service
+  </button>
+  <br>
+ <div>
+   <mat-selection-list #servicesList>
+     <mat-list-option *ngFor="let serv of services" [value]="serv">
+       {{ serv.name }}
+     </mat-list-option>
+   </mat-selection-list>
+  </div>
+
+</div>
+<br>
+<div>
+  <button mat-button matStepperPrevious>Back</button>
+  <button mat-button matStepperNext [disabled]="services.length==0" (click)="emitConfiguration()">Next</button>
+</div>
+<br>
+<div *ngIf="services.length==0" class="alert alert-warning">
+  <p>{{ "Minimum one service must be added" }}</p>
+</div>

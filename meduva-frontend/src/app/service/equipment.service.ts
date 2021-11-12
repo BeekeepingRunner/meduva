@@ -41,4 +41,12 @@ export class EquipmentService {
   doesModelExistByName(modelName: string): Observable<any> {
     return this.httpClient.get(environment.API_BASE_URL + 'api/equipment/model/doesExistWithName/' + modelName);
   }
+
+  saveModelConnections(newModelReuqest: NewModelRequest): Observable<EquipmentModel> {
+    return this.httpClient.post<EquipmentModel>(environment.API_BASE_URL + 'api/equipment/model/connect', newModelReuqest);
+  }
+
+  public deleteAllModelsPermanently(): Observable<any> {
+    return this.httpClient.delete(environment.API_BASE_URL + 'api/equipment/models/all');
+  }
 }
