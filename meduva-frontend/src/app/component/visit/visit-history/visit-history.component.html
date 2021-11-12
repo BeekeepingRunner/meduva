@@ -12,7 +12,9 @@
     <ng-container matColumnDef="date">
       <th mat-header-cell *matHeaderCellDef>Date</th>
       <td mat-cell *matCellDef="let visit">
-        <b>{{ visit.timeFrom | date: 'dd.MM.yyyy' }}</b>
+        <b [class.past-element]="visit.timeFrom < now"> <!-- why it doesn't work? -->
+          {{ visit.timeFrom | date: 'dd.MM.yyyy' }}
+        </b>
       </td>
     </ng-container>
     <ng-container matColumnDef="hour">

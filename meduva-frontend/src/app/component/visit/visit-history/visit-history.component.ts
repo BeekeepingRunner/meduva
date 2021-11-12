@@ -16,12 +16,13 @@ export class VisitHistoryComponent implements OnInit {
   currentUserId!: number | undefined;
 
   visits: Visit[] = [];
-
   displayedColumns: string[] = ['date', 'hour', 'serviceName', 'worker', 'room', 'status'];
 
   isWorker: boolean = false;
   asClientButtonColor: string = "primary";
   asWorkerButtonColor: string = "";
+
+  now: Date = new Date();
 
   constructor(
     private visitService: VisitService,

@@ -26,3 +26,12 @@ button {
   cursor: pointer;
   background: #f5f5f5;
 }
+
+.past-element {
+  background: gray;
+}
+
+.past-element:hover {
+  cursor: pointer;
+  background-color: gray;
+}
