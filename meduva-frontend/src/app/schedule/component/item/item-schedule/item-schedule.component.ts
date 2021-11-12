@@ -7,6 +7,7 @@ import {EquipmentService} from "../../../../service/equipment.service";
 import {ScheduleService, TimeRange} from "../../../service/schedule.service";
 import {ItemDayDialogComponent, UnavailabilityOptions} from "../../dialog/item-day-dialog/item-day-dialog.component";
 import {createUnavailabilityEvent} from "../../../util/event/creation";
+import {MatSnackBar} from "@angular/material/snack-bar";
 
 @Component({
   selector: 'app-item-schedule',
@@ -35,7 +36,8 @@ export class ItemScheduleComponent implements OnInit {
     private itemService: EquipmentService,
     private activatedRoute: ActivatedRoute,
     private dialog: MatDialog,
-    private scheduleService: ScheduleService
+    private scheduleService: ScheduleService,
+    public snackBar: MatSnackBar,
   ) { }
 
   ngOnInit(): void {
@@ -98,6 +100,8 @@ export class ItemScheduleComponent implements OnInit {
         if (result.event == 'UNAVAILABILITY_SET') {
           let selectedOption: number = result.data;
           this.setUnavailability(selectedOption);
+        } else {
+          this.checkIfUnavailabilityExists();
         }
       }
     );
@@ -115,6 +119,32 @@ export class ItemScheduleComponent implements OnInit {
         }
       )
     }
+  }
+
+  private checkIfUnavailabilityExists() {
+    let dayBoundaries: TimeRange = {
+      startTime: this.clickedDate,
+      endTime: this.clickedDate
+    };
+    let unavailabilityExists: boolean = false;
+
+    // @ts-ignore
+    this.scheduleService.getWeeklyItemUnavailability(this.item.id, dayBoundaries).subscribe(
+      (weeklyUnavailability: TimeRange[]) => {
+        (weeklyUnavailability.length != 0) ? unavailabilityExists = true : unavailabilityExists = false;
+
+        if(!unavailabilityExists){
+          this.snackBar.open('Unavailability does not exist!');
+        } else {
+          this.deleteDailyUnavailability();
+        }
+      });
+  }
+
+  private deleteDailyUnavailability() {
+      this.scheduleService.deleteDailyItemUnavailability(this.item.id, this.clickedDate).subscribe(
+
+      );
   }
 
   private pushUnavailableDayToEvents(dayTimeRange: TimeRange) {
@@ -138,4 +168,6 @@ export class ItemScheduleComponent implements OnInit {
   eventClick($event: {event: CalendarEvent<any>; sourceEvent: any}) {
 
   }
+
+
 }

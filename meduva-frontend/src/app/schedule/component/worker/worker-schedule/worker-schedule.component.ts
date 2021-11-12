@@ -125,13 +125,6 @@ export class WorkerScheduleComponent implements OnInit {
 
     dayDialog.afterClosed().subscribe(
       result => {
-        /*if (result.event == 'WORK_HOURS') {
-          let workHoursToSave: WorkHours = result.data;
-          this.saveWorkHours(workHoursToSave);
-        } else if(result.event == 'ABSENCE_HOURS'){
-          let absenceHoursToSave: TimeRange = result.data;
-          this.saveAbsenceHours(absenceHoursToSave);
-        }*/
 
         switch(result.event){
           case 'WORK_HOURS':

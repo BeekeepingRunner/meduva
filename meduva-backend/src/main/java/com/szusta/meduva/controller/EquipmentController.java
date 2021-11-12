@@ -4,6 +4,7 @@ import com.szusta.meduva.model.equipment.EquipmentItem;
 import com.szusta.meduva.model.equipment.EquipmentModel;
 import com.szusta.meduva.model.schedule.EquipmentSchedule;
 import com.szusta.meduva.payload.TimeRange;
+import com.szusta.meduva.payload.request.DeleteDailyHoursRequest;
 import com.szusta.meduva.payload.request.add.NewEqModelRequest;
 import com.szusta.meduva.service.equipment.EquipmentMaker;
 import com.szusta.meduva.service.equipment.EquipmentService;
@@ -73,5 +74,11 @@ public class EquipmentController {
     public TimeRange setItemDayUnavailability(@PathVariable Long itemId, @RequestBody Date day) {
         EquipmentSchedule eqSchedule = equipmentService.setItemDayUnavailability(itemId, day);
         return new TimeRange(eqSchedule.getTimeFrom(), eqSchedule.getTimeTo());
+    }
+
+    @DeleteMapping("item/delete-day-unavailability/{itemId}")
+    public void deleteDayUnavailability(@PathVariable Long itemId, @RequestBody DeleteDailyHoursRequest request){
+        Date day = request.getDay();
+        this.equipmentService.deleteDayUnavailability(itemId, day);
     }
 }

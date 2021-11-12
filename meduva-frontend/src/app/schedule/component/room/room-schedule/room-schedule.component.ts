@@ -32,8 +32,6 @@ export class RoomScheduleComponent implements OnInit {
   dayStartHour: number = 6;
   dayEndHour: number = 20;
 
-  noUnavailabilitySetError: boolean = false;
-
   constructor(
     private roomService: RoomService,
     private activatedRoute: ActivatedRoute,
@@ -126,12 +124,12 @@ export class RoomScheduleComponent implements OnInit {
 
   private deleteDailyUnavailability() {
 
-    this.scheduleService.deleteDailyUnavailability(this.room.id, this.clickedDate).subscribe(
-
+    this.scheduleService.deleteDailyRoomUnavailability(this.room.id, this.clickedDate).subscribe(
+      data => {
+        this.getWeeklyEvents();
+        this.snackBar.open("Unavailability deleted!");
+      }
     );
-
-
-
 
   }
 

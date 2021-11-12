@@ -91,7 +91,7 @@ export class ScheduleService {
     return this.httpClient.delete(environment.API_BASE_URL + 'api/worker/delete-daily-work-hours/'+ workerId, httpOptions);
   }
 
-  deleteDailyUnavailability(roomId: number | undefined, unavailabilityDate: Date) {
+  deleteDailyRoomUnavailability(roomId: number | undefined, unavailabilityDate: Date) {
     const httpOptions: any = {
       headers: new HttpHeaders({ 'Content-Type' : 'application/json',
       }),
@@ -101,4 +101,14 @@ export class ScheduleService {
     return this.httpClient.delete(environment.API_BASE_URL + 'api/room/delete-day-unavailability/'+ roomId, httpOptions);
   }
 
+
+  deleteDailyItemUnavailability(itemId: number | undefined, unavailabilityDate: Date) {
+    const httpOptions: any = {
+      headers: new HttpHeaders({ 'Content-Type' : 'application/json',
+      }),
+      body: {day: unavailabilityDate}
+    };
+
+    return this.httpClient.delete(environment.API_BASE_URL + 'api/equipment/item/delete-day-unavailability/' + itemId, httpOptions);
+  }
 }

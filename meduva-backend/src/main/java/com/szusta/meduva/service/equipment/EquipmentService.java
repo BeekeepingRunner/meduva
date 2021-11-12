@@ -102,4 +102,8 @@ public class EquipmentService {
             throw new RuntimeException("Couldn't set item unavailability: item is occupied that day");
         }
     }
+
+    public void deleteDayUnavailability(Long itemId, Date day) {
+        this.itemScheduleManager.deleteAllTypeOfEventsBetween(itemId, EItem)
+    }
 }
