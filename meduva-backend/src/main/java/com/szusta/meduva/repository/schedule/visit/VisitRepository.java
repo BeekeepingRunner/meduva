@@ -18,4 +18,13 @@ public interface VisitRepository extends UndeletableRepository<Visit> {
                     + "ORDER BY v.time_from DESC "
     )
     List<Visit> findAllWhereUserIsClient(Long userClientId);
+
+    @Query(
+            nativeQuery = true,
+            value = "SELECT * FROM visit v "
+                    + "INNER JOIN user_visit uv ON visit_id = v.id "
+                    + "WHERE as_client = 0 AND uv.user_id = ?1 AND v.deleted = 0 "
+                    + "ORDER BY v.time_from DESC "
+    )
+    List<Visit> findAllWhereUserIsWorker(long workerId);
 }

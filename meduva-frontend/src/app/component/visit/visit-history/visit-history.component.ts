@@ -17,9 +17,11 @@ export class VisitHistoryComponent implements OnInit {
 
   visits: Visit[] = [];
 
-  displayedColumns: string[] = ['date', 'hour', 'serviceName', 'room', 'status'];
+  displayedColumns: string[] = ['date', 'hour', 'serviceName', 'worker', 'room', 'status'];
 
   isWorker: boolean = false;
+  asClientButtonColor: string = "primary";
+  asWorkerButtonColor: string = "";
 
   constructor(
     private visitService: VisitService,
@@ -37,6 +39,20 @@ export class VisitHistoryComponent implements OnInit {
     this.getAllVisitsAsClient();
   }
 
+  onAsClientClick() {
+    this.asClientButtonColor = "primary";
+    this.asWorkerButtonColor = "";
+    this.displayedColumns = ['date', 'hour', 'serviceName', 'worker', 'room', 'status'];
+    this.getAllVisitsAsClient();
+  }
+
+  onAsWorkerClick() {
+    this.asClientButtonColor = "";
+    this.asWorkerButtonColor = "primary";
+    this.displayedColumns = ['date', 'hour', 'serviceName', 'client', 'room', 'status'];
+    this.getAllVisitsAsWorker();
+  }
+
   getAllVisitsAsClient() {
     if (this.currentUserId) {
       this.visitService.getAllAsClientByUserId(this.currentUserId).subscribe(
@@ -51,6 +67,15 @@ export class VisitHistoryComponent implements OnInit {
   }
 
   getAllVisitsAsWorker() {
-
+    if (this.currentUserId) {
+      this.visitService.getAllAsWorkerById(this.currentUserId).subscribe(
+        visits => {
+          console.log(visits);
+          this.visits = visits
+        }, err => {
+          console.log(err);
+        }
+      );
+    }
   }
 }

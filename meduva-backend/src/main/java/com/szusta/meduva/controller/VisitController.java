@@ -74,4 +74,10 @@ public class VisitController {
         User client = userService.findById(userId);
         return visitService.findAllWhereUserIsClient(client);
     }
+
+    @GetMapping("/all-as-worker-by-id/{workerId}")
+    public List<Visit> findAllWhereUserIsWorker(@PathVariable Long workerId) {
+        User worker = userService.findById(workerId);
+        return visitService.findAllWhereUserIsWorker(worker);
+    }
 }
