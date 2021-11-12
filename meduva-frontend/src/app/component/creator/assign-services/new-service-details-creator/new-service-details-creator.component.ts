@@ -3,7 +3,7 @@ import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {forbidValuesBetweenStep} from "../../../../util/validator/number-step";
 import {ServicesService} from "../../../../service/services.service";
 import {Service} from "../../../../model/service";
-import {NewServiceComponent} from "../../../services/new-service/new-service.component";
+import {NewServiceComponent} from "../../../facility-resources/services/new-service/new-service.component";
 import {EquipmentItem} from "../../../../model/equipment";
 
 @Component({

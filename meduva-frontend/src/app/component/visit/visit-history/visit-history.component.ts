@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {VisitService} from "../../../service/visit.service";
 import {JwtStorageService} from "../../../service/token/jwt-storage.service";
-import {roleNames, User, UserRole} from "../../../model/user";
+import {roleNames, UserRole} from "../../../model/user";
 import {UserService} from "../../../service/user.service";
 import {Visit} from "../../../model/visit";
 import {RoleGuardService} from "../../../service/auth/role-guard.service";

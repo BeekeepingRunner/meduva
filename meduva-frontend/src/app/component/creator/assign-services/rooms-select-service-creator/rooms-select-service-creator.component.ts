@@ -2,7 +2,7 @@ import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {Service} from "../../../../model/service";
 import {ServicesService} from "../../../../service/services.service";
 import {EquipmentModel} from "../../../../model/equipment";
-import {RoomListComponent} from "../../../rooms/room-list/room-list.component";
+import {RoomListComponent} from "../../../facility-resources/rooms/room-list/room-list.component";
 import {Room} from "../../../../model/room";
 
 @Component({

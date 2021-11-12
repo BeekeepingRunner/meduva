@@ -61,7 +61,6 @@ public class WorkerController {
         return workManager.getWeeklyWorkHours(worker, firstWeekDay, lastWeekDay);
     }
 
-    // TODO
     @PostMapping("/get-week-off-work-hours/{workerId}")
     public List<TimeRange> getWeeklyOffWorkHours(@PathVariable Long workerId, @RequestBody WeekBoundaries weekBoundaries) {
         User worker = userService.findById(workerId);

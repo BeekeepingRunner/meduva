@@ -6,7 +6,7 @@ import {EquipmentItem, EquipmentModel} from "../../../../model/equipment";
 /**import {RoomSelectCreatorComponent} from "./room-select-creator/room-select-creator.component";*/
 import {EquipmentService} from "../../../../service/equipment.service";
 import {Router} from "@angular/router";
-import {NewModelComponent} from "../../../equipment/new-model/new-model.component";
+import {NewModelComponent} from "../../../facility-resources/equipment/new-model/new-model.component";
 import {Room} from "../../../../model/room";
 
 

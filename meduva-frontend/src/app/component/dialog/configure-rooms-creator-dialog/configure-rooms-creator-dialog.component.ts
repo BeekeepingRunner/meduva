@@ -2,7 +2,7 @@ import {Component, Inject, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 import {Room} from "../../../model/room";
 import {RoomService} from "../../../service/room.service";
-import {NewRoomComponent} from "../../rooms/new-room/new-room.component";
+import {NewRoomComponent} from "../../facility-resources/rooms/new-room/new-room.component";
 import {FormBuilder} from "@angular/forms";
 
 export interface ConfigureRoomsCreatorDialogData {

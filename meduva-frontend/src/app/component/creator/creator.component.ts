@@ -5,7 +5,7 @@ import {
 import {ServicesService} from "../../service/services.service";
 import {RoomService} from "../../service/room.service";
 import {EquipmentItem, EquipmentModel} from "../../model/equipment";
-import {RoomSelectComponent} from "../equipment/new-model/room-select/room-select.component";
+import {RoomSelectComponent} from "../facility-resources/equipment/new-model/room-select/room-select.component";
 import {EquipmentService} from "../../service/equipment.service";
 import {Router} from "@angular/router";
 import {Room} from "../../model/room";
@@ -14,7 +14,7 @@ import {Service} from "../../model/service";
 import {ConfigureServicesCreatorDialogComponent} from "../dialog/configure-services-creator-dialog/configure-services-creator-dialog.component";
 import {ConfirmationDialogComponent} from "../dialog/confirmation-dialog/confirmation-dialog.component";
 import {MatDialog} from "@angular/material/dialog";
-import {NewModelRequest} from "../equipment/new-model/new-model.component";
+import {NewModelRequest} from "../facility-resources/equipment/new-model/new-model.component";
 import {FeedbackDialogComponent} from "../dialog/feedback-dialog/feedback-dialog.component";
 import {CreatorService} from "../../service/creator.service";
 

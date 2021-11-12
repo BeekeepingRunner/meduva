@@ -1,7 +1,7 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {ServicesService} from "../../../../service/services.service";
 import {Service} from "../../../../model/service";
-import {ServiceListComponent} from "../../../services/service-list/service-list.component";
+import {ServiceListComponent} from "../../../facility-resources/services/service-list/service-list.component";
 import {ConfigureEquipmentCreatorDialogComponent} from "../../../dialog/configure-equipment-creator-dialog/configure-equipment-creator-dialog.component";
 import {EquipmentService} from "../../../../service/equipment.service";
 import {MatDialog} from "@angular/material/dialog";

@@ -1,7 +1,7 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {Service} from "../../../../model/service";
 import {ServicesService} from "../../../../service/services.service";
-import {EquipmentListComponent} from "../../../equipment/equipment-list/equipment-list.component";
+import {EquipmentListComponent} from "../../../facility-resources/equipment/equipment-list/equipment-list.component";
 import {EquipmentModel} from "../../../../model/equipment";
 
 @Component({
