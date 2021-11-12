@@ -33,6 +33,7 @@ export class DayDialogComponent implements OnInit {
 
   noAbsenceHoursError: boolean = false;
   noWorkingHoursError: boolean = false;
+  collidingAbsenceHoursError: boolean = false;
 
 
   constructor(
@@ -180,16 +181,24 @@ export class DayDialogComponent implements OnInit {
       lastWeekDay: this.selectedDate
     }
 
-    this.scheduleService.getWeeklyWorkHours(this.data.workerId, dayBoudnaries).subscribe(
-      /* returns array with one object because it checks only one day */
+    this.scheduleService.getWeeklyAbsenceHours(this.data.workerId, dayBoudnaries).subscribe(
       data => {
-        if(data.length != 0){
-          this.dialogRef.close({
-            event: 'DELETE_WORK_HOURS',
-            data: this.selectedDate
-          });
-        } else {
-            this.noWorkingHoursError = true;
+        if(data.length == 0){
+              this.scheduleService.getWeeklyWorkHours(this.data.workerId, dayBoudnaries).subscribe(
+                /* returns array with one object because it checks only one day */
+                data => {
+                      if(data.length != 0){
+                        this.dialogRef.close({
+                          event: 'DELETE_WORK_HOURS',
+                          data: this.selectedDate
+                        });
+                      } else {
+                        this.noWorkingHoursError = true;
+                      }
+                }
+              )
+        }else{
+          this.collidingAbsenceHoursError = true;
         }
       }
     )

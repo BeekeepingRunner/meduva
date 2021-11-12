@@ -69,10 +69,13 @@
            (click)="tryToDeleteDailyAbsenceHours()" >Delete Absence hours</button>
     <br>
     <mat-error *ngIf="noAbsenceHoursError">
-      There is no absence hours to delete
+      There is no absence hours to delete.
     </mat-error>
     <mat-error *ngIf="noWorkingHoursError">
-      There is no working hours to delete
+      There is no working hours to delete.
+    </mat-error>
+    <mat-error *ngIf="collidingAbsenceHoursError">
+      Delete existing absence hours before deleting work hours!
     </mat-error>
   </div>
 </div>
