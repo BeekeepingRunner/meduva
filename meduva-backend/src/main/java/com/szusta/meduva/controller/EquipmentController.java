@@ -54,6 +54,11 @@ public class EquipmentController {
         return equipmentMaker.createModelWithItems(eqModelRequest);
     }
 
+    @PostMapping("/model/connect")
+    public EquipmentModel configureEqModelConnections(@RequestBody @Valid NewEqModelRequest eqModelRequest) {
+        return equipmentMaker.connectModelWithServices(eqModelRequest);
+    }
+
     @GetMapping("/model/doesExistWithName/{modelName}")
     public boolean doesExist(@PathVariable String modelName) {
         return equipmentService.doesModelExistByName(modelName);
@@ -63,6 +68,12 @@ public class EquipmentController {
     public void deleteModel(@PathVariable Long id) {
         this.equipmentService.markModelAsDeleted(id);
     }
+
+
+    @DeleteMapping("/models/all")
+    public void deleteAllModelsPermanently() {
+            this.equipmentService.deleteAllModelsPermanently();
+        }
 
     @PostMapping("item/get-weekly-unavailability/{itemId}")
     public List<TimeRange> getItemWeeklyUnavailability(@PathVariable Long itemId, @RequestBody TimeRange weekBoundaries) {
@@ -74,6 +85,7 @@ public class EquipmentController {
     public TimeRange setItemDayUnavailability(@PathVariable Long itemId, @RequestBody Date day) {
         EquipmentSchedule eqSchedule = equipmentService.setItemDayUnavailability(itemId, day);
         return new TimeRange(eqSchedule.getTimeFrom(), eqSchedule.getTimeTo());
+
     }
 
     @DeleteMapping("item/delete-day-unavailability/{itemId}")

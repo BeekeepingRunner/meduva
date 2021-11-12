@@ -4,6 +4,7 @@ import {environment} from "../../environments/environment";
 import {Observable} from "rxjs";
 import {Service} from "../model/service";
 import {User} from "../model/user";
+import {Client} from "../model/client";
 
 export interface Term {
   startTime: string,
@@ -12,6 +13,7 @@ export interface Term {
   serviceId: number,
   workerId: number,
   clientId: number,
+  clientUnregistered: boolean,
   roomId: number,
   eqItemId: number,
 }
@@ -22,6 +24,7 @@ enum VisitKey {
   SELECTED_TERM_KEY = "SELECTED_TERM",
   SELECTED_SERVICE_KEY = "SELECTED_SERVICE_KEY",
   SELECTED_WORKER_KEY = "SELECTED_WORKER_KEY",
+  SELECTED_CLIENT_KEY = "SELECTED_CLIENT_KEY",
 }
 
 @Injectable({
@@ -43,8 +46,18 @@ export class VisitService {
     window.sessionStorage.setItem(VisitKey.SELECTED_WORKER_KEY, JSON.stringify(worker));
   }
 
+  saveSelectedClient(client: Client) {
+    window.sessionStorage.setItem(VisitKey.SELECTED_CLIENT_KEY, JSON.stringify(client));
+  }
+
   saveAvailableDates(dates: Date[]) : void {
     this.availableDates = dates;
+  }
+
+  clearAllVisitData(): void {
+    window.sessionStorage.removeItem(VisitKey.SELECTED_SERVICE_KEY);
+    window.sessionStorage.removeItem(VisitKey.SELECTED_WORKER_KEY);
+    window.sessionStorage.removeItem(VisitKey.SELECTED_CLIENT_KEY);
   }
 
   getAvailableDates() : Date[] {
@@ -73,6 +86,15 @@ export class VisitService {
     }
   }
 
+  getSelectedClient() : Client | null {
+    let clientJSON: string | null = window.sessionStorage.getItem(VisitKey.SELECTED_CLIENT_KEY);
+    if (clientJSON) {
+      return JSON.parse(clientJSON);
+    } else {
+      return null;
+    }
+  }
+
   getSelectedTerm() : Term | null {
     let termJSON: string | null = window.sessionStorage.getItem(VisitKey.SELECTED_TERM_KEY);
     if (termJSON) {
@@ -80,10 +102,6 @@ export class VisitService {
     } else {
       return null;
     }
-  }
-
-  saveVisit(term: Term | null): Observable<any> {
-    return this.httpClient.post(environment.API_BASE_URL + 'api/visit', term);
   }
 
   getWorkerAvailableDaysInMonth(workerID: number, serviceID: number, anyDayFromMonth: string): Observable<any> {
@@ -98,6 +116,24 @@ export class VisitService {
     return this.httpClient.get(environment.API_BASE_URL + 'api/visit/get-available-days-in-month', { params: {
         serviceId: serviceID,
         anyDayFromMonth: anyDayFromMonth
-      }});
+    }});
+  }
+
+  getWorkerTermsForDay(workerId: number, serviceId: number, dayDate: string): Observable<any> {
+    return this.httpClient.get(environment.API_BASE_URL + 'api/visit/get-available-worker-terms-for-day',
+      {
+        params: {
+          workerId: workerId,
+          serviceId: serviceId,
+          dayDate: dayDate
+        }});
+  }
+
+  saveVisit(term: Term | null): Observable<any> {
+    return this.httpClient.post(environment.API_BASE_URL + 'api/visit', term);
+  }
+
+  getAllAsClientByUserId(userId: number): Observable<any>  {
+    return this.httpClient.get(environment.API_BASE_URL + 'api/visit/all-as-client-by-user-id/' + userId);
   }
 }

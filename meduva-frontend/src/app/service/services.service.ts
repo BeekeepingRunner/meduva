@@ -48,5 +48,13 @@ export class ServicesService {
   getTermsForService(serviceId: number): Observable<any> {
     return this.httpClient.get<any>(environment.API_BASE_URL + 'api/visit/terms-for-service/' + serviceId);
   }
+
+  getAllPossibleWithWorker(workerId: number): Observable<any> {
+    return this.httpClient.get<any>(environment.API_BASE_URL + 'api/worker/workerServices/' + workerId);
+  }
+
+  public deleteAllServicesPermanently(): Observable<any> {
+    return this.httpClient.delete(environment.API_BASE_URL + 'api/service/all');
+  }
 }
 

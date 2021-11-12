@@ -47,6 +47,10 @@ export class RoomService {
   editServices(roomId: number, editedServiceList: Service[]): Observable<any> {
     return this.httpClient.post(environment.API_BASE_URL + 'api/room/' + roomId + '/edit-services', editedServiceList);
   }
+
+  public deleteAllRoomsPermanently(): Observable<any> {
+    return this.httpClient.delete(environment.API_BASE_URL + 'api/room/all');
+  }
 }
 
 interface servicesResponse {

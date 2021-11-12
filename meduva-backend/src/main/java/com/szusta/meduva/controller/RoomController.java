@@ -35,6 +35,11 @@ public class RoomController {
         return this.roomService.findAllUndeletedRooms();
     }
 
+    @GetMapping("/room/doesExistWithName/{roomName}")
+    public boolean doesExist(@PathVariable String roomName) {
+        return roomService.doesRoomExistByName(roomName);
+    }
+
     @PostMapping
     public Room addRoom(@RequestBody NewRoomRequest request) {
         Room room = new Room(
@@ -58,6 +63,11 @@ public class RoomController {
     @DeleteMapping("/{id}")
     public void deleteRoom(@PathVariable Long id) {
         this.roomService.markAsDeleted(id);
+    }
+
+    @DeleteMapping("/all")
+    public void deleteAllRoomsPermanently() {
+        this.roomService.deleteAllRoomsPermanently();
     }
 
     @PostMapping("/get-weekly-unavailability/{roomId}")

@@ -1,0 +1,35 @@
+<div *ngIf="loading">
+  <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
+</div>
+<div *ngIf="!loading">
+  <div *ngIf="canChooseDay">
+    <h3></h3>
+    <div>
+      <mat-form-field appearance="outline">
+        <mat-label>Choose term for {{ service?.name }}</mat-label>
+        <input matInput [matDatepicker]="picker"
+               [matDatepickerFilter]="dateFilter"
+               (dateInput)="onDayPick($event)" required>
+        <mat-datepicker-toggle matSuffix [for]="picker" (click)="onDatePickerClick()"></mat-datepicker-toggle>
+        <mat-datepicker #picker [dateClass]="dayChecker" [calendarHeaderComponent]="asyncHeader"></mat-datepicker>
+      </mat-form-field>
+
+      <mat-progress-spinner *ngIf="generatingTerms" mode="indeterminate"></mat-progress-spinner>
+      <div *ngIf="canSelectTerm">
+        <h5>Select an hour</h5>
+        <div class="hour-buttons">
+          <div *ngFor="let term of availableTerms">
+            <div class="hour-button">
+              <button mat-raised-button (click)="onTermClick(term)">
+                {{ term.startTime | date: 'HH:mm' }}
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="!canChooseDay">
+    Something went wrong, please try again later.
+  </div>
+</div>

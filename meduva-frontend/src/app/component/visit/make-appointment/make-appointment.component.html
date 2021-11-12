@@ -1,0 +1,65 @@
+<h3>Make an appointment</h3>
+<br>
+<mat-stepper [linear]="true" orientation="vertical" #stepper>
+
+  <mat-step label="Select a service"
+            [completed]="service != null">
+    <br>
+    <app-service-selection (serviceEmitter)="onServiceSelection($event)">
+    </app-service-selection>
+    <div>
+      <br>
+      <p *ngIf="service">Selected service: <b>{{ service.name }}</b></p>
+      <button mat-button matStepperNext>Next</button>
+    </div>
+  </mat-step>
+
+  <mat-step label="Select a worker"
+            [completed]="worker != null">
+    <br>
+    <app-worker-selection *ngIf="service != null"
+                          [selectedService]="service"
+                          (reRenderSignalEmitter)="onReRenderSignal($event)"
+                          (workerEmitter)="onWorkerSelection($event)">
+    </app-worker-selection>
+    <br>
+    <p *ngIf="worker">Selected Worker: <b>{{ worker.name + ' ' + worker.surname + ' (' + worker.email + ')' }}</b></p>
+    <div>
+      <button mat-button matStepperPrevious>Back</button>
+      <button mat-button matStepperNext (click)="makeTermSelectionVisible()">Next</button>
+    </div>
+  </mat-step>
+
+  <mat-step label="Select a term"
+            [completed]="term != null">
+
+    <div *ngIf="isTermSelectionVisible">
+      <app-term-selection *ngIf="worker != null && service != null"
+                          [client]="client"
+                          [service]="service"
+                          [worker]="worker"
+                          (termEmitter)="onTermSelection($event)">
+      </app-term-selection>
+    </div>
+    <br>
+    <div>
+      <button mat-button matStepperPrevious>Back</button>
+      <button mat-button matStepperNext>Next</button>
+    </div>
+  </mat-step>
+
+  <mat-step label="Visit summary">
+    <app-visit-summary *ngIf="term != null && worker != null && service != null"
+                       [client]="client"
+                       [worker]="worker"
+                       [service]="service"
+                       [term]="term">
+    </app-visit-summary>
+    <br>
+    <div>
+      <button mat-button matStepperPrevious>Back</button>
+      <button mat-button (click)="onVisitSubmit()">Submit</button>
+    </div>
+  </mat-step>
+
+</mat-stepper>

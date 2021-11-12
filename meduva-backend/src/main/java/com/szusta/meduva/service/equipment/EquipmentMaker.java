@@ -1,5 +1,6 @@
 package com.szusta.meduva.service.equipment;
 
+import com.szusta.meduva.exception.AlreadyExistsException;
 import com.szusta.meduva.exception.EntityRecordNotFoundException;
 import com.szusta.meduva.model.Room;
 import com.szusta.meduva.model.equipment.EquipmentItem;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class EquipmentMaker {
@@ -49,6 +51,13 @@ public class EquipmentMaker {
         List<com.szusta.meduva.model.Service> services = serviceRepository.findAllById(servicesIds);
         List<Room> rooms = findRoomsByIdsInOrder(roomsIds);
         List<EquipmentItem> eqItems = createItemsWithNames(itemCount, modelName);
+
+
+        for (com.szusta.meduva.model.Service itemlessService:services) {
+            if(itemlessService.isItemless()==true){
+                throw new IllegalArgumentException("Cannot link itemless service with equipment: ");
+            }
+        }
 
         eqModel = connect(eqModel, services);
         rooms = connect(rooms, services);
@@ -109,5 +118,25 @@ public class EquipmentMaker {
             item = equipmentItemRepository.save(item);
         }
         return items;
+    }
+
+    public EquipmentModel connectModelWithServices(NewEqModelRequest eqModelRequest) {
+
+        String modelName = eqModelRequest.getModelName();
+        List<Long> servicesIds = eqModelRequest.getServicesIds();
+
+        Optional<EquipmentModel> eqModelOptional = equipmentModelRepository.findByName(modelName);
+        EquipmentModel eqModel = eqModelOptional.get();
+        List<com.szusta.meduva.model.Service> services = serviceRepository.findAllById(servicesIds);
+
+        for (com.szusta.meduva.model.Service itemlessService:services) {
+            if(itemlessService.isItemless()==true){
+                throw new IllegalArgumentException("Cannot link itemless service with equipment");
+            }
+        }
+
+        eqModel = connect(eqModel, services);
+
+        return equipmentModelRepository.save(eqModel);
     }
 }

@@ -8,6 +8,7 @@ import {Client} from "./model/client";
 import {UserService} from "./service/user.service";
 import {RoleGuardService} from "./service/auth/role-guard.service";
 import {Router} from "@angular/router";
+import {VisitService} from "./service/visit.service";
 
 @Component({
   selector: 'app-root',
@@ -20,6 +21,8 @@ export class AppComponent implements OnInit, AfterViewInit {
   sidenav!: MatSidenav;
 
   isLoggedIn = false;
+
+  pageTitle = 'Meduva';
 
   currentUser!: User;
   userRoles: UserRole[] = [];
@@ -35,6 +38,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     private roleGuardService: RoleGuardService,
     private userService: UserService,
     private clientService: ClientService,
+    private visitService: VisitService,
     private router: Router,
   ) {
   }
@@ -53,10 +57,10 @@ export class AppComponent implements OnInit, AfterViewInit {
   }
 
   private setVisibleOptions(): void {
-    this.showClientOptions = this.roleGuardService.hasExpectedRole(roleNames[UserRole.ROLE_CLIENT]);
-    this.showWorkerOptions = this.roleGuardService.hasExpectedRole(roleNames[UserRole.ROLE_WORKER]);
-    this.showReceptionistOptions = this.roleGuardService.hasExpectedRole(roleNames[UserRole.ROLE_RECEPTIONIST]);
-    this.showAdminPanel = this.roleGuardService.hasExpectedRole(roleNames[UserRole.ROLE_ADMIN]);
+    this.showClientOptions = this.roleGuardService.hasCurrentUserExpectedRole(roleNames[UserRole.ROLE_CLIENT]);
+    this.showWorkerOptions = this.roleGuardService.hasCurrentUserExpectedRole(roleNames[UserRole.ROLE_WORKER]);
+    this.showReceptionistOptions = this.roleGuardService.hasCurrentUserExpectedRole(roleNames[UserRole.ROLE_RECEPTIONIST]);
+    this.showAdminPanel = this.roleGuardService.hasCurrentUserExpectedRole(roleNames[UserRole.ROLE_ADMIN]);
   }
 
   // Responsible for closing and opening the side menu based on width of the browser's window
@@ -78,30 +82,5 @@ export class AppComponent implements OnInit, AfterViewInit {
   logout(): void {
     this.tokenStorageService.signOut();
     window.location.reload();
-  }
-
-  onVisitPlanning(): void {
-    if (this.isClient()) {
-      this.saveUserAsClient();
-      this.router.navigate(['/visit/pick-service']);
-    } else {
-      // TODO: work on that path
-      this.router.navigate(['/visit/pick-client']);
-    }
-  }
-
-  private isClient(): boolean {
-    return !this.userRoles.includes(UserRole.ROLE_WORKER);
-  }
-
-  private saveUserAsClient(): void {
-    let currUserAsClient: Client = {
-      id: this.currentUser.id,
-      name: this.currentUser.name,
-      surname: this.currentUser.surname,
-      phoneNumber: this.currentUser.phoneNumber,
-      email: this.currentUser.email
-    };
-    this.clientService.saveSelectedClient(currUserAsClient);
   }
 }

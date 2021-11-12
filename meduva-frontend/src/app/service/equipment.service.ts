@@ -7,7 +7,7 @@ import {Service} from "../model/service";
 import {map} from "rxjs/operators";
 import {trimJSON} from "../util/json/trim";
 import {EquipmentItem, EquipmentModel} from "../model/equipment";
-import {NewModelRequest} from "../component/equipment/new-model/new-model.component";
+import {NewModelRequest} from "../component/facility-resources/equipment/new-model/new-model.component";
 
 @Injectable({
   providedIn: 'root'
@@ -40,5 +40,13 @@ export class EquipmentService {
 
   doesModelExistByName(modelName: string): Observable<any> {
     return this.httpClient.get(environment.API_BASE_URL + 'api/equipment/model/doesExistWithName/' + modelName);
+  }
+
+  saveModelConnections(newModelReuqest: NewModelRequest): Observable<EquipmentModel> {
+    return this.httpClient.post<EquipmentModel>(environment.API_BASE_URL + 'api/equipment/model/connect', newModelReuqest);
+  }
+
+  public deleteAllModelsPermanently(): Observable<any> {
+    return this.httpClient.delete(environment.API_BASE_URL + 'api/equipment/models/all');
   }
 }

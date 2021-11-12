@@ -1,0 +1,21 @@
+<br>
+<h4>Assign equipment models:</h4>
+<mat-selection-list #selectionListServices
+                    [(ngModel)]="selectedModels"
+                    [compareWith]="compareFunction"
+                    (selectionChange)="assignEquipmentToService()">
+  <mat-list-option *ngFor="let model of models" [value]="model">
+    {{ model.name }}
+  </mat-list-option>
+</mat-selection-list>
+
+<br>
+
+<mat-checkbox id="itemless" [(ngModel)]="service.itemless"
+                            (change)="clearSelection()"
+                            [checked]="selectedModels.length==0 && service.itemless==true">
+  Service is itemless
+
+</mat-checkbox>
+
+

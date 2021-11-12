@@ -82,6 +82,19 @@ public class EquipmentService {
         });
     }
 
+    public void deleteAllModels() {
+        List<EquipmentModel> modelsToDelete = this.equipmentModelRepository.findAllUndeleted();
+        for (EquipmentModel model:modelsToDelete) {
+            markModelItemsAsDeleted(model);
+            markModelAsDeleted(model.getId());
+        }
+    }
+
+    public void deleteAllModelsPermanently() {
+        this.equipmentItemRepository.deleteAll();
+        this.equipmentModelRepository.deleteAll();
+    }
+
     public List<TimeRange> getItemWeeklyUnavailability(EquipmentItem item, TimeRange weekBoundaries) {
         List<EquipmentSchedule> weeklyUnavailability = scheduleChecker.getItemUnavailabilityIn(item, weekBoundaries);
         return weeklyUnavailability.stream()
@@ -101,6 +114,7 @@ public class EquipmentService {
         } else {
             throw new RuntimeException("Couldn't set item unavailability: item is occupied that day");
         }
+
     }
 
     public void deleteDayUnavailability(Long itemId, Date day) {
