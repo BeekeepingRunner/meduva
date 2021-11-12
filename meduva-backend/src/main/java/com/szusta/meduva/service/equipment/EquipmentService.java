@@ -104,6 +104,6 @@ public class EquipmentService {
     }
 
     public void deleteDayUnavailability(Long itemId, Date day) {
-        this.itemScheduleManager.deleteAllTypeOfEventsBetween(itemId, EItem)
+        this.itemScheduleManager.deleteAllTypeOfEventsBetween(itemId, EEquipmentStatus.EQUIPMENT_UNAVAILABLE, day);
     }
 }

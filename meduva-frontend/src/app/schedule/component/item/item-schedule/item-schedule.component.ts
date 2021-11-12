@@ -126,12 +126,15 @@ export class ItemScheduleComponent implements OnInit {
       startTime: this.clickedDate,
       endTime: this.clickedDate
     };
+    console.log(this.clickedDate);
     let unavailabilityExists: boolean = false;
 
     // @ts-ignore
     this.scheduleService.getWeeklyItemUnavailability(this.item.id, dayBoundaries).subscribe(
       (weeklyUnavailability: TimeRange[]) => {
         (weeklyUnavailability.length != 0) ? unavailabilityExists = true : unavailabilityExists = false;
+
+        console.log(weeklyUnavailability);
 
         if(!unavailabilityExists){
           this.snackBar.open('Unavailability does not exist!');
@@ -143,7 +146,10 @@ export class ItemScheduleComponent implements OnInit {
 
   private deleteDailyUnavailability() {
       this.scheduleService.deleteDailyItemUnavailability(this.item.id, this.clickedDate).subscribe(
-
+        data => {
+          this.snackBar.open('Unavailability deleted!');
+          this.getWeeklyEvents();
+        }
       );
   }
 

@@ -95,8 +95,8 @@ public class ScheduleChecker {
 
     public List<EquipmentSchedule> getItemUnavailabilityIn(EquipmentItem item, TimeRange weekBoundaries) {
         return equipmentScheduleRepository.findAllBetween(
-                weekBoundaries.getStartTime(),
-                weekBoundaries.getEndTime(),
+                TimeUtils.getDayStart(weekBoundaries.getStartTime()),
+                TimeUtils.getDayEnd(weekBoundaries.getEndTime()),
                 item.getId(),
                 EEquipmentStatus.EQUIPMENT_UNAVAILABLE.getValue());
     }
