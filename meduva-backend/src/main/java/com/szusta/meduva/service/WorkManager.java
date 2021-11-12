@@ -63,6 +63,18 @@ public class WorkManager {
 
     @Transactional
     public WorkHours setWorkHours(User worker, Date newWorkStartTime, Date newWorkEndTime) {
+        Calendar calendarStart = Calendar.getInstance();
+        calendarStart.setTime(newWorkStartTime);
+        Calendar calendarEnd = Calendar.getInstance();
+        calendarEnd.setTime(newWorkEndTime);
+
+        int startHour = calendarStart.get(Calendar.HOUR_OF_DAY);
+        int endHour = calendarEnd.get(Calendar.HOUR_OF_DAY);
+
+        if(startHour<6 || startHour>20 || endHour<6 || endHour>20){
+            throw new RuntimeException("Cannot set work hours - working hours are not within the operating hours of the facility");
+        }
+
         boolean collidingVisitsExist =
                 hasVisitsBefore(newWorkStartTime, worker)
                 && hasVisitsAfter(newWorkEndTime, worker);
