@@ -97,11 +97,15 @@ export class ItemScheduleComponent implements OnInit {
 
     dayDialog.afterClosed().subscribe(
       result => {
-        if (result.event == 'UNAVAILABILITY_SET') {
-          let selectedOption: number = result.data;
-          this.setUnavailability(selectedOption);
-        } else {
-          this.checkIfUnavailabilityExists();
+
+        switch(result.event) {
+          case 'UNAVAILABILITY_SET':
+              let selectedOption: number = result.data;
+              this.setUnavailability(selectedOption);
+              break;
+          case 'UNAVAILABILITY_DELETE':
+              this.checkIfUnavailabilityExists();
+              break;
         }
       }
     );
@@ -126,15 +130,12 @@ export class ItemScheduleComponent implements OnInit {
       startTime: this.clickedDate,
       endTime: this.clickedDate
     };
-    console.log(this.clickedDate);
     let unavailabilityExists: boolean = false;
 
     // @ts-ignore
     this.scheduleService.getWeeklyItemUnavailability(this.item.id, dayBoundaries).subscribe(
       (weeklyUnavailability: TimeRange[]) => {
         (weeklyUnavailability.length != 0) ? unavailabilityExists = true : unavailabilityExists = false;
-
-        console.log(weeklyUnavailability);
 
         if(!unavailabilityExists){
           this.snackBar.open('Unavailability does not exist!');

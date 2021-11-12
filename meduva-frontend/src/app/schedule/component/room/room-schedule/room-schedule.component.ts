@@ -1,4 +1,4 @@
-import {Component, Inject, OnInit} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {CalendarEvent, CalendarView} from "angular-calendar";
 import {Room} from "../../../../model/room";
 import {ActivatedRoute} from "@angular/router";
@@ -97,13 +97,14 @@ export class RoomScheduleComponent implements OnInit {
 
     dayDialog.afterClosed().subscribe(
       result => {
-        if (result.event == 'UNAVAILABILITY_SET') {
-          let selectedOption: number = result.data;
-          this.setUnavailability(selectedOption);
-        } else if (result.event == 'UNAVAILABILITY_DELETE'){
-          let selectedOption: number = result.data;
-          this.checkIfUnavailabilityExists();
-          //this.snackBar.open('Unavailability deleted!');
+        switch (result.event){
+          case 'UNAVAILABILITY_SET':
+              let selectedOption: number = result.data;
+              this.setUnavailability(selectedOption);
+              break;
+          case 'UNAVAILABILITY_DELETE':
+              this.checkIfUnavailabilityExists();
+              break;
         }
       }
     );
@@ -153,8 +154,6 @@ export class RoomScheduleComponent implements OnInit {
       });
   }
 
-
-
   private pushUnavailableDayToEvents(dayTimeRange: TimeRange) {
     let newEvents = this.events;
     newEvents.push(
@@ -163,11 +162,8 @@ export class RoomScheduleComponent implements OnInit {
     this.events = [...newEvents];
   }
 
-
-
   eventClick($event: {event: CalendarEvent<any>; sourceEvent: any}) {
 
   }
-
 
 }

@@ -67,13 +67,7 @@ public class WorkManager {
 
         boolean collidingEventsExist =
                 hasEventsBefore(newWorkStartTime, worker)
-                && hasEventsAfter(newWorkEndTime, worker);
-
-        System.out.println(TimeUtils.getDayStart(newWorkStartTime));
-        System.out.println(newWorkStartTime);
-        System.out.println(newWorkEndTime);
-        System.out.println(TimeUtils.getDayEnd(newWorkEndTime));
-        System.out.println(collidingEventsExist);
+                || hasEventsAfter(newWorkEndTime, worker);
 
         if (!collidingEventsExist) {
             deleteWorkHoursAt(newWorkStartTime, worker);

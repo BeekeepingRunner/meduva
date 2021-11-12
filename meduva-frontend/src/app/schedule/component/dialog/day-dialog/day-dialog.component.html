@@ -64,7 +64,7 @@
 
   <div *ngIf="deletingWorkOrAbsenceHours">
     <button mat-raised-button color="primary" *ngIf="deletingWorkOrAbsenceHours"
-           (click)="tryToDeleteWorkingHours()" >Delete Work hours</button>
+           (click)="tryToDeleteDailyWorkingHours()" >Delete Work hours</button>
     <button mat-raised-button color="primary" *ngIf="deletingWorkOrAbsenceHours"
            (click)="tryToDeleteDailyAbsenceHours()" >Delete Absence hours</button>
     <br>

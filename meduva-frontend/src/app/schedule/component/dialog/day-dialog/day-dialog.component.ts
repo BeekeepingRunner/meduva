@@ -175,7 +175,7 @@ export class DayDialogComponent implements OnInit {
     );
   }
 
-  tryToDeleteWorkingHours(){
+  tryToDeleteDailyWorkingHours(){
     let dayBoudnaries: WeekBoundaries = {
       firstWeekDay: this.selectedDate,
       lastWeekDay: this.selectedDate
