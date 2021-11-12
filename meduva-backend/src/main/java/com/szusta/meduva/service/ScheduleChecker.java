@@ -13,6 +13,7 @@ import com.szusta.meduva.repository.WorkHoursRepository;
 import com.szusta.meduva.repository.schedule.equipment.EquipmentScheduleRepository;
 import com.szusta.meduva.repository.schedule.room.RoomScheduleRepository;
 import com.szusta.meduva.repository.schedule.worker.WorkerScheduleRepository;
+import com.szusta.meduva.util.TimeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Date;
@@ -102,8 +103,8 @@ public class ScheduleChecker {
 
     public List<RoomSchedule> getRoomUnavailabilityIn(Room room, TimeRange weekBoundaries) {
         return roomScheduleRepository.findAllDuring(
-                weekBoundaries.getStartTime(),
-                weekBoundaries.getEndTime(),
+                TimeUtils.getDayStart(weekBoundaries.getStartTime()),
+                TimeUtils.getDayEnd(weekBoundaries.getEndTime()),
                 room.getId(),
                 ERoomStatus.ROOM_UNAVAILABLE.getValue());
     }

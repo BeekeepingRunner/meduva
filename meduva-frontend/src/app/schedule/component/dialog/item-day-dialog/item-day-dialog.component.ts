@@ -19,6 +19,7 @@ export class ItemDayDialogComponent implements OnInit {
   dateString: string = '';
 
   settingUnavailability: boolean = false;
+  deletingUnavailability: boolean = false;
   form!: FormGroup;
 
   THAT_DAY: number = 0;
@@ -41,6 +42,12 @@ export class ItemDayDialogComponent implements OnInit {
     this.dialogRef.close({
       event: 'UNAVAILABILITY_SET',
       data: this.selectedUnavailOption
+    })
+  }
+
+  onUnavailabilityDelete() {
+    this.dialogRef.close({
+      event: 'UNAVAILABILITY_DELETE'
     })
   }
 }

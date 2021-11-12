@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Inject, OnInit} from '@angular/core';
 import {CalendarEvent, CalendarView} from "angular-calendar";
 import {Room} from "../../../../model/room";
 import {ActivatedRoute} from "@angular/router";
@@ -7,6 +7,7 @@ import {RoomService} from "../../../../service/room.service";
 import {ItemDayDialogComponent, UnavailabilityOptions} from "../../dialog/item-day-dialog/item-day-dialog.component";
 import {ScheduleService, TimeRange} from "../../../service/schedule.service";
 import {createUnavailabilityEvent} from "../../../util/event/creation";
+import {MatSnackBar} from "@angular/material/snack-bar";
 
 @Component({
   selector: 'app-room-schedule',
@@ -31,11 +32,14 @@ export class RoomScheduleComponent implements OnInit {
   dayStartHour: number = 6;
   dayEndHour: number = 20;
 
+  noUnavailabilitySetError: boolean = false;
+
   constructor(
     private roomService: RoomService,
     private activatedRoute: ActivatedRoute,
     private dialog: MatDialog,
-    private scheduleService: ScheduleService
+    private scheduleService: ScheduleService,
+    public snackBar: MatSnackBar,
   ) { }
 
   ngOnInit(): void {
@@ -98,6 +102,10 @@ export class RoomScheduleComponent implements OnInit {
         if (result.event == 'UNAVAILABILITY_SET') {
           let selectedOption: number = result.data;
           this.setUnavailability(selectedOption);
+        } else if (result.event == 'UNAVAILABILITY_DELETE'){
+          let selectedOption: number = result.data;
+          this.checkIfUnavailabilityExists();
+          //this.snackBar.open('Unavailability deleted!');
         }
       }
     );
@@ -112,9 +120,42 @@ export class RoomScheduleComponent implements OnInit {
           this.pushUnavailableDayToEvents(dayTimeRange);
           this.getWeeklyEvents();
         }
-      )
+      );
     }
   }
+
+  private deleteDailyUnavailability() {
+
+    this.scheduleService.deleteDailyUnavailability(this.room.id, this.clickedDate).subscribe(
+
+    );
+
+
+
+
+  }
+
+  private checkIfUnavailabilityExists(){
+    let dayBoundaries: TimeRange = {
+      startTime: this.clickedDate,
+      endTime: this.clickedDate
+    };
+    let unavailabilityExists: boolean = false;
+
+    // @ts-ignore
+    this.scheduleService.getWeeklyRoomUnavailability(this.room.id, dayBoundaries).subscribe(
+      (weeklyUnavailability: TimeRange[]) => {
+        (weeklyUnavailability.length != 0)? unavailabilityExists = true: unavailabilityExists = false;
+
+        if(!unavailabilityExists){
+          this.snackBar.open('Unavailability does not exist!');
+        } else {
+          this.deleteDailyUnavailability();
+        }
+      });
+  }
+
+
 
   private pushUnavailableDayToEvents(dayTimeRange: TimeRange) {
     let newEvents = this.events;
@@ -124,7 +165,11 @@ export class RoomScheduleComponent implements OnInit {
     this.events = [...newEvents];
   }
 
+
+
   eventClick($event: {event: CalendarEvent<any>; sourceEvent: any}) {
 
   }
+
+
 }

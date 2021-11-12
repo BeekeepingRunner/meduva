@@ -71,6 +71,7 @@ import {ScheduleModule} from "./schedule/schedule.module";
 import {MatDatepickerModule} from "@angular/material/datepicker";
 import {MatNativeDateModule} from "@angular/material/core";
 import { SelectWorkerComponent } from './component/visit/select-worker/select-worker.component';
+import {MAT_SNACK_BAR_DEFAULT_OPTIONS, MatSnackBarModule} from "@angular/material/snack-bar";
 
 @NgModule({
   declarations: [
@@ -144,6 +145,7 @@ import { SelectWorkerComponent } from './component/visit/select-worker/select-wo
     ScheduleModule,
     MatDatepickerModule,
     MatNativeDateModule,
+    MatSnackBarModule
   ],
   exports: [
     RouterModule
@@ -153,6 +155,7 @@ import { SelectWorkerComponent } from './component/visit/select-worker/select-wo
     CurrencyPipe,
     DatePipe,
     MatDatepickerModule,
+    {provide: MAT_SNACK_BAR_DEFAULT_OPTIONS, useValue: {duration: 2500}},
   ],
   bootstrap: [AppComponent]
 })
