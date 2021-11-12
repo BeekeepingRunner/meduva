@@ -24,6 +24,7 @@ export class PlanYourVisitComponent implements OnInit {
 
   isTermSelectionVisible = false;
   term!: Term | null;
+  visitDescription: string = "";
 
   constructor(
     private jwtStorage: JwtStorageService,
@@ -84,5 +85,11 @@ export class PlanYourVisitComponent implements OnInit {
         this.router.navigate(['/visit-history']);
       }
     );
+  }
+
+  onDescriptionSave() {
+    // @ts-ignore
+    this.term?.description = this.visitDescription;
+    console.log(this.term?.description);
   }
 }

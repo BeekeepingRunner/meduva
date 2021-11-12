@@ -16,6 +16,8 @@ export interface Term {
   clientUnregistered: boolean,
   roomId: number,
   eqItemId: number,
+
+  description: string;
 }
 
 enum VisitKey {
