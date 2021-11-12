@@ -3,10 +3,10 @@
 </div>
 <div *ngIf="!loading">
   <div *ngIf="canChooseDay">
-    <h3>Choose term for {{ selectedService?.name }}:</h3>
+    <h3></h3>
     <div>
-      <mat-form-field appearance="fill">
-        <mat-label>Choose a date</mat-label>
+      <mat-form-field appearance="outline">
+        <mat-label>Choose term for {{ service?.name }}</mat-label>
         <input matInput [matDatepicker]="picker"
                [matDatepickerFilter]="dateFilter"
                (dateInput)="onDayPick($event)" required>
@@ -16,7 +16,7 @@
 
       <mat-progress-spinner *ngIf="generatingTerms" mode="indeterminate"></mat-progress-spinner>
       <div *ngIf="canSelectTerm">
-        <h3>Select an hour</h3>
+        <h5>Select an hour</h5>
         <div class="hour-buttons">
           <div *ngFor="let term of availableTerms">
             <div class="hour-button">
@@ -25,11 +25,6 @@
               </button>
             </div>
           </div>
-        </div>
-
-        <br>
-        <div *ngIf="hourSelected">
-          <button mat-raised-button color="primary" (click)="onSubmit()">Submit</button>
         </div>
       </div>
     </div>

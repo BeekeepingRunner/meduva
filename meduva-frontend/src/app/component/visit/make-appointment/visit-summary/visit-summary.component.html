@@ -1,4 +1,3 @@
-<h3>Visit Summary</h3>
 <table>
   <tr>
     <td><b>Date: </b></td>
@@ -6,15 +5,18 @@
   </tr>
   <tr>
     <td><b>Client: </b></td>
-    <td>{{ clientInfo }}</td>
+    <td>
+      {{ client.name + ' ' + client.surname + ' ' }}
+      <span *ngIf="client.email">{{ '(' + client.email + ')' }}</span>
+    </td>
   </tr>
   <tr>
     <td><b>Worker: </b></td>
-    <td>{{ workerInfo }}</td>
+    <td>{{ worker.name + ' ' + worker.surname + ' (' + worker.email + ')' }}</td>
   </tr>
   <tr>
     <td><b>Service: </b></td>
-    <td>{{ serviceName }}</td>
+    <td>{{ service.name }}</td>
   </tr>
   <tr>
     <td><b>Room: </b></td>
@@ -24,7 +26,4 @@
     <td><b>Equipment item code: </b></td>
     <td>{{ eqItemName }}</td>
   </tr>
-
-  <br>
-  <button mat-raised-button color="primary" (click)="submitVisit()">Submit a visit</button>
 </table>

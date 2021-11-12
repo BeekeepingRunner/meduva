@@ -19,6 +19,7 @@ public class Term {
     Long serviceId;
     Long workerId;
     Long clientId;
+    boolean isClientUnregistered;
     Long roomId;
     Long eqItemId;
 

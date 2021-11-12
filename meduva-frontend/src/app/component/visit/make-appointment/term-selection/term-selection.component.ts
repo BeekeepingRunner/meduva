@@ -1,37 +1,38 @@
 import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
-  Component,
-  Inject,
+  Component, EventEmitter,
+  Inject, Input,
   OnDestroy,
-  OnInit,
+  OnInit, Output,
   ViewEncapsulation
 } from '@angular/core';
-import {Term, VisitService} from "../../../service/visit.service";
-import {DatePipe} from "@angular/common";
-import {Router} from "@angular/router";
-import {ServicesService} from "../../../service/services.service";
-import {Service} from "../../../model/service";
+import {Service} from "../../../../model/service";
+import {User} from "../../../../model/user";
+import {Term, VisitService} from "../../../../service/visit.service";
+import {addMonth, getFormattedDate, isInThePast, substractMonth} from "../../../../util/date";
 import {MatCalendar, MatDatepickerInputEvent} from "@angular/material/datepicker";
-import {User} from "../../../model/user";
 import {Subject} from "rxjs";
 import {DateAdapter, MAT_DATE_FORMATS, MatDateFormats} from "@angular/material/core";
 import {takeUntil} from "rxjs/operators";
-import {addMonth, DateUtil, getFormattedDate, isInThePast, substractMonth} from "../../../util/date";
-import {JwtStorageService} from "../../../service/token/jwt-storage.service";
+import {Client} from "../../../../model/client";
 
 @Component({
-  selector: 'app-pick-term',
-  templateUrl: './pick-term.component.html',
-  styleUrls: ['./pick-term.component.css'],
+  selector: 'app-term-selection',
+  templateUrl: './term-selection.component.html',
+  styleUrls: ['./term-selection.component.css'],
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.Default,
 })
-export class PickTermComponent implements OnInit {
+export class TermSelectionComponent implements OnInit {
 
-  clientId!: number | undefined;
-  selectedService!: Service | null;
-  selectedWorker!: User | null;
+  @Input()
+  client!: Client;
+  @Input()
+  service!: Service;
+  @Input()
+  worker!: User;
+
   loading: boolean = true;
   canChooseDay: boolean = false;
 
@@ -42,6 +43,8 @@ export class PickTermComponent implements OnInit {
 
   availableTerms: Term[] = [];
   hourSelected: boolean = false;
+  @Output()
+  termEmitter = new EventEmitter<Term>();
 
   errorMessage: string = '';
 
@@ -68,7 +71,6 @@ export class PickTermComponent implements OnInit {
 
     let isAvailable = false;
     let availableMonthDays: Date[] = this.visitService.getAvailableDates();
-    console.log(availableMonthDays);
     if (availableMonthDays.length > 0) {
       let filteredDayNumber = date.getDate();
       availableMonthDays.forEach(availDate => {
@@ -83,41 +85,26 @@ export class PickTermComponent implements OnInit {
 
   constructor(
     private visitService: VisitService,
-    private servicesService: ServicesService,
-    private jwtStorageService: JwtStorageService,
-    private datePipe: DatePipe,
-    private router: Router,
   ) { }
 
   ngOnInit(): void {
-    this.clientId = this.jwtStorageService.getCurrentUser()?.id;
-    this.selectedService = this.visitService.getSelectedService();
-    if (this.serviceHasBeenSelected()) {
-      console.log("service selected");
-      this.selectedWorker = this.visitService.getSelectedWorker();
-      if (this.workerHasBeenSelected()) {
-        console.log("worker selected");
-        this.waitForWorkerAvailableDays();
-      } else {
-        this.waitForAvailableDays();
-      }
+    AsyncDatePickerHeader.worker = this.worker;
+    AsyncDatePickerHeader.service = this.service;
+    this.waitForAvailableDays();
+  }
+
+  private waitForAvailableDays() {
+    if (this.worker) {
+      this.waitForWorkerAvailableDays();
+    } else {
+      this.waitForAnyonesAvailableDays();
     }
-  }
-
-  private serviceHasBeenSelected(): boolean {
-    return this.selectedService != null && this.selectedService.id != null;
-  }
-
-  private workerHasBeenSelected(): boolean {
-    return this.selectedWorker != null && this.selectedWorker.id != null;
   }
 
   private waitForWorkerAvailableDays() {
     let activeDateStr = getFormattedDate(this.getLastPickedDayOrNow());
-    let serviceId = this.visitService.getSelectedService()?.id;
-    let workerId = this.visitService.getSelectedWorker()?.id;
     // @ts-ignore
-    this.visitService.getWorkerAvailableDaysInMonth(workerId, serviceId, activeDateStr).subscribe(
+    this.visitService.getWorkerAvailableDaysInMonth(this.worker.id, this.service.id, activeDateStr).subscribe(
       availDays => {
         console.log("avail days " + availDays);
         this.visitService.saveAvailableDates(availDays);
@@ -137,7 +124,7 @@ export class PickTermComponent implements OnInit {
     }
   }
 
-  private waitForAvailableDays() {
+  private waitForAnyonesAvailableDays() {
     let activeDateStr = getFormattedDate(new Date());
     let serviceId = this.visitService.getSelectedService()?.id;
     // @ts-ignore
@@ -150,46 +137,36 @@ export class PickTermComponent implements OnInit {
   }
 
   onDatePickerClick() {
-    this.selectedService = this.visitService.getSelectedService();
-    if (this.serviceHasBeenSelected()) {
-      this.selectedWorker = this.visitService.getSelectedWorker();
-      if (this.workerHasBeenSelected()) {
-        this.waitForWorkerAvailableDays();
-      } else {
-        this.waitForAvailableDays();
-      }
-    }
+    this.waitForAvailableDays();
   }
 
   onDayPick($event: MatDatepickerInputEvent<Date, Date | null>) {
-    this.hourSelected = false;
     this.lastPickedDay = $event.value;
     this.asyncHeader.lastPickedDay = $event.value;
+
+    this.hourSelected = false;
     this.generatingTerms = true;
     // @ts-ignore
     let dayStr = getFormattedDate(this.lastPickedDay);
     // @ts-ignore
-    this.visitService.getWorkerTermsForDay(this.selectedWorker?.id, this.selectedService?.id, dayStr).subscribe(
+    this.visitService.getWorkerTermsForDay(this.worker.id, this.service.id, dayStr).subscribe(
       (possibleTerms: Term[]) => {
-        possibleTerms.forEach(term => {
-          // @ts-ignore
-          term.clientId = this.clientId;
-        });
         this.availableTerms = possibleTerms;
         this.canSelectTerm = true;
         this.generatingTerms = false;
-        }, err => {
+      }, err => {
         console.log(err);
       });
   }
 
   onTermClick(term: Term) {
-    this.visitService.saveSelectedTerm(term);
+    term.clientId = this.client.id;
+    if (this.client.email == null || this.client.email == undefined) {
+      term.clientUnregistered = true;
+    }
+    console.log(term);
     this.hourSelected = true;
-  }
-
-  onSubmit() {
-    this.router.navigate(['/visit/summary']);
+    this.termEmitter.emit(term);
   }
 }
 
@@ -234,6 +211,8 @@ export class AsyncDatePickerHeader<D> implements OnInit, OnDestroy {
   serviceId!: number | undefined;
 
   static lastPickedDay: Date | null;
+  static worker: User;
+  static service: Service;
 
   static getLastPickedDayOrNow() {
     if (this.lastPickedDay != null) {
@@ -247,7 +226,7 @@ export class AsyncDatePickerHeader<D> implements OnInit, OnDestroy {
     private _calendar: MatCalendar<D>, private _dateAdapter: DateAdapter<D>,
     @Inject(MAT_DATE_FORMATS) private _dateFormats: MatDateFormats, cdr: ChangeDetectorRef,
     private visitService: VisitService,
-    ) {
+  ) {
     _calendar.stateChanges
       .pipe(takeUntil(this._destroyed))
       .subscribe(() => cdr.markForCheck());
@@ -273,9 +252,7 @@ export class AsyncDatePickerHeader<D> implements OnInit, OnDestroy {
     dateToSend = substractMonth(dateToSend);
     let dateToSendStr = getFormattedDate(dateToSend);
 
-    this.serviceId = this.visitService.getSelectedService()?.id;
-    this.workerId = this.visitService.getSelectedWorker()?.id;
-    if (this.workerId != undefined) {
+    if (AsyncDatePickerHeader.worker) {
       this.waitForWorkerPreviousAvailableDays(mode, dateToSendStr);
     } else {
       // TODO: SOMEDAY - check if service can be performed given day by anyone
@@ -284,8 +261,10 @@ export class AsyncDatePickerHeader<D> implements OnInit, OnDestroy {
   }
 
   private waitForWorkerPreviousAvailableDays(mode: 'month' | 'year', monthDayStr: string) {
+    let workerId = AsyncDatePickerHeader.worker.id;
+    let serviceId = AsyncDatePickerHeader.service.id;
     // @ts-ignore
-    this.visitService.getWorkerAvailableDaysInMonth(this.workerId, this.serviceId, monthDayStr).subscribe(
+    this.visitService.getWorkerAvailableDaysInMonth(workerId, serviceId, monthDayStr).subscribe(
       availDays => {
         this.visitService.saveAvailableDates(availDays);
 
@@ -302,9 +281,7 @@ export class AsyncDatePickerHeader<D> implements OnInit, OnDestroy {
     dateToSend = addMonth(dateToSend);
     let dateToSendStr = getFormattedDate(dateToSend);
 
-    this.serviceId = this.visitService.getSelectedService()?.id;
-    this.workerId = this.visitService.getSelectedWorker()?.id;
-    if (this.workerId != undefined) {
+    if (AsyncDatePickerHeader.worker) {
       this.waitForWorkerNextAvailableDays(mode, dateToSendStr);
     } else {
       // TODO: check if service can be performed given day by anyone
@@ -313,8 +290,10 @@ export class AsyncDatePickerHeader<D> implements OnInit, OnDestroy {
   }
 
   private waitForWorkerNextAvailableDays(mode: 'month' | 'year', monthDayStr: string) {
+    let workerId = AsyncDatePickerHeader.worker.id;
+    let serviceId = AsyncDatePickerHeader.service.id;
     // @ts-ignore
-    this.visitService.getWorkerAvailableDaysInMonth(this.workerId, this.serviceId, monthDayStr).subscribe(
+    this.visitService.getWorkerAvailableDaysInMonth(workerId, serviceId, monthDayStr).subscribe(
       availDays => {
         this.visitService.saveAvailableDates(availDays);
 

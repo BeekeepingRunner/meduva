@@ -22,11 +22,8 @@ import {EquipmentListComponent} from "./component/equipment/equipment-list/equip
 import {NewModelComponent} from "./component/equipment/new-model/new-model.component";
 import {ModelDetailsComponent} from "./component/equipment/model-details/model-details.component";
 import {ChooseServiceComponent} from "./component/visit/choose-service/choose-service.component";
-import {PickTermComponent} from "./component/visit/pick-term/pick-term.component";
 import {SpecificUserComponent} from "./component/specific-user-profile/specific-user.component";
 import {EditRoleComponent} from "./component/specific-user-profile/edit-role/edit-role.component";
-import {PickClientComponent} from "./component/visit/pick-client/pick-client.component";
-import {SummaryComponent} from "./component/visit/summary/summary.component";
 import {WorkerServicesComponent} from "./component/specific-user-profile/worker-services/worker-services.component";
 import {EditPerformedServicesComponent} from "./component/rooms/edit-performed-services/edit-performed-services.component";
 import {ChangePasswordComponent} from "./component/profile/change-password/change-password.component";
@@ -43,8 +40,9 @@ import {PickRoomComponent} from "./schedule/component/room/pick-room/pick-room.c
 import {RoomScheduleComponent} from "./schedule/component/room/room-schedule/room-schedule.component";
 import {PickItemComponent} from "./schedule/component/item/pick-item/pick-item.component";
 import {ItemScheduleComponent} from "./schedule/component/item/item-schedule/item-schedule.component";
-import {SelectWorkerComponent} from "./component/visit/select-worker/select-worker.component";
 import {VisitHistoryComponent} from "./component/visit/visit-history/visit-history.component";
+import {MakeAppointmentComponent} from "./component/visit/make-appointment/make-appointment.component";
+import {PlanYourVisitComponent} from "./component/visit/plan-your-visit/plan-your-visit.component";
 
 export const routes: Routes = [
   { path: 'home', component: HomeComponent },
@@ -267,43 +265,19 @@ export const routes: Routes = [
     }
   },
   {
-    path: 'visit/pick-service',
-    component: ChooseServiceComponent,
+    path: 'visit/make-appointment',
+    component: MakeAppointmentComponent,
     canActivate: [RoleGuard],
     data: {
       expectedRole: roleNames[UserRole.ROLE_CLIENT]
     }
   },
   {
-    path: 'visit/pick-worker',
-    component: SelectWorkerComponent,
-    canActivate: [RoleGuard],
-    data: {
-      expectedRole: roleNames[UserRole.ROLE_CLIENT]
-    }
-  },
-  {
-    path: 'visit/pick-term',
-    component: PickTermComponent,
-    canActivate: [RoleGuard],
-    data: {
-      expectedRole: roleNames[UserRole.ROLE_CLIENT]
-    }
-  },
-  {
-    path: 'visit/pick-client',
-    component: PickClientComponent,
+    path: 'visit/plan-your-visit',
+    component: PlanYourVisitComponent,
     canActivate: [RoleGuard],
     data: {
       expectedRole: roleNames[UserRole.ROLE_WORKER]
-    }
-  },
-  {
-    path: 'visit/summary',
-    component: SummaryComponent,
-    canActivate: [RoleGuard],
-    data: {
-      expectedRole: roleNames[UserRole.ROLE_CLIENT]
     }
   },
   {

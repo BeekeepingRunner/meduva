@@ -30,7 +30,7 @@ export class ClientListComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.isReceptionist = this.roleGuardService.hasExpectedRole(roleNames[UserRole.ROLE_RECEPTIONIST]);
+    this.isReceptionist = this.roleGuardService.hasCurrentUserExpectedRole(roleNames[UserRole.ROLE_RECEPTIONIST]);
     this.getAllClients();
   }
 
