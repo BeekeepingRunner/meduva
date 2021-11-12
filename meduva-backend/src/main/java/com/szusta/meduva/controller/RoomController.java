@@ -4,6 +4,7 @@ import com.szusta.meduva.model.Room;
 import com.szusta.meduva.model.Service;
 import com.szusta.meduva.model.schedule.RoomSchedule;
 import com.szusta.meduva.payload.TimeRange;
+import com.szusta.meduva.payload.request.DeleteDailyHoursRequest;
 import com.szusta.meduva.payload.request.add.NewRoomRequest;
 import com.szusta.meduva.service.room.RoomService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -70,4 +71,12 @@ public class RoomController {
         RoomSchedule roomUnavailSchedule = roomService.setRoomDayUnavailability(roomId, day);
         return new TimeRange(roomUnavailSchedule.getTimeFrom(), roomUnavailSchedule.getTimeTo());
     }
+
+    @DeleteMapping("/delete-day-unavailability/{roomId}")
+    public void deleteDayUnavailability(@PathVariable Long roomId, @RequestBody DeleteDailyHoursRequest request){
+        Date day = request.getDay();
+        roomService.deleteDayUnavailability(roomId, day);
+    }
+
+
 }

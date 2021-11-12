@@ -14,8 +14,11 @@ import com.szusta.meduva.repository.schedule.equipment.EquipmentScheduleReposito
 import com.szusta.meduva.repository.schedule.equipment.EquipmentStatusRepository;
 import com.szusta.meduva.repository.schedule.room.RoomScheduleRepository;
 import com.szusta.meduva.repository.schedule.room.RoomStatusRepository;
+import com.szusta.meduva.util.TimeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.Date;
 
 @Service
 public class RoomScheduleManager {
@@ -37,5 +40,11 @@ public class RoomScheduleManager {
 
         RoomSchedule roomSchedule = new RoomSchedule(room, allDay, roomStatus);
         return roomScheduleRepository.save(roomSchedule);
+    }
+
+    public void deleteAllTypeOfEventsBetween(Long roomId, ERoomStatus status, Date day) {
+        Date dayStart = TimeUtils.getDayStart(day);
+        Date dayEnd = TimeUtils.getDayEnd(day);
+        roomScheduleRepository.deleteByRoomIdBetween(roomId, status.getValue(), dayStart, dayEnd);
     }
 }

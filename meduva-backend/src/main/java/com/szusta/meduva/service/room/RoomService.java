@@ -7,6 +7,7 @@ import com.szusta.meduva.model.equipment.EquipmentItem;
 import com.szusta.meduva.model.schedule.EquipmentSchedule;
 import com.szusta.meduva.model.schedule.RoomSchedule;
 import com.szusta.meduva.model.schedule.Schedule;
+import com.szusta.meduva.model.schedule.status.enums.ERoomStatus;
 import com.szusta.meduva.payload.TimeRange;
 import com.szusta.meduva.repository.RoomRepository;
 import com.szusta.meduva.service.ScheduleChecker;
@@ -94,5 +95,10 @@ public class RoomService {
         } else {
             throw new RuntimeException("Couldn't set room unavailability: room is occupied that day");
         }
+    }
+
+    @Transactional
+    public void deleteDayUnavailability(Long roomId, Date day) {
+        this.roomScheduleManager.deleteAllTypeOfEventsBetween(roomId, ERoomStatus.ROOM_UNAVAILABLE, day);
     }
 }
