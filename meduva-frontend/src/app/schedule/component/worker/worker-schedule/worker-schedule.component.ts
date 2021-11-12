@@ -38,6 +38,7 @@ export class WorkerScheduleComponent implements OnInit {
     private dialog: MatDialog,
     private userService: UserService,
     private scheduleService: ScheduleService,
+    public snackBar: MatSnackBar,
     ) {
   }
 
@@ -153,6 +154,7 @@ export class WorkerScheduleComponent implements OnInit {
         this.prepareWeekEvents();
       }, err => {
         console.log(err);
+        this.snackBar.open("Error! There are colliding events beyond new work hours!");
       }
     );
   }
