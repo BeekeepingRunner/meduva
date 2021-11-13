@@ -6,6 +6,7 @@ import {ConfirmationDialogComponent} from "../../dialog/confirmation-dialog/conf
 import {MatDialog} from "@angular/material/dialog";
 import {FeedbackDialogComponent} from "../../dialog/feedback-dialog/feedback-dialog.component";
 import {Service} from "../../../model/service";
+import {JwtStorageService} from "../../../service/token/jwt-storage.service";
 
 @Component({
   selector: 'app-specific-user',
@@ -26,7 +27,8 @@ export class SpecificUserComponent implements OnInit {
     private userService: UserService,
     private activatedRoute: ActivatedRoute,
     public dialog: MatDialog,
-    private router: Router
+    private router: Router,
+    private currentUserJwtToken: JwtStorageService
 
   ) { }
 
@@ -67,15 +69,22 @@ export class SpecificUserComponent implements OnInit {
   }
 
   openDeleteConfirmDialog(): void {
-    const confirmDialogRef = this.dialog.open(ConfirmationDialogComponent, {
-      data: { message: 'Do you want to delete this user?' }
-    });
+    if(this.userId==this.currentUserJwtToken.getCurrentUser()?.id){
+      const feedbackDialogRef = this.dialog.open(FeedbackDialogComponent, {
+        data: { message: 'U cannot delete yourself' }
+      });
+    }
+    else{
+      const confirmDialogRef = this.dialog.open(ConfirmationDialogComponent, {
+        data: { message: 'Do you want to delete this user?' }
+      });
 
-    confirmDialogRef.afterClosed().subscribe(confirmed => {
-      if (confirmed) {
-        this.deleteUser();
-      }
-    });
+      confirmDialogRef.afterClosed().subscribe(confirmed => {
+        if (confirmed) {
+          this.deleteUser();
+        }
+      });
+    }
   }
 
   deleteUser() {
