@@ -11,6 +11,22 @@ export const startTimeBeforeEndTimeValidator
   return !isInCorrectOrder ? { inWrongOrder: true } : null;
 };
 
+export const workingHoursValidator
+  : ValidatorFn = (control: AbstractControl): ValidationErrors | null => {
+
+  let hourAndMinutes: string = control.get('startTime')?.value;
+  let temp: string[] = hourAndMinutes.split(':');
+  const startHour = Number(temp[0]);
+
+  hourAndMinutes = control.get('endTime')?.value;
+  temp = hourAndMinutes.split(':');
+  const endHour = Number(temp[0]);
+
+  let isInOperatingHours: boolean
+    = (startHour>=6 && startHour<=20) && (endHour>=6 && endHour<=20);
+  return !isInOperatingHours ? { wrongWorkingHours: true } : null;
+};
+
 export function absenceValidator(existingWorkHours: WorkHours): ValidatorFn {
 
     return (control: AbstractControl): { [key: string]: boolean } | null => {
@@ -34,5 +50,7 @@ export function absenceValidator(existingWorkHours: WorkHours): ValidatorFn {
         }
             }
 };
+
+
 
 

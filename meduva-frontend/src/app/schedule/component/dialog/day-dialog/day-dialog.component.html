@@ -49,6 +49,9 @@
           <mat-error *ngIf="form.errors?.workHoursUndefined">
             Working hours must be set.
           </mat-error>
+          <mat-error *ngIf="form.errors?.wrongWorkingHours && (form.dirty || form.touched)">
+            Working hours must be within the operating hours of the facility.
+          </mat-error>
         </tr>
         <tr>
           <br>

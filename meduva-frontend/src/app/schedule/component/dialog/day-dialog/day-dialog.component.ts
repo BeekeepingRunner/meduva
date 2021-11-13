@@ -3,7 +3,7 @@ import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {
   absenceValidator,
-  startTimeBeforeEndTimeValidator
+  startTimeBeforeEndTimeValidator, workingHoursValidator
 } from "../../../util/validator/hours-input";
 import {ScheduleService, WeekBoundaries, WorkHours} from "../../../service/schedule.service";
 
@@ -50,6 +50,7 @@ export class DayDialogComponent implements OnInit {
       startTime : new FormControl('', [Validators.required]),
       endTime: new FormControl('', [Validators.required])
     }, { validators: startTimeBeforeEndTimeValidator });
+    this.form.setValidators(workingHoursValidator);
   }
 
   onWorkHoursSave() {

@@ -63,6 +63,11 @@ public class WorkManager {
 
     @Transactional
     public WorkHours setWorkHours(User worker, Date newWorkStartTime, Date newWorkEndTime) {
+
+        if(ifStartAndEndHourIsWithinOperatingHours(newWorkStartTime,newWorkEndTime)==false){
+            throw new RuntimeException("Cannot set work hours - working hours are not within the operating hours of the facility");
+        }
+
         boolean collidingVisitsExist =
                 hasVisitsBefore(newWorkStartTime, worker)
                 && hasVisitsAfter(newWorkEndTime, worker);
@@ -76,6 +81,7 @@ public class WorkManager {
             throw new RuntimeException("Cannot set work hours - visits exist before or after requested work hours");
         }
     }
+
 
     @Transactional
     public WorkerSchedule setDailyAbsenceHours(User worker, Date newAbsenceStartTime, Date newAbsenceEndTime) {
@@ -141,6 +147,8 @@ public class WorkManager {
         return workerScheduleRepository.findAllDuring(firstWeekDay, lastWeekDay, worker.getId());
     }
 
+
+
     private List<TimeRange> convertToOffWorkHours(List<WorkHours> weeklyWorkHours) {
         List<TimeRange> weeklyOffWorkHours = new ArrayList<>();
 
@@ -187,6 +195,21 @@ public class WorkManager {
     private boolean hasWorkHours(User worker, Date start, Date end) {
         List<WorkHours> workHours = workHoursRepository.getAllByWorkerIdBetween(worker.getId(), start, end);
         return !workHours.isEmpty();
+    }
+
+    private boolean ifStartAndEndHourIsWithinOperatingHours(Date newWorkStartTime, Date newWorkEndTime) {
+        Calendar calendarStart = Calendar.getInstance();
+        calendarStart.setTime(newWorkStartTime);
+        Calendar calendarEnd = Calendar.getInstance();
+        calendarEnd.setTime(newWorkEndTime);
+
+        int startHour = calendarStart.get(Calendar.HOUR_OF_DAY);
+        int endHour = calendarEnd.get(Calendar.HOUR_OF_DAY);
+
+        if(startHour<6 || startHour>20 || endHour<6 || endHour>20){
+            return false;
+        }
+        return true;
     }
 
 }
