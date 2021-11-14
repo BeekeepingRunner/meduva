@@ -10,8 +10,8 @@ th.mat-header-cell {
 
 table {
   width: 90%;
-  max-width: 800px;
-  min-width: 400px;
+  max-width: 1000px;
+  min-width: 600px;
 }
 
 button {
@@ -25,4 +25,13 @@ button {
 .element-row:hover{
   cursor: pointer;
   background: #f5f5f5;
+}
+
+.past-element {
+  background: gray;
+}
+
+.past-element:hover {
+  cursor: pointer;
+  background-color: gray;
 }

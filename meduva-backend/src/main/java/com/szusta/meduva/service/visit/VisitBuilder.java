@@ -102,6 +102,7 @@ public class VisitBuilder {
         visit.setVisitStatus(booked);
         visit.setService(service);
         visit.setRoom(room);
+        visit.setDescription(term.getDescription());
         if (term.getEqItemId() != null) {
             EquipmentItem eqItem = itemRepository.findById(term.getEqItemId())
                     .orElseThrow(() -> new EntityRecordNotFoundException("Equipment item not found in DB with id = " + term.getEqItemId()));

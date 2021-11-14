@@ -16,6 +16,8 @@ export interface Term {
   clientUnregistered: boolean,
   roomId: number,
   eqItemId: number,
+
+  description: string;
 }
 
 enum VisitKey {
@@ -135,5 +137,9 @@ export class VisitService {
 
   getAllAsClientByUserId(userId: number): Observable<any>  {
     return this.httpClient.get(environment.API_BASE_URL + 'api/visit/all-as-client-by-user-id/' + userId);
+  }
+
+  getAllAsWorkerById(workerId: number): Observable<any> {
+    return this.httpClient.get(environment.API_BASE_URL + 'api/visit/all-as-worker-by-id/' + workerId);
   }
 }

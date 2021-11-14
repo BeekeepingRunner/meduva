@@ -23,6 +23,8 @@ public class Term {
     Long roomId;
     Long eqItemId;
 
+    String description;
+
     public Term(Date startTime, Date endTime) {
         this.startTime = startTime;
         this.endTime = endTime;

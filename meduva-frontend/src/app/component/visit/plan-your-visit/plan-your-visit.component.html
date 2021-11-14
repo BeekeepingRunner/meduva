@@ -62,9 +62,15 @@
                        [term]="term">
     </app-visit-summary>
     <br>
+    <mat-form-field appearance="fill" class="full-width">
+      <mat-label>Add a description</mat-label>
+      <textarea matInput [(ngModel)]="visitDescription"></textarea>
+    </mat-form-field>
+    <button mat-button color="primary" (click)="onDescriptionSave()">save</button>
+    <br><br>
     <div>
       <button mat-button matStepperPrevious>Back</button>
-      <button mat-button (click)="onVisitSubmit()">Submit</button>
+      <button mat-raised-button color="primary" (click)="onVisitSubmit()">Submit</button>
     </div>
   </mat-step>
 

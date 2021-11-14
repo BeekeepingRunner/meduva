@@ -138,4 +138,8 @@ public class VisitService {
     public List<Visit> findAllWhereUserIsClient(User client) {
         return visitRepository.findAllWhereUserIsClient(client.getId());
     }
+
+    public List<Visit> findAllWhereUserIsWorker(User worker) {
+        return visitRepository.findAllWhereUserIsWorker(worker.getId());
+    }
 }
