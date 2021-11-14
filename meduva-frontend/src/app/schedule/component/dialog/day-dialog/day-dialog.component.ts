@@ -151,9 +151,6 @@ export class DayDialogComponent implements OnInit {
     }
   }
 
-  startDeletingHours(){
-    this.deletingWorkOrAbsenceHours = true;
-  }
 
   tryToDeleteDailyAbsenceHours(){
     let dayBoundaries: WeekBoundaries = {
