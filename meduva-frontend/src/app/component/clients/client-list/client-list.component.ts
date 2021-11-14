@@ -90,7 +90,6 @@ export class ClientListComponent implements OnInit {
     // @ts-ignore
     this.workerService.getAllClients(currentWorkerId).subscribe(
       (registeredWorkerClients: User[]) => {
-        console.log(registeredWorkerClients);
 
         registeredWorkerClients.forEach(registeredClient => {
           let client = trimJSON(registeredClient, ["login", "password", "roles", "services"]);
