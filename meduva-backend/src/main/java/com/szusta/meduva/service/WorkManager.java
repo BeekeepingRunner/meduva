@@ -130,7 +130,7 @@ public class WorkManager {
     public void deleteDailyWorkHours(Date dateTime, User worker){
         boolean collidingEventsExist =
                 hasEventsBefore(dateTime, worker)
-                        && hasEventsAfter(dateTime, worker);
+                        || hasEventsAfter(dateTime, worker);
         
         if(!collidingEventsExist){
             deleteWorkHoursAt(dateTime, worker);
