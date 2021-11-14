@@ -99,6 +99,9 @@ public class UserService {
 
     @Transactional
     public void markAsDeleted(Long userId) {
+        if(userId==getCurrentUserId()){
+            throw new IllegalArgumentException("Current user cannot delete himself");
+        }
         com.szusta.meduva.model.User user = userRepository.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException("User not found with id : " + userId));
 
