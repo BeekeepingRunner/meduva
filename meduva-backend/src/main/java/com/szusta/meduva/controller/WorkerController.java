@@ -1,6 +1,7 @@
 package com.szusta.meduva.controller;
 
 import com.szusta.meduva.model.Service;
+import com.szusta.meduva.model.UnregisteredClient;
 import com.szusta.meduva.model.User;
 import com.szusta.meduva.model.WorkHours;
 import com.szusta.meduva.model.schedule.WorkerSchedule;
@@ -41,6 +42,16 @@ public class WorkerController {
     public List<User> findWorkersByService(@PathVariable Long serviceId) {
         Service service = servicesService.findById(serviceId);
         return this.workerService.findAllByService(service);
+    }
+
+    @GetMapping("/find-clients/{workerId}")
+    public List<User> findWorkerClients(@PathVariable Long workerId) {
+        return this.workerService.findWorkerClients(workerId);
+    }
+
+    @GetMapping("/find-unregistered-clients/{workerId}")
+    public List<UnregisteredClient> findWorkerUnregisteredClients(@PathVariable Long workerId) {
+        return this.workerService.findWorkerUnregisteredClients(workerId);
     }
 
     @GetMapping("/workerServices/{id}")

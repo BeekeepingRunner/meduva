@@ -14,4 +14,12 @@ export class WorkerService {
   getAllByPerformedService(serviceId: number) : Observable<User[]> {
     return this.http.get<User[]>(environment.API_BASE_URL + 'api/worker/find-by-service/' + serviceId);
   }
+
+  getAllClients(workerId: number): Observable<any> {
+    return this.http.get<any>(environment.API_BASE_URL + 'api/worker/find-clients/' + workerId);
+  }
+
+  getAllUnregisteredClients(workerId: number): Observable<any> {
+    return this.http.get<any>(environment.API_BASE_URL + 'api/worker/find-unregistered-clients/' + workerId);
+  }
 }
