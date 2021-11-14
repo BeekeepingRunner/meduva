@@ -91,6 +91,7 @@ import {
 } from './component/visit/make-appointment/term-selection/term-selection.component';
 import { VisitSummaryComponent } from './component/visit/make-appointment/visit-summary/visit-summary.component';
 import { ClientSelectionComponent } from './component/visit/plan-your-visit/client-selection/client-selection.component';
+import {MAT_SNACK_BAR_DEFAULT_OPTIONS, MatSnackBarModule} from "@angular/material/snack-bar";
 
 
 @NgModule({
@@ -184,6 +185,7 @@ import { ClientSelectionComponent } from './component/visit/plan-your-visit/clie
     ScheduleModule,
     MatDatepickerModule,
     MatNativeDateModule,
+    MatSnackBarModule
   ],
   exports: [
     RouterModule
@@ -193,6 +195,7 @@ import { ClientSelectionComponent } from './component/visit/plan-your-visit/clie
     CurrencyPipe,
     DatePipe,
     MatDatepickerModule,
+    {provide: MAT_SNACK_BAR_DEFAULT_OPTIONS, useValue: {duration: 2500}},
   ],
   bootstrap: [AppComponent]
 })

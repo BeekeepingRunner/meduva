@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {HttpClient} from "@angular/common/http";
+import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {environment} from "../../../environments/environment";
 import {Observable} from "rxjs";
 
@@ -69,5 +69,44 @@ export class ScheduleService {
     return this.httpClient.post(environment.API_BASE_URL + 'api/room/set-day-unavailability/' + roomId, day);
   }
 
+  deleteDailyAbsenceHours(workerId: number, absenceDayDate: Date) {
+    const httpOptions: any = {
+      headers: new HttpHeaders({ 'Content-Type' : 'application/json',
+         }),
+      body: {day: absenceDayDate}
+    };
 
+    return this.httpClient.delete(environment.API_BASE_URL + 'api/worker/delete-daily-absence-hours/' + workerId, httpOptions);
+  }
+
+  deleteDailyWorkHours(workerId: number, workDay: Date) {
+    const httpOptions: any = {
+      headers: new HttpHeaders({ 'Content-Type' : 'application/json',
+      }),
+      body: {day: workDay}
+    };
+
+    return this.httpClient.delete(environment.API_BASE_URL + 'api/worker/delete-daily-work-hours/'+ workerId, httpOptions);
+  }
+
+  deleteDailyRoomUnavailability(roomId: number | undefined, unavailabilityDate: Date) {
+    const httpOptions: any = {
+      headers: new HttpHeaders({ 'Content-Type' : 'application/json',
+      }),
+      body: {day: unavailabilityDate}
+    };
+
+    return this.httpClient.delete(environment.API_BASE_URL + 'api/room/delete-day-unavailability/'+ roomId, httpOptions);
+  }
+
+
+  deleteDailyItemUnavailability(itemId: number | undefined, unavailabilityDate: Date) {
+    const httpOptions: any = {
+      headers: new HttpHeaders({ 'Content-Type' : 'application/json',
+      }),
+      body: {day: unavailabilityDate}
+    };
+
+    return this.httpClient.delete(environment.API_BASE_URL + 'api/equipment/item/delete-day-unavailability/' + itemId, httpOptions);
+  }
 }

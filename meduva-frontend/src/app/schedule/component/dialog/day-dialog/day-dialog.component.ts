@@ -7,6 +7,7 @@ import {
 } from "../../../util/validator/hours-input";
 import {ScheduleService, WeekBoundaries, WorkHours} from "../../../service/schedule.service";
 
+
 export interface DayDialogData {
   date: Date;
   workerId: number;
@@ -24,17 +25,22 @@ export class DayDialogComponent implements OnInit {
 
   settingWorkHours: boolean = false;
   settingAbsenceHours: boolean = false;
+  deletingWorkOrAbsenceHours: boolean = false;
   form!: FormGroup;
 
   workHours!: WorkHours;
   existingWorkingHours!: WorkHours | undefined;
+
+  noAbsenceHoursError: boolean = false;
+  noWorkingHoursError: boolean = false;
+  collidingAbsenceHoursError: boolean = false;
 
 
   constructor(
     public dialogRef: MatDialogRef<DayDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: DayDialogData,
     private formBuilder: FormBuilder,
-    private scheduleService: ScheduleService
+    private scheduleService: ScheduleService,
   ) {
   }
 
@@ -143,6 +149,57 @@ export class DayDialogComponent implements OnInit {
     } else {
       this.onAbsenceHoursSave();
     }
+  }
+
+
+  tryToDeleteDailyAbsenceHours(){
+    let dayBoundaries: WeekBoundaries = {
+      firstWeekDay: this.selectedDate,
+      lastWeekDay: this.selectedDate
+    }
+
+    this.scheduleService.getWeeklyAbsenceHours(this.data.workerId, dayBoundaries).subscribe(
+      /* returns array with one object because it checks only one day */
+      data => {
+        if(data.length != 0){
+          this.dialogRef.close({
+            event: 'DELETE_ABSENCE_HOURS',
+            data: this.selectedDate
+          });
+        } else{
+          this.noAbsenceHoursError = true;
+        }
+      }
+    );
+  }
+
+  tryToDeleteDailyWorkingHours(){
+    let dayBoudnaries: WeekBoundaries = {
+      firstWeekDay: this.selectedDate,
+      lastWeekDay: this.selectedDate
+    }
+
+    this.scheduleService.getWeeklyAbsenceHours(this.data.workerId, dayBoudnaries).subscribe(
+      data => {
+        if(data.length == 0){
+              this.scheduleService.getWeeklyWorkHours(this.data.workerId, dayBoudnaries).subscribe(
+                /* returns array with one object because it checks only one day */
+                data => {
+                      if(data.length != 0){
+                        this.dialogRef.close({
+                          event: 'DELETE_WORK_HOURS',
+                          data: this.selectedDate
+                        });
+                      } else {
+                        this.noWorkingHoursError = true;
+                      }
+                }
+              )
+        }else{
+          this.collidingAbsenceHoursError = true;
+        }
+      }
+    )
   }
 
 }

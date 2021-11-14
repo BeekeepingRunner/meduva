@@ -1,15 +1,19 @@
 <button class="close" mat-icon-button [mat-dialog-close]="true">X</button>
 <h3>{{ dateString }}</h3>
 <div mat-dialog-actions>
-  <button mat-raised-button color="primary" *ngIf="!settingWorkHours && !settingAbsenceHours"
+  <button mat-raised-button color="primary" *ngIf="!settingWorkHours && !settingAbsenceHours && !deletingWorkOrAbsenceHours"
           (click)="startSettingWorkHours()">Set work hours</button>
-  <button mat-raised-button color="primary" *ngIf="!settingAbsenceHours && !settingWorkHours"
+  <button mat-raised-button color="primary" *ngIf="!settingAbsenceHours && !settingWorkHours && !deletingWorkOrAbsenceHours"
           (click)="startSettingAbsenceHours()" >Set absence</button>
+  <button mat-raised-button color="primary" *ngIf="!settingAbsenceHours && !settingWorkHours && !deletingWorkOrAbsenceHours"
+          (click)="deletingWorkOrAbsenceHours = true" >Delete hours</button>
   <div *ngIf="settingWorkHours || settingAbsenceHours">
     <form (ngSubmit)="chooseWorkHoursOrAbsence()" [formGroup]="form">
       <table>
+        <p *ngIf="settingWorkHours">You are setting work hours</p>
+        <p *ngIf="settingAbsenceHours">You are setting absence hours</p>
         <tr>
-          <td><strong>Work start:</strong></td>
+          <td><strong>Start:</strong></td>
           <td>
             <ngx-timepicker-field formControlName="startTime"
                                   [format]="24"
@@ -18,7 +22,7 @@
           </td>
         </tr>
         <tr>
-          <td><strong>Work end:</strong></td>
+          <td><strong>End:</strong></td>
           <td>
             <ngx-timepicker-field formControlName="endTime"
                                   [format]="24"
@@ -59,6 +63,23 @@
         </tr>
       </table>
     </form>
+  </div>
+
+  <div *ngIf="deletingWorkOrAbsenceHours">
+    <button mat-raised-button color="primary" *ngIf="deletingWorkOrAbsenceHours"
+           (click)="tryToDeleteDailyWorkingHours()" >Delete Work hours</button>
+    <button mat-raised-button color="primary" *ngIf="deletingWorkOrAbsenceHours"
+           (click)="tryToDeleteDailyAbsenceHours()" >Delete Absence hours</button>
+    <br>
+    <mat-error *ngIf="noAbsenceHoursError">
+      There is no absence hours to delete.
+    </mat-error>
+    <mat-error *ngIf="noWorkingHoursError">
+      There is no working hours to delete.
+    </mat-error>
+    <mat-error *ngIf="collidingAbsenceHoursError">
+      Delete existing absence hours before deleting work hours!
+    </mat-error>
   </div>
 </div>
 

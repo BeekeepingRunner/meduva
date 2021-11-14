@@ -68,11 +68,11 @@ public class WorkManager {
             throw new RuntimeException("Cannot set work hours - working hours are not within the operating hours of the facility");
         }
 
-        boolean collidingVisitsExist =
-                hasVisitsBefore(newWorkStartTime, worker)
-                && hasVisitsAfter(newWorkEndTime, worker);
+        boolean collidingEventsExist =
+                hasEventsBefore(newWorkStartTime, worker)
+                || hasEventsAfter(newWorkEndTime, worker);
 
-        if (!collidingVisitsExist) {
+        if (!collidingEventsExist) {
             deleteWorkHoursAt(newWorkStartTime, worker);
             WorkHours workHours = new WorkHours(newWorkStartTime, newWorkEndTime);
             workHours.setWorker(worker);
@@ -85,12 +85,13 @@ public class WorkManager {
 
     @Transactional
     public WorkerSchedule setDailyAbsenceHours(User worker, Date newAbsenceStartTime, Date newAbsenceEndTime) {
-        deleteDailyAbsenceHours(worker, newAbsenceStartTime);
+
+        TimeRange wantedAbsenceTimeRange = new TimeRange(newAbsenceStartTime, newAbsenceEndTime);
         boolean collidingVisitsExist =
-                hasVisitsBefore(newAbsenceStartTime, worker)
-                        && hasVisitsAfter(newAbsenceEndTime, worker);
+                scheduleChecker.isBusyWith(worker, EWorkerStatus.WORKER_OCCUPIED, wantedAbsenceTimeRange);
 
         if(!collidingVisitsExist){
+            deleteDailyAbsenceHours(worker, newAbsenceStartTime);
             WorkerSchedule workerSchedule = new WorkerSchedule(worker, newAbsenceStartTime, newAbsenceEndTime);
             WorkerStatus workerStatus = workerStatusRepository.findById(EWorkerStatus.WORKER_ABSENT.getValue()).get();
             workerSchedule.setWorkerStatus(workerStatus);
@@ -100,13 +101,13 @@ public class WorkManager {
         }
     }
 
-    private boolean hasVisitsBefore(Date newWorkStartTime, User worker) {
+    private boolean hasEventsBefore(Date newWorkStartTime, User worker) {
         Date dayStart = TimeUtils.getDayStart(newWorkStartTime);
         TimeRange timeRange = new TimeRange(dayStart, newWorkStartTime);
         return !scheduleChecker.isWorkerFree(timeRange, worker);
     }
 
-    private boolean hasVisitsAfter(Date newWorkEndTime, User worker) {
+    private boolean hasEventsAfter(Date newWorkEndTime, User worker) {
         Date dayEnd = TimeUtils.getDayEnd(newWorkEndTime);
         TimeRange timeRange = new TimeRange(newWorkEndTime, dayEnd);
         return !scheduleChecker.isWorkerFree(timeRange, worker);
@@ -118,10 +119,24 @@ public class WorkManager {
         workHoursRepository.deleteByWorkerIdBetween(worker.getId(), dayStart, dayEnd);
     }
 
-    private void deleteDailyAbsenceHours(User worker, Date dateTime){
+    @Transactional
+    public void deleteDailyAbsenceHours(User worker, Date dateTime){
         Date dayStart = TimeUtils.getDayStart(dateTime);
         Date dayEnd = TimeUtils.getDayEnd(dateTime);
-        workerScheduleRepository.deleteByWorkerIdBetween(worker.getId(), dayStart, dayEnd);
+        workerScheduleRepository.deleteByWorkerIdBetween(worker.getId(), EWorkerStatus.WORKER_ABSENT.getValue(), dayStart, dayEnd);
+    }
+    
+    @Transactional
+    public void deleteDailyWorkHours(Date dateTime, User worker){
+        boolean collidingEventsExist =
+                hasEventsBefore(dateTime, worker)
+                        || hasEventsAfter(dateTime, worker);
+        
+        if(!collidingEventsExist){
+            deleteWorkHoursAt(dateTime, worker);
+        } else {
+            throw new RuntimeException("Cannot delete work hours - events exist before or after requested work hours");
+        }
     }
 
     public List<WorkHours> getWeeklyWorkHours(User worker, Date firstWeekDay, Date lastWeekDay) {
@@ -144,7 +159,11 @@ public class WorkManager {
     public List<? super WorkerSchedule> getWeeklyAbsenceHours(User worker, Date firstWeekDay, Date lastWeekDay) {
         firstWeekDay = TimeUtils.getDayStart(firstWeekDay);
         lastWeekDay = TimeUtils.getDayEnd(lastWeekDay);
-        return workerScheduleRepository.findAllDuring(firstWeekDay, lastWeekDay, worker.getId());
+        return workerScheduleRepository.findAllDuring(
+                firstWeekDay,
+                lastWeekDay,
+                worker.getId(),
+                EWorkerStatus.WORKER_ABSENT.getValue());
     }
 
 

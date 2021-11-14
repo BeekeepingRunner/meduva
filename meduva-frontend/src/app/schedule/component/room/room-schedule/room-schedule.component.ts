@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {CalendarEvent, CalendarView} from "angular-calendar";
 import {Room} from "../../../../model/room";
 import {ActivatedRoute} from "@angular/router";
@@ -7,6 +7,7 @@ import {RoomService} from "../../../../service/room.service";
 import {ItemDayDialogComponent, UnavailabilityOptions} from "../../dialog/item-day-dialog/item-day-dialog.component";
 import {ScheduleService, TimeRange} from "../../../service/schedule.service";
 import {createUnavailabilityEvent} from "../../../util/event/creation";
+import {MatSnackBar} from "@angular/material/snack-bar";
 
 @Component({
   selector: 'app-room-schedule',
@@ -35,7 +36,8 @@ export class RoomScheduleComponent implements OnInit {
     private roomService: RoomService,
     private activatedRoute: ActivatedRoute,
     private dialog: MatDialog,
-    private scheduleService: ScheduleService
+    private scheduleService: ScheduleService,
+    public snackBar: MatSnackBar,
   ) { }
 
   ngOnInit(): void {
@@ -95,9 +97,14 @@ export class RoomScheduleComponent implements OnInit {
 
     dayDialog.afterClosed().subscribe(
       result => {
-        if (result.event == 'UNAVAILABILITY_SET') {
-          let selectedOption: number = result.data;
-          this.setUnavailability(selectedOption);
+        switch (result.event){
+          case 'UNAVAILABILITY_SET':
+              let selectedOption: number = result.data;
+              this.setUnavailability(selectedOption);
+              break;
+          case 'UNAVAILABILITY_DELETE':
+              this.checkIfUnavailabilityExists();
+              break;
         }
       }
     );
@@ -112,8 +119,39 @@ export class RoomScheduleComponent implements OnInit {
           this.pushUnavailableDayToEvents(dayTimeRange);
           this.getWeeklyEvents();
         }
-      )
+      );
     }
+  }
+
+  private deleteDailyUnavailability() {
+
+    this.scheduleService.deleteDailyRoomUnavailability(this.room.id, this.clickedDate).subscribe(
+      data => {
+        this.getWeeklyEvents();
+        this.snackBar.open("Unavailability deleted!");
+      }
+    );
+
+  }
+
+  private checkIfUnavailabilityExists(){
+    let dayBoundaries: TimeRange = {
+      startTime: this.clickedDate,
+      endTime: this.clickedDate
+    };
+    let unavailabilityExists: boolean = false;
+
+    // @ts-ignore
+    this.scheduleService.getWeeklyRoomUnavailability(this.room.id, dayBoundaries).subscribe(
+      (weeklyUnavailability: TimeRange[]) => {
+        (weeklyUnavailability.length != 0)? unavailabilityExists = true: unavailabilityExists = false;
+
+        if(!unavailabilityExists){
+          this.snackBar.open('Unavailability does not exist!');
+        } else {
+          this.deleteDailyUnavailability();
+        }
+      });
   }
 
   private pushUnavailableDayToEvents(dayTimeRange: TimeRange) {
@@ -127,4 +165,5 @@ export class RoomScheduleComponent implements OnInit {
   eventClick($event: {event: CalendarEvent<any>; sourceEvent: any}) {
 
   }
+
 }
