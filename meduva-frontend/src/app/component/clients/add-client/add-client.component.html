@@ -58,7 +58,7 @@
     <button class="btn btn-primary btn-block" type="submit">{{ submitButtonText }}</button>
 
     <br><br>
-    <div class="alert alert-warning" *ngIf="isSignUpFailed">
+    <div class="alert alert-warning" *ngIf="errorMessage">
       {{ errorMessage }}
     </div>
 

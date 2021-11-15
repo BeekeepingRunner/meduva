@@ -48,7 +48,6 @@ export class AddClientComponent implements OnInit {
       surname : this.form.controls.surname.value,
       phoneNumber : this.form.controls.phoneNumber.value
     };
-    console.log(newClient);
     this.clientService.addClient(newClient).subscribe(
       data => {
         this.openFeedbackDialog();

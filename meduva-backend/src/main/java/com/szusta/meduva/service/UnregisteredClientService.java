@@ -1,5 +1,6 @@
 package com.szusta.meduva.service;
 
+import com.szusta.meduva.exception.AlreadyExistsException;
 import com.szusta.meduva.exception.EntityRecordNotFoundException;
 import com.szusta.meduva.model.UnregisteredClient;
 import com.szusta.meduva.repository.UnregisteredClientRepository;
@@ -24,7 +25,17 @@ public class UnregisteredClientService {
     }
 
     public UnregisteredClient save(UnregisteredClient client) {
-        return clientRepository.save(client);
+        if (alreadyExists(client)) {
+            throw new AlreadyExistsException("That client already exists");
+        } else {
+            return clientRepository.save(client);
+        }
+    }
+
+    private boolean alreadyExists(UnregisteredClient client) {
+        return clientRepository.existsByName(client.getName())
+                && clientRepository.existsBySurname(client.getSurname())
+                && clientRepository.existsByPhoneNumber(client.getPhoneNumber());
     }
 
     public List<UnregisteredClient> findAll() {

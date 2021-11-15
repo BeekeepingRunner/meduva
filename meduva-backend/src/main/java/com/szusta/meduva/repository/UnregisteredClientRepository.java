@@ -10,6 +10,10 @@ import java.util.List;
 @Repository
 public interface UnregisteredClientRepository extends UndeletableRepository<UnregisteredClient> {
 
+    boolean existsByPhoneNumber(String phoneNumber);
+    boolean existsByName(String name);
+    boolean existsBySurname(String surname);
+
     @Query(
             nativeQuery = true,
             value = "SELECT DISTINCT uc.id, "
