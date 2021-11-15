@@ -1,8 +1,8 @@
 package com.szusta.meduva.model.schedule.visit;
 
-import com.szusta.meduva.model.AccountlessClient;
 import com.szusta.meduva.model.Room;
 import com.szusta.meduva.model.Service;
+import com.szusta.meduva.model.UnregisteredClient;
 import com.szusta.meduva.model.equipment.EquipmentItem;
 import com.szusta.meduva.model.schedule.Schedule;
 import com.szusta.meduva.model.schedule.status.VisitStatus;
@@ -40,7 +40,7 @@ public class Visit extends Schedule {
 
     @ManyToOne
     @JoinColumn(name = "unregistered_client_id")
-    private AccountlessClient unregisteredClient;
+    private UnregisteredClient unregisteredClient;
 
     @OneToMany(mappedBy = "visit", cascade = CascadeType.ALL)
     private List<UserVisit> userVisits;

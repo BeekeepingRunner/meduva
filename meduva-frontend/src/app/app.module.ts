@@ -92,6 +92,7 @@ import {
 import { VisitSummaryComponent } from './component/visit/make-appointment/visit-summary/visit-summary.component';
 import { ClientSelectionComponent } from './component/visit/plan-your-visit/client-selection/client-selection.component';
 import {MAT_SNACK_BAR_DEFAULT_OPTIONS, MatSnackBarModule} from "@angular/material/snack-bar";
+import { ClientVisitsComponent } from './component/clients/client-details/client-visits/client-visits.component';
 
 
 @NgModule({
@@ -157,6 +158,7 @@ import {MAT_SNACK_BAR_DEFAULT_OPTIONS, MatSnackBarModule} from "@angular/materia
     TermSelectionComponent,
     VisitSummaryComponent,
     ClientSelectionComponent,
+    ClientVisitsComponent,
   ],
   imports: [
     BrowserModule,

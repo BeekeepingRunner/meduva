@@ -80,4 +80,9 @@ public class VisitController {
         User worker = userService.findById(workerId);
         return visitService.findAllWhereUserIsWorker(worker);
     }
+
+    @GetMapping("/all-of-unregistered-client/{unregisteredClientId}")
+    public List<Visit> findAllOfUnregisteredClient(@PathVariable Long unregisteredClientId) {
+        return visitService.findAllOfUnregisteredClient(unregisteredClientId);
+    }
 }

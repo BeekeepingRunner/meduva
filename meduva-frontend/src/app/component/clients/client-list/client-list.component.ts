@@ -7,6 +7,7 @@ import {roleNames, User, UserRole} from "../../../model/user";
 import {Route, Router} from "@angular/router";
 import {JwtStorageService, TokenUserInfo} from "../../../service/token/jwt-storage.service";
 import {RoleGuardService} from "../../../service/auth/role-guard.service";
+import {WorkerService} from "../../../service/worker.service";
 
 @Component({
   selector: 'app-client-list',
@@ -24,12 +25,14 @@ export class ClientListComponent implements OnInit {
   constructor(
     private roleGuardService: RoleGuardService,
     private userService: UserService,
+    private workerService: WorkerService,
     private clientService: ClientService,
     private jwtTokenStorageService: JwtStorageService,
     private router: Router,
   ) { }
 
   ngOnInit(): void {
+    this.currentUser = this.jwtTokenStorageService.getCurrentUser();
     this.isReceptionist = this.roleGuardService.hasCurrentUserExpectedRole(roleNames[UserRole.ROLE_RECEPTIONIST]);
     this.getAllClients();
   }
@@ -79,5 +82,26 @@ export class ClientListComponent implements OnInit {
   pickClient(client: Client): void {
     this.clientService.saveSelectedClient(client);
     this.router.navigate(["client/details"]);
+  }
+
+  getAllWorkerClients(): void {
+    this.clients = [];
+    let currentWorkerId = this.currentUser?.id;
+    // @ts-ignore
+    this.workerService.getAllClients(currentWorkerId).subscribe(
+      (registeredWorkerClients: User[]) => {
+
+        registeredWorkerClients.forEach(registeredClient => {
+          let client = trimJSON(registeredClient, ["login", "password", "roles", "services"]);
+          this.clients.push(client);
+        });
+
+        // @ts-ignore
+        this.workerService.getAllUnregisteredClients(currentWorkerId).subscribe(
+          unregisteredClients => {
+          this.clients = this.clients.concat(unregisteredClients);
+        });
+      }
+    )
   }
 }
