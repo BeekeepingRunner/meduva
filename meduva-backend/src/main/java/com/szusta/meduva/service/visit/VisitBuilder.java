@@ -1,20 +1,14 @@
 package com.szusta.meduva.service.visit;
 
 import com.szusta.meduva.exception.EntityRecordNotFoundException;
-import com.szusta.meduva.model.AccountlessClient;
-import com.szusta.meduva.model.Room;
-import com.szusta.meduva.model.Service;
-import com.szusta.meduva.model.User;
+import com.szusta.meduva.model.*;
 import com.szusta.meduva.model.equipment.EquipmentItem;
 import com.szusta.meduva.model.schedule.status.VisitStatus;
 import com.szusta.meduva.model.schedule.status.enums.EVisitStatus;
 import com.szusta.meduva.model.schedule.visit.UserVisit;
 import com.szusta.meduva.model.schedule.visit.Visit;
 import com.szusta.meduva.payload.Term;
-import com.szusta.meduva.repository.AccountlessClientRepository;
-import com.szusta.meduva.repository.RoomRepository;
-import com.szusta.meduva.repository.ServiceRepository;
-import com.szusta.meduva.repository.UserRepository;
+import com.szusta.meduva.repository.*;
 import com.szusta.meduva.repository.equipment.EquipmentItemRepository;
 import com.szusta.meduva.repository.schedule.visit.VisitRepository;
 import com.szusta.meduva.repository.schedule.visit.VisitStatusRepository;
@@ -27,7 +21,7 @@ import java.util.Collections;
 public class VisitBuilder {
 
     private VisitRepository visitRepository;
-    private AccountlessClientRepository accountlessClientRepository;
+    private UnregisteredClientRepository unregisteredClientRepository;
     private VisitStatusRepository visitStatusRepository;
     private ServiceRepository serviceRepository;
     private RoomRepository roomRepository;
@@ -36,14 +30,14 @@ public class VisitBuilder {
 
     @Autowired
     public VisitBuilder(VisitRepository visitRepository,
-                        AccountlessClientRepository accountlessClientRepository,
+                        UnregisteredClientRepository unregisteredClientRepository,
                         VisitStatusRepository visitStatusRepository,
                         ServiceRepository serviceRepository,
                         RoomRepository roomRepository,
                         UserRepository userRepository,
                         EquipmentItemRepository itemRepository) {
         this.visitRepository = visitRepository;
-        this.accountlessClientRepository = accountlessClientRepository;
+        this.unregisteredClientRepository = unregisteredClientRepository;
         this.visitStatusRepository = visitStatusRepository;
         this.serviceRepository = serviceRepository;
         this.roomRepository = roomRepository;
@@ -73,9 +67,9 @@ public class VisitBuilder {
                 term.getEndTime(),
                 new UserVisit(worker, false));
 
-        AccountlessClient accountlessClient = accountlessClientRepository.findById(term.getClientId())
+        UnregisteredClient unregisteredClient = unregisteredClientRepository.findById(term.getClientId())
                 .orElseThrow(() -> new RuntimeException("Cannot find accountless client in db with id : " + term.getClientId()));
-        visit.setUnregisteredClient(accountlessClient);
+        visit.setUnregisteredClient(unregisteredClient);
         return visit;
     }
 

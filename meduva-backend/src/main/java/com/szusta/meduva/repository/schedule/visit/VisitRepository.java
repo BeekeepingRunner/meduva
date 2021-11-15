@@ -1,5 +1,6 @@
 package com.szusta.meduva.repository.schedule.visit;
 
+import com.szusta.meduva.model.UnregisteredClient;
 import com.szusta.meduva.model.schedule.visit.Visit;
 import com.szusta.meduva.repository.undeletable.UndeletableRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -27,4 +28,6 @@ public interface VisitRepository extends UndeletableRepository<Visit> {
                     + "ORDER BY v.time_from DESC "
     )
     List<Visit> findAllWhereUserIsWorker(long workerId);
+
+    List<Visit> findByUnregisteredClient(UnregisteredClient unregisteredClient);
 }
