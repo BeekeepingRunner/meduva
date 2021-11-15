@@ -22,6 +22,11 @@ export class ClientListComponent implements OnInit {
 
   isReceptionist: boolean = false;
 
+  allButtonColor: string = "";
+  registeredButtonColor: string = "";
+  unregisteredButtonColor: string = "";
+  yoursButtonColor: string = "";
+
   constructor(
     private roleGuardService: RoleGuardService,
     private userService: UserService,
@@ -34,17 +39,35 @@ export class ClientListComponent implements OnInit {
   ngOnInit(): void {
     this.currentUser = this.jwtTokenStorageService.getCurrentUser();
     this.isReceptionist = this.roleGuardService.hasCurrentUserExpectedRole(roleNames[UserRole.ROLE_RECEPTIONIST]);
+    this.onAllClick();
+  }
+
+  onAllClick() {
+    this.allButtonColor = "primary";
+    this.registeredButtonColor = "";
+    this.unregisteredButtonColor = "";
+    this.yoursButtonColor = "";
     this.getAllClients();
   }
 
   getAllClients(): void {
     this.clients = [];
-    this.userService.getAllUndeletedUsers().subscribe(
-      registeredClients => {
+    this.userService.getAllUndeletedUsers().subscribe(registeredClients => {
         registeredClients = this.deleteCurrentUser(registeredClients);
         this.combineWithUnregisteredClients(registeredClients);
       }
     );
+  }
+  private combineWithUnregisteredClients(registeredClients: User[]): void {
+    registeredClients.forEach(registeredClient => {
+      let client = trimJSON(registeredClient,
+        ["login", "password", "roles", "services"]);
+      this.clients.push(client);
+    });
+    this.clientService.getAllUnregisteredClients().subscribe(
+      unregisteredClients => {
+      this.clients = this.clients.concat(unregisteredClients);
+    });
   }
 
   private deleteCurrentUser(registeredClients: User[]): User[] {
@@ -52,16 +75,12 @@ export class ClientListComponent implements OnInit {
     return registeredClients.filter(client => client.id != currentUserId);
   }
 
-  private combineWithUnregisteredClients(registeredClients: User[]): void {
-
-    registeredClients.forEach(registeredClient => {
-      let client = trimJSON(registeredClient, ["login", "password", "roles", "services"]);
-      this.clients.push(client);
-    });
-
-    this.clientService.getAllUnregisteredClients().subscribe(unregisteredClients => {
-      this.clients = this.clients.concat(unregisteredClients);
-    });
+  onRegisteredClick() {
+    this.allButtonColor = "";
+    this.registeredButtonColor = "primary";
+    this.unregisteredButtonColor = "";
+    this.yoursButtonColor = "";
+    this.getAllRegisteredClients();
   }
 
   getAllRegisteredClients(): void {
@@ -73,15 +92,26 @@ export class ClientListComponent implements OnInit {
     )
   }
 
+  onUnregisteredClick() {
+    this.allButtonColor = "";
+    this.registeredButtonColor = "";
+    this.unregisteredButtonColor = "primary";
+    this.yoursButtonColor = "";
+    this.getAllUnregisteredClients();
+  }
+
   getAllUnregisteredClients(): void {
     this.clientService.getAllUnregisteredClients().subscribe(clients => {
       this.clients = clients;
     });
   }
 
-  pickClient(client: Client): void {
-    this.clientService.saveSelectedClient(client);
-    this.router.navigate(["client/details"]);
+  onYoursClick() {
+    this.allButtonColor = "";
+    this.registeredButtonColor = "";
+    this.unregisteredButtonColor = "";
+    this.yoursButtonColor = "primary";
+    this.getAllWorkerClients();
   }
 
   getAllWorkerClients(): void {
@@ -99,9 +129,14 @@ export class ClientListComponent implements OnInit {
         // @ts-ignore
         this.workerService.getAllUnregisteredClients(currentWorkerId).subscribe(
           unregisteredClients => {
-          this.clients = this.clients.concat(unregisteredClients);
-        });
+            this.clients = this.clients.concat(unregisteredClients);
+          });
       }
     )
+  }
+
+  pickClient(client: Client): void {
+    this.clientService.saveSelectedClient(client);
+    this.router.navigate(["client/details"]);
   }
 }

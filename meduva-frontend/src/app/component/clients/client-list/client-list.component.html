@@ -3,10 +3,10 @@
   <div class="table-container">
     <div class="table-topping">
       <div class="left-side">
-        <button mat-raised-button color="primary" (click)="getAllClients()">All</button>
-        <button mat-raised-button color="primary" (click)="getAllRegisteredClients()">Registered</button>
-        <button mat-raised-button color="primary" (click)="getAllUnregisteredClients()">Unregistered</button>
-        <button mat-raised-button color="primary" (click)="getAllWorkerClients()">Yours</button>
+        <button mat-raised-button [color]="allButtonColor" (click)="onAllClick()">All</button>
+        <button mat-raised-button [color]="registeredButtonColor" (click)="onRegisteredClick()">Registered</button>
+        <button mat-raised-button [color]="unregisteredButtonColor" (click)="onUnregisteredClick()">Unregistered</button>
+        <button mat-raised-button [color]="yoursButtonColor" (click)="onYoursClick()">Your Clients</button>
       </div>
       <div class="right-side">
       <button *ngIf="isReceptionist" class="add-button" mat-icon-button color="primary"
