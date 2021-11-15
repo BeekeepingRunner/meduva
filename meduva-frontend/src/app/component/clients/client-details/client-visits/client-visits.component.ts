@@ -14,6 +14,7 @@ export class ClientVisitsComponent implements OnInit {
   client!: Client;
 
   visits: Visit[] = [];
+  displayedColumns: string[] = ['date', 'hour', 'serviceName', 'worker', 'room', 'status'];
 
   constructor(
     private visitService: VisitService,
