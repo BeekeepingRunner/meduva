@@ -146,4 +146,7 @@ export class VisitService {
   getAllOfUnregisteredClient(clientId: number): Observable<any> {
     return this.httpClient.get(environment.API_BASE_URL + 'api/visit/all-of-unregistered-client/' + clientId);
   }
+  deleteAllOfUnregisteredClient(clientId: number): Observable<any> {
+    return this.httpClient.delete(environment.API_BASE_URL + 'api/visit/all-of-unregistered-client/' + clientId);
+  }
 }

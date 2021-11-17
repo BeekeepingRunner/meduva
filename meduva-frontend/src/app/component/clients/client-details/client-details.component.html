@@ -27,6 +27,7 @@
     <div *ngIf="!client.email">
       <br>
       <button mat-raised-button color="primary" [routerLink]="['/client/edit/' + client.id]">Edit</button>
+      <button mat-raised-button color="warn" (click)="openDeleteConfirmDialog()">Delete Client</button>
       <br>
       <br>
     </div>
@@ -34,7 +35,8 @@
 
   <br>
   <h5><strong>Visit history</strong></h5>
-  <app-client-visits [client]="client">
+  <app-client-visits [client]="client"
+                    (clientVisitsEmitter)="onClientVisitsGot($event)">
   </app-client-visits>
   <br>
 </div>
