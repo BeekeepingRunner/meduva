@@ -6,7 +6,11 @@ import {DayDialogComponent} from "../../dialog/day-dialog/day-dialog.component";
 import {User} from "../../../../model/user";
 import {UserService} from "../../../../service/user.service";
 import {ScheduleService, TimeRange, WeekBoundaries, WorkHours, WorkSchedule} from "../../../service/schedule.service";
-import {createAbsenceHoursEvent, createOffWorkHoursEvent} from "../../../util/event/creation";
+import {
+  createAbsenceHoursEvent,
+  createOffWorkHoursEvent,
+  createVisitsAsWorkerEvent
+} from "../../../util/event/creation";
 import {MatSnackBar} from "@angular/material/snack-bar";
 
 @Component({
@@ -101,10 +105,21 @@ export class WorkerScheduleComponent implements OnInit {
 
     this.scheduleService.getWeeklyVisitsAsWorker(this.worker.id, weekBoundaries).subscribe(
       /* possibly later change TimeRange on new interface (Visit?) */
-      (weeklyVisitsAsWorker: TimeRange[]) => {
+      (weeklyVisitsAsWorker: WorkSchedule[]) => {
         console.log(weeklyVisitsAsWorker);
+        this.updateVisitsAsWorkerEvents(weeklyVisitsAsWorker);
       }
     );
+  }
+
+  private updateVisitsAsWorkerEvents(weeklyVisitsAsWorker: WorkSchedule[]){
+    let newEvents = this.events;
+    this.events = [];
+    weeklyVisitsAsWorker.forEach(visitAsWorker => {
+      newEvents.push(
+          createVisitsAsWorkerEvent(visitAsWorker.timeFrom, visitAsWorker.timeTo));
+    });
+    this.events = [...newEvents];
   }
 
   private updateWorkHoursEvents(weeklyOffWorkHours: WorkHours[]) {
