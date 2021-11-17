@@ -51,3 +51,8 @@ button:focus, .btn-primary:focus {
 .alarm-info {
   color: red;
 }
+
+.custom-event span{
+  color: white;
+
+}
