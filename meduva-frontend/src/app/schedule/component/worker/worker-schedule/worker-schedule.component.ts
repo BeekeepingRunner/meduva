@@ -88,8 +88,23 @@ export class WorkerScheduleComponent implements OnInit {
       (weeklyAbsenceHours: WorkSchedule[]) => {
         console.log(weeklyAbsenceHours);
         this.updateAbsenceHoursEvents(weeklyAbsenceHours);
+        this.prepareWeeklyVisitsAsWorker();
       }
     );
+  }
+
+  private prepareWeeklyVisitsAsWorker(): void {
+    let weekBoundaries: WeekBoundaries = {
+      firstWeekDay: this.firstDayOfWeek,
+      lastWeekDay: this.lastDayOfWeek
+    };
+
+    this.scheduleService.getWeeklyVisitsAsWorker(this.worker.id, weekBoundaries).subscribe(
+      /* possibly later change TimeRange on new interface (Visit?) */
+      (weeklyVisitsAsWorker: TimeRange[]) => {
+        console.log(weeklyVisitsAsWorker);
+      }
+    )
   }
 
   private updateWorkHoursEvents(weeklyOffWorkHours: WorkHours[]) {
