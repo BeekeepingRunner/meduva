@@ -8,7 +8,7 @@ import {UserService} from "../../../../service/user.service";
 import {ScheduleService, TimeRange, WeekBoundaries, WorkHours, WorkSchedule} from "../../../service/schedule.service";
 import {
   createAbsenceHoursEvent,
-  createOffWorkHoursEvent,
+  createOffWorkHoursEvent, createVisitsAsClientEvent,
   createVisitsAsWorkerEvent
 } from "../../../util/event/creation";
 import {MatSnackBar} from "@angular/material/snack-bar";
@@ -104,10 +104,26 @@ export class WorkerScheduleComponent implements OnInit {
     };
 
     this.scheduleService.getWeeklyVisitsAsWorker(this.worker.id, weekBoundaries).subscribe(
-      /* possibly later change TimeRange on new interface (Visit?) */
+      /* possibly later change WorkSchedule on new interface (Visit?) */
       (weeklyVisitsAsWorker: WorkSchedule[]) => {
         console.log(weeklyVisitsAsWorker);
         this.updateVisitsAsWorkerEvents(weeklyVisitsAsWorker);
+        this.prepareWeeklyVisitsAsClient();
+      }
+    );
+  }
+
+  private prepareWeeklyVisitsAsClient(): void {
+    let weekBoundaries: WeekBoundaries = {
+      firstWeekDay: this.firstDayOfWeek,
+      lastWeekDay: this.lastDayOfWeek
+    };
+
+    this.scheduleService.getWeeklyVisitsAsClient(this.worker.id, weekBoundaries).subscribe(
+      /* possibly later change WorkSchedule on new interface (Visit?) */
+      (weeklyVisitsAsClient: WorkSchedule[]) => {
+        console.log(weeklyVisitsAsClient);
+        this.updateVisitsAsClientEvents(weeklyVisitsAsClient);
       }
     );
   }
@@ -118,6 +134,16 @@ export class WorkerScheduleComponent implements OnInit {
     weeklyVisitsAsWorker.forEach(visitAsWorker => {
       newEvents.push(
           createVisitsAsWorkerEvent(visitAsWorker.timeFrom, visitAsWorker.timeTo));
+    });
+    this.events = [...newEvents];
+  }
+
+  private updateVisitsAsClientEvents(weeklyVisitsAsClient: WorkSchedule[]) {
+    let newEvents = this.events;
+    this.events = [];
+    weeklyVisitsAsClient.forEach(visitAsWorker => {
+      newEvents.push(
+        createVisitsAsClientEvent(visitAsWorker.timeFrom, visitAsWorker.timeTo));
     });
     this.events = [...newEvents];
   }
@@ -223,5 +249,6 @@ export class WorkerScheduleComponent implements OnInit {
   eventClick($event: { event: CalendarEvent<any>; sourceEvent: any }) {
 
   }
+
 
 }

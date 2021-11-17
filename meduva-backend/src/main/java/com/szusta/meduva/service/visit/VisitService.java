@@ -155,12 +155,10 @@ public class VisitService {
     }
 
     public List<Visit> findAllWhereUserIsWorkerBetween(Long workerId, Date startTime, Date endTime) {
-        List<Visit> temp = visitRepository.findAllWhereUserIsWorkerBetween(workerId, startTime, endTime);
-
-            System.out.println(temp);
-        /*System.out.println(startTime);
-        System.out.println(endTime);*/
-
         return visitRepository.findAllWhereUserIsWorkerBetween(workerId, startTime, endTime);
+    }
+
+    public List<Visit> findAllWhereUserIsClientBetween(Long workerId, Date startTime, Date endTime) {
+        return visitRepository.findAllWhereUserIsClientBetween(workerId, startTime, endTime);
     }
 }

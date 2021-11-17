@@ -95,4 +95,11 @@ public class VisitController {
         Date endTime = TimeUtils.getDayEnd(weekBoundaries.getLastWeekDay());
         return visitService.findAllWhereUserIsWorkerBetween(workerId, startTime, endTime);
     }
+
+    @PostMapping("/get-week-visits-as-client/{workerId}")
+    public List<Visit> findAllWhereUserIsClientBetween(@PathVariable Long workerId, @RequestBody WeekBoundaries weekBoundaries) {
+        Date startTime = TimeUtils.getDayStart(weekBoundaries.getFirstWeekDay());
+        Date endTime = TimeUtils.getDayEnd(weekBoundaries.getLastWeekDay());
+        return visitService.findAllWhereUserIsClientBetween(workerId, startTime, endTime);
+    }
 }

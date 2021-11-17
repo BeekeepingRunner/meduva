@@ -57,6 +57,10 @@ export class ScheduleService {
     return this.httpClient.post(environment.API_BASE_URL + "api/visit/get-week-visits-as-worker/" + workerId, weekBoundaries );
   }
 
+  getWeeklyVisitsAsClient(workerId: number, weekBoundaries: WeekBoundaries): Observable<any> {
+    return this.httpClient.post(environment.API_BASE_URL + "api/visit/get-week-visits-as-client/" + workerId, weekBoundaries );
+  }
+
   getWeeklyItemUnavailability(itemId: number, weekBoundaries: WeekBoundaries): Observable<any> {
     return this.httpClient.post(environment.API_BASE_URL + 'api/equipment/item/get-weekly-unavailability/' + itemId, weekBoundaries);
   }
@@ -113,6 +117,7 @@ export class ScheduleService {
 
     return this.httpClient.delete(environment.API_BASE_URL + 'api/equipment/item/delete-day-unavailability/' + itemId, httpOptions);
   }
+
 
 
 }

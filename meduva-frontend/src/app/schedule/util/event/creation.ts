@@ -66,3 +66,20 @@ export function createVisitsAsWorkerEvent(start: Date, end: Date): CalendarEvent
     cssClass: "custom-event",
   };
 }
+
+export function createVisitsAsClientEvent(start: Date, end: Date): CalendarEvent {
+
+  return {
+    draggable: false,
+    end: new Date(end),
+    id: undefined,
+    meta: undefined,
+    start: new Date(start),
+    title: "Visit as client",
+    color: {
+      primary: "#4438e5",
+      secondary: "#4438e5"
+    },
+    cssClass: "custom-event",
+  };
+}
