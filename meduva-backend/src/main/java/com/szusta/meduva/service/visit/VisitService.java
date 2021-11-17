@@ -153,4 +153,14 @@ public class VisitService {
                 .orElseThrow(() -> new EntityRecordNotFoundException("Cannot find visits: unregistered client not found with id " + unregisteredClientId));
         return visitRepository.findByUnregisteredClient(unregisteredClient);
     }
+
+    public List<Visit> findAllWhereUserIsWorkerBetween(Long workerId, Date startTime, Date endTime) {
+        List<Visit> temp = visitRepository.findAllWhereUserIsWorkerBetween(workerId, startTime, endTime);
+
+            System.out.println(temp);
+        /*System.out.println(startTime);
+        System.out.println(endTime);*/
+
+        return visitRepository.findAllWhereUserIsWorkerBetween(workerId, startTime, endTime);
+    }
 }

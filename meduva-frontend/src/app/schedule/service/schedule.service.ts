@@ -54,10 +54,10 @@ export class ScheduleService {
   }
 
   getWeeklyVisitsAsWorker(workerId: number, weekBoundaries: WeekBoundaries): Observable<any> {
-    return this.httpClient.post(environment.API_BASE_URL + "api/worker/get-week-visits-as-worker/" + workerId, weekBoundaries );
+    return this.httpClient.post(environment.API_BASE_URL + "api/visit/get-week-visits-as-worker/" + workerId, weekBoundaries );
   }
 
-  getWeeklyItemUnavailability(itemId: number, weekBoundaries: TimeRange): Observable<any> {
+  getWeeklyItemUnavailability(itemId: number, weekBoundaries: WeekBoundaries): Observable<any> {
     return this.httpClient.post(environment.API_BASE_URL + 'api/equipment/item/get-weekly-unavailability/' + itemId, weekBoundaries);
   }
 

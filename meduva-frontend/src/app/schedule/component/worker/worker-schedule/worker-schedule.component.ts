@@ -104,7 +104,7 @@ export class WorkerScheduleComponent implements OnInit {
       (weeklyVisitsAsWorker: TimeRange[]) => {
         console.log(weeklyVisitsAsWorker);
       }
-    )
+    );
   }
 
   private updateWorkHoursEvents(weeklyOffWorkHours: WorkHours[]) {

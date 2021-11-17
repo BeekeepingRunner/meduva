@@ -4,10 +4,13 @@ import com.szusta.meduva.model.Service;
 import com.szusta.meduva.model.User;
 import com.szusta.meduva.model.schedule.visit.Visit;
 import com.szusta.meduva.payload.Term;
+import com.szusta.meduva.payload.TimeRange;
+import com.szusta.meduva.payload.WeekBoundaries;
 import com.szusta.meduva.service.ScheduleChecker;
 import com.szusta.meduva.service.ServicesService;
 import com.szusta.meduva.service.user.UserService;
 import com.szusta.meduva.service.visit.VisitService;
+import com.szusta.meduva.util.TimeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -84,5 +87,12 @@ public class VisitController {
     @GetMapping("/all-of-unregistered-client/{unregisteredClientId}")
     public List<Visit> findAllOfUnregisteredClient(@PathVariable Long unregisteredClientId) {
         return visitService.findAllOfUnregisteredClient(unregisteredClientId);
+    }
+
+    @PostMapping("/get-week-visits-as-worker/{workerId}")
+    public List<Visit> findAllWhereUserIsWorkerBetween(@PathVariable Long workerId, @RequestBody WeekBoundaries weekBoundaries) {
+        Date startTime = TimeUtils.getDayStart(weekBoundaries.getFirstWeekDay());
+        Date endTime = TimeUtils.getDayEnd(weekBoundaries.getLastWeekDay());
+        return visitService.findAllWhereUserIsWorkerBetween(workerId, startTime, endTime);
     }
 }

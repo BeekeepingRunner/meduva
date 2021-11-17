@@ -41,16 +41,16 @@ public interface VisitRepository extends UndeletableRepository<Visit> {
                     + " AND timestampdiff(MINUTE, time_from, ?2) <= 0 AND timestampdiff(MINUTE, time_to, ?3) >= 0 "
                     + " ORDER BY v.time_to asc "
     )
-    List<Visit> findAllWhereUserIsClientBetween(Long clientId, Date startTime, Date endTime);
+    List<Visit> findAllWhereUserIsWorkerBetween(Long clientId, Date startTime, Date endTime);
 
     @Query(
             nativeQuery = true,
             value = "SELECT v.id, v.name, v.time_from, v.time_to, v.description, v.paid, "
-                    + "v.deleted, v.visit_status_id, v.service_id, v.room_id, v.unregistered_client_id  FROM visit v"
-                    + " INNER JOIN user_visit uv ON visit_id = v.id "
-                    + " WHERE as_client = 1 AND uv.user_id = ?1 "
-                    + " AND timestampdiff(MINUTE, time_from, ?2) <= 0 AND timestampdiff(MINUTE, time_to, ?3) >= 0 "
-                    + " ORDER BY v.time_to asc "
+                    + "v.deleted, v.visit_status_id, v.service_id, v.room_id, v.unregistered_client_id FROM visit v "
+                    + "INNER JOIN user_visit uv ON visit_id = v.id "
+                    + "WHERE as_client = 1 AND uv.user_id = ?1 "
+                    + "AND timestampdiff(MINUTE, time_from, ?2) <= 0 AND timestampdiff(MINUTE, time_to, ?3) >= 0 "
+                    + "ORDER BY v.time_to asc "
     )
-    List<Visit> findAllWhereUserIsWorkerBetween(Long workerId, Date startTime, Date endTime);
+    List<Visit> findAllWhereUserIsClientBetween(Long workerId, Date startTime, Date endTime);
 }
