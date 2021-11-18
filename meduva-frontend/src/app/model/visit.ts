@@ -15,6 +15,7 @@ export interface Visit {
   unregisteredClient: Client,
   room: Room,
   eqItems: EquipmentItem[],
+  paid: boolean,
 }
 
 export interface UserVisit {

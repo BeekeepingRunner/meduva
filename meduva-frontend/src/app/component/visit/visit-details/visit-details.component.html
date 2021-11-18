@@ -52,21 +52,36 @@
   <tr>
     <td><b>Status: </b></td>
     <td>
-        <span *ngIf="visit.visitStatus.name == 'VISIT_BOOKED'">
-          <span style="color: grey">
-            {{ visit.visitStatus.name | lowercase | slice : 6 }}
-          </span>
+      <span *ngIf="visit.visitStatus.name == 'VISIT_BOOKED'">
+        <span style="color: grey">
+          {{ visit.visitStatus.name | lowercase | slice : 6 }}
         </span>
+      </span>
       <span *ngIf="visit.visitStatus.name == 'VISIT_DONE'">
-          <span style="color: green">
-            {{ visit.visitStatus.name | lowercase | slice : 6 }}
-          </span>
+        <span style="color: green">
+          {{ visit.visitStatus.name | lowercase | slice : 6 }}
         </span>
+      </span>
       <span *ngIf="visit.visitStatus.name == 'VISIT_CANCELLED'">
-          <span style="color: red">
-            {{ visit.visitStatus.name | lowercase | slice : 6 }}
-          </span>
+        <span style="color: red">
+          {{ visit.visitStatus.name | lowercase | slice : 6 }}
         </span>
+      </span>
+    </td>
+  </tr>
+  <tr>
+    <td><b>Paid: </b></td>
+    <td>
+      <span *ngIf="visit.paid == false">
+        <span style="color: red">
+          NO
+        </span>
+      </span>
+      <span *ngIf="visit.paid == true">
+        <span style="color: green">
+          YES
+        </span>
+      </span>
     </td>
   </tr>
 </table>
