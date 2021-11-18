@@ -8,6 +8,7 @@ import {Router} from "@angular/router";
 import {EquipmentModel} from "../../../model/equipment";
 import {Visit} from "../../../model/visit";
 import {ConfirmationWithWarningDialogComponent} from "../../dialog/confirmation-with-warning-dialog/confirmation-with-warning-dialog.component";
+import {VisitService} from "../../../service/visit.service";
 
 @Component({
   selector: 'app-client-details',
@@ -21,6 +22,7 @@ export class ClientDetailsComponent implements OnInit {
 
   constructor(
     private clientService: ClientService,
+    private visitService: VisitService,
     private dialog: MatDialog,
     private router: Router,
   ) { }
@@ -37,6 +39,7 @@ export class ClientDetailsComponent implements OnInit {
   }
 
   private deleteClient() {
+    this.visitService.deleteAllOfUnregisteredClient(this.client.id).subscribe();
     this.clientService.deleteById(this.client.id).subscribe(
       ifSuccess => {
         this.openFeedbackDialog();

@@ -85,4 +85,8 @@ public class VisitController {
     public List<Visit> findAllOfUnregisteredClient(@PathVariable Long unregisteredClientId) {
         return visitService.findAllOfUnregisteredClient(unregisteredClientId);
     }
+    @DeleteMapping("/all-of-unregistered-client/{unregisteredClientId}")
+    public void deleteAllOfUnregisteredClient(@PathVariable Long unregisteredClientId) {
+       visitService.deleteAllOfUnregisteredClient(unregisteredClientId);
+    }
 }

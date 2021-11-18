@@ -15,6 +15,7 @@ import com.szusta.meduva.service.freetimescanner.FreeTimeScanner;
 import com.szusta.meduva.service.freetimescanner.NotAvailableException;
 import com.szusta.meduva.util.TimeUtils;
 
+import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
 import java.time.ZoneId;
 import java.util.*;
@@ -152,5 +153,20 @@ public class VisitService {
         UnregisteredClient unregisteredClient = unregisteredClientRepository.findById(unregisteredClientId)
                 .orElseThrow(() -> new EntityRecordNotFoundException("Cannot find visits: unregistered client not found with id " + unregisteredClientId));
         return visitRepository.findByUnregisteredClient(unregisteredClient);
+    }
+
+    @Transactional
+    public void markAsDeleted(Long visitId) {
+        Visit visit = visitRepository.findById(visitId)
+                .orElseThrow(() -> new EntityNotFoundException("Visit not found with id : " + visitId));
+        visit.markAsDeleted();
+        visitRepository.save(visit);
+    }
+
+    public void deleteAllOfUnregisteredClient(Long unregisteredClientId) {
+        List<Visit> unregisteredClientVisits = findAllOfUnregisteredClient(unregisteredClientId);
+        for (Visit visit:unregisteredClientVisits) {
+            markAsDeleted(visit.getId());
+        }
     }
 }
