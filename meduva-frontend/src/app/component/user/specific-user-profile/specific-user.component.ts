@@ -7,6 +7,10 @@ import {MatDialog} from "@angular/material/dialog";
 import {FeedbackDialogComponent} from "../../dialog/feedback-dialog/feedback-dialog.component";
 import {Service} from "../../../model/service";
 import {JwtStorageService} from "../../../service/token/jwt-storage.service";
+import {ConfirmationWithWarningDialogComponent} from "../../dialog/confirmation-with-warning-dialog/confirmation-with-warning-dialog.component";
+import {Visit} from "../../../model/visit";
+import {Client} from "../../../model/client";
+import {VisitService} from "../../../service/visit.service";
 
 @Component({
   selector: 'app-specific-user',
@@ -22,9 +26,12 @@ export class SpecificUserComponent implements OnInit {
   workerServices!: Service[];
   columnName: string[] = ['Name'];
   error!: string;
+  userVisits: Visit[] = [];
+  clientDetails!: Client;
 
   constructor(
     private userService: UserService,
+    private visitService: VisitService,
     private activatedRoute: ActivatedRoute,
     public dialog: MatDialog,
     private router: Router,
@@ -41,6 +48,11 @@ export class SpecificUserComponent implements OnInit {
 
   }
 
+  onUserVisitsGot($event: Visit[]){
+    this.userVisits = $event;
+  }
+
+
   private getUserDetails(userId: number): void {
 
     this.userService.getUserDetails(userId).subscribe(
@@ -56,7 +68,6 @@ export class SpecificUserComponent implements OnInit {
   }
 
   getWorkerSerivces(){
-
     this.userService.getWorkerServices(this.userId).subscribe(
       services => {
         this.workerServices = services;
@@ -76,24 +87,41 @@ export class SpecificUserComponent implements OnInit {
     }
     else{
       const confirmDialogRef = this.dialog.open(ConfirmationDialogComponent, {
-        data: { message: 'Do you want to delete this user?' }
+        data: { message: 'Are u sure you want to delete this user?' }
       });
 
       confirmDialogRef.afterClosed().subscribe(confirmed => {
         if (confirmed) {
-          this.deleteUser();
+          if(this.userVisits.length>0){
+            this.openDeleteWarningDialog();
+          }
+          else{
+            this.deleteUser();
+          }
         }
       });
     }
   }
 
   deleteUser() {
+
     this.userService.deleteById(this.userId).subscribe(
       ifSuccess => {
         this.openFeedbackDialog();
       }
 
     );
+  }
+  openDeleteWarningDialog(): void {
+    const warningConfirmDialogRef = this.dialog.open(ConfirmationWithWarningDialogComponent, {
+      data: { message: 'The customer has visits, if you delete him, you will also delete the visits to which he is assigned!' }
+    });
+
+    warningConfirmDialogRef.afterClosed().subscribe(confirmed => {
+      if (confirmed) {
+        this.deleteUser();
+      }
+    });
   }
 
   private openFeedbackDialog() {
