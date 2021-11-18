@@ -37,11 +37,9 @@ public class VisitController {
         this.scheduleChecker = scheduleChecker;
     }
 
-    @GetMapping("/terms-for-service/{serviceId}")
-    public List<Term> getCurrentWorkerTermsForService(@PathVariable Long serviceId) {
-        User worker = userService.findById(userService.getCurrentUserId());
-        Service service = servicesService.findById(serviceId);
-        return visitService.getTermsForWorker(worker, service);
+    @GetMapping("/{visitId}")
+    public Visit findById(@PathVariable Long visitId) {
+        return visitService.findById(visitId);
     }
 
     @GetMapping("/get-worker-available-days-in-month")

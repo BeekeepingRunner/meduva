@@ -10,13 +10,11 @@ import com.szusta.meduva.payload.Term;
 import com.szusta.meduva.repository.RoomRepository;
 import com.szusta.meduva.repository.UnregisteredClientRepository;
 import com.szusta.meduva.repository.schedule.visit.VisitRepository;
-import com.szusta.meduva.service.TermGenerator;
 import com.szusta.meduva.service.freetimescanner.FreeTimeScanner;
 import com.szusta.meduva.service.freetimescanner.NotAvailableException;
 import com.szusta.meduva.util.TimeUtils;
 
 import javax.transaction.Transactional;
-import java.time.ZoneId;
 import java.util.*;
 
 @org.springframework.stereotype.Service
@@ -28,7 +26,6 @@ public class VisitService {
     private RoomRepository roomRepository;
     private UnregisteredClientRepository unregisteredClientRepository;
 
-    private TermGenerator termGenerator;
     private VisitScheduleGenerator visitScheduleGenerator;
 
     private FreeTimeScanner freeTimeScanner;
@@ -37,43 +34,19 @@ public class VisitService {
                         VisitBuilder visitBuilder,
                         RoomRepository roomRepository,
                         UnregisteredClientRepository unregisteredClientRepository,
-                        TermGenerator termGenerator,
                         VisitScheduleGenerator visitScheduleGenerator,
                         FreeTimeScanner freeTimeScanner) {
         this.visitRepository = visitRepository;
         this.visitBuilder = visitBuilder;
         this.roomRepository = roomRepository;
         this.unregisteredClientRepository = unregisteredClientRepository;
-        this.termGenerator = termGenerator;
         this.visitScheduleGenerator = visitScheduleGenerator;
         this.freeTimeScanner = freeTimeScanner;
     }
 
-    // Checks subsequent time-intervals in range of several days, starting from now.
-    // Returns empty list if there are no available Terms.
-    public List<Term> getTermsForWorker(User worker, Service service) {
-
-        List<Room> suitableRooms = roomRepository.findAllSuitableForService(service.getId());
-        if (suitableRooms.isEmpty()) {
-            return Collections.emptyList();
-        }
-
-        Calendar now = Calendar.getInstance(TimeZone.getTimeZone(ZoneId.systemDefault()));
-        Calendar currentlyCheckedTime = TimeUtils.roundToNextHalfHour(now);
-
-        // check subsequent terms starting from now
-        List<Term> possibleTerms = new ArrayList<>();
-        do {
-            Optional<Term> term = termGenerator.getTermForWorker(worker, service, suitableRooms, currentlyCheckedTime);
-            term.ifPresent(possibleTerms::add);
-
-            // proceed to the next interval
-            // TODO: move forward until its worker work time
-            currentlyCheckedTime.add(Calendar.MINUTE, TimeUtils.MINUTE_OFFSET);
-
-        } while (!TimeUtils.isNDaysBetween(now, currentlyCheckedTime, 30));
-
-        return possibleTerms;
+    public Visit findById(Long visitId) {
+        return visitRepository.findById(visitId)
+                .orElseThrow(() -> new EntityRecordNotFoundException("Visit not found with id " + visitId));
     }
 
     public List<Date> getWorkerAvailableDaysOfMonth(User worker,
