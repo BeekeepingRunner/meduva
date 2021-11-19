@@ -1,87 +1,104 @@
 <h3>Visit details</h3>
 
-<table>
-  <tr>
-    <td><b>Start time: </b></td>
-    <td>{{ visit?.timeFrom | date: 'dd/MM/yyyy HH:mm' }}</td>
-  </tr>
-  <tr>
-    <td><b>End time: </b></td>
-    <td>{{ visit?.timeTo | date: 'dd/MM/yyyy HH:mm' }}</td>
-  </tr>
-  <ng-container *ngIf="visit?.userVisits">
-    <ng-container *ngFor="let userVisit of visit.userVisits">
-      <tr *ngIf="userVisit.asClient == false">
-        <td><b>Worker: </b></td>
-        <td>
-          {{ userVisit.user.name + ' ' + userVisit.user.surname + ' (' + userVisit.user.email + ')' + ' (' + userVisit.user.phoneNumber + ')' }}
-        </td>
-      </tr>
-      <tr *ngIf="userVisit.asClient == true">
-        <td><b>Client: </b></td>
-        <td>
-          <div>
+<div class="mat-elevation-z8 table-section">
+  <table>
+    <span class="section-label">Time</span>
+    <tr>
+      <td><b>Starts: </b></td>
+      <td>{{ visit?.timeFrom | date: 'dd/MM/yyyy - HH:mm' }}</td>
+    </tr>
+    <tr>
+      <td><b>Ends: </b></td>
+      <td>{{ visit?.timeTo | date: 'dd/MM/yyyy - HH:mm' }}</td>
+    </tr>
+  </table>
+</div>
+<div class="mat-elevation-z8 table-section">
+  <table>
+    <span class="section-label">Participants</span>
+    <ng-container *ngIf="visit?.userVisits">
+      <ng-container *ngFor="let userVisit of visit.userVisits">
+        <tr *ngIf="userVisit.asClient == false">
+          <td><b>Worker: </b></td>
+          <td>
             {{ userVisit.user.name + ' ' + userVisit.user.surname + ' (' + userVisit.user.email + ')' + ' (' + userVisit.user.phoneNumber + ')' }}
-          </div>
-        </td>
-      </tr>
+          </td>
+        </tr>
+        <tr *ngIf="userVisit.asClient == true">
+          <td><b>Client: </b></td>
+          <td>
+            <div>
+              {{ userVisit.user.name + ' ' + userVisit.user.surname + ' (' + userVisit.user.email + ')' + ' (' + userVisit.user.phoneNumber + ')' }}
+            </div>
+          </td>
+        </tr>
+      </ng-container>
     </ng-container>
-  </ng-container>
-  <tr *ngIf="visit?.unregisteredClient">
-    <td><b>Client: </b></td>
-    <td>
+    <tr *ngIf="visit?.unregisteredClient">
+      <td><b>Client: </b></td>
+      <td>
         {{ visit.unregisteredClient.name + ' ' + visit.unregisteredClient.surname + ' (' + visit.unregisteredClient.phoneNumber + ')' }}
-    </td>
-  </tr>
-  <tr>
-    <td><b>Service: </b></td>
-    <td>{{ visit?.service?.name }}</td>
-  </tr>
-  <tr>
-    <td><b>Room: </b></td>
-    <td>{{ visit?.room?.name }}</td>
-  </tr>
-  <tr>
-    <td><b>Equipment items: </b></td>
-    <td>
-      <div *ngFor="let eqItem of visit?.eqItems">
-        {{ eqItem?.name }}
-      </div>
-    </td>
-  </tr>
-  <tr>
-    <td><b>Status: </b></td>
-    <td>
-      <span *ngIf="visit.visitStatus.name == 'VISIT_BOOKED'">
-        <span style="color: grey">
-          {{ visit.visitStatus.name | lowercase | slice : 6 }}
+      </td>
+    </tr>
+  </table>
+</div>
+<div class="mat-elevation-z8 table-section">
+  <span class="section-label">Details</span>
+  <table>
+    <tr>
+      <td><b>Service: </b></td>
+      <td>{{ visit?.service?.name }}</td>
+    </tr>
+    <tr>
+      <td><b>Room: </b></td>
+      <td>{{ visit?.room?.name }}</td>
+    </tr>
+    <tr>
+      <td><b>Equipment items: </b></td>
+      <td>
+        <div *ngFor="let eqItem of visit?.eqItems">
+          {{ eqItem?.name }}
+        </div>
+      </td>
+    </tr>
+  </table>
+</div>
+<div class="mat-elevation-z8 table-section">
+  <table>
+    <tr>
+      <td><b>Status: </b></td>
+      <td>
+        <span *ngIf="visit.visitStatus.name == 'VISIT_BOOKED'">
+          <span style="color: grey">
+            {{ visit.visitStatus.name | lowercase | slice : 6 }}
+          </span>
         </span>
-      </span>
-      <span *ngIf="visit.visitStatus.name == 'VISIT_DONE'">
-        <span style="color: green">
-          {{ visit.visitStatus.name | lowercase | slice : 6 }}
+        <span *ngIf="visit.visitStatus.name == 'VISIT_DONE'">
+          <span style="color: green">
+            {{ visit.visitStatus.name | lowercase | slice : 6 }}
+          </span>
         </span>
-      </span>
-      <span *ngIf="visit.visitStatus.name == 'VISIT_CANCELLED'">
-        <span style="color: red">
-          {{ visit.visitStatus.name | lowercase | slice : 6 }}
+        <span *ngIf="visit.visitStatus.name == 'VISIT_CANCELLED'">
+          <span style="color: red">
+            {{ visit.visitStatus.name | lowercase | slice : 6 }}
+          </span>
         </span>
-      </span>
-    </td>
-  </tr>
-  <tr>
-    <td><b>Paid: </b></td>
-    <td>
-      <span *ngIf="visit.paid == false">
-        <span style="color: red">
-          NO
+      </td>
+    </tr>
+    <tr>
+      <td><b>Paid: </b></td>
+      <td>
+        <span *ngIf="visit.paid == false">
+          <span style="color: red">
+            NO
+          </span>
         </span>
-      </span>
-      <span *ngIf="visit.paid == true">
-        <span style="color: green">
-          YES
+        <span *ngIf="visit.paid == true">
+          <span style="color: green">
+            YES
+          </span>
         </span>
-      </span>
-    </td>
-  </tr>
-</table>
+      </td>
+    </tr>
+  </table>
+</div>

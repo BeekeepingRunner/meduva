@@ -1,0 +1,10 @@
+.table-section {
+  border-radius: 10px;
+  padding: 10px;
+  margin: 5px;
+}
+
+.section-label {
+  color: gray;
+  font-size: small;
+}
