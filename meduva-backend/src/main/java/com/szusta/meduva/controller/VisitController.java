@@ -83,4 +83,22 @@ public class VisitController {
     public List<Visit> findAllOfUnregisteredClient(@PathVariable Long unregisteredClientId) {
         return visitService.findAllOfUnregisteredClient(unregisteredClientId);
     }
+
+    @PutMapping("/{visitId}/mark-as-done")
+    public Visit markVisitAsDone(@PathVariable Long visitId) {
+        Visit visit = visitService.findById(visitId);
+        return visitService.markAsDone(visit);
+    }
+
+    @PutMapping("/{visitId}/mark-as-paid")
+    public Visit markVisitAsPaid(@PathVariable Long visitId) {
+        Visit visit = visitService.findById(visitId);
+        return visitService.markAsPaid(visit);
+    }
+
+    @PutMapping("/{visitId}/cancel")
+    public Visit cancelVisit(@PathVariable Long visitId) {
+        Visit visit = visitService.findById(visitId);
+        return visitService.cancel(visit);
+    }
 }

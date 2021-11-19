@@ -1,7 +1,9 @@
 package com.szusta.meduva.service.visit;
 
 import com.szusta.meduva.exception.EntityRecordNotFoundException;
+import com.szusta.meduva.model.Room;
 import com.szusta.meduva.model.User;
+import com.szusta.meduva.model.equipment.EquipmentItem;
 import com.szusta.meduva.model.role.ERole;
 import com.szusta.meduva.model.role.Role;
 import com.szusta.meduva.model.schedule.EquipmentSchedule;
@@ -20,17 +22,17 @@ import com.szusta.meduva.repository.schedule.equipment.EquipmentScheduleReposito
 import com.szusta.meduva.repository.schedule.equipment.EquipmentStatusRepository;
 import com.szusta.meduva.repository.schedule.room.RoomScheduleRepository;
 import com.szusta.meduva.repository.schedule.room.RoomStatusRepository;
-import com.szusta.meduva.repository.schedule.visit.UserVisitRepository;
 import com.szusta.meduva.repository.schedule.worker.WorkerScheduleRepository;
 import com.szusta.meduva.repository.schedule.worker.WorkerStatusRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
 @Component
-public class VisitScheduleGenerator {
+public class ScheduleManager {
 
     private RoomStatusRepository roomStatusRepository;
     private WorkerStatusRepository workerStatusRepository;
@@ -41,17 +43,15 @@ public class VisitScheduleGenerator {
     private EquipmentScheduleRepository equipmentScheduleRepository;
 
     private RoleRepository roleRepository;
-    private UserVisitRepository userVisitRepository;
 
     @Autowired
-    public VisitScheduleGenerator(RoomStatusRepository roomStatusRepository,
-                                  WorkerStatusRepository workerStatusRepository,
-                                  EquipmentStatusRepository equipmentStatusRepository,
-                                  RoomScheduleRepository roomScheduleRepository,
-                                  WorkerScheduleRepository workerScheduleRepository,
-                                  EquipmentScheduleRepository equipmentScheduleRepository,
-                                  RoleRepository roleRepository,
-                                  UserVisitRepository userVisitRepository) {
+    public ScheduleManager(RoomStatusRepository roomStatusRepository,
+                           WorkerStatusRepository workerStatusRepository,
+                           EquipmentStatusRepository equipmentStatusRepository,
+                           RoomScheduleRepository roomScheduleRepository,
+                           WorkerScheduleRepository workerScheduleRepository,
+                           EquipmentScheduleRepository equipmentScheduleRepository,
+                           RoleRepository roleRepository) {
         this.roomStatusRepository = roomStatusRepository;
         this.workerStatusRepository = workerStatusRepository;
         this.equipmentStatusRepository = equipmentStatusRepository;
@@ -59,10 +59,9 @@ public class VisitScheduleGenerator {
         this.workerScheduleRepository = workerScheduleRepository;
         this.equipmentScheduleRepository = equipmentScheduleRepository;
         this.roleRepository = roleRepository;
-        this.userVisitRepository = userVisitRepository;
     }
 
-    public void generateVisitSchedules(Visit visit) {
+    public void generateSchedules(Visit visit) {
 
         generateRoomSchedule(visit);
         generateWorkerSchedule(visit);
@@ -80,28 +79,13 @@ public class VisitScheduleGenerator {
     }
 
     private void generateWorkerSchedule(Visit visit) {
-        List<UserVisit> userVisits = visit.getUserVisits();
-        for (UserVisit userVisit : userVisits) {
-            if (!userVisit.isAsClient()) {
-                User worker = userVisit.getUser();
-                saveWorkerSchedule(worker, visit);
-            } else {
-                User maybeWorkerAnyway = userVisit.getUser();
-                Set<Role> userRoles = maybeWorkerAnyway.getRoles();
-                Role workerRole = roleRepository.findById(ERole.ROLE_WORKER.getValue())
-                        .orElseThrow(() -> new EntityRecordNotFoundException("Role not found in DB with id : " + ERole.ROLE_WORKER.getValue()));
-                if (userRoles.contains(workerRole)) {
-                    saveWorkerSchedule(maybeWorkerAnyway, visit);
-                }
-            }
+        List<User> workers = getWorkers(visit);
+        WorkerStatus occupied = workerStatusRepository.getById(EWorkerStatus.WORKER_OCCUPIED.getValue());
+        for (User worker : workers) {
+            WorkerSchedule workerSchedule = new WorkerSchedule(worker, visit.getTimeFrom(), visit.getTimeTo());
+            workerSchedule.setWorkerStatus(occupied);
+            workerScheduleRepository.save(workerSchedule);
         }
-    }
-
-    private void saveWorkerSchedule(User worker, Visit visit) {
-        WorkerStatus workerOccupied = workerStatusRepository.getById(EWorkerStatus.WORKER_OCCUPIED.getValue());
-        WorkerSchedule workerSchedule = new WorkerSchedule(worker, visit.getTimeFrom(), visit.getTimeTo());
-        workerSchedule.setWorkerStatus(workerOccupied);
-        workerScheduleRepository.save(workerSchedule);
     }
 
     private void generateEquipmentSchedule(Visit visit) {
@@ -109,5 +93,47 @@ public class VisitScheduleGenerator {
         EquipmentStatus equipmentOccupied = equipmentStatusRepository.getById(EEquipmentStatus.EQUIPMENT_OCCUPIED.getValue());
         equipmentSchedule.setEquipmentStatus(equipmentOccupied);
         equipmentScheduleRepository.save(equipmentSchedule);
+    }
+
+    public void freeSchedules(Visit visit) {
+        freeWorkerSchedules(visit);
+        freeRoomSchedule(visit);
+        freeEquipmentSchedules(visit);
+    }
+
+    private void freeWorkerSchedules(Visit visit) {
+        List<User> workers = getWorkers(visit);
+        for (User user : workers) {
+            workerScheduleRepository.deleteByWorkerIdBetween(user.getId(), visit.getTimeFrom(), visit.getTimeTo());
+        }
+    }
+
+    private List<User> getWorkers(Visit visit) {
+        List<User> workers = new ArrayList<>();
+
+        List<UserVisit> userVisits = visit.getUserVisits();
+        for (UserVisit userVisit : userVisits) {
+            User user = userVisit.getUser();
+            Set<Role> userRoles = user.getRoles();
+            Role workerRole = roleRepository.findById(ERole.ROLE_WORKER.getValue())
+                    .orElseThrow(() -> new EntityRecordNotFoundException("Role not found in DB with id : " + ERole.ROLE_WORKER.getValue()));
+            if (userRoles.contains(workerRole)) {
+                workers.add(user);
+            }
+        }
+        return workers;
+    }
+
+    private void freeRoomSchedule(Visit visit) {
+        Room room = visit.getRoom();
+        roomScheduleRepository.deleteByRoomIdBetween(room.getId(), visit.getTimeFrom(), visit.getTimeTo());
+    }
+
+    private void freeEquipmentSchedules(Visit visit) {
+        List<EquipmentItem> equipmentItems = visit.getEqItems();
+        for (EquipmentItem item : equipmentItems) {
+            System.out.println(item.getId());
+            equipmentScheduleRepository.deleteByEqItemIdWithStartTime(item.getId(), visit.getTimeFrom());
+        }
     }
 }

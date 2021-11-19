@@ -8,3 +8,11 @@
   color: gray;
   font-size: small;
 }
+
+.title-col {
+  margin-right: 10px;
+}
+
+button {
+  margin-left: 10px;
+}

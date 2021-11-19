@@ -25,7 +25,6 @@ public class ScheduleChecker {
     private EquipmentScheduleRepository equipmentScheduleRepository;
     private RoomScheduleRepository roomScheduleRepository;
     private WorkerScheduleRepository workerScheduleRepository;
-    private WorkHoursRepository workHoursRepository;
 
     @Autowired
     public ScheduleChecker(EquipmentScheduleRepository equipmentScheduleRepository,
@@ -35,7 +34,6 @@ public class ScheduleChecker {
         this.equipmentScheduleRepository = equipmentScheduleRepository;
         this.roomScheduleRepository = roomScheduleRepository;
         this.workerScheduleRepository = workerScheduleRepository;
-        this.workHoursRepository = workHoursRepository;
     }
 
     public boolean isWorkerFree(TimeRange timeRange, User worker) {

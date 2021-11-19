@@ -36,4 +36,37 @@ export class VisitDetailsComponent implements OnInit {
       }
     );
   }
+
+  markAsDone() {
+    this.visitService.markVisitAsDone(this.visit.id).subscribe(
+      doneVisit => {
+        this.visit = doneVisit;
+        console.log(doneVisit);
+      }, err => {
+        console.log(err);
+      }
+    );
+  }
+
+  cancelVisit() {
+    this.visitService.cancelVisit(this.visit.id).subscribe(
+        cancelledVisit => {
+          this.visit = cancelledVisit;
+          console.log(cancelledVisit);
+        }, err => {
+          console.log(err);
+        }
+    );;
+  }
+
+  markAsPaid() {
+    this.visitService.markVisitAsPaid(this.visit.id).subscribe(
+        paidVisit => {
+          this.visit = paidVisit;
+          console.log(paidVisit);
+        }, err => {
+          console.log(err);
+        }
+    );;
+  }
 }

@@ -150,4 +150,16 @@ export class VisitService {
   getVisitById(visitId: any): Observable<any> {
     return this.httpClient.get(environment.API_BASE_URL + 'api/visit/' + visitId);
   }
+
+  markVisitAsDone(visitId: any): Observable<any> {
+    return this.httpClient.put(environment.API_BASE_URL + 'api/visit/' + visitId + '/mark-as-done', {});
+  }
+
+  cancelVisit(visitId: any): Observable<any> {
+    return this.httpClient.put(environment.API_BASE_URL + 'api/visit/' + visitId + '/cancel', {});
+  }
+
+  markVisitAsPaid(visitId: any): Observable<any> {
+    return this.httpClient.put(environment.API_BASE_URL + 'api/visit/' + visitId + '/mark-as-paid', {});
+  }
 }
