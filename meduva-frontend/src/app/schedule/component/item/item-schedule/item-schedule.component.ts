@@ -6,7 +6,7 @@ import {EquipmentItem} from "../../../../model/equipment";
 import {EquipmentService} from "../../../../service/equipment.service";
 import {ScheduleService, TimeRange, WeekBoundaries, WorkSchedule} from "../../../service/schedule.service";
 import {ItemDayDialogComponent, UnavailabilityOptions} from "../../dialog/item-day-dialog/item-day-dialog.component";
-import {createUnavailabilityEvent} from "../../../util/event/creation";
+import {createUnavailabilityEvent, createVisitEvent} from "../../../util/event/creation";
 import {MatSnackBar} from "@angular/material/snack-bar";
 
 @Component({
@@ -96,9 +96,20 @@ export class ItemScheduleComponent implements OnInit {
 
     this.scheduleService.getWeeklyItemVisits(this.item.id, weekBoundaries).subscribe(
       (weeklyItemVisits: WorkSchedule[]) => {
-        console.log(weeklyItemVisits);
+        this.pushVisits(weeklyItemVisits);
       }
     );
+  }
+
+  private pushVisits(weeklyItemVisits: WorkSchedule[]) {
+    let newEvents = this.events;
+    weeklyItemVisits.forEach(visit => {
+      newEvents.push(
+        createVisitEvent(visit.timeFrom, visit.timeTo)
+      );
+    });
+    this.events = [];
+    this.events = [...newEvents];
   }
 
   openDayDialog(date: Date) {

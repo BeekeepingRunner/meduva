@@ -84,7 +84,7 @@ export function createVisitsAsClientEvent(start: Date, end: Date): CalendarEvent
   };
 }
 
-export function createRoomVisitEvent(start: Date, end: Date): CalendarEvent {
+export function createVisitEvent(start: Date, end: Date): CalendarEvent {
   return {
     draggable: false,
     end: new Date(end),

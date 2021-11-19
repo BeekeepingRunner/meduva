@@ -6,7 +6,7 @@ import {MatDialog} from "@angular/material/dialog";
 import {RoomService} from "../../../../service/room.service";
 import {ItemDayDialogComponent, UnavailabilityOptions} from "../../dialog/item-day-dialog/item-day-dialog.component";
 import {ScheduleService, TimeRange, WeekBoundaries, WorkSchedule} from "../../../service/schedule.service";
-import {createRoomVisitEvent, createUnavailabilityEvent} from "../../../util/event/creation";
+import {createVisitEvent, createUnavailabilityEvent} from "../../../util/event/creation";
 import {MatSnackBar} from "@angular/material/snack-bar";
 
 @Component({
@@ -97,7 +97,7 @@ export class RoomScheduleComponent implements OnInit {
     this.events = [];
     weeklyVisits.forEach(visit => {
       newEvents.push(
-        createRoomVisitEvent(visit.timeFrom, visit.timeTo)
+        createVisitEvent(visit.timeFrom, visit.timeTo)
       );
     });
     this.events = [...newEvents];
