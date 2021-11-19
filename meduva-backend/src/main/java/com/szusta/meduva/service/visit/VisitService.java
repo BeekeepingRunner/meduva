@@ -5,75 +5,55 @@ import com.szusta.meduva.model.Room;
 import com.szusta.meduva.model.Service;
 import com.szusta.meduva.model.UnregisteredClient;
 import com.szusta.meduva.model.User;
+import com.szusta.meduva.model.schedule.status.VisitStatus;
+import com.szusta.meduva.model.schedule.status.enums.EVisitStatus;
 import com.szusta.meduva.model.schedule.visit.Visit;
 import com.szusta.meduva.payload.Term;
 import com.szusta.meduva.repository.RoomRepository;
 import com.szusta.meduva.repository.UnregisteredClientRepository;
 import com.szusta.meduva.repository.schedule.visit.VisitRepository;
-import com.szusta.meduva.service.TermGenerator;
+import com.szusta.meduva.repository.schedule.visit.VisitStatusRepository;
 import com.szusta.meduva.service.freetimescanner.FreeTimeScanner;
 import com.szusta.meduva.service.freetimescanner.NotAvailableException;
 import com.szusta.meduva.util.TimeUtils;
 
 import javax.transaction.Transactional;
-import java.time.ZoneId;
 import java.util.*;
 
 @org.springframework.stereotype.Service
 public class VisitService {
 
     private VisitRepository visitRepository;
+    private VisitStatusRepository visitStatusRepository;
+
     private VisitBuilder visitBuilder;
 
     private RoomRepository roomRepository;
     private UnregisteredClientRepository unregisteredClientRepository;
 
-    private TermGenerator termGenerator;
-    private VisitScheduleGenerator visitScheduleGenerator;
+    private ScheduleManager scheduleManager;
 
     private FreeTimeScanner freeTimeScanner;
 
     public VisitService(VisitRepository visitRepository,
                         VisitBuilder visitBuilder,
                         RoomRepository roomRepository,
+                        VisitStatusRepository visitStatusRepository,
                         UnregisteredClientRepository unregisteredClientRepository,
-                        TermGenerator termGenerator,
-                        VisitScheduleGenerator visitScheduleGenerator,
+                        ScheduleManager scheduleManager,
                         FreeTimeScanner freeTimeScanner) {
         this.visitRepository = visitRepository;
         this.visitBuilder = visitBuilder;
         this.roomRepository = roomRepository;
+        this.visitStatusRepository = visitStatusRepository;
         this.unregisteredClientRepository = unregisteredClientRepository;
-        this.termGenerator = termGenerator;
-        this.visitScheduleGenerator = visitScheduleGenerator;
+        this.scheduleManager = scheduleManager;
         this.freeTimeScanner = freeTimeScanner;
     }
 
-    // Checks subsequent time-intervals in range of several days, starting from now.
-    // Returns empty list if there are no available Terms.
-    public List<Term> getTermsForWorker(User worker, Service service) {
-
-        List<Room> suitableRooms = roomRepository.findAllSuitableForService(service.getId());
-        if (suitableRooms.isEmpty()) {
-            return Collections.emptyList();
-        }
-
-        Calendar now = Calendar.getInstance(TimeZone.getTimeZone(ZoneId.systemDefault()));
-        Calendar currentlyCheckedTime = TimeUtils.roundToNextHalfHour(now);
-
-        // check subsequent terms starting from now
-        List<Term> possibleTerms = new ArrayList<>();
-        do {
-            Optional<Term> term = termGenerator.getTermForWorker(worker, service, suitableRooms, currentlyCheckedTime);
-            term.ifPresent(possibleTerms::add);
-
-            // proceed to the next interval
-            // TODO: move forward until its worker work time
-            currentlyCheckedTime.add(Calendar.MINUTE, TimeUtils.MINUTE_OFFSET);
-
-        } while (!TimeUtils.isNDaysBetween(now, currentlyCheckedTime, 30));
-
-        return possibleTerms;
+    public Visit findById(Long visitId) {
+        return visitRepository.findById(visitId)
+                .orElseThrow(() -> new EntityRecordNotFoundException("Visit not found with id " + visitId));
     }
 
     public List<Date> getWorkerAvailableDaysOfMonth(User worker,
@@ -135,7 +115,7 @@ public class VisitService {
         Visit visit = visitBuilder.buildVisit(term);
         visit = visitRepository.findById(visit.getId())
                 .orElseThrow(() -> new EntityRecordNotFoundException("Visit wasn't saved"));
-        visitScheduleGenerator.generateVisitSchedules(visit);
+        scheduleManager.generateSchedules(visit);
         return Optional.of(visit);
     }
 
@@ -152,5 +132,28 @@ public class VisitService {
         UnregisteredClient unregisteredClient = unregisteredClientRepository.findById(unregisteredClientId)
                 .orElseThrow(() -> new EntityRecordNotFoundException("Cannot find visits: unregistered client not found with id " + unregisteredClientId));
         return visitRepository.findByUnregisteredClient(unregisteredClient);
+    }
+
+    public Visit markAsDone(Visit visit) {
+        VisitStatus done = visitStatusRepository.findById(EVisitStatus.VISIT_DONE.getValue())
+                .orElseThrow(() -> new EntityRecordNotFoundException("Visit status not found with id " + EVisitStatus.VISIT_DONE.getValue()));
+        visit.setVisitStatus(done);
+        return visitRepository.save(visit);
+    }
+
+    public Visit markAsPaid(Visit visit) {
+        visit.setPaid(true);
+        return visitRepository.save(visit);
+    }
+
+    @Transactional
+    public Visit cancel(Visit visit) {
+
+        scheduleManager.freeSchedules(visit);
+
+        VisitStatus cancelled = visitStatusRepository.findById(EVisitStatus.VISIT_CANCELLED.getValue())
+                .orElseThrow(() -> new EntityRecordNotFoundException("Visit status not found with id " + EVisitStatus.VISIT_CANCELLED.getValue()));
+        visit.setVisitStatus(cancelled);
+        return visitRepository.save(visit);
     }
 }
