@@ -145,6 +145,9 @@ export class ItemScheduleComponent implements OnInit {
           console.log(dayTimeRange); // git gud
           this.pushUnavailableDayToEvents(dayTimeRange);
           this.getWeeklyEvents();
+        }, err => {
+          console.log(err);
+          this.snackBar.open(err.error.message);
         }
       )
     }

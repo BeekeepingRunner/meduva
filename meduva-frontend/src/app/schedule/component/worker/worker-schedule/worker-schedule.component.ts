@@ -221,6 +221,7 @@ export class WorkerScheduleComponent implements OnInit {
         this.prepareWeekEvents();
       }, err => {
         console.log(err);
+        this.snackBar.open(err.error.message);
       }
     );
 
@@ -232,6 +233,7 @@ export class WorkerScheduleComponent implements OnInit {
         this.prepareWeekEvents();
       }, err => {
         console.log(err);
+        this.snackBar.open(err.error.message);
       }
     )
   }
@@ -242,6 +244,7 @@ export class WorkerScheduleComponent implements OnInit {
         this.prepareWeekEvents();
       }, err => {
         console.log(err);
+        this.snackBar.open(err.error.message);
       }
     )
   }

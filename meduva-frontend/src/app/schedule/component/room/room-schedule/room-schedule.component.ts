@@ -86,7 +86,6 @@ export class RoomScheduleComponent implements OnInit {
 
     this.scheduleService.getWeeklyRoomVisits(this.room.id, weekBoundaries).subscribe(
       (weeklyVisits: WorkSchedule[]) => {
-        console.log(weeklyVisits);
         this.pushVisits(weeklyVisits);
       }
     );
@@ -145,7 +144,10 @@ export class RoomScheduleComponent implements OnInit {
         (dayTimeRange: TimeRange) => {
           this.pushUnavailableDayToEvents(dayTimeRange);
           this.getWeeklyEvents();
-        }
+        },err => {
+        console.log(err);
+        this.snackBar.open(err.error.message);
+      }
       );
     }
   }
