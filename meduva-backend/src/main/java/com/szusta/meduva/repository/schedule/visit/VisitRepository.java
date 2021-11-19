@@ -63,4 +63,15 @@ public interface VisitRepository extends UndeletableRepository<Visit> {
                     + "ORDER BY time_to ASC "
     )
     List<Visit> findAllWeeklyRoomVisits(Long roomId, Date startTime, Date endTime);
+
+    @Query(
+            nativeQuery = true,
+            value = "SELECT v.id, v.name, v.time_from, v.time_to, v.description, v.paid, "
+                    + "v.deleted, v.visit_status_id, v.service_id, v.room_id, v.unregistered_client_id FROM visit v "
+                    + "INNER JOIN visit_equipment_item vi ON visit_id = v.id "
+                    + "WHERE vi.equipment_item_id = ?1 "
+                    + "AND timestampdiff(MINUTE, time_from, ?2) <= 0 AND timestampdiff(MINUTE, time_to, ?3) >= 0 "
+                    + "ORDER BY v.time_to asc "
+    )
+    List<Visit> findAllWeeklyItemVisits(Long itemId, Date startTime, Date endTime);
 }

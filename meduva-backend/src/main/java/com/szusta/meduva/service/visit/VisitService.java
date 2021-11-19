@@ -165,4 +165,8 @@ public class VisitService {
     public List<Visit> findAllWeeklyRoomVisits(Long roomId, Date startTime, Date endTime) {
         return visitRepository.findAllWeeklyRoomVisits(roomId, startTime, endTime);
     }
+
+    public List<Visit> findAllWeeklyItemVisits(Long itemId, Date startTime, Date endTime) {
+        return visitRepository.findAllWeeklyItemVisits(itemId, startTime, endTime);
+    }
 }
