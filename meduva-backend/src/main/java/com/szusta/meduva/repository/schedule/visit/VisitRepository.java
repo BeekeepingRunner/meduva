@@ -40,6 +40,7 @@ public interface VisitRepository extends UndeletableRepository<Visit> {
                     + " INNER JOIN user_visit uv ON visit_id = v.id "
                     + " WHERE as_client = 0 AND uv.user_id = ?1 "
                     + " AND timestampdiff(MINUTE, time_from, ?2) <= 0 AND timestampdiff(MINUTE, time_to, ?3) >= 0 "
+                    + " AND v.visit_status_id = 1 "
                     + " ORDER BY v.time_to asc "
     )
     List<Visit> findAllWhereUserIsWorkerBetween(Long clientId, Date startTime, Date endTime);
@@ -51,14 +52,16 @@ public interface VisitRepository extends UndeletableRepository<Visit> {
                     + "INNER JOIN user_visit uv ON visit_id = v.id "
                     + "WHERE as_client = 1 AND uv.user_id = ?1 "
                     + "AND timestampdiff(MINUTE, time_from, ?2) <= 0 AND timestampdiff(MINUTE, time_to, ?3) >= 0 "
+                    + "AND v.visit_status_id = 1 "
                     + "ORDER BY v.time_to asc "
     )
     List<Visit> findAllWhereUserIsClientBetween(Long workerId, Date startTime, Date endTime);
 
     @Query(
             nativeQuery = true,
-            value = "SELECT * FROM visit "
+            value = "SELECT * FROM visit v "
                     + "WHERE room_id = ?1 AND "
+                    + "visit_status_id = 1 AND "
                     + "timestampdiff(MINUTE, time_from, ?2) <= 0 AND timestampdiff(MINUTE, time_to, ?3) >= 0 "
                     + "ORDER BY time_to ASC "
     )
@@ -71,6 +74,7 @@ public interface VisitRepository extends UndeletableRepository<Visit> {
                     + "INNER JOIN visit_equipment_item vi ON visit_id = v.id "
                     + "WHERE vi.equipment_item_id = ?1 "
                     + "AND timestampdiff(MINUTE, time_from, ?2) <= 0 AND timestampdiff(MINUTE, time_to, ?3) >= 0 "
+                    + "AND v.visit_status_id = 1 "
                     + "ORDER BY v.time_to asc "
     )
     List<Visit> findAllWeeklyItemVisits(Long itemId, Date startTime, Date endTime);

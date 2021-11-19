@@ -263,8 +263,6 @@ export class WorkerScheduleComponent implements OnInit {
       this.openVisitDetailsDialog($event.event.id);
     }
 
-
   }
-
 
 }
