@@ -83,3 +83,19 @@ export function createVisitsAsClientEvent(start: Date, end: Date): CalendarEvent
     cssClass: "custom-event",
   };
 }
+
+export function createRoomVisitEvent(start: Date, end: Date): CalendarEvent {
+  return {
+    draggable: false,
+    end: new Date(end),
+    id: undefined,
+    meta: undefined,
+    start: new Date(start),
+    title: "Visit",
+    color: {
+      primary: "#4F4C79",
+      secondary: "#4F4C79"
+    },
+    cssClass: "custom-event",
+  };
+}
