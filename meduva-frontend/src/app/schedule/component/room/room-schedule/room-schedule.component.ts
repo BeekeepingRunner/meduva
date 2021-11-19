@@ -68,7 +68,7 @@ export class RoomScheduleComponent implements OnInit {
     let weekBoundaries: TimeRange = {
       startTime: this.firstDayOfWeek,
       endTime: this.lastDayOfWeek,
-    }
+    };
 
     // @ts-ignore
     this.scheduleService.getWeeklyRoomUnavailability(this.room.id, weekBoundaries).subscribe(
