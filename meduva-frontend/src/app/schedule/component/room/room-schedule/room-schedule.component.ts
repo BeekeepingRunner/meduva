@@ -5,7 +5,7 @@ import {ActivatedRoute} from "@angular/router";
 import {MatDialog} from "@angular/material/dialog";
 import {RoomService} from "../../../../service/room.service";
 import {ItemDayDialogComponent, UnavailabilityOptions} from "../../dialog/item-day-dialog/item-day-dialog.component";
-import {ScheduleService, TimeRange} from "../../../service/schedule.service";
+import {ScheduleService, TimeRange, WeekBoundaries} from "../../../service/schedule.service";
 import {createUnavailabilityEvent} from "../../../util/event/creation";
 import {MatSnackBar} from "@angular/material/snack-bar";
 
@@ -26,6 +26,7 @@ export class RoomScheduleComponent implements OnInit {
 
   room!: Room;
 
+  weekBoundaries!: WeekBoundaries;
   firstDayOfWeek!: Date;
   lastDayOfWeek!: Date;
 
@@ -61,19 +62,28 @@ export class RoomScheduleComponent implements OnInit {
     let firstDayOfWeekNumber = currDate.getDate() - currDate.getDay();
     this.firstDayOfWeek = new Date(currDate.setDate(firstDayOfWeekNumber));
     this.lastDayOfWeek = new Date(currDate.setDate(this.firstDayOfWeek.getDate() + 6));
+    this.weekBoundaries = {
+      firstWeekDay: this.firstDayOfWeek,
+      lastWeekDay: this.lastDayOfWeek,
+    }
   }
 
   private pushWeeklyUnavailability(): void {
-    let weekBoundaries: TimeRange = {
-      startTime: this.firstDayOfWeek,
-      endTime: this.lastDayOfWeek
-    };
-
     // @ts-ignore
-    this.scheduleService.getWeeklyRoomUnavailability(this.room.id, weekBoundaries).subscribe(
+    this.scheduleService.getWeeklyRoomUnavailability(this.room.id, this.weekBoundaries).subscribe(
       (weeklyUnavailability: TimeRange[]) => {
         this.pushUnavailabilities(weeklyUnavailability);
+        this.pushWeeklyVisits();
       });
+  }
+
+  private pushWeeklyVisits() {
+    this.scheduleService.getWeeklyRoomVisits(this.room.id, this.weekBoundaries).subscribe(
+      (weeklyVisits: TimeRange[]) => {
+        console.log(weeklyVisits);
+      }
+    );
+
   }
 
   private pushUnavailabilities(weeklyUnavailability: TimeRange[]) {

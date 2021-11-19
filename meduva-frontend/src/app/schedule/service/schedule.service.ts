@@ -77,6 +77,10 @@ export class ScheduleService {
     return this.httpClient.post(environment.API_BASE_URL + 'api/room/set-day-unavailability/' + roomId, day);
   }
 
+  getWeeklyRoomVisits(roomId: number | undefined, weekBoundaries: WeekBoundaries): Observable<any> {
+    return  this.httpClient.post(environment.API_BASE_URL + 'api/visit/get-week-room-visit/' + roomId, weekBoundaries);
+  }
+
   deleteDailyAbsenceHours(workerId: number, absenceDayDate: Date) {
     const httpOptions: any = {
       headers: new HttpHeaders({ 'Content-Type' : 'application/json',
@@ -117,7 +121,5 @@ export class ScheduleService {
 
     return this.httpClient.delete(environment.API_BASE_URL + 'api/equipment/item/delete-day-unavailability/' + itemId, httpOptions);
   }
-
-
 
 }
