@@ -67,7 +67,7 @@ public interface RoomScheduleRepository extends UndeletableRepository<RoomSchedu
     @Query(
             nativeQuery = true,
             value = "DELETE FROM room_schedule rs WHERE rs.room_id = ?1 AND "
-                    + " timestampdiff(MINUTE, time_from, ?1) <= 0 AND timestampdiff(MINUTE, time_to, ?2) >= 0"
+                    + " timestampdiff(MINUTE, time_from, ?2) <= 0 AND timestampdiff(MINUTE, time_to, ?3) >= 0"
     )
     void deleteByRoomIdBetween(Long roomId, Date start, Date end);
 

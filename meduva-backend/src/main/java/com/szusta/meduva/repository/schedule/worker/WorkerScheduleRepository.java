@@ -79,4 +79,12 @@ public interface WorkerScheduleRepository extends UndeletableRepository<WorkerSc
                     + " timestampdiff(MINUTE, time_from, ?3) <= 0 AND timestampdiff(MINUTE, time_to, ?4) >= 0"
     )
     void deleteByWorkerIdBetween(Long workerId, Long workerStatusId, Date start, Date end);
+
+    @Modifying
+    @Query(
+            nativeQuery = true,
+            value = "DELETE FROM worker_schedule wh WHERE wh.worker_id = ?1 AND "
+                    + " wh.time_from = ?2"
+    )
+    void deleteByWorkerIdWithTimeFrom(Long workerId, Date timeFrom);
 }

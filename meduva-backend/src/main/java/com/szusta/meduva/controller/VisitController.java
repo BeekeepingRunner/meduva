@@ -37,11 +37,9 @@ public class VisitController {
         this.scheduleChecker = scheduleChecker;
     }
 
-    @GetMapping("/terms-for-service/{serviceId}")
-    public List<Term> getCurrentWorkerTermsForService(@PathVariable Long serviceId) {
-        User worker = userService.findById(userService.getCurrentUserId());
-        Service service = servicesService.findById(serviceId);
-        return visitService.getTermsForWorker(worker, service);
+    @GetMapping("/{visitId}")
+    public Visit findById(@PathVariable Long visitId) {
+        return visitService.findById(visitId);
     }
 
     @GetMapping("/get-worker-available-days-in-month")
@@ -85,6 +83,7 @@ public class VisitController {
     public List<Visit> findAllOfUnregisteredClient(@PathVariable Long unregisteredClientId) {
         return visitService.findAllOfUnregisteredClient(unregisteredClientId);
     }
+
     @DeleteMapping("/all-of-unregistered-client/{unregisteredClientId}")
     public void deleteAllOfUnregisteredClient(@PathVariable Long unregisteredClientId) {
        visitService.deleteAllOfUnregisteredClient(unregisteredClientId);
@@ -99,5 +98,23 @@ public class VisitController {
     public void deleteAllWhereUserIsWorker(@PathVariable Long userId) {
         User userAsWorker = userService.findById(userId);
         visitService.deleteAllWhereUserIsWorker(userAsWorker);
+    }
+
+    @PutMapping("/{visitId}/mark-as-done")
+    public Visit markVisitAsDone(@PathVariable Long visitId) {
+        Visit visit = visitService.findById(visitId);
+        return visitService.markAsDone(visit);
+    }
+
+    @PutMapping("/{visitId}/mark-as-paid")
+    public Visit markVisitAsPaid(@PathVariable Long visitId) {
+        Visit visit = visitService.findById(visitId);
+        return visitService.markAsPaid(visit);
+    }
+
+    @PutMapping("/{visitId}/cancel")
+    public Visit cancelVisit(@PathVariable Long visitId) {
+        Visit visit = visitService.findById(visitId);
+        return visitService.cancel(visit);
     }
 }

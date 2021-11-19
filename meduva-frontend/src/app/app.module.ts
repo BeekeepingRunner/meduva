@@ -94,6 +94,8 @@ import { ClientSelectionComponent } from './component/visit/plan-your-visit/clie
 import {MAT_SNACK_BAR_DEFAULT_OPTIONS, MatSnackBarModule} from "@angular/material/snack-bar";
 import { ClientVisitsComponent } from './component/clients/client-details/client-visits/client-visits.component';
 import {ConfirmationWithWarningDialogComponent} from "./component/dialog/confirmation-with-warning-dialog/confirmation-with-warning-dialog.component";
+import { VisitDetailsComponent } from './component/visit/visit-details/visit-details.component';
+
 
 
 @NgModule({
@@ -162,6 +164,7 @@ import {ConfirmationWithWarningDialogComponent} from "./component/dialog/confirm
     ClientVisitsComponent,
 
     ConfirmationWithWarningDialogComponent,
+    VisitDetailsComponent,
   ],
   imports: [
     BrowserModule,

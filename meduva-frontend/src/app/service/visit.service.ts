@@ -146,13 +146,30 @@ export class VisitService {
   getAllOfUnregisteredClient(clientId: number): Observable<any> {
     return this.httpClient.get(environment.API_BASE_URL + 'api/visit/all-of-unregistered-client/' + clientId);
   }
+
   deleteAllOfUnregisteredClient(clientId: number): Observable<any> {
     return this.httpClient.delete(environment.API_BASE_URL + 'api/visit/all-of-unregistered-client/' + clientId);
   }
   deleteAllAsClientByUserId(userId: number): Observable<any>  {
     return this.httpClient.delete(environment.API_BASE_URL + 'api/visit/all-as-client-by-user-id/' + userId);
   }
-  deleteAllAsWorkerByUserId(userId: number): Observable<any>  {
+  deleteAllAsWorkerByUserId(userId: number): Observable<any> {
     return this.httpClient.delete(environment.API_BASE_URL + 'api/visit/all-as-worker-by-user-id/' + userId);
+  }
+
+  getVisitById(visitId: any): Observable<any> {
+    return this.httpClient.get(environment.API_BASE_URL + 'api/visit/' + visitId);
+  }
+
+  markVisitAsDone(visitId: any): Observable<any> {
+    return this.httpClient.put(environment.API_BASE_URL + 'api/visit/' + visitId + '/mark-as-done', {});
+  }
+
+  cancelVisit(visitId: any): Observable<any> {
+    return this.httpClient.put(environment.API_BASE_URL + 'api/visit/' + visitId + '/cancel', {});
+  }
+
+  markVisitAsPaid(visitId: any): Observable<any> {
+    return this.httpClient.put(environment.API_BASE_URL + 'api/visit/' + visitId + '/mark-as-paid', {});
   }
 }

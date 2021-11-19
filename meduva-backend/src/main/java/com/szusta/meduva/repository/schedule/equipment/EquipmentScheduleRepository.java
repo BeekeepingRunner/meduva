@@ -110,6 +110,14 @@ public interface EquipmentScheduleRepository extends UndeletableRepository<Equip
     @Query(
             nativeQuery = true,
             value = "DELETE FROM equipment_schedule es WHERE es.equipment_item_id = ?1 AND "
+                    + " es.time_from = ?2"
+    )
+    void deleteByEqItemIdWithStartTime(Long eqItemId, Date startTime);
+
+    @Modifying
+    @Query(
+            nativeQuery = true,
+            value = "DELETE FROM equipment_schedule es WHERE es.equipment_item_id = ?1 AND "
                     + " es.equipment_status_id = ?2 AND "
                     + " timestampdiff(MINUTE, time_from, ?3) <= 0 AND timestampdiff(MINUTE, time_to, ?4) >= 0"
     )
