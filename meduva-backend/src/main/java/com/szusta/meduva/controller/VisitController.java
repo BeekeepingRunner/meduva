@@ -40,11 +40,9 @@ public class VisitController {
         this.scheduleChecker = scheduleChecker;
     }
 
-    @GetMapping("/terms-for-service/{serviceId}")
-    public List<Term> getCurrentWorkerTermsForService(@PathVariable Long serviceId) {
-        User worker = userService.findById(userService.getCurrentUserId());
-        Service service = servicesService.findById(serviceId);
-        return visitService.getTermsForWorker(worker, service);
+    @GetMapping("/{visitId}")
+    public Visit findById(@PathVariable Long visitId) {
+        return visitService.findById(visitId);
     }
 
     @GetMapping("/get-worker-available-days-in-month")
@@ -111,9 +109,28 @@ public class VisitController {
     }
 
     @PostMapping("/get-week-item-visit/{itemId}")
-    public List<Visit> findAllWeeklyItemVisits(@PathVariable Long itemId, @RequestBody WeekBoundaries weekBoundaries){
+    public List<Visit> findAllWeeklyItemVisits(@PathVariable Long itemId, @RequestBody WeekBoundaries weekBoundaries) {
         Date startTime = TimeUtils.getDayStart(weekBoundaries.getFirstWeekDay());
         Date endTime = TimeUtils.getDayEnd(weekBoundaries.getLastWeekDay());
         return visitService.findAllWeeklyItemVisits(itemId, startTime, endTime);
+    }
+    
+    @PutMapping("/{visitId}/mark-as-done")
+    public Visit markVisitAsDone(@PathVariable Long visitId) {
+        Visit visit = visitService.findById(visitId);
+        return visitService.markAsDone(visit);
+    }
+
+    @PutMapping("/{visitId}/mark-as-paid")
+    public Visit markVisitAsPaid(@PathVariable Long visitId) {
+        Visit visit = visitService.findById(visitId);
+        return visitService.markAsPaid(visit);
+    }
+
+    @PutMapping("/{visitId}/cancel")
+    public Visit cancelVisit(@PathVariable Long visitId) {
+        Visit visit = visitService.findById(visitId);
+        return visitService.cancel(visit);
+
     }
 }
