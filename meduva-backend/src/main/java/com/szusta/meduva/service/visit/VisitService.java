@@ -169,4 +169,18 @@ public class VisitService {
             markAsDeleted(visit.getId());
         }
     }
+
+    public void deleteAllWhereUserIsClient(User userAsClient) {
+        List<Visit> userAsClientVisits = findAllWhereUserIsClient(userAsClient);
+        for (Visit visit:userAsClientVisits) {
+            markAsDeleted(visit.getId());
+        }
+    }
+
+    public void deleteAllWhereUserIsWorker(User userAsWorker) {
+        List<Visit> userAsWorkerVisits = findAllWhereUserIsWorker(userAsWorker);
+        for (Visit visit:userAsWorkerVisits) {
+            markAsDeleted(visit.getId());
+        }
+    }
 }

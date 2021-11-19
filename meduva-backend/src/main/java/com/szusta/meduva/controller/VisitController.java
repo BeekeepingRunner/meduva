@@ -89,4 +89,15 @@ public class VisitController {
     public void deleteAllOfUnregisteredClient(@PathVariable Long unregisteredClientId) {
        visitService.deleteAllOfUnregisteredClient(unregisteredClientId);
     }
+
+    @DeleteMapping("/all-as-client-by-user-id/{userId}")
+    public void deleteAllWhereUserIsClient(@PathVariable Long userId) {
+        User userAsClient = userService.findById(userId);
+        visitService.deleteAllWhereUserIsClient(userAsClient);
+    }
+    @DeleteMapping("/all-as-worker-by-user-id/{userId}")
+    public void deleteAllWhereUserIsWorker(@PathVariable Long userId) {
+        User userAsWorker = userService.findById(userId);
+        visitService.deleteAllWhereUserIsWorker(userAsWorker);
+    }
 }

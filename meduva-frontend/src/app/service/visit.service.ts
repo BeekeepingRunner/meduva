@@ -149,4 +149,10 @@ export class VisitService {
   deleteAllOfUnregisteredClient(clientId: number): Observable<any> {
     return this.httpClient.delete(environment.API_BASE_URL + 'api/visit/all-of-unregistered-client/' + clientId);
   }
+  deleteAllAsClientByUserId(userId: number): Observable<any>  {
+    return this.httpClient.delete(environment.API_BASE_URL + 'api/visit/all-as-client-by-user-id/' + userId);
+  }
+  deleteAllAsWorkerByUserId(userId: number): Observable<any>  {
+    return this.httpClient.delete(environment.API_BASE_URL + 'api/visit/all-as-worker-by-user-id/' + userId);
+  }
 }

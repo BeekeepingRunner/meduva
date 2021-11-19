@@ -104,7 +104,10 @@ export class SpecificUserComponent implements OnInit {
   }
 
   deleteUser() {
-
+    this.visitService.deleteAllAsClientByUserId(this.userId).subscribe();
+    if(this.isAWorker==true){
+      this.visitService.deleteAllAsWorkerByUserId(this.userId).subscribe();
+    }
     this.userService.deleteById(this.userId).subscribe(
       ifSuccess => {
         this.openFeedbackDialog();
@@ -112,6 +115,7 @@ export class SpecificUserComponent implements OnInit {
 
     );
   }
+
   openDeleteWarningDialog(): void {
     const warningConfirmDialogRef = this.dialog.open(ConfirmationWithWarningDialogComponent, {
       data: { message: 'The customer has visits, if you delete him, you will also delete the visits to which he is assigned!' }
