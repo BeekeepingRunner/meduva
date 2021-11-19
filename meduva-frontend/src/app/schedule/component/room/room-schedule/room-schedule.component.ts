@@ -26,7 +26,6 @@ export class RoomScheduleComponent implements OnInit {
 
   room!: Room;
 
-  weekBoundaries!: WeekBoundaries;
   firstDayOfWeek!: Date;
   lastDayOfWeek!: Date;
 
@@ -62,15 +61,17 @@ export class RoomScheduleComponent implements OnInit {
     let firstDayOfWeekNumber = currDate.getDate() - currDate.getDay();
     this.firstDayOfWeek = new Date(currDate.setDate(firstDayOfWeekNumber));
     this.lastDayOfWeek = new Date(currDate.setDate(this.firstDayOfWeek.getDate() + 6));
-    this.weekBoundaries = {
-      firstWeekDay: this.firstDayOfWeek,
-      lastWeekDay: this.lastDayOfWeek,
-    }
+
   }
 
   private pushWeeklyUnavailability(): void {
+    let weekBoundaries: TimeRange = {
+      startTime: this.firstDayOfWeek,
+      endTime: this.lastDayOfWeek,
+    }
+
     // @ts-ignore
-    this.scheduleService.getWeeklyRoomUnavailability(this.room.id, this.weekBoundaries).subscribe(
+    this.scheduleService.getWeeklyRoomUnavailability(this.room.id, weekBoundaries).subscribe(
       (weeklyUnavailability: TimeRange[]) => {
         this.pushUnavailabilities(weeklyUnavailability);
         this.pushWeeklyVisits();
@@ -78,7 +79,12 @@ export class RoomScheduleComponent implements OnInit {
   }
 
   private pushWeeklyVisits() {
-    this.scheduleService.getWeeklyRoomVisits(this.room.id, this.weekBoundaries).subscribe(
+    let weekBoundaries: WeekBoundaries = {
+      firstWeekDay: this.firstDayOfWeek,
+      lastWeekDay: this.lastDayOfWeek,
+    }
+
+    this.scheduleService.getWeeklyRoomVisits(this.room.id, weekBoundaries).subscribe(
       (weeklyVisits: TimeRange[]) => {
         console.log(weeklyVisits);
       }

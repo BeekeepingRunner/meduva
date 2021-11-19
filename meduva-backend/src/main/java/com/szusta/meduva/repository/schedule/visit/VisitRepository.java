@@ -2,6 +2,7 @@ package com.szusta.meduva.repository.schedule.visit;
 
 import com.szusta.meduva.model.UnregisteredClient;
 import com.szusta.meduva.model.schedule.visit.Visit;
+import com.szusta.meduva.repository.UnregisteredClientRepository;
 import com.szusta.meduva.repository.undeletable.UndeletableRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -53,4 +54,13 @@ public interface VisitRepository extends UndeletableRepository<Visit> {
                     + "ORDER BY v.time_to asc "
     )
     List<Visit> findAllWhereUserIsClientBetween(Long workerId, Date startTime, Date endTime);
+
+    @Query(
+            nativeQuery = true,
+            value = "SELECT * FROM visit "
+                    + "WHERE room_id = ?1 AND "
+                    + "timestampdiff(MINUTE, time_from, ?2) <= 0 AND timestampdiff(MINUTE, time_to, ?3) >= 0 "
+                    + "ORDER BY time_to ASC "
+    )
+    List<Visit> findAllWeeklyRoomVisits(Long roomId, Date startTime, Date endTime);
 }

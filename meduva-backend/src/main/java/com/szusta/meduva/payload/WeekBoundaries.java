@@ -11,4 +11,5 @@ public class WeekBoundaries {
 
     private Date firstWeekDay;
     private Date lastWeekDay;
+
 }

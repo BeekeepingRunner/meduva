@@ -161,4 +161,8 @@ public class VisitService {
     public List<Visit> findAllWhereUserIsClientBetween(Long workerId, Date startTime, Date endTime) {
         return visitRepository.findAllWhereUserIsClientBetween(workerId, startTime, endTime);
     }
+
+    public List<Visit> findAllWeeklyRoomVisits(Long roomId, Date startTime, Date endTime) {
+        return visitRepository.findAllWeeklyRoomVisits(roomId, startTime, endTime);
+    }
 }
