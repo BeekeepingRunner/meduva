@@ -85,7 +85,7 @@ export class RoomScheduleComponent implements OnInit {
       lastWeekDay: this.lastDayOfWeek,
     }
 
-    this.scheduleService.getWeeklyRoomVisits(this.room.id, weekBoundaries).subscribe(
+    this.scheduleService.getWeeklyBookedRoomVisits(this.room.id, weekBoundaries).subscribe(
       (weeklyVisits: Visit[]) => {
         this.pushVisits(weeklyVisits);
       }

@@ -4,7 +4,6 @@ import com.szusta.meduva.model.Service;
 import com.szusta.meduva.model.User;
 import com.szusta.meduva.model.schedule.visit.Visit;
 import com.szusta.meduva.payload.Term;
-import com.szusta.meduva.payload.TimeRange;
 import com.szusta.meduva.payload.WeekBoundaries;
 import com.szusta.meduva.service.ScheduleChecker;
 import com.szusta.meduva.service.ServicesService;
@@ -87,32 +86,32 @@ public class VisitController {
         return visitService.findAllOfUnregisteredClient(unregisteredClientId);
     }
 
-    @PostMapping("/get-week-visits-as-worker/{workerId}")
-    public List<Visit> findAllWhereUserIsWorkerBetween(@PathVariable Long workerId, @RequestBody WeekBoundaries weekBoundaries) {
+    @PostMapping("/get-week-booked-visits-as-worker/{workerId}")
+    public List<Visit> findAllBookedWhereUserIsWorkerBetween(@PathVariable Long workerId, @RequestBody WeekBoundaries weekBoundaries) {
         Date startTime = TimeUtils.getDayStart(weekBoundaries.getFirstWeekDay());
         Date endTime = TimeUtils.getDayEnd(weekBoundaries.getLastWeekDay());
-        return visitService.findAllWhereUserIsWorkerBetween(workerId, startTime, endTime);
+        return visitService.findAllBookedWhereUserIsWorkerBetween(workerId, startTime, endTime);
     }
 
-    @PostMapping("/get-week-visits-as-client/{workerId}")
-    public List<Visit> findAllWhereUserIsClientBetween(@PathVariable Long workerId, @RequestBody WeekBoundaries weekBoundaries) {
+    @PostMapping("/get-week-booked-visits-as-client/{workerId}")
+    public List<Visit> findAllBookedWhereUserIsClientBetween(@PathVariable Long workerId, @RequestBody WeekBoundaries weekBoundaries) {
         Date startTime = TimeUtils.getDayStart(weekBoundaries.getFirstWeekDay());
         Date endTime = TimeUtils.getDayEnd(weekBoundaries.getLastWeekDay());
-        return visitService.findAllWhereUserIsClientBetween(workerId, startTime, endTime);
+        return visitService.findAllBookedWhereUserIsClientBetween(workerId, startTime, endTime);
     }
 
-    @PostMapping("/get-week-room-visit/{roomId}")
-    public List<Visit> findAllWeeklyRoomVisits(@PathVariable Long roomId, @RequestBody WeekBoundaries weekBoundaries){
+    @PostMapping("/get-week-booked-room-visit/{roomId}")
+    public List<Visit> findAllBookedWeeklyRoomVisits(@PathVariable Long roomId, @RequestBody WeekBoundaries weekBoundaries){
         Date startTime = TimeUtils.getDayStart(weekBoundaries.getFirstWeekDay());
         Date endTime = TimeUtils.getDayEnd(weekBoundaries.getLastWeekDay());
-        return visitService.findAllWeeklyRoomVisits(roomId, startTime, endTime);
+        return visitService.findAllBookedWeeklyRoomVisits(roomId, startTime, endTime);
     }
 
-    @PostMapping("/get-week-item-visit/{itemId}")
-    public List<Visit> findAllWeeklyItemVisits(@PathVariable Long itemId, @RequestBody WeekBoundaries weekBoundaries) {
+    @PostMapping("/get-week-booked-item-visit/{itemId}")
+    public List<Visit> findAllBookedWeeklyItemVisits(@PathVariable Long itemId, @RequestBody WeekBoundaries weekBoundaries) {
         Date startTime = TimeUtils.getDayStart(weekBoundaries.getFirstWeekDay());
         Date endTime = TimeUtils.getDayEnd(weekBoundaries.getLastWeekDay());
-        return visitService.findAllWeeklyItemVisits(itemId, startTime, endTime);
+        return visitService.findAllBookedWeeklyItemVisits(itemId, startTime, endTime);
     }
 
     @PutMapping("/{visitId}/mark-as-done")

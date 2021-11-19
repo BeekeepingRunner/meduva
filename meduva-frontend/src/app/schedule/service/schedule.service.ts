@@ -59,12 +59,12 @@ export class ScheduleService {
     return this.httpClient.post(environment.API_BASE_URL + 'api/worker/get-week-absence-hours/' + workerId, weekBoundaries);
   }
 
-  getWeeklyVisitsAsWorker(workerId: number, weekBoundaries: WeekBoundaries): Observable<any> {
-    return this.httpClient.post(environment.API_BASE_URL + "api/visit/get-week-visits-as-worker/" + workerId, weekBoundaries );
+  getWeeklyBookedVisitsAsWorker(workerId: number, weekBoundaries: WeekBoundaries): Observable<any> {
+    return this.httpClient.post(environment.API_BASE_URL + "api/visit/get-week-booked-visits-as-worker/" + workerId, weekBoundaries );
   }
 
-  getWeeklyVisitsAsClient(workerId: number, weekBoundaries: WeekBoundaries): Observable<any> {
-    return this.httpClient.post(environment.API_BASE_URL + "api/visit/get-week-visits-as-client/" + workerId, weekBoundaries );
+  getWeeklyBookedVisitsAsClient(workerId: number, weekBoundaries: WeekBoundaries): Observable<any> {
+    return this.httpClient.post(environment.API_BASE_URL + "api/visit/get-week-booked-visits-as-client/" + workerId, weekBoundaries );
   }
 
   getWeeklyItemUnavailability(itemId: number, weekBoundaries: WeekBoundaries): Observable<any> {
@@ -83,12 +83,12 @@ export class ScheduleService {
     return this.httpClient.post(environment.API_BASE_URL + 'api/room/set-day-unavailability/' + roomId, day);
   }
 
-  getWeeklyRoomVisits(roomId: number | undefined, weekBoundaries: WeekBoundaries): Observable<any> {
-    return this.httpClient.post(environment.API_BASE_URL + 'api/visit/get-week-room-visit/' + roomId, weekBoundaries);
+  getWeeklyBookedRoomVisits(roomId: number | undefined, weekBoundaries: WeekBoundaries): Observable<any> {
+    return this.httpClient.post(environment.API_BASE_URL + 'api/visit/get-week-booked-room-visit/' + roomId, weekBoundaries);
   }
 
-  getWeeklyItemVisits(itemId: number | undefined, weekBoundaries: WeekBoundaries): Observable<any> {
-    return this.httpClient.post(environment.API_BASE_URL + 'api/visit/get-week-item-visit/' + itemId, weekBoundaries);
+  getWeeklyBookedItemVisits(itemId: number | undefined, weekBoundaries: WeekBoundaries): Observable<any> {
+    return this.httpClient.post(environment.API_BASE_URL + 'api/visit/get-week-booked-item-visit/' + itemId, weekBoundaries);
   }
 
   deleteDailyAbsenceHours(workerId: number, absenceDayDate: Date) {

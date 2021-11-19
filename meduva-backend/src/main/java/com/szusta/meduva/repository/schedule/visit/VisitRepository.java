@@ -43,7 +43,7 @@ public interface VisitRepository extends UndeletableRepository<Visit> {
                     + " AND v.visit_status_id = 1 "
                     + " ORDER BY v.time_to asc "
     )
-    List<Visit> findAllWhereUserIsWorkerBetween(Long clientId, Date startTime, Date endTime);
+    List<Visit> findAllBookedWhereUserIsWorkerBetween(Long clientId, Date startTime, Date endTime);
 
     @Query(
             nativeQuery = true,
@@ -55,7 +55,7 @@ public interface VisitRepository extends UndeletableRepository<Visit> {
                     + "AND v.visit_status_id = 1 "
                     + "ORDER BY v.time_to asc "
     )
-    List<Visit> findAllWhereUserIsClientBetween(Long workerId, Date startTime, Date endTime);
+    List<Visit> findAllBookedWhereUserIsClientBetween(Long workerId, Date startTime, Date endTime);
 
     @Query(
             nativeQuery = true,
@@ -65,7 +65,7 @@ public interface VisitRepository extends UndeletableRepository<Visit> {
                     + "timestampdiff(MINUTE, time_from, ?2) <= 0 AND timestampdiff(MINUTE, time_to, ?3) >= 0 "
                     + "ORDER BY time_to ASC "
     )
-    List<Visit> findAllWeeklyRoomVisits(Long roomId, Date startTime, Date endTime);
+    List<Visit> findAllBookedWeeklyRoomVisits(Long roomId, Date startTime, Date endTime);
 
     @Query(
             nativeQuery = true,
@@ -77,5 +77,5 @@ public interface VisitRepository extends UndeletableRepository<Visit> {
                     + "AND v.visit_status_id = 1 "
                     + "ORDER BY v.time_to asc "
     )
-    List<Visit> findAllWeeklyItemVisits(Long itemId, Date startTime, Date endTime);
+    List<Visit> findAllBookedWeeklyItemVisits(Long itemId, Date startTime, Date endTime);
 }

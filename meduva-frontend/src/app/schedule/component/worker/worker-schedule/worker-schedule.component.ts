@@ -105,7 +105,7 @@ export class WorkerScheduleComponent implements OnInit {
 
   private prepareWeeklyVisitsAsWorker(): void {
 
-    this.scheduleService.getWeeklyVisitsAsWorker(this.worker.id, this.weekBoundaries).subscribe(
+    this.scheduleService.getWeeklyBookedVisitsAsWorker(this.worker.id, this.weekBoundaries).subscribe(
       /* possibly later change WorkSchedule on new interface (Visit?) */
       (weeklyVisitsAsWorker: Visit[]) => {
         console.log(weeklyVisitsAsWorker);
@@ -117,7 +117,7 @@ export class WorkerScheduleComponent implements OnInit {
 
   private prepareWeeklyVisitsAsClient(): void {
 
-    this.scheduleService.getWeeklyVisitsAsClient(this.worker.id, this.weekBoundaries).subscribe(
+    this.scheduleService.getWeeklyBookedVisitsAsClient(this.worker.id, this.weekBoundaries).subscribe(
       /* possibly later change WorkSchedule on new interface (Visit?) */
       (weeklyVisitsAsClient: Visit[]) => {
         console.log(weeklyVisitsAsClient);

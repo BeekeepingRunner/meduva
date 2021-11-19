@@ -95,7 +95,7 @@ export class ItemScheduleComponent implements OnInit {
       lastWeekDay: this.lastDayOfWeek,
     }
 
-    this.scheduleService.getWeeklyItemVisits(this.item.id, weekBoundaries).subscribe(
+    this.scheduleService.getWeeklyBookedItemVisits(this.item.id, weekBoundaries).subscribe(
       (weeklyItemVisits: Visit[]) => {
         this.pushVisits(weeklyItemVisits);
       }

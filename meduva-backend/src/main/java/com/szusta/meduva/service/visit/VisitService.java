@@ -134,20 +134,20 @@ public class VisitService {
         return visitRepository.findByUnregisteredClient(unregisteredClient);
     }
 
-    public List<Visit> findAllWhereUserIsWorkerBetween(Long workerId, Date startTime, Date endTime) {
-        return visitRepository.findAllWhereUserIsWorkerBetween(workerId, startTime, endTime);
+    public List<Visit> findAllBookedWhereUserIsWorkerBetween(Long workerId, Date startTime, Date endTime) {
+        return visitRepository.findAllBookedWhereUserIsWorkerBetween(workerId, startTime, endTime);
     }
 
-    public List<Visit> findAllWhereUserIsClientBetween(Long workerId, Date startTime, Date endTime) {
-        return visitRepository.findAllWhereUserIsClientBetween(workerId, startTime, endTime);
+    public List<Visit> findAllBookedWhereUserIsClientBetween(Long workerId, Date startTime, Date endTime) {
+        return visitRepository.findAllBookedWhereUserIsClientBetween(workerId, startTime, endTime);
     }
 
-    public List<Visit> findAllWeeklyRoomVisits(Long roomId, Date startTime, Date endTime) {
-        return visitRepository.findAllWeeklyRoomVisits(roomId, startTime, endTime);
+    public List<Visit> findAllBookedWeeklyRoomVisits(Long roomId, Date startTime, Date endTime) {
+        return visitRepository.findAllBookedWeeklyRoomVisits(roomId, startTime, endTime);
     }
 
-    public List<Visit> findAllWeeklyItemVisits(Long itemId, Date startTime, Date endTime) {
-        return visitRepository.findAllWeeklyItemVisits(itemId, startTime, endTime);
+    public List<Visit> findAllBookedWeeklyItemVisits(Long itemId, Date startTime, Date endTime) {
+        return visitRepository.findAllBookedWeeklyItemVisits(itemId, startTime, endTime);
     }
 
     public Visit markAsDone(Visit visit) {
