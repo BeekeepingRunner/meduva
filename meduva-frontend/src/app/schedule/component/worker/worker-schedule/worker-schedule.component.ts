@@ -5,13 +5,21 @@ import {ActivatedRoute} from "@angular/router";
 import {DayDialogComponent} from "../../dialog/day-dialog/day-dialog.component";
 import {User} from "../../../../model/user";
 import {UserService} from "../../../../service/user.service";
-import {ScheduleService, TimeRange, WeekBoundaries, WorkHours, WorkSchedule} from "../../../service/schedule.service";
+import {
+  ScheduleService,
+  TimeRange,
+  Visit,
+  WeekBoundaries,
+  WorkHours,
+  WorkSchedule
+} from "../../../service/schedule.service";
 import {
   createAbsenceHoursEvent,
   createOffWorkHoursEvent, createVisitsAsClientEvent,
-  createVisitsAsWorkerEvent
+  createVisitsAsWorkerEvent,
 } from "../../../util/event/creation";
 import {MatSnackBar} from "@angular/material/snack-bar";
+import {VisitDetailsComponent} from "../../../../component/visit/visit-details/visit-details.component";
 
 @Component({
   selector: 'app-worker-schedule',
@@ -19,6 +27,7 @@ import {MatSnackBar} from "@angular/material/snack-bar";
   templateUrl: './worker-schedule.component.html',
   styleUrls: ['./worker-schedule.component.css']
 })
+
 export class WorkerScheduleComponent implements OnInit {
 
   view: CalendarView = CalendarView.Week;
@@ -98,7 +107,7 @@ export class WorkerScheduleComponent implements OnInit {
 
     this.scheduleService.getWeeklyVisitsAsWorker(this.worker.id, this.weekBoundaries).subscribe(
       /* possibly later change WorkSchedule on new interface (Visit?) */
-      (weeklyVisitsAsWorker: WorkSchedule[]) => {
+      (weeklyVisitsAsWorker: Visit[]) => {
         console.log(weeklyVisitsAsWorker);
         this.updateVisitsAsWorkerEvents(weeklyVisitsAsWorker);
         this.prepareWeeklyVisitsAsClient();
@@ -110,29 +119,29 @@ export class WorkerScheduleComponent implements OnInit {
 
     this.scheduleService.getWeeklyVisitsAsClient(this.worker.id, this.weekBoundaries).subscribe(
       /* possibly later change WorkSchedule on new interface (Visit?) */
-      (weeklyVisitsAsClient: WorkSchedule[]) => {
+      (weeklyVisitsAsClient: Visit[]) => {
         console.log(weeklyVisitsAsClient);
         this.updateVisitsAsClientEvents(weeklyVisitsAsClient);
       }
     );
   }
 
-  private updateVisitsAsWorkerEvents(weeklyVisitsAsWorker: WorkSchedule[]){
+  private updateVisitsAsWorkerEvents(weeklyVisitsAsWorker: Visit[]){
     let newEvents = this.events;
     this.events = [];
     weeklyVisitsAsWorker.forEach(visitAsWorker => {
       newEvents.push(
-          createVisitsAsWorkerEvent(visitAsWorker.timeFrom, visitAsWorker.timeTo));
+          createVisitsAsWorkerEvent(visitAsWorker.timeFrom, visitAsWorker.timeTo, visitAsWorker.id));
     });
     this.events = [...newEvents];
   }
 
-  private updateVisitsAsClientEvents(weeklyVisitsAsClient: WorkSchedule[]) {
+  private updateVisitsAsClientEvents(weeklyVisitsAsClient: Visit[]) {
     let newEvents = this.events;
     this.events = [];
     weeklyVisitsAsClient.forEach(visitAsWorker => {
       newEvents.push(
-        createVisitsAsClientEvent(visitAsWorker.timeFrom, visitAsWorker.timeTo));
+        createVisitsAsClientEvent(visitAsWorker.timeFrom, visitAsWorker.timeTo, visitAsWorker.id));
     });
     this.events = [...newEvents];
   }
@@ -237,7 +246,23 @@ export class WorkerScheduleComponent implements OnInit {
     )
   }
 
+  openVisitDetailsDialog(id: string | number | undefined) {
+    const visitDetailsDialog = this.dialog.open(VisitDetailsComponent, {
+      width: '600px',
+      height: '600px',
+      panelClass: 'my-dialog',
+      data: {
+        visitId: id,
+      }
+    });
+  }
+
   eventClick($event: { event: CalendarEvent<any>; sourceEvent: any }) {
+
+    if($event.event.id != null){
+      this.openVisitDetailsDialog($event.event.id);
+    }
+
 
   }
 

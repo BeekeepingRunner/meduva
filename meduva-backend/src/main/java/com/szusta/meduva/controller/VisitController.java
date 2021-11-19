@@ -114,7 +114,7 @@ public class VisitController {
         Date endTime = TimeUtils.getDayEnd(weekBoundaries.getLastWeekDay());
         return visitService.findAllWeeklyItemVisits(itemId, startTime, endTime);
     }
-    
+
     @PutMapping("/{visitId}/mark-as-done")
     public Visit markVisitAsDone(@PathVariable Long visitId) {
         Visit visit = visitService.findById(visitId);

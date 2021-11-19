@@ -5,9 +5,10 @@ import {ActivatedRoute} from "@angular/router";
 import {MatDialog} from "@angular/material/dialog";
 import {RoomService} from "../../../../service/room.service";
 import {ItemDayDialogComponent, UnavailabilityOptions} from "../../dialog/item-day-dialog/item-day-dialog.component";
-import {ScheduleService, TimeRange, WeekBoundaries, WorkSchedule} from "../../../service/schedule.service";
+import {ScheduleService, TimeRange, Visit, WeekBoundaries, WorkSchedule} from "../../../service/schedule.service";
 import {createVisitEvent, createUnavailabilityEvent} from "../../../util/event/creation";
 import {MatSnackBar} from "@angular/material/snack-bar";
+import {VisitDetailsComponent} from "../../../../component/visit/visit-details/visit-details.component";
 
 @Component({
   selector: 'app-room-schedule',
@@ -85,18 +86,18 @@ export class RoomScheduleComponent implements OnInit {
     }
 
     this.scheduleService.getWeeklyRoomVisits(this.room.id, weekBoundaries).subscribe(
-      (weeklyVisits: WorkSchedule[]) => {
+      (weeklyVisits: Visit[]) => {
         this.pushVisits(weeklyVisits);
       }
     );
   }
 
-  private pushVisits(weeklyVisits: WorkSchedule[]) {
+  private pushVisits(weeklyVisits: Visit[]) {
     let newEvents = this.events;
     this.events = [];
     weeklyVisits.forEach(visit => {
       newEvents.push(
-        createVisitEvent(visit.timeFrom, visit.timeTo)
+        createVisitEvent(visit.timeFrom, visit.timeTo, visit.id)
       );
     });
     this.events = [...newEvents];
@@ -191,8 +192,22 @@ export class RoomScheduleComponent implements OnInit {
     this.events = [...newEvents];
   }
 
+  openVisitDetailsDialog(id: string | number | undefined) {
+    const visitDetailsDialog = this.dialog.open(VisitDetailsComponent, {
+      width: '600px',
+      height: '600px',
+      panelClass: 'my-dialog',
+      data: {
+        visitId: id,
+      }
+    });
+  }
+
   eventClick($event: {event: CalendarEvent<any>; sourceEvent: any}) {
 
+    if($event.event.id != null){
+      this.openVisitDetailsDialog($event.event.id);
+    }
   }
 
 }

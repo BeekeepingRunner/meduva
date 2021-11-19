@@ -1,5 +1,9 @@
 import {CalendarEvent} from "angular-calendar";
 
+interface VisitEventExtension extends CalendarEvent {
+  visitId: number;
+}
+
 export function createUnavailabilityEvent(start: Date, end: Date): CalendarEvent {
   return {
     draggable: false,
@@ -50,12 +54,12 @@ export function createAbsenceHoursEvent(start: Date, end: Date): CalendarEvent {
   };
 }
 
-export function createVisitsAsWorkerEvent(start: Date, end: Date): CalendarEvent {
+export function createVisitsAsWorkerEvent(start: Date, end: Date, visitId: number): CalendarEvent {
 
   return {
     draggable: false,
     end: new Date(end),
-    id: undefined,
+    id: visitId,
     meta: undefined,
     start: new Date(start),
     title: "Visit",
@@ -67,12 +71,12 @@ export function createVisitsAsWorkerEvent(start: Date, end: Date): CalendarEvent
   };
 }
 
-export function createVisitsAsClientEvent(start: Date, end: Date): CalendarEvent {
+export function createVisitsAsClientEvent(start: Date, end: Date, visitId: number): CalendarEvent {
 
   return {
     draggable: false,
     end: new Date(end),
-    id: undefined,
+    id: visitId,
     meta: undefined,
     start: new Date(start),
     title: "Visit as client",
@@ -84,11 +88,11 @@ export function createVisitsAsClientEvent(start: Date, end: Date): CalendarEvent
   };
 }
 
-export function createVisitEvent(start: Date, end: Date): CalendarEvent {
+export function createVisitEvent(start: Date, end: Date, visitId: number): CalendarEvent {
   return {
     draggable: false,
     end: new Date(end),
-    id: undefined,
+    id: visitId,
     meta: undefined,
     start: new Date(start),
     title: "Visit",

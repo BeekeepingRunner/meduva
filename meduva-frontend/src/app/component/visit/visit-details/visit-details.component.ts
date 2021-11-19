@@ -1,26 +1,35 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Injector, OnInit} from '@angular/core';
 import {Visit} from "../../../model/visit";
 import {VisitService} from "../../../service/visit.service";
 import {RoleGuardService} from "../../../service/auth/role-guard.service";
 import {ActivatedRoute} from "@angular/router";
 import {roleNames, UserRole} from "../../../model/user";
+import {MAT_DIALOG_DATA} from "@angular/material/dialog";
+import {DayDialogData} from "../../../schedule/component/dialog/day-dialog/day-dialog.component";
+
+export interface VisitDetailsDialogData {
+  visitId: number;
+}
 
 @Component({
   selector: 'app-visit-details',
   templateUrl: './visit-details.component.html',
   styleUrls: ['./visit-details.component.css']
 })
+
 export class VisitDetailsComponent implements OnInit {
 
   visit!: Visit;
   isClient: boolean = true;
   isWorker: boolean = true;
   isReceptionist: boolean = true;
+  data!: VisitDetailsDialogData;
 
   constructor(
     private activatedRoute: ActivatedRoute,
     private visitService: VisitService,
     private roleGuard: RoleGuardService,
+    private injector: Injector,
   ) { }
 
   ngOnInit(): void {
@@ -29,6 +38,9 @@ export class VisitDetailsComponent implements OnInit {
     this.isReceptionist = this.roleGuard.hasCurrentUserExpectedRole(roleNames[UserRole.ROLE_RECEPTIONIST]);
     if (visitId) {
       this.getVisitDetails(visitId);
+    } else {
+      this.data = this.injector.get(MAT_DIALOG_DATA);
+      this.getVisitDetails(this.data!.visitId);
     }
   }
 

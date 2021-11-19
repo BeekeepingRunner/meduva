@@ -23,6 +23,12 @@ export interface WorkSchedule {
   timeTo: Date
 }
 
+export interface Visit {
+  id: number,
+  timeFrom: Date,
+  timeTo: Date
+}
+
 @Injectable({
   providedIn: 'root'
 })
