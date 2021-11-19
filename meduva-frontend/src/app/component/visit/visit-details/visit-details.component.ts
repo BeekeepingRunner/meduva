@@ -3,6 +3,7 @@ import {Visit} from "../../../model/visit";
 import {VisitService} from "../../../service/visit.service";
 import {RoleGuardService} from "../../../service/auth/role-guard.service";
 import {ActivatedRoute} from "@angular/router";
+import {roleNames, UserRole} from "../../../model/user";
 
 @Component({
   selector: 'app-visit-details',
@@ -12,6 +13,9 @@ import {ActivatedRoute} from "@angular/router";
 export class VisitDetailsComponent implements OnInit {
 
   visit!: Visit;
+  isClient: boolean = true;
+  isWorker: boolean = true;
+  isReceptionist: boolean = true;
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -21,6 +25,8 @@ export class VisitDetailsComponent implements OnInit {
 
   ngOnInit(): void {
     let visitId = this.activatedRoute.snapshot.params.id;
+    this.isWorker = this.roleGuard.hasCurrentUserExpectedRole(roleNames[UserRole.ROLE_WORKER]);
+    this.isReceptionist = this.roleGuard.hasCurrentUserExpectedRole(roleNames[UserRole.ROLE_RECEPTIONIST]);
     if (visitId) {
       this.getVisitDetails(visitId);
     }

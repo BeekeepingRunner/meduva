@@ -84,14 +84,14 @@
           </span>
         </span>
       </td>
-      <td *ngIf="visit?.visitStatus?.name == 'VISIT_BOOKED'">
+      <td *ngIf="visit?.visitStatus?.name == 'VISIT_BOOKED' && isWorker">
         <button mat-raised-button color="primary" (click)="markAsDone()">Mark as done</button>
       </td>
       <td *ngIf="visit?.visitStatus?.name == 'VISIT_BOOKED'">
         <button mat-raised-button color="warn" (click)="cancelVisit()">Cancel visit</button>
       </td>
     </tr>
-    <tr>
+    <tr *ngIf="isWorker">
       <td><b class="title-col">Paid: </b></td>
       <td>
         <span *ngIf="visit?.paid == false">
