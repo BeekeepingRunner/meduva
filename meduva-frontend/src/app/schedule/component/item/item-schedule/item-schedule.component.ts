@@ -210,6 +210,12 @@ export class ItemScheduleComponent implements OnInit {
         visitId: id,
       }
     });
+
+    visitDetailsDialog.afterClosed().subscribe(
+      (value => {
+        this.getWeeklyEvents();
+      })
+    );
   }
 
   eventClick($event: {event: CalendarEvent<any>; sourceEvent: any}) {

@@ -255,7 +255,15 @@ export class WorkerScheduleComponent implements OnInit {
         visitId: id,
       }
     });
+
+    visitDetailsDialog.afterClosed().subscribe(
+      (value => {
+        this.prepareWeekEvents();
+      })
+    );
   }
+
+
 
   eventClick($event: { event: CalendarEvent<any>; sourceEvent: any }) {
 
