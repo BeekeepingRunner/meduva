@@ -78,7 +78,11 @@ export class ScheduleService {
   }
 
   getWeeklyRoomVisits(roomId: number | undefined, weekBoundaries: WeekBoundaries): Observable<any> {
-    return  this.httpClient.post(environment.API_BASE_URL + 'api/visit/get-week-room-visit/' + roomId, weekBoundaries);
+    return this.httpClient.post(environment.API_BASE_URL + 'api/visit/get-week-room-visit/' + roomId, weekBoundaries);
+  }
+
+  getWeeklyItemVisits(itemId: number | undefined, weekBoundaries: WeekBoundaries): Observable<any> {
+    return this.httpClient.post(environment.API_BASE_URL + 'api/visit/get-week-item-visit/' + itemId, weekBoundaries);
   }
 
   deleteDailyAbsenceHours(workerId: number, absenceDayDate: Date) {

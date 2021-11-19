@@ -4,7 +4,7 @@ import {ActivatedRoute} from "@angular/router";
 import {MatDialog} from "@angular/material/dialog";
 import {EquipmentItem} from "../../../../model/equipment";
 import {EquipmentService} from "../../../../service/equipment.service";
-import {ScheduleService, TimeRange} from "../../../service/schedule.service";
+import {ScheduleService, TimeRange, WeekBoundaries, WorkSchedule} from "../../../service/schedule.service";
 import {ItemDayDialogComponent, UnavailabilityOptions} from "../../dialog/item-day-dialog/item-day-dialog.component";
 import {createUnavailabilityEvent} from "../../../util/event/creation";
 import {MatSnackBar} from "@angular/material/snack-bar";
@@ -73,6 +73,7 @@ export class ItemScheduleComponent implements OnInit {
     this.scheduleService.getWeeklyItemUnavailability(this.item.id, weekBoundaries).subscribe(
       (weeklyUnavailability: TimeRange[]) => {
         this.pushUnavailabilities(weeklyUnavailability);
+        this.pushWeeklyVisits();
       });
   }
 
@@ -85,6 +86,19 @@ export class ItemScheduleComponent implements OnInit {
     });
     this.events = [];
     this.events = [...newEvents];
+  }
+
+  private pushWeeklyVisits(): void {
+    let weekBoundaries: WeekBoundaries = {
+      firstWeekDay: this.firstDayOfWeek,
+      lastWeekDay: this.lastDayOfWeek,
+    }
+
+    this.scheduleService.getWeeklyItemVisits(this.item.id, weekBoundaries).subscribe(
+      (weeklyItemVisits: WorkSchedule[]) => {
+        console.log(weeklyItemVisits);
+      }
+    );
   }
 
   openDayDialog(date: Date) {
@@ -175,6 +189,5 @@ export class ItemScheduleComponent implements OnInit {
   eventClick($event: {event: CalendarEvent<any>; sourceEvent: any}) {
 
   }
-
 
 }
