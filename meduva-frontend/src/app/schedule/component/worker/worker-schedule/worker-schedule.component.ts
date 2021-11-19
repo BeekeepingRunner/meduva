@@ -31,6 +31,7 @@ export class WorkerScheduleComponent implements OnInit {
 
   worker!: User;
 
+  weekBoundaries!: WeekBoundaries;
   firstDayOfWeek!: Date;
   lastDayOfWeek!: Date;
 
@@ -70,12 +71,12 @@ export class WorkerScheduleComponent implements OnInit {
   }
 
   private prepareWeeklyOffWorkHours(): void {
-    let weekBoundaries: WeekBoundaries = {
+    this.weekBoundaries = {
       firstWeekDay: this.firstDayOfWeek,
       lastWeekDay: this.lastDayOfWeek
     };
 
-    this.scheduleService.getWeeklyOffWorkHours(this.worker.id, weekBoundaries).subscribe(
+    this.scheduleService.getWeeklyOffWorkHours(this.worker.id, this.weekBoundaries).subscribe(
     (weeklyOffWorkHours: WorkHours[]) => {
       this.updateWorkHoursEvents(weeklyOffWorkHours);
       this.prepareWeeklyAbsenceHours();
@@ -83,12 +84,8 @@ export class WorkerScheduleComponent implements OnInit {
   }
 
   private prepareWeeklyAbsenceHours(): void {
-    let weekBoundaries: WeekBoundaries = {
-      firstWeekDay: this.firstDayOfWeek,
-      lastWeekDay: this.lastDayOfWeek
-    };
 
-    this.scheduleService.getWeeklyAbsenceHours(this.worker.id, weekBoundaries).subscribe(
+    this.scheduleService.getWeeklyAbsenceHours(this.worker.id, this.weekBoundaries).subscribe(
       (weeklyAbsenceHours: WorkSchedule[]) => {
         console.log(weeklyAbsenceHours);
         this.updateAbsenceHoursEvents(weeklyAbsenceHours);
@@ -98,12 +95,8 @@ export class WorkerScheduleComponent implements OnInit {
   }
 
   private prepareWeeklyVisitsAsWorker(): void {
-    let weekBoundaries: WeekBoundaries = {
-      firstWeekDay: this.firstDayOfWeek,
-      lastWeekDay: this.lastDayOfWeek
-    };
 
-    this.scheduleService.getWeeklyVisitsAsWorker(this.worker.id, weekBoundaries).subscribe(
+    this.scheduleService.getWeeklyVisitsAsWorker(this.worker.id, this.weekBoundaries).subscribe(
       /* possibly later change WorkSchedule on new interface (Visit?) */
       (weeklyVisitsAsWorker: WorkSchedule[]) => {
         console.log(weeklyVisitsAsWorker);
@@ -114,12 +107,8 @@ export class WorkerScheduleComponent implements OnInit {
   }
 
   private prepareWeeklyVisitsAsClient(): void {
-    let weekBoundaries: WeekBoundaries = {
-      firstWeekDay: this.firstDayOfWeek,
-      lastWeekDay: this.lastDayOfWeek
-    };
 
-    this.scheduleService.getWeeklyVisitsAsClient(this.worker.id, weekBoundaries).subscribe(
+    this.scheduleService.getWeeklyVisitsAsClient(this.worker.id, this.weekBoundaries).subscribe(
       /* possibly later change WorkSchedule on new interface (Visit?) */
       (weeklyVisitsAsClient: WorkSchedule[]) => {
         console.log(weeklyVisitsAsClient);
@@ -162,7 +151,6 @@ export class WorkerScheduleComponent implements OnInit {
     let newEvents = this.events;
     this.events = [];
     weeklyAbsenceHours.forEach(absenceHours => {
-      console.log(absenceHours);
       newEvents.push(
         createAbsenceHoursEvent(absenceHours.timeFrom, absenceHours.timeTo)
       );
