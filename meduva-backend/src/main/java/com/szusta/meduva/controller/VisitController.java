@@ -7,7 +7,6 @@ import com.szusta.meduva.payload.Term;
 import com.szusta.meduva.service.ScheduleChecker;
 import com.szusta.meduva.service.ServicesService;
 import com.szusta.meduva.service.user.UserService;
-import com.szusta.meduva.service.visit.ScheduleManager;
 import com.szusta.meduva.service.visit.VisitService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -26,7 +25,6 @@ public class VisitController {
     UserService userService;
     ServicesService servicesService;
     ScheduleChecker scheduleChecker;
-    ScheduleManager scheduleManager;
 
     @Autowired
     public VisitController(VisitService visitService,
