@@ -79,6 +79,26 @@ export class SpecificUserComponent implements OnInit {
     this.isAWorker = this.userRole.name != 'ROLE_CLIENT';
   }
 
+  deleteUser() {
+    this.visitService.cancelAllAsClientByUserId(this.userId).subscribe(
+      ifSuccess => {
+        this.visitService.deleteAllAsClientByUserId(this.userId).subscribe();
+      }
+    )
+    if(this.isAWorker==true){
+      this.visitService.cancelAllAsWorkerByUserId(this.userId).subscribe(
+        ifSuccess => {
+          this.visitService.deleteAllAsWorkerByUserId(this.userId).subscribe();
+        }
+      )
+    }
+    this.userService.deleteById(this.userId).subscribe(
+      ifSuccess => {
+        this.openFeedbackDialog();
+      }
+    );
+  }
+
   openDeleteConfirmDialog(): void {
     if(this.userId==this.currentUserJwtToken.getCurrentUser()?.id){
       const feedbackDialogRef = this.dialog.open(FeedbackDialogComponent, {
@@ -103,18 +123,7 @@ export class SpecificUserComponent implements OnInit {
     }
   }
 
-  deleteUser() {
-    this.visitService.deleteAllAsClientByUserId(this.userId).subscribe();
-    if(this.isAWorker==true){
-      this.visitService.deleteAllAsWorkerByUserId(this.userId).subscribe();
-    }
-    this.userService.deleteById(this.userId).subscribe(
-      ifSuccess => {
-        this.openFeedbackDialog();
-      }
 
-    );
-  }
 
   openDeleteWarningDialog(): void {
     const warningConfirmDialogRef = this.dialog.open(ConfirmationWithWarningDialogComponent, {

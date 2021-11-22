@@ -146,7 +146,7 @@ public class VisitService {
     public List<Visit> cancelAllOfUnregisteredClient(Long unregisteredClientId) {
         List<Visit> unregisteredClientVisits = findAllOfUnregisteredClient(unregisteredClientId);
         for (Visit visit : unregisteredClientVisits) {
-            scheduleManager.freeSchedules(visit);
+            cancel(visit);
         }
         return unregisteredClientVisits;
     }

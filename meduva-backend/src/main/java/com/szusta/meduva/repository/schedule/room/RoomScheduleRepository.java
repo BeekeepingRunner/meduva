@@ -5,6 +5,7 @@ import com.szusta.meduva.repository.undeletable.UndeletableRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
@@ -69,6 +70,8 @@ public interface RoomScheduleRepository extends UndeletableRepository<RoomSchedu
             value = "DELETE FROM room_schedule rs WHERE rs.room_id = ?1 AND "
                     + " timestampdiff(MINUTE, time_from, ?2) <= 0 AND timestampdiff(MINUTE, time_to, ?3) >= 0"
     )
+
+    @Transactional
     void deleteByRoomIdBetween(Long roomId, Date start, Date end);
 
     @Modifying

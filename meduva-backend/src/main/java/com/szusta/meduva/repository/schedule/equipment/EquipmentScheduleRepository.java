@@ -5,6 +5,7 @@ import com.szusta.meduva.repository.undeletable.UndeletableRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
@@ -112,6 +113,8 @@ public interface EquipmentScheduleRepository extends UndeletableRepository<Equip
             value = "DELETE FROM equipment_schedule es WHERE es.equipment_item_id = ?1 AND "
                     + " es.time_from = ?2"
     )
+
+    @Transactional
     void deleteByEqItemIdWithStartTime(Long eqItemId, Date startTime);
 
     @Modifying
