@@ -168,6 +168,9 @@ export class VisitService {
   cancelVisit(visitId: any): Observable<any> {
     return this.httpClient.put(environment.API_BASE_URL + 'api/visit/' + visitId + '/cancel', {});
   }
+  cancelAllOfUnregisteredClient(clientId: number): Observable<any> {
+    return this.httpClient.put(environment.API_BASE_URL + 'api/visit/cancel-all-of-unregistered-client/' + clientId, {});
+  }
 
   markVisitAsPaid(visitId: any): Observable<any> {
     return this.httpClient.put(environment.API_BASE_URL + 'api/visit/' + visitId + '/mark-as-paid', {});

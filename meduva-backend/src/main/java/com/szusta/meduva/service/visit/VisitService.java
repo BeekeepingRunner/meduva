@@ -135,19 +135,20 @@ public class VisitService {
         return visitRepository.findByUnregisteredClient(unregisteredClient);
     }
 
-    @Transactional
-    public void markAsDeleted(Long visitId) {
-        Visit visit = visitRepository.findById(visitId)
-                .orElseThrow(() -> new EntityNotFoundException("Visit not found with id : " + visitId));
-        visit.markAsDeleted();
-        visitRepository.save(visit);
-    }
+
 
     public void deleteAllOfUnregisteredClient(Long unregisteredClientId) {
         List<Visit> unregisteredClientVisits = findAllOfUnregisteredClient(unregisteredClientId);
         for (Visit visit:unregisteredClientVisits) {
             markAsDeleted(visit.getId());
         }
+    }
+    public List<Visit> cancelAllOfUnregisteredClient(Long unregisteredClientId) {
+        List<Visit> unregisteredClientVisits = findAllOfUnregisteredClient(unregisteredClientId);
+        for (Visit visit : unregisteredClientVisits) {
+            scheduleManager.freeSchedules(visit);
+        }
+        return unregisteredClientVisits;
     }
 
     public void deleteAllWhereUserIsClient(User userAsClient) {
@@ -157,11 +158,36 @@ public class VisitService {
         }
     }
 
+    public List<Visit> cancelAllWhereUserIsClient(User userAsClient) {
+        List<Visit> userAsClientVisits = findAllWhereUserIsClient(userAsClient);
+        for (Visit visit:userAsClientVisits) {
+            cancel(visit);
+        }
+        return userAsClientVisits;
+    }
+
     public void deleteAllWhereUserIsWorker(User userAsWorker) {
         List<Visit> userAsWorkerVisits = findAllWhereUserIsWorker(userAsWorker);
         for (Visit visit : userAsWorkerVisits) {
             markAsDeleted(visit.getId());
         }
+    }
+
+    public List<Visit> cancelAllWhereUserIsWorker(User userAsWorker) {
+        List<Visit> userAsWorkerVisits = findAllWhereUserIsWorker(userAsWorker);
+        for (Visit visit : userAsWorkerVisits) {
+            cancel(visit);
+        }
+        return userAsWorkerVisits;
+    }
+
+
+    @Transactional
+    public void markAsDeleted(Long visitId) {
+        Visit visit = visitRepository.findById(visitId)
+                .orElseThrow(() -> new EntityNotFoundException("Visit not found with id : " + visitId));
+        visit.markAsDeleted();
+        visitRepository.save(visit);
     }
 
     public Visit markAsDone(Visit visit) {

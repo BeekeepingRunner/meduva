@@ -39,7 +39,10 @@ export class ClientDetailsComponent implements OnInit {
   }
 
   private deleteClient() {
+
+    this.visitService.cancelAllOfUnregisteredClient(this.client.id).subscribe();
     this.visitService.deleteAllOfUnregisteredClient(this.client.id).subscribe();
+
     this.clientService.deleteById(this.client.id).subscribe(
       ifSuccess => {
         this.openFeedbackDialog();

@@ -7,6 +7,7 @@ import com.szusta.meduva.payload.Term;
 import com.szusta.meduva.service.ScheduleChecker;
 import com.szusta.meduva.service.ServicesService;
 import com.szusta.meduva.service.user.UserService;
+import com.szusta.meduva.service.visit.ScheduleManager;
 import com.szusta.meduva.service.visit.VisitService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -25,6 +26,7 @@ public class VisitController {
     UserService userService;
     ServicesService servicesService;
     ScheduleChecker scheduleChecker;
+    ScheduleManager scheduleManager;
 
     @Autowired
     public VisitController(VisitService visitService,
@@ -116,5 +118,22 @@ public class VisitController {
     public Visit cancelVisit(@PathVariable Long visitId) {
         Visit visit = visitService.findById(visitId);
         return visitService.cancel(visit);
+    }
+
+    @PutMapping("/cancel-all-of-unregistered-client/{unregisteredClientId}")
+    public List<Visit> cancelAllOfUnregisteredClient(@PathVariable Long unregisteredClientId) {
+        return visitService.cancelAllOfUnregisteredClient(unregisteredClientId);
+    }
+
+    @PutMapping("/cancel-all-as-client-by-user-id/{userId}")
+    public List<Visit> cancelAllWhereUserIsClient(@PathVariable Long userId) {
+        User userAsClient = userService.findById(userId);
+        return visitService.cancelAllWhereUserIsClient(userAsClient);
+    }
+
+    @PutMapping("/cancel-all-as-worker-by-user-id/{userId}")
+    public List<Visit> cancelAllWhereUserIsWorker(@PathVariable Long userId) {
+        User userAsWorker = userService.findById(userId);
+        return visitService.cancelAllWhereUserIsWorker(userAsWorker);
     }
 }
