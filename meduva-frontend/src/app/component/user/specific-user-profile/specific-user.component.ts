@@ -80,24 +80,38 @@ export class SpecificUserComponent implements OnInit {
   }
 
   deleteUser() {
-    this.visitService.cancelAllAsClientByUserId(this.userId).subscribe(
-      ifSuccess => {
-        this.visitService.deleteAllAsClientByUserId(this.userId).subscribe();
-      }
-    )
     if(this.isAWorker==true){
       this.visitService.cancelAllAsWorkerByUserId(this.userId).subscribe(
         ifSuccess => {
-          this.visitService.deleteAllAsWorkerByUserId(this.userId).subscribe();
+          this.visitService.deleteAllAsWorkerByUserId(this.userId).subscribe(
+            ifSuccess => {
+              this.deleteUserWithVisits()
+            }
+          );
         }
       )
     }
-    this.userService.deleteById(this.userId).subscribe(
-      ifSuccess => {
-        this.openFeedbackDialog();
-      }
-    );
+    else {
+      this.deleteUserWithVisits();
+    }
   }
+
+  deleteUserWithVisits(){
+    this.visitService.cancelAllAsClientByUserId(this.userId).subscribe(
+      ifSuccess => {
+        this.visitService.deleteAllAsClientByUserId(this.userId).subscribe(
+          ifSuccess => {
+            this.userService.deleteById(this.userId).subscribe(
+              ifSuccess => {
+                this.openFeedbackDialog();
+              }
+            );
+          }
+        );
+      }
+    )
+  }
+
 
   openDeleteConfirmDialog(): void {
     if(this.userId==this.currentUserJwtToken.getCurrentUser()?.id){

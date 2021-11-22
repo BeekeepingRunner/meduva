@@ -42,15 +42,19 @@ export class ClientDetailsComponent implements OnInit {
 
     this.visitService.cancelAllOfUnregisteredClient(this.client.id).subscribe(
       ifSuccess => {
-        this.visitService.deleteAllOfUnregisteredClient(this.client.id).subscribe();
+        this.visitService.deleteAllOfUnregisteredClient(this.client.id).subscribe(
+          ifSuccess => {
+            this.clientService.deleteById(this.client.id).subscribe(
+              ifSuccess => {
+                this.openFeedbackDialog();
+              }
+            );
+          }
+        );
       }
     );
 
-    this.clientService.deleteById(this.client.id).subscribe(
-      ifSuccess => {
-        this.openFeedbackDialog();
-      }
-    );
+
   }
 
   openDeleteConfirmDialog(): void {
