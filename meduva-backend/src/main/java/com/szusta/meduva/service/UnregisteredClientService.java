@@ -1,5 +1,6 @@
 package com.szusta.meduva.service;
 
+import ch.qos.logback.core.net.server.Client;
 import com.szusta.meduva.exception.AlreadyExistsException;
 import com.szusta.meduva.exception.EntityRecordNotFoundException;
 import com.szusta.meduva.model.UnregisteredClient;
@@ -7,6 +8,8 @@ import com.szusta.meduva.repository.UnregisteredClientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityNotFoundException;
+import javax.transaction.Transactional;
 import java.util.List;
 
 @Service
@@ -50,4 +53,12 @@ public class UnregisteredClientService {
         return this.clientRepository.findAllDeleted();
     }
 
+    @Transactional
+    public void markAsDeleted(Long clientId) {
+
+        UnregisteredClient client = clientRepository.findById(clientId)
+                .orElseThrow(() -> new EntityNotFoundException("Client not found with id : " + clientId));
+        client.markAsDeleted();
+        clientRepository.save(client);
+    }
 }

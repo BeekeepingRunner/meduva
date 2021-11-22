@@ -44,4 +44,8 @@ export class ClientService {
   editClient(client: Client): Observable<any> {
     return this.httpClient.post(environment.API_BASE_URL + "api/unregistered-client/edit", client);
   }
+
+  public deleteById(clientId: number | undefined): Observable<any> {
+    return this.httpClient.delete(environment.API_BASE_URL + 'api/unregistered-client/' + clientId);
+  }
 }

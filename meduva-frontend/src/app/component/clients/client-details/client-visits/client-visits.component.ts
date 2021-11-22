@@ -1,7 +1,8 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {Client} from "../../../../model/client";
 import {Visit} from "../../../../model/visit";
 import {VisitService} from "../../../../service/visit.service";
+import {Service} from "../../../../model/service";
 
 @Component({
   selector: 'app-client-visits',
@@ -9,6 +10,8 @@ import {VisitService} from "../../../../service/visit.service";
   styleUrls: ['./client-visits.component.css']
 })
 export class ClientVisitsComponent implements OnInit {
+
+  @Output() clientVisitsEmitter = new EventEmitter<Visit[]>();
 
   @Input()
   client!: Client;
@@ -32,6 +35,7 @@ export class ClientVisitsComponent implements OnInit {
     this.visitService.getAllAsClientByUserId(this.client.id).subscribe(
       visits => {
         this.visits = visits;
+        this.clientVisitsEmitter.emit(this.visits);
         console.log(visits);
       }, err => {
         console.log(err);
@@ -43,6 +47,7 @@ export class ClientVisitsComponent implements OnInit {
     this.visitService.getAllOfUnregisteredClient(this.client.id).subscribe(
       visits => {
         this.visits = visits;
+        this.clientVisitsEmitter.emit(this.visits);
         console.log(visits);
       }, err => {
         console.log(err);

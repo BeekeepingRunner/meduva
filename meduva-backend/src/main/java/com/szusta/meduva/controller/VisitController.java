@@ -114,6 +114,22 @@ public class VisitController {
         return visitService.findAllBookedWeeklyItemVisits(itemId, startTime, endTime);
     }
 
+    @DeleteMapping("/all-of-unregistered-client/{unregisteredClientId}")
+    public void deleteAllOfUnregisteredClient(@PathVariable Long unregisteredClientId) {
+       visitService.deleteAllOfUnregisteredClient(unregisteredClientId);
+    }
+
+    @DeleteMapping("/all-as-client-by-user-id/{userId}")
+    public void deleteAllWhereUserIsClient(@PathVariable Long userId) {
+        User userAsClient = userService.findById(userId);
+        visitService.deleteAllWhereUserIsClient(userAsClient);
+    }
+    @DeleteMapping("/all-as-worker-by-user-id/{userId}")
+    public void deleteAllWhereUserIsWorker(@PathVariable Long userId) {
+        User userAsWorker = userService.findById(userId);
+        visitService.deleteAllWhereUserIsWorker(userAsWorker);
+    }
+
     @PutMapping("/{visitId}/mark-as-done")
     public Visit markVisitAsDone(@PathVariable Long visitId) {
         Visit visit = visitService.findById(visitId);
@@ -131,5 +147,22 @@ public class VisitController {
         Visit visit = visitService.findById(visitId);
         return visitService.cancel(visit);
 
+    }
+
+    @PutMapping("/cancel-all-of-unregistered-client/{unregisteredClientId}")
+    public List<Visit> cancelAllOfUnregisteredClient(@PathVariable Long unregisteredClientId) {
+        return visitService.cancelAllOfUnregisteredClient(unregisteredClientId);
+    }
+
+    @PutMapping("/cancel-all-as-client-by-user-id/{userId}")
+    public List<Visit> cancelAllWhereUserIsClient(@PathVariable Long userId) {
+        User userAsClient = userService.findById(userId);
+        return visitService.cancelAllWhereUserIsClient(userAsClient);
+    }
+
+    @PutMapping("/cancel-all-as-worker-by-user-id/{userId}")
+    public List<Visit> cancelAllWhereUserIsWorker(@PathVariable Long userId) {
+        User userAsWorker = userService.findById(userId);
+        return visitService.cancelAllWhereUserIsWorker(userAsWorker);
     }
 }
