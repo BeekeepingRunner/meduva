@@ -4,10 +4,11 @@ import {ActivatedRoute} from "@angular/router";
 import {MatDialog} from "@angular/material/dialog";
 import {EquipmentItem} from "../../../../model/equipment";
 import {EquipmentService} from "../../../../service/equipment.service";
-import {ScheduleService, TimeRange} from "../../../service/schedule.service";
+import {ScheduleService, TimeRange, Visit, WeekBoundaries, WorkSchedule} from "../../../service/schedule.service";
 import {ItemDayDialogComponent, UnavailabilityOptions} from "../../dialog/item-day-dialog/item-day-dialog.component";
-import {createUnavailabilityEvent} from "../../../util/event/creation";
+import {createUnavailabilityEvent, createVisitEvent} from "../../../util/event/creation";
 import {MatSnackBar} from "@angular/material/snack-bar";
+import {VisitDetailsComponent} from "../../../../component/visit/visit-details/visit-details.component";
 
 @Component({
   selector: 'app-item-schedule',
@@ -73,6 +74,7 @@ export class ItemScheduleComponent implements OnInit {
     this.scheduleService.getWeeklyItemUnavailability(this.item.id, weekBoundaries).subscribe(
       (weeklyUnavailability: TimeRange[]) => {
         this.pushUnavailabilities(weeklyUnavailability);
+        this.pushWeeklyVisits();
       });
   }
 
@@ -81,6 +83,30 @@ export class ItemScheduleComponent implements OnInit {
     weeklyUnavailability.forEach(unavailability => {
       newEvents.push(
         createUnavailabilityEvent(unavailability.startTime, unavailability.endTime)
+      );
+    });
+    this.events = [];
+    this.events = [...newEvents];
+  }
+
+  private pushWeeklyVisits(): void {
+    let weekBoundaries: WeekBoundaries = {
+      firstWeekDay: this.firstDayOfWeek,
+      lastWeekDay: this.lastDayOfWeek,
+    }
+
+    this.scheduleService.getWeeklyBookedItemVisits(this.item.id, weekBoundaries).subscribe(
+      (weeklyItemVisits: Visit[]) => {
+        this.pushVisits(weeklyItemVisits);
+      }
+    );
+  }
+
+  private pushVisits(weeklyItemVisits: Visit[]) {
+    let newEvents = this.events;
+    weeklyItemVisits.forEach(visit => {
+      newEvents.push(
+        createVisitEvent(visit.timeFrom, visit.timeTo, visit.id)
       );
     });
     this.events = [];
@@ -120,6 +146,9 @@ export class ItemScheduleComponent implements OnInit {
           console.log(dayTimeRange); // git gud
           this.pushUnavailableDayToEvents(dayTimeRange);
           this.getWeeklyEvents();
+        }, err => {
+          console.log(err);
+          this.snackBar.open(err.error.message);
         }
       )
     }
@@ -172,9 +201,28 @@ export class ItemScheduleComponent implements OnInit {
     this.events = [...newEvents];
   }
 
-  eventClick($event: {event: CalendarEvent<any>; sourceEvent: any}) {
+  openVisitDetailsDialog(id: string | number | undefined) {
+    const visitDetailsDialog = this.dialog.open(VisitDetailsComponent, {
+      width: '600px',
+      height: '600px',
+      panelClass: 'my-dialog',
+      data: {
+        visitId: id,
+      }
+    });
 
+    visitDetailsDialog.afterClosed().subscribe(
+      (value => {
+        this.getWeeklyEvents();
+      })
+    );
   }
 
+  eventClick($event: {event: CalendarEvent<any>; sourceEvent: any}) {
+
+    if($event.event.id != null){
+      this.openVisitDetailsDialog($event.event.id);
+    }
+  }
 
 }

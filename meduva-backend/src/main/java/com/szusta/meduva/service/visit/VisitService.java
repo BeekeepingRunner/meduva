@@ -136,6 +136,21 @@ public class VisitService {
     }
 
 
+    public List<Visit> findAllBookedWhereUserIsWorkerBetween(Long workerId, Date startTime, Date endTime) {
+        return visitRepository.findAllBookedWhereUserIsWorkerBetween(workerId, startTime, endTime);
+    }
+
+    public List<Visit> findAllBookedWhereUserIsClientBetween(Long workerId, Date startTime, Date endTime) {
+        return visitRepository.findAllBookedWhereUserIsClientBetween(workerId, startTime, endTime);
+    }
+
+    public List<Visit> findAllBookedWeeklyRoomVisits(Long roomId, Date startTime, Date endTime) {
+        return visitRepository.findAllBookedWeeklyRoomVisits(roomId, startTime, endTime);
+    }
+
+    public List<Visit> findAllBookedWeeklyItemVisits(Long itemId, Date startTime, Date endTime) {
+        return visitRepository.findAllBookedWeeklyItemVisits(itemId, startTime, endTime);
+}
 
     public void deleteAllOfUnregisteredClient(Long unregisteredClientId) {
         List<Visit> unregisteredClientVisits = findAllOfUnregisteredClient(unregisteredClientId);
@@ -211,5 +226,6 @@ public class VisitService {
                 .orElseThrow(() -> new EntityRecordNotFoundException("Visit status not found with id " + EVisitStatus.VISIT_CANCELLED.getValue()));
         visit.setVisitStatus(cancelled);
         return visitRepository.save(visit);
+
     }
 }

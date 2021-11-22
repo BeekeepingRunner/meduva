@@ -23,6 +23,12 @@ export interface WorkSchedule {
   timeTo: Date
 }
 
+export interface Visit {
+  id: number,
+  timeFrom: Date,
+  timeTo: Date
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -53,7 +59,15 @@ export class ScheduleService {
     return this.httpClient.post(environment.API_BASE_URL + 'api/worker/get-week-absence-hours/' + workerId, weekBoundaries);
   }
 
-  getWeeklyItemUnavailability(itemId: number, weekBoundaries: TimeRange): Observable<any> {
+  getWeeklyBookedVisitsAsWorker(workerId: number, weekBoundaries: WeekBoundaries): Observable<any> {
+    return this.httpClient.post(environment.API_BASE_URL + "api/visit/get-week-booked-visits-as-worker/" + workerId, weekBoundaries );
+  }
+
+  getWeeklyBookedVisitsAsClient(workerId: number, weekBoundaries: WeekBoundaries): Observable<any> {
+    return this.httpClient.post(environment.API_BASE_URL + "api/visit/get-week-booked-visits-as-client/" + workerId, weekBoundaries );
+  }
+
+  getWeeklyItemUnavailability(itemId: number, weekBoundaries: WeekBoundaries): Observable<any> {
     return this.httpClient.post(environment.API_BASE_URL + 'api/equipment/item/get-weekly-unavailability/' + itemId, weekBoundaries);
   }
 
@@ -67,6 +81,14 @@ export class ScheduleService {
 
   setRoomDayUnavailability(roomId: number, day: Date): Observable<any> {
     return this.httpClient.post(environment.API_BASE_URL + 'api/room/set-day-unavailability/' + roomId, day);
+  }
+
+  getWeeklyBookedRoomVisits(roomId: number | undefined, weekBoundaries: WeekBoundaries): Observable<any> {
+    return this.httpClient.post(environment.API_BASE_URL + 'api/visit/get-week-booked-room-visit/' + roomId, weekBoundaries);
+  }
+
+  getWeeklyBookedItemVisits(itemId: number | undefined, weekBoundaries: WeekBoundaries): Observable<any> {
+    return this.httpClient.post(environment.API_BASE_URL + 'api/visit/get-week-booked-item-visit/' + itemId, weekBoundaries);
   }
 
   deleteDailyAbsenceHours(workerId: number, absenceDayDate: Date) {
@@ -109,4 +131,5 @@ export class ScheduleService {
 
     return this.httpClient.delete(environment.API_BASE_URL + 'api/equipment/item/delete-day-unavailability/' + itemId, httpOptions);
   }
+
 }
