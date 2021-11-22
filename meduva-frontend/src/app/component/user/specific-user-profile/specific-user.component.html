@@ -80,6 +80,14 @@
   </div>
 
 </div>
+<br>
+<div *ngIf="userDetails" class="container">
+<h5><strong>Visit history</strong></h5>
+<app-client-visits [client]="userDetails"
+                   (clientVisitsEmitter)="onUserVisitsGot($event)">
+</app-client-visits>
+</div>
+<br>
 
 <ng-template #loggedOut>
   Please login.

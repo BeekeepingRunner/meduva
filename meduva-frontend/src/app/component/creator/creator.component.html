@@ -32,13 +32,11 @@
     </div>
   </mat-step>
 
-
   <mat-step label="Add the equipment">
 
     <app-equipment-list-creator *ngIf="roomItems.length"
                                 [roomItems]="roomItems"
                                 (eqModelEmitter)="onEquipmentModelGot($event)">
-
     </app-equipment-list-creator>
     <br>
     <div>
@@ -51,8 +49,6 @@
     </div>
   </mat-step>
 
-
-
   <mat-step label="Personalize services"
             [completed]="services.length>0">
 
@@ -62,9 +58,7 @@
                               (serviceConfigurationEmitter)="onServicesGot($event)"
                               (equipmentConfigurationEmitter)="onEquipmentModelGot($event)"
                               (roomConfigurationEmitter)="onRoomsGeneration($event)">
-
     </app-service-list-creator>
-
 
   </mat-step>
 

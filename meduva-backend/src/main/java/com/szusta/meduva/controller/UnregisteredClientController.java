@@ -51,4 +51,9 @@ public class UnregisteredClientController {
         client.setPhoneNumber(editedClient.getPhoneNumber());
         return clientService.save(client);
     }
+
+    @DeleteMapping("/{id}")
+    public void deleteClient(@PathVariable Long id) {
+        this.clientService.markAsDeleted(id);
+    }
 }
