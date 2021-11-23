@@ -86,28 +86,28 @@ public class VisitController {
         return visitService.findAllOfUnregisteredClient(unregisteredClientId);
     }
 
-    @PostMapping("/get-week-booked-visits-as-worker/{workerId}")
+    @PostMapping("/get-week-not-cancelled-visits-as-worker/{workerId}")
     public List<Visit> findAllBookedWhereUserIsWorkerBetween(@PathVariable Long workerId, @RequestBody WeekBoundaries weekBoundaries) {
         Date startTime = TimeUtils.getDayStart(weekBoundaries.getFirstWeekDay());
         Date endTime = TimeUtils.getDayEnd(weekBoundaries.getLastWeekDay());
         return visitService.findAllNotCancelledWhereUserIsWorkerBetween(workerId, startTime, endTime);
     }
 
-    @PostMapping("/get-week-booked-visits-as-client/{workerId}")
+    @PostMapping("/get-week-not-cancelled-visits-as-client/{workerId}")
     public List<Visit> findAllNotCancelledWhereUserIsClientBetween(@PathVariable Long workerId, @RequestBody WeekBoundaries weekBoundaries) {
         Date startTime = TimeUtils.getDayStart(weekBoundaries.getFirstWeekDay());
         Date endTime = TimeUtils.getDayEnd(weekBoundaries.getLastWeekDay());
         return visitService.findAllNotCancelledWhereUserIsClientBetween(workerId, startTime, endTime);
     }
 
-    @PostMapping("/get-week-booked-room-visit/{roomId}")
+    @PostMapping("/get-week-not-cancelled-room-visit/{roomId}")
     public List<Visit> findAllNotCancelledWeeklyRoomVisits(@PathVariable Long roomId, @RequestBody WeekBoundaries weekBoundaries){
         Date startTime = TimeUtils.getDayStart(weekBoundaries.getFirstWeekDay());
         Date endTime = TimeUtils.getDayEnd(weekBoundaries.getLastWeekDay());
         return visitService.findAllNotCancelledWeeklyRoomVisits(roomId, startTime, endTime);
     }
 
-    @PostMapping("/get-week-booked-item-visit/{itemId}")
+    @PostMapping("/get-week-not-cancelled-item-visit/{itemId}")
     public List<Visit> findAllNotCancelledWeeklyItemVisits(@PathVariable Long itemId, @RequestBody WeekBoundaries weekBoundaries) {
         Date startTime = TimeUtils.getDayStart(weekBoundaries.getFirstWeekDay());
         Date endTime = TimeUtils.getDayEnd(weekBoundaries.getLastWeekDay());

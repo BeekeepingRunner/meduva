@@ -109,7 +109,7 @@ export class MyScheduleComponent implements OnInit {
 
   private prepareWeeklyVisitsAsWorker(): void {
 
-    this.scheduleService.getWeeklyBookedVisitsAsWorker(this.worker.id, this.weekBoundaries).subscribe(
+    this.scheduleService.getWeeklyNotCancelledVisitsAsWorker(this.worker.id, this.weekBoundaries).subscribe(
       /* possibly later change WorkSchedule on new interface (Visit?) */
       (weeklyVisitsAsWorker: Visit[]) => {
         console.log(weeklyVisitsAsWorker);
@@ -121,7 +121,7 @@ export class MyScheduleComponent implements OnInit {
 
   private prepareWeeklyVisitsAsClient(): void {
 
-    this.scheduleService.getWeeklyBookedVisitsAsClient(this.worker.id, this.weekBoundaries).subscribe(
+    this.scheduleService.getWeeklyNotCancelledVisitsAsClient(this.worker.id, this.weekBoundaries).subscribe(
       /* possibly later change WorkSchedule on new interface (Visit?) */
       (weeklyVisitsAsClient: Visit[]) => {
         console.log(weeklyVisitsAsClient);
