@@ -90,28 +90,28 @@ public class VisitController {
     public List<Visit> findAllBookedWhereUserIsWorkerBetween(@PathVariable Long workerId, @RequestBody WeekBoundaries weekBoundaries) {
         Date startTime = TimeUtils.getDayStart(weekBoundaries.getFirstWeekDay());
         Date endTime = TimeUtils.getDayEnd(weekBoundaries.getLastWeekDay());
-        return visitService.findAllBookedWhereUserIsWorkerBetween(workerId, startTime, endTime);
+        return visitService.findAllNotCancelledWhereUserIsWorkerBetween(workerId, startTime, endTime);
     }
 
     @PostMapping("/get-week-booked-visits-as-client/{workerId}")
-    public List<Visit> findAllBookedWhereUserIsClientBetween(@PathVariable Long workerId, @RequestBody WeekBoundaries weekBoundaries) {
+    public List<Visit> findAllNotCancelledWhereUserIsClientBetween(@PathVariable Long workerId, @RequestBody WeekBoundaries weekBoundaries) {
         Date startTime = TimeUtils.getDayStart(weekBoundaries.getFirstWeekDay());
         Date endTime = TimeUtils.getDayEnd(weekBoundaries.getLastWeekDay());
-        return visitService.findAllBookedWhereUserIsClientBetween(workerId, startTime, endTime);
+        return visitService.findAllNotCancelledWhereUserIsClientBetween(workerId, startTime, endTime);
     }
 
     @PostMapping("/get-week-booked-room-visit/{roomId}")
-    public List<Visit> findAllBookedWeeklyRoomVisits(@PathVariable Long roomId, @RequestBody WeekBoundaries weekBoundaries){
+    public List<Visit> findAllNotCancelledWeeklyRoomVisits(@PathVariable Long roomId, @RequestBody WeekBoundaries weekBoundaries){
         Date startTime = TimeUtils.getDayStart(weekBoundaries.getFirstWeekDay());
         Date endTime = TimeUtils.getDayEnd(weekBoundaries.getLastWeekDay());
-        return visitService.findAllBookedWeeklyRoomVisits(roomId, startTime, endTime);
+        return visitService.findAllNotCancelledWeeklyRoomVisits(roomId, startTime, endTime);
     }
 
     @PostMapping("/get-week-booked-item-visit/{itemId}")
-    public List<Visit> findAllBookedWeeklyItemVisits(@PathVariable Long itemId, @RequestBody WeekBoundaries weekBoundaries) {
+    public List<Visit> findAllNotCancelledWeeklyItemVisits(@PathVariable Long itemId, @RequestBody WeekBoundaries weekBoundaries) {
         Date startTime = TimeUtils.getDayStart(weekBoundaries.getFirstWeekDay());
         Date endTime = TimeUtils.getDayEnd(weekBoundaries.getLastWeekDay());
-        return visitService.findAllBookedWeeklyItemVisits(itemId, startTime, endTime);
+        return visitService.findAllNotCancelledWeeklyItemVisits(itemId, startTime, endTime);
     }
 
     @DeleteMapping("/all-of-unregistered-client/{unregisteredClientId}")

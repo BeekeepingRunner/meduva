@@ -136,21 +136,21 @@ public class VisitService {
     }
 
 
-    public List<Visit> findAllBookedWhereUserIsWorkerBetween(Long workerId, Date startTime, Date endTime) {
-        return visitRepository.findAllBookedWhereUserIsWorkerBetween(workerId, startTime, endTime);
+    public List<Visit> findAllNotCancelledWhereUserIsWorkerBetween(Long workerId, Date startTime, Date endTime) {
+        return visitRepository.findAllNotCancelledWhereUserIsWorkerBetween(workerId, startTime, endTime);
     }
 
-    public List<Visit> findAllBookedWhereUserIsClientBetween(Long workerId, Date startTime, Date endTime) {
-        return visitRepository.findAllBookedWhereUserIsClientBetween(workerId, startTime, endTime);
+    public List<Visit> findAllNotCancelledWhereUserIsClientBetween(Long workerId, Date startTime, Date endTime) {
+        return visitRepository.findAllNotCancelledWhereUserIsClientBetween(workerId, startTime, endTime);
     }
 
-    public List<Visit> findAllBookedWeeklyRoomVisits(Long roomId, Date startTime, Date endTime) {
-        return visitRepository.findAllBookedWeeklyRoomVisits(roomId, startTime, endTime);
+    public List<Visit> findAllNotCancelledWeeklyRoomVisits(Long roomId, Date startTime, Date endTime) {
+        return visitRepository.findAllNotCancelledWeeklyRoomVisits(roomId, startTime, endTime);
     }
 
-    public List<Visit> findAllBookedWeeklyItemVisits(Long itemId, Date startTime, Date endTime) {
-        return visitRepository.findAllBookedWeeklyItemVisits(itemId, startTime, endTime);
-}
+    public List<Visit> findAllNotCancelledWeeklyItemVisits(Long itemId, Date startTime, Date endTime) {
+        return visitRepository.findAllNotCancelledWeeklyItemVisits(itemId, startTime, endTime);
+    }
 
     public void deleteAllOfUnregisteredClient(Long unregisteredClientId) {
         List<Visit> unregisteredClientVisits = findAllOfUnregisteredClient(unregisteredClientId);
