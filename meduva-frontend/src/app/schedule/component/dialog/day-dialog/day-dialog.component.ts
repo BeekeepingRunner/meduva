@@ -55,8 +55,8 @@ export class DayDialogComponent implements OnInit {
     this.form = this.formBuilder.group({
       startTime : new FormControl('', [Validators.required]),
       endTime: new FormControl('', [Validators.required])
-    }, { validators: startTimeBeforeEndTimeValidator });
-    this.form.setValidators(workingHoursValidator);
+    });
+    this.form.setValidators([startTimeBeforeEndTimeValidator, workingHoursValidator]);
   }
 
   onWorkHoursSave() {
