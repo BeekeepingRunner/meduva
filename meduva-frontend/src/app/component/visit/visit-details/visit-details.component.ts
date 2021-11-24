@@ -4,8 +4,9 @@ import {VisitService} from "../../../service/visit.service";
 import {RoleGuardService} from "../../../service/auth/role-guard.service";
 import {ActivatedRoute} from "@angular/router";
 import {roleNames, UserRole} from "../../../model/user";
-import {MAT_DIALOG_DATA} from "@angular/material/dialog";
-import {DayDialogData} from "../../../schedule/component/dialog/day-dialog/day-dialog.component";
+import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from "@angular/material/dialog";
+import {DayDialogComponent, DayDialogData} from "../../../schedule/component/dialog/day-dialog/day-dialog.component";
+import {EditVisitTermComponent} from "../edit-visit-term/edit-visit-term.component";
 
 export interface VisitDetailsDialogData {
   visitId: number;
@@ -30,6 +31,8 @@ export class VisitDetailsComponent implements OnInit {
     private visitService: VisitService,
     private roleGuard: RoleGuardService,
     private injector: Injector,
+    private dialog: MatDialog,
+
   ) { }
 
   ngOnInit(): void {
@@ -86,5 +89,14 @@ export class VisitDetailsComponent implements OnInit {
           console.log(err);
         }
     );;
+  }
+
+  editVisitTerm(){
+
+    const dayDialog = this.dialog.open(EditVisitTermComponent, {
+      width: '500px',
+      panelClass: 'my-dialog',
+      data: { visitId: this.visit.id,}
+    });
   }
 }

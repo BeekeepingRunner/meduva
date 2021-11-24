@@ -108,6 +108,9 @@
       <td *ngIf="visit?.paid == false && visit?.visitStatus?.name != 'VISIT_CANCELLED'">
         <button mat-raised-button color="primary" (click)="markAsPaid()">Mark as paid</button>
       </td>
+      <td *ngIf="visit?.visitStatus?.name == ('VISIT_BOOKED') ">
+        <button mat-raised-button color="primary" (click)="editVisitTerm()">Change term</button>
+      </td>
     </tr>
   </table>
 </div>
