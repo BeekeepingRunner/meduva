@@ -150,4 +150,14 @@ public class AuthService {
     public boolean validateUserJwt(String jwt) {
         return jwtUtils.hasJwtExpired(jwt);
     }
+
+    public boolean checkIfUserIsNotDeleted(String login){
+        User tempUser = userService.findByLogin(login);
+        if(tempUser.isDeleted()){
+            return false;
+        }else{
+            return true;
+        }
+
+    }
 }

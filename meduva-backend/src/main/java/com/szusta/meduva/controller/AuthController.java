@@ -40,8 +40,14 @@ public class AuthController {
 
         String login = loginRequest.getLogin();
         String password = loginRequest.getPassword();
-        JwtResponse jwtResponse = authService.authenticate(login, password);
-        return ResponseEntity.ok(jwtResponse);
+
+        if(authService.checkIfUserIsNotDeleted(login)){
+            JwtResponse jwtResponse = authService.authenticate(login, password);
+            return ResponseEntity.ok(jwtResponse);
+        } else {
+            throw new RuntimeException("This user has been deleted!");
+        }
+
     }
 
     @PostMapping("/signup")
