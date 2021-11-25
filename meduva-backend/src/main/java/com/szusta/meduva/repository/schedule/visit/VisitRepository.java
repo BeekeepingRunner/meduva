@@ -41,6 +41,7 @@ public interface VisitRepository extends UndeletableRepository<Visit> {
                     + " WHERE as_client = 0 AND uv.user_id = ?1 "
                     + " AND timestampdiff(MINUTE, time_from, ?2) <= 0 AND timestampdiff(MINUTE, time_to, ?3) >= 0 "
                     + " AND (v.visit_status_id = 1 OR v.visit_status_id = 2) "
+                    + " AND v.deleted = 0 "
                     + " ORDER BY v.time_to asc "
     )
     List<Visit> findAllNotCancelledWhereUserIsWorkerBetween(Long userId, Date startTime, Date endTime);
@@ -53,6 +54,7 @@ public interface VisitRepository extends UndeletableRepository<Visit> {
                     + "WHERE as_client = 1 AND uv.user_id = ?1 "
                     + "AND timestampdiff(MINUTE, time_from, ?2) <= 0 AND timestampdiff(MINUTE, time_to, ?3) >= 0 "
                     + "AND (v.visit_status_id = 1 OR v.visit_status_id = 2) "
+                    + " AND v.deleted = 0 "
                     + "ORDER BY v.time_to asc "
     )
     List<Visit> findAllNotCancelledWhereUserIsClientBetween(Long userId, Date startTime, Date endTime);
@@ -63,6 +65,7 @@ public interface VisitRepository extends UndeletableRepository<Visit> {
                     + "WHERE room_id = ?1 AND "
                     + "(v.visit_status_id = 1 OR v.visit_status_id = 2) AND "
                     + "timestampdiff(MINUTE, time_from, ?2) <= 0 AND timestampdiff(MINUTE, time_to, ?3) >= 0 "
+                    + " AND v.deleted = 0 "
                     + "ORDER BY time_to ASC "
     )
     List<Visit> findAllNotCancelledWeeklyRoomVisits(Long roomId, Date startTime, Date endTime);
@@ -75,6 +78,7 @@ public interface VisitRepository extends UndeletableRepository<Visit> {
                     + "WHERE vi.equipment_item_id = ?1 "
                     + "AND timestampdiff(MINUTE, time_from, ?2) <= 0 AND timestampdiff(MINUTE, time_to, ?3) >= 0 "
                     + "AND (v.visit_status_id = 1 OR v.visit_status_id = 2) "
+                    + " AND v.deleted = 0 "
                     + "ORDER BY v.time_to asc "
     )
     List<Visit> findAllNotCancelledWeeklyItemVisits(Long itemId, Date startTime, Date endTime);
