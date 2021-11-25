@@ -1,13 +1,15 @@
 mat-toolbar {
-  background: #4f4c79;
+  background: #574B90;
   color: white;
-  padding-left: 20px;
+  padding-left: 40px;
+  padding-right: 30px;
   display: flex;
   justify-content: space-between;
 }
 
 a {
   color: white;
+  font-size: 1.2rem;
 }
 
 .my-row {
@@ -23,7 +25,7 @@ mat-sidenav {
   margin: 8px;
   width: 250px;
   border-right: none;
-  background: #4f4c79;
+  background: #574B90;
   color: white;
   border-radius: 10px;
   padding: 16px;
@@ -40,6 +42,7 @@ mat-sidenav {
 mat-sidenav-container {
   height: calc(100vh - 65px);
 }
+
 
 .menu-button {
   width: 100%;
@@ -72,3 +75,8 @@ mat-icon {
 button:focus {
   outline: none;
 }
+#logo{
+  max-width: 170px;
+}
+
+

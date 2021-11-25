@@ -50,6 +50,7 @@ export class AppComponent implements OnInit, AfterViewInit {
       this.userService.getUserDetails(this.tokenStorageService.getCurrentUser()?.id).subscribe(
         user => {
           this.currentUser = user;
+          this.pageTitle = this.currentUser.name;
           this.setVisibleOptions();
         }
       );
