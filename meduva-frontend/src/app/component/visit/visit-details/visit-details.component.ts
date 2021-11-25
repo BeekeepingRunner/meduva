@@ -32,7 +32,7 @@ export class VisitDetailsComponent implements OnInit {
     private roleGuard: RoleGuardService,
     private injector: Injector,
     private dialog: MatDialog,
-
+    public dialogRef: MatDialogRef<VisitDetailsComponent>,
   ) { }
 
   ngOnInit(): void {
@@ -92,6 +92,8 @@ export class VisitDetailsComponent implements OnInit {
   }
 
   editVisitTerm(){
+
+    this.dialogRef.close();
 
     const dayDialog = this.dialog.open(EditVisitTermComponent, {
       width: '500px',
