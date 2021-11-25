@@ -29,6 +29,7 @@ export class EditVisitTermComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: EditVisitTermData,
     private visitService: VisitService,
     private dialog: MatDialog,
+    public dialogRef: MatDialogRef<EditVisitTermComponent>,
   ) { }
 
   ngOnInit(): void {
@@ -62,21 +63,20 @@ export class EditVisitTermComponent implements OnInit {
 
     this.visitService.saveVisit(this.term).subscribe(
       visitData => {
-        this.openFeedbackDialog();
           this.visitService.cancelVisit(this.visit.id).subscribe(
             response => {
+                this.dialogRef.close({
+                    event: 'TERM_CHANGED'
+                  }
+                );
             }
           )
       }, err => {
         console.log(err);
       }
     );
-  }
 
-  private openFeedbackDialog() {
-    const feedbackDialogRef = this.dialog.open(FeedbackDialogComponent, {
-      data: {message: 'Visit term has been changed.'}
-    });
+
   }
 
 }

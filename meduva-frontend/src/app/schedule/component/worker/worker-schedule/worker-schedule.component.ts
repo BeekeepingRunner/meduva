@@ -196,6 +196,10 @@ export class WorkerScheduleComponent implements OnInit {
           case 'DELETE_WORK_HOURS':
             let workDay: Date = result.data;
             this.deleteDailyWorkHours(workDay);
+            break;
+          case 'TERM_CHANGE':
+            this.prepareWeekEvents();
+            break;
         }
       }
     );
@@ -253,7 +257,7 @@ export class WorkerScheduleComponent implements OnInit {
       panelClass: 'my-dialog',
       data: {
         visitId: id,
-      }
+      },
     });
 
     visitDetailsDialog.afterClosed().subscribe(
@@ -262,8 +266,6 @@ export class WorkerScheduleComponent implements OnInit {
       })
     );
   }
-
-
 
   eventClick($event: { event: CalendarEvent<any>; sourceEvent: any }) {
 

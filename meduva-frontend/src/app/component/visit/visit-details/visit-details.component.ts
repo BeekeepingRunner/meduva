@@ -25,6 +25,8 @@ export class VisitDetailsComponent implements OnInit {
   isWorker: boolean = true;
   isReceptionist: boolean = true;
   data!: VisitDetailsDialogData;
+  dialogRef: any;
+  dialogData: any;
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -32,8 +34,10 @@ export class VisitDetailsComponent implements OnInit {
     private roleGuard: RoleGuardService,
     private injector: Injector,
     private dialog: MatDialog,
-    public dialogRef: MatDialogRef<VisitDetailsComponent>,
-  ) { }
+  ) {
+    this.dialogRef = this.injector.get(MatDialogRef, null);
+    this.dialogData = this.injector.get(MAT_DIALOG_DATA, null);
+  }
 
   ngOnInit(): void {
     let visitId = this.activatedRoute.snapshot.params.id;
@@ -93,12 +97,21 @@ export class VisitDetailsComponent implements OnInit {
 
   editVisitTerm(){
 
-    this.dialogRef.close();
-
-    const dayDialog = this.dialog.open(EditVisitTermComponent, {
+    const termDialog = this.dialog.open(EditVisitTermComponent, {
       width: '500px',
       panelClass: 'my-dialog',
       data: { visitId: this.visit.id,}
     });
+
+    termDialog.afterClosed().subscribe(
+      result => {
+        if(result.event == 'TERM_CHANGED'){
+          this.dialogRef.close({
+            event: 'TERM_CHANGED'
+          });
+        }
+      }
+
+    )
   }
 }
