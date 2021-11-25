@@ -182,4 +182,8 @@ export class VisitService {
   markVisitAsPaid(visitId: any): Observable<any> {
     return this.httpClient.put(environment.API_BASE_URL + 'api/visit/' + visitId + '/mark-as-paid', {});
   }
+
+  markVisitAsDeleted(visitId: number): Observable<any>{
+    return this.httpClient.put(environment.API_BASE_URL + 'api/visit/mark-as-deleted/' + visitId, {});
+  }
 }

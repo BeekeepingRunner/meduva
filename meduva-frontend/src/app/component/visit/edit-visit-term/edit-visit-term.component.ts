@@ -63,7 +63,7 @@ export class EditVisitTermComponent implements OnInit {
 
     this.visitService.saveVisit(this.term).subscribe(
       visitData => {
-          this.visitService.cancelVisit(this.visit.id).subscribe(
+          this.visitService.markVisitAsDeleted(this.visit.id).subscribe(
             response => {
                 this.dialogRef.close({
                     event: 'TERM_CHANGED'
