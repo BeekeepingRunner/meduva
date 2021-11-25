@@ -54,17 +54,19 @@ export class EditVisitTermComponent implements OnInit {
   }
 
   onVisitSubmit(){
+    if(this.visit.paid){
+      this.term.paid=true;
+    }
+
+    console.log(this.term);
+
     this.visitService.saveVisit(this.term).subscribe(
       visitData => {
         this.openFeedbackDialog();
-
-        this.visitService.cancelVisit(this.visit.id).subscribe(
-          response => {
-            console.log("success");
-          }, error => {
-            console.log(error);
-          }
-        )
+          this.visitService.cancelVisit(this.visit.id).subscribe(
+            response => {
+            }
+          )
       }, err => {
         console.log(err);
       }

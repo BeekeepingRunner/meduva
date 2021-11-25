@@ -16,6 +16,7 @@ export interface Term {
   clientUnregistered: boolean,
   roomId: number,
   eqItemId: number,
+  paid: boolean,
 
   description: string;
 }
