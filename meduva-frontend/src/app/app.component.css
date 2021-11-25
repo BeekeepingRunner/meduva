@@ -72,3 +72,7 @@ mat-icon {
 button:focus {
   outline: none;
 }
+
+mat-divider {
+  border-top-width: 4px;
+}
