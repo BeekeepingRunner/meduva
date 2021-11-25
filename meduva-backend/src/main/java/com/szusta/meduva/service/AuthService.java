@@ -119,18 +119,14 @@ public class AuthService {
         String jwt = jwtUtils.generateJwtTokenFrom(userDetails);
         Set<Role> roles = userService.getUser(userDetails.getId()).getRoles();
 
-        // Not fully implemented yet !!!
         RefreshToken refreshToken = getRefreshTokenFrom(userDetails);
-
-        JwtResponse jwtResponse = new JwtResponse(
+        return new JwtResponse(
                 jwt,
                 refreshToken.getToken(),
                 userDetails.getId(),
                 userDetails.getUsername(),
                 userDetails.getEmail(),
                 roles);
-
-        return jwtResponse;
     }
 
     private Authentication authenticateUser(String login, String password) {

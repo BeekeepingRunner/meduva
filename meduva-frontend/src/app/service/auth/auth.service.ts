@@ -45,4 +45,10 @@ export class AuthService {
   public hasJwtExpired(): boolean {
     return !this.jwtTokenStorageService.hasJwtExpired()
   }
+
+  refreshToken(token: string): any {
+    return this.http.post(environment.AUTH_API + 'refreshtoken', {
+      refreshToken: token
+    }, httpOptions);
+  }
 }
