@@ -325,7 +325,7 @@ export const routes: Routes = [
     component: PickRoomComponent,
     canActivate: [RoleGuard],
     data: {
-      expectedRole: roleNames[UserRole.ROLE_RECEPTIONIST]
+      expectedRole: roleNames[UserRole.ROLE_WORKER]
     }
   },
   {
@@ -333,7 +333,7 @@ export const routes: Routes = [
     component: RoomScheduleComponent,
     canActivate: [RoleGuard],
     data: {
-      expectedRole: roleNames[UserRole.ROLE_RECEPTIONIST]
+      expectedRole: roleNames[UserRole.ROLE_WORKER]
     }
   },
   {
@@ -341,7 +341,7 @@ export const routes: Routes = [
     component: PickItemComponent,
     canActivate: [RoleGuard],
     data: {
-      expectedRole: roleNames[UserRole.ROLE_RECEPTIONIST]
+      expectedRole: roleNames[UserRole.ROLE_WORKER]
     }
   },
   {
@@ -349,7 +349,7 @@ export const routes: Routes = [
     component: ItemScheduleComponent,
     canActivate: [RoleGuard],
     data: {
-      expectedRole: roleNames[UserRole.ROLE_RECEPTIONIST]
+      expectedRole: roleNames[UserRole.ROLE_WORKER]
     }
   },
   { path: '', redirectTo: 'home', pathMatch: 'full' }

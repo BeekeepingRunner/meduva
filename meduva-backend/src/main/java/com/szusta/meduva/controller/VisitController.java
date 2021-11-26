@@ -142,6 +142,11 @@ public class VisitController {
         return visitService.markAsPaid(visit);
     }
 
+    @PutMapping("/mark-as-deleted/{visitId}")
+    public void markVisitAsDeleted(@PathVariable Long visitId) {
+        visitService.markAsDeleted(visitId);
+    }
+
     @PutMapping("/{visitId}/cancel")
     public Visit cancelVisit(@PathVariable Long visitId) {
         Visit visit = visitService.findById(visitId);

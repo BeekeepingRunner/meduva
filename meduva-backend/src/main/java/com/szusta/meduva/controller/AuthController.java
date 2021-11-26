@@ -1,12 +1,14 @@
 package com.szusta.meduva.controller;
 
 import com.szusta.meduva.exception.EntityRecordNotFoundException;
+import com.szusta.meduva.exception.TokenRefreshException;
 import com.szusta.meduva.model.RefreshToken;
 import com.szusta.meduva.payload.request.LoginRequest;
 import com.szusta.meduva.payload.request.RefreshTokenRequest;
 import com.szusta.meduva.payload.request.SignupRequest;
 import com.szusta.meduva.payload.response.JwtResponse;
 import com.szusta.meduva.payload.response.MessageResponse;
+import com.szusta.meduva.payload.response.RefreshTokenResponse;
 import com.szusta.meduva.security.jwt.JwtUtils;
 import com.szusta.meduva.service.AuthService;
 import com.szusta.meduva.service.RefreshTokenService;
@@ -74,15 +76,13 @@ public class AuthController {
 
         String requestRefreshToken = request.getRefreshToken();
 
-        String outRefreshToken =  refreshTokenService.findByToken(requestRefreshToken)
+        String newAccessToken = refreshTokenService.findByToken(requestRefreshToken)
                 .map(refreshTokenService::verifyExpiration)
                 .map(RefreshToken::getUser)
-                .map(user -> {
-                    String token = jwtUtils.generateJwtTokenFrom(UserDetailsImpl.build(user));
-                    return token;
-                })
-                .orElseThrow(() -> new EntityRecordNotFoundException("Refresh token is not in database!"));
+                .map(user -> jwtUtils.generateJwtTokenFrom(UserDetailsImpl.build(user)))
+                .orElseThrow(() -> new TokenRefreshException(requestRefreshToken, "Refresh token is not in database!"));
 
-        return ResponseEntity.ok().body(outRefreshToken);
+        return ResponseEntity.ok().body(
+                new RefreshTokenResponse(newAccessToken, requestRefreshToken));
     }
 }

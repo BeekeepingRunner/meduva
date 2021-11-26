@@ -102,6 +102,7 @@ public class VisitBuilder {
                     .orElseThrow(() -> new EntityRecordNotFoundException("Equipment item not found in DB with id = " + term.getEqItemId()));
             visit.setEqItems(Collections.singletonList(eqItem));
         }
+        visit.setPaid(term.isPaid());
         return visit;
     }
 }

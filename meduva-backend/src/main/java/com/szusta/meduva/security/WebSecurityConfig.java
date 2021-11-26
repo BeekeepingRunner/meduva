@@ -102,13 +102,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     // TODO: secure endpoint access for users with specific roles
     private void authorizeRequests(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                /*
                 .antMatchers("/api/auth/**").permitAll()
                 .antMatchers("/api/test/all").permitAll()
                 .antMatchers("/api/password/request").permitAll()
                 .antMatchers("/api/password/user").permitAll()
                 .antMatchers("/api/password/validate-reset-token").permitAll()
                 .antMatchers("/api/password/change").permitAll()
+                /*
                 .antMatchers("/api/service/{id}").hasAuthority("ROLE_ADMIN")
                 .antMatchers("/services").hasAuthority("ROLE_ADMIN")
                 .antMatchers("/api/service/all/itemless").hasAuthority("ROLE_ADMIN")
@@ -120,6 +120,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/assignServicesToWorker/{id}").hasAuthority("ROLE_RECEPTIONIST")
                 .anyRequest().authenticated();
                 */
-        .anyRequest().permitAll();
+        //.anyRequest().permitAll();
+                .anyRequest().authenticated();
+
     }
 }

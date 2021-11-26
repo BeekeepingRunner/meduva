@@ -53,7 +53,6 @@ export class LoginComponent implements OnInit {
     const password: string = this.form.controls.password.value;
 
     this.authService.login(login, password).subscribe(
-
       (userInfo: TokenUserInfo) => {
         this.changeStateAfterLogin(userInfo);
         this.reloadPage();  // so that the toolbar and sidebar updates
@@ -67,6 +66,7 @@ export class LoginComponent implements OnInit {
 
   private changeStateAfterLogin(userInfo: TokenUserInfo): void {
     this.tokenStorage.saveToken(userInfo.accessToken);
+    this.tokenStorage.saveRefreshToken(userInfo.refreshToken);
     this.tokenStorage.saveUser(userInfo);
 
     this.isLoginFailed = false;
