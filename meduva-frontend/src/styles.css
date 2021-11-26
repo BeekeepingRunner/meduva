@@ -58,3 +58,6 @@ button:focus, .btn-primary:focus {
   color: white;
 
 }
+app-choose-option-dialog {
+  padding:0px;
+}
