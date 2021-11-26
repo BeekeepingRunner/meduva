@@ -11,7 +11,10 @@ import {User} from "../../../../model/user";
 export class ServiceSelectionComponent implements OnInit {
 
   @Input()
-  worker!: User;
+  worker!: User | null;
+
+  @Input()
+  asRecepcionist = false;
 
   services: Service[] = [];
 
@@ -42,13 +45,15 @@ export class ServiceSelectionComponent implements OnInit {
   }
 
   private getServicesForWorker() {
-    this.servicesService.getAllPossibleWithWorker(this.worker.id).subscribe(
-      services => {
-        this.services = services;
-      }, err => {
-        console.log(err);
-      }
-    );
+    if(this.worker?.id){
+      this.servicesService.getAllPossibleWithWorker(this.worker.id).subscribe(
+        services => {
+          this.services = services;
+        }, err => {
+          console.log(err);
+        }
+      );
+    }
   }
 
   onServiceSelect(service: Service) {
