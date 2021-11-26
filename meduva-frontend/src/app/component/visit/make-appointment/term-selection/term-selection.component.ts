@@ -126,7 +126,6 @@ export class TermSelectionComponent implements OnInit {
 
   private waitForAnyonesAvailableDays() {
     let activeDateStr = getFormattedDate(new Date());
-    //let serviceId = this.visitService.getSelectedService()?.id;
     // @ts-ignore
     this.visitService.getAvailableDaysInMonth(this.service.id, activeDateStr).subscribe(
       availDays => {

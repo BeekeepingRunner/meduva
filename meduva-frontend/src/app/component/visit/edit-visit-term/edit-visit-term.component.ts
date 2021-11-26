@@ -59,8 +59,6 @@ export class EditVisitTermComponent implements OnInit {
       this.term.paid=true;
     }
 
-    console.log(this.term);
-
     this.visitService.saveVisit(this.term).subscribe(
       visitData => {
           this.visitService.markVisitAsDeleted(this.visit.id).subscribe(
@@ -75,8 +73,6 @@ export class EditVisitTermComponent implements OnInit {
         console.log(err);
       }
     );
-
-
   }
 
 }
