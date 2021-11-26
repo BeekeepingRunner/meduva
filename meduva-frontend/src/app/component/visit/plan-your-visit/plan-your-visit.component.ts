@@ -115,11 +115,8 @@ export class PlanYourVisitComponent implements OnInit {
     this.term = null;
   }
   ifCurrentUserIsRecepcionistOrAdmin(){
-    let ifUserIsPrivileged = this.roleGuardService.hasCurrentUserExpectedRole(roleNames[UserRole.ROLE_RECEPTIONIST])
-    if(ifUserIsPrivileged == false){
-      ifUserIsPrivileged = this.roleGuardService.hasCurrentUserExpectedRole(roleNames[UserRole.ROLE_ADMIN])
-    }
-    return ifUserIsPrivileged;
+    return (this.roleGuardService.hasCurrentUserExpectedRole(roleNames[UserRole.ROLE_RECEPTIONIST]) || this.roleGuardService.hasCurrentUserExpectedRole(roleNames[UserRole.ROLE_ADMIN]))
+
   }
 
   showWorker() {
