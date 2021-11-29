@@ -1,12 +1,16 @@
 <div class="centered-content">
-  <form class="basic-form" *ngIf="!isSuccessful" (ngSubmit)="onSubmit()" [formGroup]="form">
-    <br><br>
+  <img class="wave" src="assets/images/wave.png">
+  <div class="container">
+    <div class="img">
+    </div>
+    <div class="login-content">
+      <form class="basic-form" *ngIf="!isSuccessful" (ngSubmit)="onSubmit()" [formGroup]="form">
+        <h2 class="title">Sign up</h2>
+        <mat-form-field class="wide-element" appearance="outline">
+          <mat-label>Username:</mat-label>
+          <input matInput id="login" type="text" formControlName="login">
 
-    <mat-form-field class="wide-element" appearance="outline">
-      <mat-label>Login:</mat-label>
-      <input matInput id="login" type="text" formControlName="login">
-
-        <mat-error *ngIf="form.controls.login.invalid &&
+          <mat-error *ngIf="form.controls.login.invalid &&
                             (form.controls.login.dirty || form.controls.login.touched)">
 
             <mat-error *ngIf="form.controls.login.errors?.required">
@@ -18,114 +22,118 @@
             <mat-error *ngIf="form.controls.login.errors?.pattern">
               Login must not contain forbidden characters
             </mat-error>
-        </mat-error>
-    </mat-form-field>
+          </mat-error>
+        </mat-form-field>
 
-    <mat-form-field class="wide-element" appearance="outline">
-      <mat-label>Password:</mat-label>
-      <input matInput id="password" [type]="hide ? 'password' : 'text'" formControlName="password">
+        <mat-form-field class="wide-element" appearance="outline">
+          <mat-label>Password:</mat-label>
+          <input matInput id="password" [type]="hide ? 'password' : 'text'" formControlName="password">
 
-      <button mat-icon-button type="button" matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
-        <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
-      </button>
+          <button mat-icon-button type="button" matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+            <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+          </button>
 
-      <mat-error *ngIf="form.controls.password.invalid &&
+          <mat-error *ngIf="form.controls.password.invalid &&
                           (form.controls.password.dirty || form.controls.password.touched)">
 
-          <mat-error *ngIf="form.controls.password.errors?.required">
-            Password is required
+            <mat-error *ngIf="form.controls.password.errors?.required">
+              Password is required
+            </mat-error>
+            <mat-error *ngIf="(form.controls.password.errors?.minlength || form.controls.password.errors?.maxlength) && !form.controls.password.errors?.pattern">
+              Password must be between 8 and 20 characters long
+            </mat-error>
+            <mat-error *ngIf="form.controls.password.errors?.pattern">
+              Password must not contain forbidden characters
+            </mat-error>
           </mat-error>
-          <mat-error *ngIf="(form.controls.password.errors?.minlength || form.controls.password.errors?.maxlength) && !form.controls.password.errors?.pattern">
-            Password must be between 8 and 20 characters long
-          </mat-error>
-          <mat-error *ngIf="form.controls.password.errors?.pattern">
-            Password must not contain forbidden characters
-          </mat-error>
-      </mat-error>
-    </mat-form-field>
+        </mat-form-field>
 
-    <mat-form-field class="wide-element" appearance="outline">
-      <mat-label>Email:</mat-label>
-      <input matInput id="email" type="text" formControlName="email">
+        <mat-form-field class="wide-element" appearance="outline">
+          <mat-label>Email:</mat-label>
+          <input matInput id="email" type="text" formControlName="email">
 
-      <mat-error *ngIf="form.controls.email.invalid &&
+          <mat-error *ngIf="form.controls.email.invalid &&
                           (form.controls.email.dirty || form.controls.email.touched)">
-        <mat-error *ngIf="form.controls.email.errors?.required ">
-          Email is required
-        </mat-error>
-        <mat-error *ngIf="form.controls.email.errors?.pattern">
-          Email must be in its correct format
-        </mat-error>
+            <mat-error *ngIf="form.controls.email.errors?.required ">
+              Email is required
+            </mat-error>
+            <mat-error *ngIf="form.controls.email.errors?.pattern">
+              Email must be in its correct format
+            </mat-error>
 
-      </mat-error>
-    </mat-form-field>
+          </mat-error>
+        </mat-form-field>
 
-    <mat-form-field class="wide-element" appearance="outline">
-      <mat-label>First name:</mat-label>
-      <input matInput id="name" type="text" formControlName="name">
-      <mat-error *ngIf="form.controls.name.invalid &&
+        <mat-form-field class="wide-element" appearance="outline">
+          <mat-label>First name:</mat-label>
+          <input matInput id="name" type="text" formControlName="name">
+          <mat-error *ngIf="form.controls.name.invalid &&
                           (form.controls.name.dirty || form.controls.name.touched)">
-        <mat-error *ngIf="form.controls.name.errors?.required ">
-          First name is required
-        </mat-error>
-        <mat-error *ngIf="(form.controls.name.errors?.minlength || form.controls.name.errors?.maxlength) && !form.controls.name.errors?.pattern">
-          First name must be between 1 and 30 characters long
-        </mat-error>
-        <mat-error *ngIf="form.controls.name.errors?.pattern">
-          First name must not contain forbidden characters
-        </mat-error>
+            <mat-error *ngIf="form.controls.name.errors?.required ">
+              First name is required
+            </mat-error>
+            <mat-error *ngIf="(form.controls.name.errors?.minlength || form.controls.name.errors?.maxlength) && !form.controls.name.errors?.pattern">
+              First name must be between 1 and 30 characters long
+            </mat-error>
+            <mat-error *ngIf="form.controls.name.errors?.pattern">
+              First name must not contain forbidden characters
+            </mat-error>
 
-      </mat-error>
-    </mat-form-field>
+          </mat-error>
+        </mat-form-field>
 
-    <mat-form-field class="wide-element" appearance="outline">
-      <mat-label>Surname:</mat-label>
-      <input matInput id="surname" type="text" formControlName="surname">
-      <mat-error *ngIf="form.controls.surname.invalid &&
+        <mat-form-field class="wide-element" appearance="outline">
+          <mat-label>Surname:</mat-label>
+          <input matInput id="surname" type="text" formControlName="surname">
+          <mat-error *ngIf="form.controls.surname.invalid &&
                           (form.controls.surname.dirty || form.controls.surname.touched)">
 
-        <mat-error *ngIf="form.controls.surname.errors?.required ">
-          Surname is required
-        </mat-error>
-        <mat-error *ngIf="(form.controls.surname.errors?.minlength || form.controls.surname.errors?.maxlength) && !form.controls.surname.errors?.pattern">
-          Surname must be between 1 and 30 characters long
-        </mat-error>
-        <mat-error *ngIf="form.controls.surname.errors?.pattern">
-          Surname must not contain forbidden characters
-        </mat-error>
-      </mat-error>
-    </mat-form-field>
+            <mat-error *ngIf="form.controls.surname.errors?.required ">
+              Surname is required
+            </mat-error>
+            <mat-error *ngIf="(form.controls.surname.errors?.minlength || form.controls.surname.errors?.maxlength) && !form.controls.surname.errors?.pattern">
+              Surname must be between 1 and 30 characters long
+            </mat-error>
+            <mat-error *ngIf="form.controls.surname.errors?.pattern">
+              Surname must not contain forbidden characters
+            </mat-error>
+          </mat-error>
+        </mat-form-field>
 
-    <mat-form-field class="wide-element" appearance="outline">
-      <mat-label>Phone number:</mat-label>
-      <input matInput id="phoneNumber" type="text" formControlName="phoneNumber">
-      <mat-error *ngIf="form.controls.phoneNumber.invalid &&
+        <mat-form-field class="wide-element" appearance="outline">
+          <mat-label>Phone number:</mat-label>
+          <input matInput id="phoneNumber" type="text" formControlName="phoneNumber">
+          <mat-error *ngIf="form.controls.phoneNumber.invalid &&
                           (form.controls.phoneNumber.dirty || form.controls.phoneNumber.touched)">
 
-        <mat-error *ngIf="form.controls.phoneNumber.errors?.required ">
-          Phone number is required
-        </mat-error>
-        <mat-error *ngIf="form.controls.phoneNumber.errors?.pattern">
-          Phone number must contain between 6 and 12 digits
-        </mat-error>
-      </mat-error>
-    </mat-form-field>
+            <mat-error *ngIf="form.controls.phoneNumber.errors?.required ">
+              Phone number is required
+            </mat-error>
+            <mat-error *ngIf="form.controls.phoneNumber.errors?.pattern">
+              Phone number must contain between 6 and 12 digits
+            </mat-error>
+          </mat-error>
+        </mat-form-field>
 
-    <button class="btn btn-primary btn-block" type="submit">Sign Up</button>
+        <button class="btn btn-primary btn-block" type="submit">Sign Up</button>
 
-    <br><br>
-    <div class="alert alert-warning" *ngIf="isSignUpFailed">
-        Signup failed!<br />{{ errorMessage }}
+
+        <div class="alert alert-warning" *ngIf="isSignUpFailed">
+          Signup failed!<br />{{ errorMessage }}
+        </div>
+
+
+      </form>
+      <div *ngIf="isSuccessful">
+        <div class="alert alert-success" >
+          Your registration is successful!
+        </div>
+
+        <button class="btn btn-primary btn-block" [routerLink]="['/login']">Log in!</button>
+      </div>
     </div>
-
-  </form>
-
-  <div *ngIf="isSuccessful">
-    <div class="alert alert-success" >
-      Your registration is successful!
-    </div>
-
-    <button class="btn btn-primary btn-block" [routerLink]="['/login']">Log in!</button>
   </div>
 
 </div>
+
+<app-footer></app-footer>

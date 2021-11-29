@@ -1,10 +1,19 @@
 mat-toolbar {
   background: #574B90;
   color: white;
-  padding-left: 40px;
-  padding-right: 30px;
   display: flex;
   justify-content: space-between;
+}
+
+mat-toolbar a{
+  font-family: 'Segoe UI Historic', sans-serif;
+}
+
+.left-item{
+  margin-left: 100px;
+}
+.right-item{
+  margin-right: 100px;
 }
 
 a {
@@ -35,12 +44,15 @@ mat-sidenav {
 .content {
   height: calc(100vh - 98px);
   border-radius: 10px;
-  margin: 16px;
-  margin-left: 32px;
 }
+
 
 mat-sidenav-container {
   height: calc(100vh - 65px);
+}
+
+mat-sidenav-content::-webkit-scrollbar {
+  display: none;
 }
 
 
@@ -78,5 +90,12 @@ button:focus {
 #logo{
   max-width: 170px;
 }
-
+@media screen and (max-width: 900px){
+  .left-item{
+    margin-left: 0px;
+  }
+  .right-item{
+    margin-right: 0px;
+  }
+}
 
