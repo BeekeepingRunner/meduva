@@ -95,13 +95,8 @@ import {MAT_SNACK_BAR_DEFAULT_OPTIONS, MatSnackBarModule} from "@angular/materia
 import { ClientVisitsComponent } from './component/clients/client-details/client-visits/client-visits.component';
 import {ConfirmationWithWarningDialogComponent} from "./component/dialog/confirmation-with-warning-dialog/confirmation-with-warning-dialog.component";
 import { VisitDetailsComponent } from './component/visit/visit-details/visit-details.component';
-<<<<<<< HEAD
 import {ChooseOptionDialogComponent} from "./component/dialog/choose-option-dialog/choose-option-dialog.component";
-=======
 import { EditVisitTermComponent } from './component/visit/edit-visit-term/edit-visit-term.component';
->>>>>>> c3a783754ab8c495e69971e8a8b97366e18fda81
-
-
 
 @NgModule({
   declarations: [
