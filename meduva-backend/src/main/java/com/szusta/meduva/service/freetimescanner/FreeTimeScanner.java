@@ -16,7 +16,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 
 /**
  * Make sure that before using FreeTimeScanner, its fields are set appropriately
@@ -27,10 +30,6 @@ import java.util.*;
 public class FreeTimeScanner {
 
     public static int TIME_STEP_IN_MINUTES = 15;
-
-    private User worker;
-    private Service service;
-    private List<Room> rooms;
 
     private ScheduleChecker scheduleChecker;
     private WorkHoursRepository workHoursRepository;
@@ -50,68 +49,63 @@ public class FreeTimeScanner {
         this.equipmentItemRepository = equipmentItemRepository;
     }
 
-    private void checkIfWorkerIsSet() {
-        if (worker == null) {
-            throw new RuntimeException("FreeTimeScanner not set appropriately: worker is not set");
+    private void checkIfContextIsComplete(VisitContext visitContext) {
+        if (visitContext.getWorker() == null
+                || visitContext.getService() == null
+                || visitContext.getSuitableRooms() == null) {
+            throw new RuntimeException("Visit context is not complete (worker, service, suitableRooms)");
         }
     }
 
-    private void checkIfServiceIsSet() {
-        if (service == null) {
-            throw new RuntimeException("FreeTimeScanner not set appropriately: service is not set");
+    private void checkIfBasicContextExists(VisitContext visitContext) {
+        if (visitContext.getWorker() == null
+                || visitContext.getService() == null) {
+            throw new RuntimeException("Basic visit context isn't set (worker, service)");
         }
     }
 
-    private void checkIfRoomsAreSet() {
-        if (rooms == null) {
-            throw new RuntimeException("FreeTimeScanner not set appropriately: rooms are not set");
-        }
-    }
-
-    public boolean isWorkerDayAvailable(Calendar dayStart) {
-        checkIfWorkerIsSet();
-        checkIfServiceIsSet();
-        checkIfRoomsAreSet();
+    public boolean isWorkerDayAvailable(Calendar dayStart, VisitContext visitContext) {
+        checkIfContextIsComplete(visitContext);
         try {
-            return hasFreeTerm(dayStart);
+            return hasFreeTerm(dayStart, visitContext);
         } catch (NotAvailableException ex) {
             System.out.println(ex.getMessage());
             return false;
         }
     }
 
-    private boolean hasFreeTerm(Calendar dayStart) throws NotAvailableException {
-        this.potentialTermStart = getWorkStartTime(dayStart);
-        this.potentialTermEnd = getPotentialTermEnd(potentialTermStart, service.getDurationInMin());
-        Date workEndTime = getWorkEndTime(dayStart);
+    private boolean hasFreeTerm(Calendar dayStart, VisitContext visitContext) throws NotAvailableException {
+        this.potentialTermStart = getWorkStartTime(dayStart, visitContext.getWorker());
+        this.potentialTermEnd = getPotentialTermEnd(potentialTermStart, visitContext.getService().getDurationInMin());
+        Date workEndTime = getWorkEndTime(dayStart, visitContext.getWorker());
         do {
             TimeRange potentialTermTimeRange = new TimeRange(potentialTermStart.getTime(), potentialTermEnd.getTime());
 
-            if (scheduleChecker.isWorkerFree(potentialTermTimeRange, worker)) {
-                return doesFreeRoomExist(potentialTermTimeRange);
+            if (scheduleChecker.isWorkerFree(potentialTermTimeRange, visitContext.getWorker())) {
+                return doesFreeRoomExist(potentialTermTimeRange, visitContext.getSuitableRooms(), visitContext.getService());
             }
 
             this.potentialTermStart.add(Calendar.MINUTE, TIME_STEP_IN_MINUTES);
-            this.potentialTermEnd = getPotentialTermEnd(this.potentialTermStart, service.getDurationInMin());
+            this.potentialTermEnd = getPotentialTermEnd(this.potentialTermStart, visitContext.getService().getDurationInMin());
         } while (this.potentialTermEnd.before(TimeUtils.getCalendar(workEndTime)));
 
         return false;
     }
 
-    private Calendar getWorkStartTime(Calendar day) throws NotAvailableException {
-        WorkHours workHours = getWorkHours(day);
+    private Calendar getWorkStartTime(Calendar day, User worker) throws NotAvailableException {
+        WorkHours workHours = getWorkHours(day, worker);
         return TimeUtils.getCalendar(workHours.getStartTime());
     }
 
-    private Date getWorkEndTime(Calendar day) throws NotAvailableException {
-        WorkHours workHours = getWorkHours(day);
+    private Date getWorkEndTime(Calendar day, User worker) throws NotAvailableException {
+        WorkHours workHours = getWorkHours(day, worker);
         Calendar cal = Calendar.getInstance();
         cal.setTime(workHours.getEndTime());
         cal.add(Calendar.MINUTE, 1); // because service could end exactly at work end time
         return cal.getTime();
     }
 
-    private WorkHours getWorkHours(Calendar day) throws NotAvailableException {
+    private WorkHours getWorkHours(Calendar day, User worker) throws NotAvailableException {
         Date dayStart = TimeUtils.getDayStart(day.getTime());
         Date dayEnd = TimeUtils.getDayEnd(dayStart);
 
@@ -131,13 +125,13 @@ public class FreeTimeScanner {
         return potentialTermEnd;
     }
 
-    private boolean doesFreeRoomExist(TimeRange potentialTermTimeRange) {
-        Room availableRoom = getFirstAvailableRoom(rooms, potentialTermTimeRange);
+    private boolean doesFreeRoomExist(TimeRange potentialTermTimeRange, List<Room> suitableRooms, Service service) {
+        Room availableRoom = getFirstAvailableRoom(suitableRooms, potentialTermTimeRange);
         if (availableRoom != null) {
             if (service.isItemless()) {
                 return true;
             } else {
-                return doesFreeItemExist(availableRoom, potentialTermTimeRange);
+                return doesFreeItemExist(potentialTermTimeRange, availableRoom, service);
             }
         } else {
             return false;
@@ -153,7 +147,7 @@ public class FreeTimeScanner {
         return null;
     }
 
-    private boolean doesFreeItemExist(Room availableRoom, TimeRange potentialTermTimeRange) {
+    private boolean doesFreeItemExist(TimeRange potentialTermTimeRange, Room availableRoom, Service service) {
         List<EquipmentItem> suitableEqItems =
                 equipmentItemRepository.findAllSuitableForServiceInRoom(service.getId(), availableRoom.getId());
         EquipmentItem availableEqItem = getFirstAvailableEqItem(suitableEqItems, potentialTermTimeRange);
@@ -170,54 +164,55 @@ public class FreeTimeScanner {
         return null;
     }
 
-    public List<Term> getWorkerPossibleTerms(Date day) throws NotAvailableException {
+    public List<Term> getWorkerPossibleTerms(Date day, VisitContext visitContext) throws NotAvailableException {
+        checkIfContextIsComplete(visitContext);
         List<Term> possibleTerms = new ArrayList<>();
 
-        this.potentialTermStart = getWorkStartTime(TimeUtils.getCalendar(day));
+        this.potentialTermStart = getWorkStartTime(TimeUtils.getCalendar(day), visitContext.getWorker());
         this.potentialTermEnd = getPotentialTermEnd(this.potentialTermStart,
-                service.getDurationInMin());
-        Date workEndTime = getWorkEndTime(TimeUtils.getCalendar(day));
+                visitContext.getService().getDurationInMin());
+        Date workEndTime = getWorkEndTime(TimeUtils.getCalendar(day), visitContext.getWorker());
         do {
             TimeRange potentialTermTimeRange = new TimeRange(
                     this.potentialTermStart.getTime(),
                     this.potentialTermEnd.getTime());
 
-            if (scheduleChecker.isWorkerFree(potentialTermTimeRange, worker)) {
-                possibleTerms = checkResources(possibleTerms, potentialTermTimeRange);
+            if (scheduleChecker.isWorkerFree(potentialTermTimeRange, visitContext.getWorker())) {
+                possibleTerms = checkResources(possibleTerms, potentialTermTimeRange, visitContext);
             }
 
             this.potentialTermStart.add(Calendar.MINUTE, TIME_STEP_IN_MINUTES);
             this.potentialTermEnd = getPotentialTermEnd(this.potentialTermStart,
-                    service.getDurationInMin());
+                    visitContext.getService().getDurationInMin());
         } while (this.potentialTermEnd.before(TimeUtils.getCalendar(workEndTime)));
 
         return possibleTerms;
     }
 
-    private List<Term> checkResources(List<Term> possibleTerms, TimeRange potentialTermTimeRange) {
-        this.availableRoom = getFirstAvailableRoom(rooms, potentialTermTimeRange);
+    private List<Term> checkResources(List<Term> possibleTerms, TimeRange potentialTermTimeRange, VisitContext visitContext) {
+        this.availableRoom = getFirstAvailableRoom(visitContext.getSuitableRooms(), potentialTermTimeRange);
         if (this.availableRoom != null) {
-            if (service.isItemless()) {
-                possibleTerms.add(createTermWithoutItem());
+            if (visitContext.getService().isItemless()) {
+                possibleTerms.add(createTermWithoutItem(visitContext));
             } else {
                 List<EquipmentItem> suitableEqItems =
                         equipmentItemRepository.findAllSuitableForServiceInRoom(
-                                service.getId(),
+                                visitContext.getService().getId(),
                                 availableRoom.getId());
                 this.availableEqItem =
                         getFirstAvailableEqItem(suitableEqItems, potentialTermTimeRange);
                 if (this.availableEqItem != null) {
-                    possibleTerms.add(createTermWithItem());
+                    possibleTerms.add(createTermWithItem(visitContext));
                 }
             }
         }
         return possibleTerms;
     }
 
-    private Term createTermWithItem() {
+    private Term createTermWithItem(VisitContext visitContext) {
         Term term = new Term();
-        term.setWorkerId(worker.getId());
-        term.setServiceId(service.getId());
+        term.setWorkerId(visitContext.getWorker().getId());
+        term.setServiceId(visitContext.getService().getId());
         term.setStartTime(potentialTermStart.getTime());
         term.setEndTime(this.potentialTermEnd.getTime());
         term.setRoomId(availableRoom.getId());
@@ -225,10 +220,10 @@ public class FreeTimeScanner {
         return term;
     }
 
-    private Term createTermWithoutItem() {
+    private Term createTermWithoutItem(VisitContext visitContext) {
         Term term = new Term();
-        term.setWorkerId(worker.getId());
-        term.setServiceId(service.getId());
+        term.setWorkerId(visitContext.getWorker().getId());
+        term.setServiceId(visitContext.getService().getId());
         term.setStartTime(this.potentialTermStart.getTime());
         term.setEndTime(this.potentialTermEnd.getTime());
         term.setRoomId(this.availableRoom.getId());
