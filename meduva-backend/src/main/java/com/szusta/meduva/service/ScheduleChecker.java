@@ -9,7 +9,6 @@ import com.szusta.meduva.model.schedule.status.enums.EEquipmentStatus;
 import com.szusta.meduva.model.schedule.status.enums.ERoomStatus;
 import com.szusta.meduva.model.schedule.status.enums.EWorkerStatus;
 import com.szusta.meduva.payload.TimeRange;
-import com.szusta.meduva.repository.WorkHoursRepository;
 import com.szusta.meduva.repository.schedule.equipment.EquipmentScheduleRepository;
 import com.szusta.meduva.repository.schedule.room.RoomScheduleRepository;
 import com.szusta.meduva.repository.schedule.worker.WorkerScheduleRepository;
@@ -29,8 +28,7 @@ public class ScheduleChecker {
     @Autowired
     public ScheduleChecker(EquipmentScheduleRepository equipmentScheduleRepository,
                            RoomScheduleRepository roomScheduleRepository,
-                           WorkerScheduleRepository workerScheduleRepository,
-                           WorkHoursRepository workHoursRepository) {
+                           WorkerScheduleRepository workerScheduleRepository) {
         this.equipmentScheduleRepository = equipmentScheduleRepository;
         this.roomScheduleRepository = roomScheduleRepository;
         this.workerScheduleRepository = workerScheduleRepository;

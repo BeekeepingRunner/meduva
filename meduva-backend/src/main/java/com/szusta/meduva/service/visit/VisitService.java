@@ -15,6 +15,7 @@ import com.szusta.meduva.repository.schedule.visit.VisitRepository;
 import com.szusta.meduva.repository.schedule.visit.VisitStatusRepository;
 import com.szusta.meduva.service.freetimescanner.FreeTimeScanner;
 import com.szusta.meduva.service.freetimescanner.NotAvailableException;
+import com.szusta.meduva.service.freetimescanner.VisitContext;
 import com.szusta.meduva.util.TimeUtils;
 
 import javax.persistence.EntityNotFoundException;
@@ -61,7 +62,7 @@ public class VisitService {
                                                     Service service,
                                                     Date anyDayOfMonth) {
         checkIfCanPerform(worker, service);
-        setAuxiliaryData(worker, service);
+        VisitContext visitContext = new VisitContext(worker, service, getSuitableRooms(service));
 
         List<Date> availableDaysOfMonth = new ArrayList<>();
 
@@ -70,20 +71,13 @@ public class VisitService {
         Calendar nextMonthStart = TimeUtils.getCalendar(
                 TimeUtils.getNextMonthStart(anyDayOfMonth));
         do {
-            if (freeTimeScanner.isWorkerDayAvailable(currentDay)) {
+            if (freeTimeScanner.isWorkerDayAvailable(currentDay, visitContext)) {
                 availableDaysOfMonth.add(currentDay.getTime());
             }
             currentDay.add(Calendar.DAY_OF_MONTH, 1);
         } while (currentDay.before(nextMonthStart));
 
         return availableDaysOfMonth;
-    }
-
-    private void setAuxiliaryData(User worker, Service service) {
-        List<Room> suitableRooms = getSuitableRooms(service);
-        freeTimeScanner.setWorker(worker);
-        freeTimeScanner.setService(service);
-        freeTimeScanner.setRooms(suitableRooms);
     }
 
     private void checkIfCanPerform(User worker, Service service) {
@@ -104,8 +98,8 @@ public class VisitService {
     public List<Term> getWorkerAvailableTermsForDay(User worker, Service service, Date day) {
         try {
             checkIfCanPerform(worker, service);
-            setAuxiliaryData(worker, service);
-            return freeTimeScanner.getWorkerPossibleTerms(day);
+            VisitContext visitContext = new VisitContext(worker, service, getSuitableRooms(service));
+            return freeTimeScanner.getWorkerPossibleTerms(day, visitContext);
         } catch (NotAvailableException ex) {
             throw new RuntimeException("Worker doesn't have work hours on " + day);
         }
@@ -201,6 +195,9 @@ public class VisitService {
     public void markAsDeleted(Long visitId) {
         Visit visit = visitRepository.findById(visitId)
                 .orElseThrow(() -> new EntityNotFoundException("Visit not found with id : " + visitId));
+
+        scheduleManager.freeSchedules(visit);
+
         visit.markAsDeleted();
         visitRepository.save(visit);
     }
