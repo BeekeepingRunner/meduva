@@ -10,7 +10,7 @@
         close
       </mat-icon>
     </button>
-    <a href="#"><img id="logo" class="img-responsive" src="assets/images/Logo.png"></a>
+    <a href="home"><img id="logo" class="img-responsive" src="assets/images/Logo.png"></a>
   </div>
 
   <div class="right-item">
@@ -158,7 +158,10 @@
   </mat-sidenav>
 
   <mat-sidenav-content>
-    <div class="content">
+    <div class="content" *ngIf="isLoggedIn">
+      <router-outlet></router-outlet>
+    </div>
+    <div class="homecontent" *ngIf="!isLoggedIn">
       <router-outlet></router-outlet>
     </div>
 
