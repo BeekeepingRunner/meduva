@@ -12,30 +12,47 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class TimeUtilsTest {
 
-    Date preparedSampleDate;
-    Calendar comparativeCalendar;
+    Calendar initialDate;
+    Calendar dateUnderTest;
 
     // Sets calendar on 2021.01.01 10:15:00:00
     @BeforeEach
     public void setCalendar() {
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(2021, Calendar.JANUARY, 1);
-        calendar.set(Calendar.HOUR_OF_DAY, 10);
-        calendar.set(Calendar.MINUTE, 15);
-        calendar.set(Calendar.SECOND, 0);
-        calendar.set(Calendar.MILLISECOND, 0);
-        preparedSampleDate = calendar.getTime();
+        initialDate = Calendar.getInstance();
+        initialDate.set(2021, Calendar.JANUARY, 1);
+        initialDate.set(Calendar.HOUR_OF_DAY, 10);
+        initialDate.set(Calendar.MINUTE, 15);
+        initialDate.set(Calendar.SECOND, 0);
+        initialDate.set(Calendar.MILLISECOND, 0);
 
-        comparativeCalendar = Calendar.getInstance();
+        dateUnderTest = Calendar.getInstance();
     }
 
     @Test
-    @DisplayName("time of given day should be 00:00:00")
+    @DisplayName("should return same day with time equal to 00:00:00")
     public void dayStartTest() {
-        Date potentialDayStart = TimeUtils.getDayStart(preparedSampleDate);
-        comparativeCalendar.setTime(potentialDayStart);
-        assertEquals(0, comparativeCalendar.get(Calendar.HOUR_OF_DAY));
-        assertEquals(0, comparativeCalendar.get(Calendar.MINUTE));
-        assertEquals(0, comparativeCalendar.get(Calendar.SECOND));
+        Date potentialDayStart = TimeUtils.getDayStart(initialDate.getTime());
+        dateUnderTest.setTime(potentialDayStart);
+
+        assertEquals(initialDate.get(Calendar.YEAR), dateUnderTest.get(Calendar.YEAR));
+        assertEquals(initialDate.get(Calendar.MONTH), dateUnderTest.get(Calendar.MONTH));
+        assertEquals(initialDate.get(Calendar.DAY_OF_MONTH), dateUnderTest.get(Calendar.DAY_OF_MONTH));
+        assertEquals(0, dateUnderTest.get(Calendar.HOUR_OF_DAY));
+        assertEquals(0, dateUnderTest.get(Calendar.MINUTE));
+        assertEquals(0, dateUnderTest.get(Calendar.SECOND));
+    }
+
+    @Test
+    @DisplayName("should return same day with time equal to 23:59:59")
+    public void dayEndTest() {
+        Date potentialDayEnd = TimeUtils.getDayEnd(initialDate.getTime());
+        dateUnderTest.setTime(potentialDayEnd);
+
+        assertEquals(initialDate.get(Calendar.YEAR), dateUnderTest.get(Calendar.YEAR));
+        assertEquals(initialDate.get(Calendar.MONTH), dateUnderTest.get(Calendar.MONTH));
+        assertEquals(initialDate.get(Calendar.DAY_OF_MONTH), dateUnderTest.get(Calendar.DAY_OF_MONTH));
+        assertEquals(23, dateUnderTest.get(Calendar.HOUR_OF_DAY));
+        assertEquals(59, dateUnderTest.get(Calendar.MINUTE));
+        assertEquals(59, dateUnderTest.get(Calendar.SECOND));
     }
 }
