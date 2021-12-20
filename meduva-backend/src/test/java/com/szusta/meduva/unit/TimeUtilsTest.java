@@ -55,4 +55,56 @@ public class TimeUtilsTest {
         assertEquals(59, dateUnderTest.get(Calendar.MINUTE));
         assertEquals(59, dateUnderTest.get(Calendar.SECOND));
     }
+
+    @Test
+    @DisplayName("should return the next day with time equal to 00:00:00")
+    public void nextDayStartTest() {
+        Date potentialNextDayStart = TimeUtils.getNextDayStart(initialDate.getTime());
+        dateUnderTest.setTime(potentialNextDayStart);
+
+        Calendar nextDay = (Calendar) initialDate.clone();
+        nextDay.add(Calendar.DAY_OF_MONTH, 1);
+
+        assertEquals(nextDay.get(Calendar.YEAR), dateUnderTest.get(Calendar.YEAR));
+        assertEquals(nextDay.get(Calendar.MONTH), dateUnderTest.get(Calendar.MONTH));
+        assertEquals(nextDay.get(Calendar.DAY_OF_MONTH), dateUnderTest.get(Calendar.DAY_OF_MONTH));
+        assertEquals(0, dateUnderTest.get(Calendar.HOUR_OF_DAY));
+        assertEquals(0, dateUnderTest.get(Calendar.MINUTE));
+        assertEquals(0, dateUnderTest.get(Calendar.SECOND));
+    }
+
+    @Test
+    @DisplayName("should return the first day of the next month with time equal to 00:00:00")
+    public void nextMonthStartTest() {
+        Date potentialNextMonthStart = TimeUtils.getNextMonthStart(initialDate.getTime());
+        dateUnderTest.setTime(potentialNextMonthStart);
+
+        Calendar nextMonthFirstDay = (Calendar) initialDate.clone();
+        nextMonthFirstDay.add(Calendar.MONTH, 1);
+        nextMonthFirstDay.set(Calendar.DAY_OF_MONTH, 1);
+
+        assertEquals(nextMonthFirstDay.get(Calendar.YEAR), dateUnderTest.get(Calendar.YEAR));
+        assertEquals(nextMonthFirstDay.get(Calendar.MONTH), dateUnderTest.get(Calendar.MONTH));
+        assertEquals(nextMonthFirstDay.get(Calendar.DAY_OF_MONTH), dateUnderTest.get(Calendar.DAY_OF_MONTH));
+        assertEquals(0, dateUnderTest.get(Calendar.HOUR_OF_DAY));
+        assertEquals(0, dateUnderTest.get(Calendar.MINUTE));
+        assertEquals(0, dateUnderTest.get(Calendar.SECOND));
+    }
+
+    @Test
+    @DisplayName("should return the last day of the same month with time equal to 23:59:59")
+    public void monthEndTest() {
+        Date potentialMonthEnd = TimeUtils.getMonthEnd(initialDate.getTime());
+        dateUnderTest.setTime(potentialMonthEnd);
+
+        Calendar monthEnd = (Calendar) initialDate.clone();
+        monthEnd.set(Calendar.DAY_OF_MONTH, initialDate.getActualMaximum(Calendar.DAY_OF_MONTH));
+
+        assertEquals(monthEnd.get(Calendar.YEAR), dateUnderTest.get(Calendar.YEAR));
+        assertEquals(monthEnd.get(Calendar.MONTH), dateUnderTest.get(Calendar.MONTH));
+        assertEquals(monthEnd.get(Calendar.DAY_OF_MONTH), dateUnderTest.get(Calendar.DAY_OF_MONTH));
+        assertEquals(23, dateUnderTest.get(Calendar.HOUR_OF_DAY));
+        assertEquals(59, dateUnderTest.get(Calendar.MINUTE));
+        assertEquals(59, dateUnderTest.get(Calendar.SECOND));
+    }
 }
