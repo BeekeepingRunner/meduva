@@ -15,13 +15,12 @@
 }
 
 *::selection{
-  background:var(--pink);
+  background:var(--purple);
   color:#fff;
 }
 
 body{
   background:#f9f9f9;
-
 }
 
 h3{
@@ -29,7 +28,6 @@ h3{
 }
 
 section{
-
   padding:0 9%;
   padding-top: 5rem;
   padding-bottom: 2rem;
@@ -49,11 +47,11 @@ section{
   transition: .5s;
   box-shadow: 0 .5rem 1rem rgba(0,0,0,.1);
 }
+
 .btn:hover{
   background-position: right;
   transform: scale(1.1);
 }
-
 
 .heading{
   text-align: center;
@@ -66,6 +64,7 @@ section{
   padding:10px;
   font-weight: bold;
 }
+
 .subheading{
   text-align: center;
   background:var(--gradient);
@@ -79,21 +78,21 @@ section{
   letter-spacing: 3px;
 }
 
-
 .home{
   min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background:url(../../../assets/images/landing-page/Przechwytywanie2.JPG) no-repeat;
+  background:url(../../../assets/images/landing-page/home-background.JPG) no-repeat;
   background-size: cover;
   background-position: center;
 }
 
 .home .image img{
-  width:40vw;
+  width:30vw;
   transition-duration: 1s;
 }
+
 .home .image img:hover{
   transform: scale(1.1);
   transition-duration: 1s;
@@ -102,7 +101,9 @@ section{
 .home .content{
   max-width: 600px;
   top: 100px;
+  margin-right: 5vw;
 }
+
 .home .content h3{
   font-size: 50px;
   font-weight: bold;
@@ -131,7 +132,7 @@ section{
 }
 
 .features .box-container .box{
-  flex:1 1 30rem;
+  flex:1 1;
   background:#fff;
   border:.1rem solid rgba(87,75,144,.1);
   box-shadow: .5rem .5rem 1rem rgba(0,0,0,.2);
@@ -173,7 +174,7 @@ section{
   margin-top: 20px;
 }
 
-.about .heading{
+.about h1{
   color: #b5add9;
   padding-bottom: 20px;
 }
@@ -186,7 +187,7 @@ section{
 }
 
 .about .column .image{
-  flex:1 1 100px;
+  flex:1 1;
   text-align: center;
 }
 
@@ -233,7 +234,7 @@ section{
   position: relative;
   border:.1rem solid rgba(87,75,144,.1);
   box-shadow: .5rem .5rem 1rem rgba(0,0,0,.2);
-  flex:1 1 30rem;
+  flex:1 1;
   border-radius: 10px;
 }
 
@@ -285,7 +286,7 @@ section{
   height: 100%;
   left: 0;
   top: 0;
-  background: url("../../../assets/images/landing-page/contact_form_after.jpg") no-repeat center;
+  background: url("../../../assets/images/landing-page/contact-form-background.jpg") no-repeat center;
   background-size: cover;
   filter: blur(50px);
   z-index: -1;
@@ -325,9 +326,23 @@ textarea{
   .left{
     height: 200px;
   }
+  .review .box-container .box{
+    flex:1 1 auto;
+  }
+  .features .box-container .box{
+    flex:1 1 auto;
+  }
+  .home .image img{
+    width:50vw;
+  }
 }
 
+@media (max-width:1366px){
 
+  .home .image img{
+    width:35vw;
+  }
+}
 @media (max-width:1100px){
 
   section{
@@ -341,6 +356,9 @@ textarea{
   }
   .home .content{
     max-width: 480px;
+  }
+  .home .image img{
+    width:40vw;
   }
 }
 
@@ -382,6 +400,5 @@ textarea{
   .about .column .content{
     margin-right: 0;
   }
-
 
 }
