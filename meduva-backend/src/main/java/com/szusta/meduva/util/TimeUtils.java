@@ -5,8 +5,6 @@ import java.util.Date;
 
 public class TimeUtils {
 
-    public static int MINUTE_OFFSET = 30;
-
     /**
      *  Returns the same date with time equal to 00:00:00
      */
@@ -77,16 +75,6 @@ public class TimeUtils {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
         return calendar;
-    }
-
-    public static Calendar roundToNextHalfHour(Calendar calendar) {
-        Calendar toRoundCalendar = (Calendar) calendar.clone();
-        int currMinutes = toRoundCalendar.get(Calendar.MINUTE);
-        int mod = currMinutes % MINUTE_OFFSET;
-        toRoundCalendar.add(Calendar.MINUTE, MINUTE_OFFSET - mod);
-        toRoundCalendar.set(Calendar.SECOND, 0);
-        toRoundCalendar.set(Calendar.MILLISECOND, 0);
-        return toRoundCalendar;
     }
 
     public static boolean hasNDaysElapsed(Calendar start, Calendar end, int days) {
