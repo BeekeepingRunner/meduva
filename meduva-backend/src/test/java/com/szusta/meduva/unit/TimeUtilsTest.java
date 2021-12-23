@@ -3,6 +3,7 @@ package com.szusta.meduva.unit;
 import com.szusta.meduva.util.TimeUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import java.util.Calendar;
@@ -30,7 +31,7 @@ public class TimeUtilsTest {
 
     @Test
     @DisplayName("should return same day with time equal to 00:00:00")
-    public void dayStartTest() {
+    public void should_return_same_day_start() {
         Date potentialDayStart = TimeUtils.getDayStart(initialDate.getTime());
         testDate.setTime(potentialDayStart);
 
@@ -44,7 +45,7 @@ public class TimeUtilsTest {
 
     @Test
     @DisplayName("should return same day with time equal to 23:59:59")
-    public void dayEndTest() {
+    public void should_return_same_day_end() {
         Date potentialDayEnd = TimeUtils.getDayEnd(initialDate.getTime());
         testDate.setTime(potentialDayEnd);
 
@@ -58,7 +59,7 @@ public class TimeUtilsTest {
 
     @Test
     @DisplayName("should return the next day with time equal to 00:00:00")
-    public void nextDayStartTest() {
+    public void should_return_next_day_start() {
         Date potentialNextDayStart = TimeUtils.getNextDayStart(initialDate.getTime());
         testDate.setTime(potentialNextDayStart);
 
@@ -75,7 +76,7 @@ public class TimeUtilsTest {
 
     @Test
     @DisplayName("should return the first day of the next month with time equal to 00:00:00")
-    public void nextMonthStartTest() {
+    public void should_return_next_months_first_day_start() {
         Date potentialNextMonthStart = TimeUtils.getNextMonthStart(initialDate.getTime());
         testDate.setTime(potentialNextMonthStart);
 
@@ -93,7 +94,7 @@ public class TimeUtilsTest {
 
     @Test
     @DisplayName("should return the last day of the same month with time equal to 23:59:59")
-    public void monthEndTest() {
+    public void should_return_same_months_last_day_end() {
         Date potentialMonthEnd = TimeUtils.getMonthEnd(initialDate.getTime());
         testDate.setTime(potentialMonthEnd);
 
@@ -108,53 +109,57 @@ public class TimeUtilsTest {
         assertEquals(59, testDate.get(Calendar.SECOND));
     }
 
-    @Test
-    @DisplayName("Should return true only if the actual number of elapsed days is equal or greater from the specified")
-    public void hasNDaysElapsedTest1() {
-        testDate = (Calendar) initialDate.clone();
-        int daysElapsed = 5;
-        testDate.add(Calendar.DAY_OF_MONTH, daysElapsed);
+    @Nested
+    class nDaysElapsed {
 
-        assertTrue(TimeUtils.hasNDaysElapsed(initialDate, testDate, daysElapsed));
-        assertTrue(TimeUtils.hasNDaysElapsed(initialDate, testDate, daysElapsed - 1));
-        assertFalse(TimeUtils.hasNDaysElapsed(initialDate, testDate, daysElapsed + 1));
-    }
+        @Test
+        @DisplayName("Should return true only if the actual number of elapsed days is equal or greater from the specified")
+        public void if_n_days_elapsed_then_true() {
+            testDate = (Calendar) initialDate.clone();
+            int daysElapsed = 5;
+            testDate.add(Calendar.DAY_OF_MONTH, daysElapsed);
 
-    @Test
-    @DisplayName("Should take hourly time into consideration")
-    public void hasNDaysElapsedTest2() {
-        int daysElapsed = 5;
+            assertTrue(TimeUtils.hasNDaysElapsed(initialDate, testDate, daysElapsed));
+            assertTrue(TimeUtils.hasNDaysElapsed(initialDate, testDate, daysElapsed - 1));
+            assertFalse(TimeUtils.hasNDaysElapsed(initialDate, testDate, daysElapsed + 1));
+        }
 
-        Calendar momentAfter = (Calendar) initialDate.clone();
-        momentAfter.add(Calendar.DAY_OF_MONTH, daysElapsed);
-        momentAfter.add(Calendar.SECOND, 1);
+        @Test
+        @DisplayName("Should take hourly time into consideration")
+        public void should_behave_correct_if_day_time_differs_sligthly() {
+            int daysElapsed = 5;
 
-        assertTrue(TimeUtils.hasNDaysElapsed(initialDate, momentAfter, daysElapsed));
+            Calendar momentAfter = (Calendar) initialDate.clone();
+            momentAfter.add(Calendar.DAY_OF_MONTH, daysElapsed);
+            momentAfter.add(Calendar.SECOND, 1);
 
-        Calendar momentBefore = (Calendar) initialDate.clone();
-        momentBefore.add(Calendar.DAY_OF_MONTH, daysElapsed);
-        momentBefore.add(Calendar.SECOND, -1);
+            assertTrue(TimeUtils.hasNDaysElapsed(initialDate, momentAfter, daysElapsed));
 
-        assertFalse(TimeUtils.hasNDaysElapsed(initialDate, momentBefore, daysElapsed));
-    }
+            Calendar momentBefore = (Calendar) initialDate.clone();
+            momentBefore.add(Calendar.DAY_OF_MONTH, daysElapsed);
+            momentBefore.add(Calendar.SECOND, -1);
 
-    @Test
-    @DisplayName("Should work on dates with different months")
-    public void hasNDaysElapsedTest3() {
-        testDate = (Calendar) initialDate.clone();
-        int daysElapsed = 45;
-        testDate.add(Calendar.DAY_OF_MONTH, daysElapsed);
+            assertFalse(TimeUtils.hasNDaysElapsed(initialDate, momentBefore, daysElapsed));
+        }
 
-        assertTrue(TimeUtils.hasNDaysElapsed(initialDate, testDate, daysElapsed));
-    }
+        @Test
+        @DisplayName("Should work on dates with different months")
+        public void hasNDaysElapsedTest3() {
+            testDate = (Calendar) initialDate.clone();
+            int daysElapsed = 45;
+            testDate.add(Calendar.DAY_OF_MONTH, daysElapsed);
 
-    @Test
-    @DisplayName("Should work on dates with different years")
-    public void hasNDaysElapsedTest4() {
-        testDate = (Calendar) initialDate.clone();
-        int daysElapsed = 500;
-        testDate.add(Calendar.DAY_OF_MONTH, daysElapsed);
+            assertTrue(TimeUtils.hasNDaysElapsed(initialDate, testDate, daysElapsed));
+        }
 
-        assertTrue(TimeUtils.hasNDaysElapsed(initialDate, testDate, daysElapsed));
+        @Test
+        @DisplayName("Should work on dates with different years")
+        public void hasNDaysElapsedTest4() {
+            testDate = (Calendar) initialDate.clone();
+            int daysElapsed = 500;
+            testDate.add(Calendar.DAY_OF_MONTH, daysElapsed);
+
+            assertTrue(TimeUtils.hasNDaysElapsed(initialDate, testDate, daysElapsed));
+        }
     }
 }
