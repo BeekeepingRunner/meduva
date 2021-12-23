@@ -138,3 +138,16 @@ a:hover{
     justify-content: center;
   }
 }
+
+@media screen and (max-width: 400px){
+  .container{
+    margin-top: 5vh;
+    margin-bottom: 5vh;
+  }
+}
+@media screen and (max-width: 360px){
+  .container{
+    padding: 0;
+    height: auto;
+  }
+}
