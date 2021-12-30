@@ -5,9 +5,10 @@ import {ActivatedRoute} from "@angular/router";
 import {MatDialog} from "@angular/material/dialog";
 import {RoomService} from "../../../../service/room.service";
 import {ItemDayDialogComponent, UnavailabilityOptions} from "../../dialog/item-day-dialog/item-day-dialog.component";
-import {ScheduleService, TimeRange} from "../../../service/schedule.service";
-import {createUnavailabilityEvent} from "../../../util/event/creation";
+import {ScheduleService, TimeRange, Visit, WeekBoundaries, WorkSchedule} from "../../../service/schedule.service";
+import {createVisitEvent, createUnavailabilityEvent} from "../../../util/event/creation";
 import {MatSnackBar} from "@angular/material/snack-bar";
+import {VisitDetailsComponent} from "../../../../component/visit/visit-details/visit-details.component";
 
 @Component({
   selector: 'app-room-schedule',
@@ -61,19 +62,45 @@ export class RoomScheduleComponent implements OnInit {
     let firstDayOfWeekNumber = currDate.getDate() - currDate.getDay();
     this.firstDayOfWeek = new Date(currDate.setDate(firstDayOfWeekNumber));
     this.lastDayOfWeek = new Date(currDate.setDate(this.firstDayOfWeek.getDate() + 6));
+
   }
 
   private pushWeeklyUnavailability(): void {
     let weekBoundaries: TimeRange = {
       startTime: this.firstDayOfWeek,
-      endTime: this.lastDayOfWeek
+      endTime: this.lastDayOfWeek,
     };
 
     // @ts-ignore
     this.scheduleService.getWeeklyRoomUnavailability(this.room.id, weekBoundaries).subscribe(
       (weeklyUnavailability: TimeRange[]) => {
         this.pushUnavailabilities(weeklyUnavailability);
+        this.pushWeeklyVisits();
       });
+  }
+
+  private pushWeeklyVisits() {
+    let weekBoundaries: WeekBoundaries = {
+      firstWeekDay: this.firstDayOfWeek,
+      lastWeekDay: this.lastDayOfWeek,
+    }
+
+    this.scheduleService.getWeeklyNotCancelledRoomVisits(this.room.id, weekBoundaries).subscribe(
+      (weeklyVisits: Visit[]) => {
+        this.pushVisits(weeklyVisits);
+      }
+    );
+  }
+
+  private pushVisits(weeklyVisits: Visit[]) {
+    let newEvents = this.events;
+    this.events = [];
+    weeklyVisits.forEach(visit => {
+      newEvents.push(
+        createVisitEvent(visit.timeFrom, visit.timeTo, visit.id)
+      );
+    });
+    this.events = [...newEvents];
   }
 
   private pushUnavailabilities(weeklyUnavailability: TimeRange[]) {
@@ -118,7 +145,10 @@ export class RoomScheduleComponent implements OnInit {
         (dayTimeRange: TimeRange) => {
           this.pushUnavailableDayToEvents(dayTimeRange);
           this.getWeeklyEvents();
-        }
+        },err => {
+        console.log(err);
+        this.snackBar.open(err.error.message);
+      }
       );
     }
   }
@@ -162,8 +192,28 @@ export class RoomScheduleComponent implements OnInit {
     this.events = [...newEvents];
   }
 
+  openVisitDetailsDialog(id: string | number | undefined) {
+    const visitDetailsDialog = this.dialog.open(VisitDetailsComponent, {
+      width: '600px',
+      height: '600px',
+      panelClass: 'my-dialog',
+      data: {
+        visitId: id,
+      }
+    });
+
+    visitDetailsDialog.afterClosed().subscribe(
+      (value => {
+        this.getWeeklyEvents();
+      })
+    );
+  }
+
   eventClick($event: {event: CalendarEvent<any>; sourceEvent: any}) {
 
+    if($event.event.id != null){
+      this.openVisitDetailsDialog($event.event.id);
+    }
   }
 
 }

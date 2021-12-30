@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {User} from "../../../model/user";
+import {roleNames, User, UserRole} from "../../../model/user";
 import {Client} from "../../../model/client";
 import {Service} from "../../../model/service";
 import {Term, VisitService} from "../../../service/visit.service";
@@ -8,6 +8,9 @@ import {UserService} from "../../../service/user.service";
 import {MatDialog} from "@angular/material/dialog";
 import {Router} from "@angular/router";
 import {FeedbackDialogComponent} from "../../dialog/feedback-dialog/feedback-dialog.component";
+import {RoleGuardService} from "../../../service/auth/role-guard.service";
+import {ConfirmationDialogComponent} from "../../dialog/confirmation-dialog/confirmation-dialog.component";
+import {ChooseOptionDialogComponent} from "../../dialog/choose-option-dialog/choose-option-dialog.component";
 
 @Component({
   selector: 'app-plan-your-visit',
@@ -25,6 +28,7 @@ export class PlanYourVisitComponent implements OnInit {
   isTermSelectionVisible = false;
   term!: Term | null;
   visitDescription: string = "";
+  asReceptionist = false;
 
   constructor(
     private jwtStorage: JwtStorageService,
@@ -32,6 +36,7 @@ export class PlanYourVisitComponent implements OnInit {
     private visitService: VisitService,
     private dialog: MatDialog,
     private router: Router,
+    private roleGuardService: RoleGuardService,
   ) { }
 
   ngOnInit(): void {
@@ -42,6 +47,18 @@ export class PlanYourVisitComponent implements OnInit {
         this.worker = currUser;
       }
     );
+    if(this.ifCurrentUserIsRecepcionistOrAdmin()){ const optionDialogRef = this.dialog.open(ChooseOptionDialogComponent, {
+      data: { message: 'For whom do u want to book an appointment?' , optionNo: 'For me', optionYes: 'For other worker'}
+    });
+      optionDialogRef.afterClosed().subscribe(confirmed => {
+        if(confirmed){
+          this.asReceptionist = true;
+          this.worker=null;
+        }
+      });
+    }
+
+
   }
 
   onClientSelection($event: any) {
@@ -91,5 +108,18 @@ export class PlanYourVisitComponent implements OnInit {
     // @ts-ignore
     this.term?.description = this.visitDescription;
     console.log(this.term?.description);
+  }
+
+  onWorkerSelection($event: any) {
+    this.worker = $event;
+    this.term = null;
+  }
+  ifCurrentUserIsRecepcionistOrAdmin(){
+    return (this.roleGuardService.hasCurrentUserExpectedRole(roleNames[UserRole.ROLE_RECEPTIONIST]) || this.roleGuardService.hasCurrentUserExpectedRole(roleNames[UserRole.ROLE_ADMIN]))
+
+  }
+
+  showWorker() {
+    console.log(this.worker+"To jest worker teraz");
   }
 }

@@ -2,7 +2,7 @@
 <br>
 <mat-stepper [linear]="true" orientation="vertical" #stepper>
 
-  <mat-step label="Select a Client"
+  <mat-step #first_step label="Select a Client"
             [completed]="client != null">
     <br>
     <app-client-selection (clientEmitter)="onClientSelection($event)">
@@ -17,36 +17,59 @@
           <span *ngIf="!client.email">{{ '(without account)' }}</span>
         </b>
       </p>
-      <button mat-button matStepperNext>Next</button>
+      <button mat-button matStepperNext (click)="showWorker()">Next</button>
     </div>
   </mat-step>
 
-  <mat-step label="Select a service"
+
+  <mat-step #second_step label="Select a service"
             [completed]="service != null">
     <br>
-    <app-service-selection *ngIf="worker != null"
+    <ng-container *ngIf="stepper.selected == second_step">
+    <app-service-selection *ngIf="worker != null || asReceptionist==true"
                            [worker]="worker"
                            (reRenderSignalEmitter)="onReRenderSignal($event)"
                            (serviceEmitter)="onServiceSelection($event)">
     </app-service-selection>
+    </ng-container>
     <div>
       <br>
       <p *ngIf="service">Selected service: <b>{{ service.name }}</b></p>
-      <button mat-button matStepperNext (click)="makeTermSelectionVisible()">Next</button>
+      <button mat-button matStepperNext>Next</button>
     </div>
   </mat-step>
 
-  <mat-step label="Select a term"
-            [completed]="term != null">
 
-    <div *ngIf="isTermSelectionVisible">
+  <ng-container *ngIf="asReceptionist">
+    <mat-step #third_step label="Select a worker"
+              [completed]="worker != null">
+    <br>
+      <ng-container *ngIf="stepper.selected == third_step">
+    <app-worker-selection *ngIf="service != null"
+                          [selectedService]="service"
+                          (reRenderSignalEmitter)="onReRenderSignal($event)"
+                          (workerEmitter)="onWorkerSelection($event)">
+    </app-worker-selection>
+      </ng-container>
+    <div>
+    <br>
+    <p *ngIf="worker">Selected Worker: <b>{{ worker.name + ' ' + worker.surname + ' (' + worker.email + ')' }}</b></p>
+      <button mat-button matStepperNext>Next</button>
+    </div>
+  </mat-step>
+  </ng-container>
+
+  <mat-step #fourth_step label="Select a term"
+            [completed]="term != null">
+    <ng-container *ngIf="stepper.selected == fourth_step">
       <app-term-selection *ngIf="worker != null && service != null && client != null"
                           [client]="client"
                           [service]="service"
                           [worker]="worker"
                           (termEmitter)="onTermSelection($event)">
       </app-term-selection>
-    </div>
+    </ng-container>
+
     <br>
     <div>
       <button mat-button matStepperPrevious>Back</button>
@@ -54,13 +77,15 @@
     </div>
   </mat-step>
 
-  <mat-step label="Visit summary">
+  <mat-step #fifth_step label="Visit summary">
+    <ng-container *ngIf="stepper.selected == fifth_step">
     <app-visit-summary *ngIf="term != null && worker != null && service != null && client != null"
                        [client]="client"
                        [worker]="worker"
                        [service]="service"
                        [term]="term">
     </app-visit-summary>
+    </ng-container>
     <br>
     <mat-form-field appearance="fill" class="full-width">
       <mat-label>Add a description</mat-label>

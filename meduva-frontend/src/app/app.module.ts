@@ -96,8 +96,8 @@ import { ClientVisitsComponent } from './component/clients/client-details/client
 import {ConfirmationWithWarningDialogComponent} from "./component/dialog/confirmation-with-warning-dialog/confirmation-with-warning-dialog.component";
 import { VisitDetailsComponent } from './component/visit/visit-details/visit-details.component';
 import {FooterComponent} from "./component/home/footer/footer.component";
-
-
+import {ChooseOptionDialogComponent} from "./component/dialog/choose-option-dialog/choose-option-dialog.component";
+import { EditVisitTermComponent } from './component/visit/edit-visit-term/edit-visit-term.component';
 
 @NgModule({
   declarations: [
@@ -167,6 +167,8 @@ import {FooterComponent} from "./component/home/footer/footer.component";
 
     ConfirmationWithWarningDialogComponent,
     VisitDetailsComponent,
+    ChooseOptionDialogComponent,
+    EditVisitTermComponent,
   ],
   imports: [
     BrowserModule,

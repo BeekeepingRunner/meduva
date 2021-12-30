@@ -5,9 +5,21 @@ import {ActivatedRoute} from "@angular/router";
 import {DayDialogComponent} from "../../dialog/day-dialog/day-dialog.component";
 import {User} from "../../../../model/user";
 import {UserService} from "../../../../service/user.service";
-import {ScheduleService, TimeRange, WeekBoundaries, WorkHours, WorkSchedule} from "../../../service/schedule.service";
-import {createAbsenceHoursEvent, createOffWorkHoursEvent} from "../../../util/event/creation";
+import {
+  ScheduleService,
+  TimeRange,
+  Visit,
+  WeekBoundaries,
+  WorkHours,
+  WorkSchedule
+} from "../../../service/schedule.service";
+import {
+  createAbsenceHoursEvent,
+  createOffWorkHoursEvent, createVisitsAsClientEvent,
+  createVisitsAsWorkerEvent,
+} from "../../../util/event/creation";
 import {MatSnackBar} from "@angular/material/snack-bar";
+import {VisitDetailsComponent} from "../../../../component/visit/visit-details/visit-details.component";
 
 @Component({
   selector: 'app-worker-schedule',
@@ -15,6 +27,7 @@ import {MatSnackBar} from "@angular/material/snack-bar";
   templateUrl: './worker-schedule.component.html',
   styleUrls: ['./worker-schedule.component.css']
 })
+
 export class WorkerScheduleComponent implements OnInit {
 
   view: CalendarView = CalendarView.Week;
@@ -27,6 +40,7 @@ export class WorkerScheduleComponent implements OnInit {
 
   worker!: User;
 
+  weekBoundaries!: WeekBoundaries;
   firstDayOfWeek!: Date;
   lastDayOfWeek!: Date;
 
@@ -66,12 +80,12 @@ export class WorkerScheduleComponent implements OnInit {
   }
 
   private prepareWeeklyOffWorkHours(): void {
-    let weekBoundaries: WeekBoundaries = {
+    this.weekBoundaries = {
       firstWeekDay: this.firstDayOfWeek,
       lastWeekDay: this.lastDayOfWeek
     };
 
-    this.scheduleService.getWeeklyOffWorkHours(this.worker.id, weekBoundaries).subscribe(
+    this.scheduleService.getWeeklyOffWorkHours(this.worker.id, this.weekBoundaries).subscribe(
     (weeklyOffWorkHours: WorkHours[]) => {
       this.updateWorkHoursEvents(weeklyOffWorkHours);
       this.prepareWeeklyAbsenceHours();
@@ -79,17 +93,57 @@ export class WorkerScheduleComponent implements OnInit {
   }
 
   private prepareWeeklyAbsenceHours(): void {
-    let weekBoundaries: WeekBoundaries = {
-      firstWeekDay: this.firstDayOfWeek,
-      lastWeekDay: this.lastDayOfWeek
-    };
 
-    this.scheduleService.getWeeklyAbsenceHours(this.worker.id, weekBoundaries).subscribe(
+    this.scheduleService.getWeeklyAbsenceHours(this.worker.id, this.weekBoundaries).subscribe(
       (weeklyAbsenceHours: WorkSchedule[]) => {
         console.log(weeklyAbsenceHours);
         this.updateAbsenceHoursEvents(weeklyAbsenceHours);
+        this.prepareWeeklyVisitsAsWorker();
       }
     );
+  }
+
+  private prepareWeeklyVisitsAsWorker(): void {
+
+    this.scheduleService.getWeeklyNotCancelledVisitsAsWorker(this.worker.id, this.weekBoundaries).subscribe(
+      /* possibly later change WorkSchedule on new interface (Visit?) */
+      (weeklyVisitsAsWorker: Visit[]) => {
+        console.log(weeklyVisitsAsWorker);
+        this.updateVisitsAsWorkerEvents(weeklyVisitsAsWorker);
+        this.prepareWeeklyVisitsAsClient();
+      }
+    );
+  }
+
+  private prepareWeeklyVisitsAsClient(): void {
+
+    this.scheduleService.getWeeklyNotCancelledVisitsAsClient(this.worker.id, this.weekBoundaries).subscribe(
+      /* possibly later change WorkSchedule on new interface (Visit?) */
+      (weeklyVisitsAsClient: Visit[]) => {
+        console.log(weeklyVisitsAsClient);
+        this.updateVisitsAsClientEvents(weeklyVisitsAsClient);
+      }
+    );
+  }
+
+  private updateVisitsAsWorkerEvents(weeklyVisitsAsWorker: Visit[]){
+    let newEvents = this.events;
+    this.events = [];
+    weeklyVisitsAsWorker.forEach(visitAsWorker => {
+      newEvents.push(
+          createVisitsAsWorkerEvent(visitAsWorker.timeFrom, visitAsWorker.timeTo, visitAsWorker.id));
+    });
+    this.events = [...newEvents];
+  }
+
+  private updateVisitsAsClientEvents(weeklyVisitsAsClient: Visit[]) {
+    let newEvents = this.events;
+    this.events = [];
+    weeklyVisitsAsClient.forEach(visitAsWorker => {
+      newEvents.push(
+        createVisitsAsClientEvent(visitAsWorker.timeFrom, visitAsWorker.timeTo, visitAsWorker.id));
+    });
+    this.events = [...newEvents];
   }
 
   private updateWorkHoursEvents(weeklyOffWorkHours: WorkHours[]) {
@@ -106,7 +160,6 @@ export class WorkerScheduleComponent implements OnInit {
     let newEvents = this.events;
     this.events = [];
     weeklyAbsenceHours.forEach(absenceHours => {
-      console.log(absenceHours);
       newEvents.push(
         createAbsenceHoursEvent(absenceHours.timeFrom, absenceHours.timeTo)
       );
@@ -143,6 +196,10 @@ export class WorkerScheduleComponent implements OnInit {
           case 'DELETE_WORK_HOURS':
             let workDay: Date = result.data;
             this.deleteDailyWorkHours(workDay);
+            break;
+          case 'TERM_CHANGE':
+            this.prepareWeekEvents();
+            break;
         }
       }
     );
@@ -165,6 +222,7 @@ export class WorkerScheduleComponent implements OnInit {
         this.prepareWeekEvents();
       }, err => {
         console.log(err);
+        this.snackBar.open(err.error.message);
       }
     );
 
@@ -176,6 +234,7 @@ export class WorkerScheduleComponent implements OnInit {
         this.prepareWeekEvents();
       }, err => {
         console.log(err);
+        this.snackBar.open(err.error.message);
       }
     )
   }
@@ -186,11 +245,33 @@ export class WorkerScheduleComponent implements OnInit {
         this.prepareWeekEvents();
       }, err => {
         console.log(err);
+        this.snackBar.open(err.error.message);
       }
     )
   }
 
+  openVisitDetailsDialog(id: string | number | undefined) {
+    const visitDetailsDialog = this.dialog.open(VisitDetailsComponent, {
+      width: '600px',
+      height: '600px',
+      panelClass: 'my-dialog',
+      data: {
+        visitId: id,
+      },
+    });
+
+    visitDetailsDialog.afterClosed().subscribe(
+      (value => {
+        this.prepareWeekEvents();
+      })
+    );
+  }
+
   eventClick($event: { event: CalendarEvent<any>; sourceEvent: any }) {
+
+    if($event.event.id != null){
+      this.openVisitDetailsDialog($event.event.id);
+    }
 
   }
 

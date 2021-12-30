@@ -4,10 +4,12 @@ import com.szusta.meduva.model.Service;
 import com.szusta.meduva.model.User;
 import com.szusta.meduva.model.schedule.visit.Visit;
 import com.szusta.meduva.payload.Term;
+import com.szusta.meduva.payload.WeekBoundaries;
 import com.szusta.meduva.service.ScheduleChecker;
 import com.szusta.meduva.service.ServicesService;
 import com.szusta.meduva.service.user.UserService;
 import com.szusta.meduva.service.visit.VisitService;
+import com.szusta.meduva.util.TimeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -84,6 +86,34 @@ public class VisitController {
         return visitService.findAllOfUnregisteredClient(unregisteredClientId);
     }
 
+    @PostMapping("/get-week-not-cancelled-visits-as-worker/{workerId}")
+    public List<Visit> findAllBookedWhereUserIsWorkerBetween(@PathVariable Long workerId, @RequestBody WeekBoundaries weekBoundaries) {
+        Date startTime = TimeUtils.getDayStart(weekBoundaries.getFirstWeekDay());
+        Date endTime = TimeUtils.getDayEnd(weekBoundaries.getLastWeekDay());
+        return visitService.findAllNotCancelledWhereUserIsWorkerBetween(workerId, startTime, endTime);
+    }
+
+    @PostMapping("/get-week-not-cancelled-visits-as-client/{workerId}")
+    public List<Visit> findAllNotCancelledWhereUserIsClientBetween(@PathVariable Long workerId, @RequestBody WeekBoundaries weekBoundaries) {
+        Date startTime = TimeUtils.getDayStart(weekBoundaries.getFirstWeekDay());
+        Date endTime = TimeUtils.getDayEnd(weekBoundaries.getLastWeekDay());
+        return visitService.findAllNotCancelledWhereUserIsClientBetween(workerId, startTime, endTime);
+    }
+
+    @PostMapping("/get-week-not-cancelled-room-visit/{roomId}")
+    public List<Visit> findAllNotCancelledWeeklyRoomVisits(@PathVariable Long roomId, @RequestBody WeekBoundaries weekBoundaries){
+        Date startTime = TimeUtils.getDayStart(weekBoundaries.getFirstWeekDay());
+        Date endTime = TimeUtils.getDayEnd(weekBoundaries.getLastWeekDay());
+        return visitService.findAllNotCancelledWeeklyRoomVisits(roomId, startTime, endTime);
+    }
+
+    @PostMapping("/get-week-not-cancelled-item-visit/{itemId}")
+    public List<Visit> findAllNotCancelledWeeklyItemVisits(@PathVariable Long itemId, @RequestBody WeekBoundaries weekBoundaries) {
+        Date startTime = TimeUtils.getDayStart(weekBoundaries.getFirstWeekDay());
+        Date endTime = TimeUtils.getDayEnd(weekBoundaries.getLastWeekDay());
+        return visitService.findAllNotCancelledWeeklyItemVisits(itemId, startTime, endTime);
+    }
+
     @DeleteMapping("/all-of-unregistered-client/{unregisteredClientId}")
     public void deleteAllOfUnregisteredClient(@PathVariable Long unregisteredClientId) {
        visitService.deleteAllOfUnregisteredClient(unregisteredClientId);
@@ -112,10 +142,16 @@ public class VisitController {
         return visitService.markAsPaid(visit);
     }
 
+    @PutMapping("/mark-as-deleted/{visitId}")
+    public void markVisitAsDeleted(@PathVariable Long visitId) {
+        visitService.markAsDeleted(visitId);
+    }
+
     @PutMapping("/{visitId}/cancel")
     public Visit cancelVisit(@PathVariable Long visitId) {
         Visit visit = visitService.findById(visitId);
         return visitService.cancel(visit);
+
     }
 
     @PutMapping("/cancel-all-of-unregistered-client/{unregisteredClientId}")

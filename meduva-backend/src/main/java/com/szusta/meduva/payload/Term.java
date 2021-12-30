@@ -22,6 +22,7 @@ public class Term {
     boolean isClientUnregistered;
     Long roomId;
     Long eqItemId;
+    boolean paid;
 
     String description;
 

@@ -29,7 +29,7 @@ public class UnregisteredClientService {
 
     public UnregisteredClient save(UnregisteredClient client) {
         if (alreadyExists(client)) {
-            throw new AlreadyExistsException("That client already exists");
+            throw new AlreadyExistsException("Client with given phone number already exists");
         } else {
             return clientRepository.save(client);
         }

@@ -4,8 +4,15 @@ import {User} from "../../../model/user";
 import {MatDialog} from "@angular/material/dialog";
 import {UserService} from "../../../service/user.service";
 import {JwtStorageService} from "../../../service/token/jwt-storage.service";
-import {ScheduleService, WeekBoundaries, WorkHours} from "../../service/schedule.service";
+import {ScheduleService, Visit, WeekBoundaries, WorkHours, WorkSchedule} from "../../service/schedule.service";
 import {DayDialogComponent} from "../dialog/day-dialog/day-dialog.component";
+import {
+  createAbsenceHoursEvent,
+  createOffWorkHoursEvent,
+  createVisitsAsClientEvent,
+  createVisitsAsWorkerEvent
+} from "../../util/event/creation";
+import {VisitDetailsComponent} from "../../../component/visit/visit-details/visit-details.component";
 
 @Component({
   selector: 'app-my-schedule',
@@ -25,6 +32,7 @@ export class MyScheduleComponent implements OnInit {
 
   worker!: User;
 
+  weekBoundaries!: WeekBoundaries;
   firstDayOfWeek!: Date;
   lastDayOfWeek!: Date;
 
@@ -65,43 +73,120 @@ export class MyScheduleComponent implements OnInit {
   }
 
   private prepareWeeklyOffWorkHours(): void {
-    let weekBoundaries: WeekBoundaries = {
+    this.weekBoundaries = {
       firstWeekDay: this.firstDayOfWeek,
       lastWeekDay: this.lastDayOfWeek
     };
 
     // @ts-ignore
-    this.scheduleService.getWeeklyOffWorkHours(this.worker.id, weekBoundaries).subscribe(
+    this.scheduleService.getWeeklyOffWorkHours(this.worker.id, this.weekBoundaries).subscribe(
       (weeklyOffWorkHours: WorkHours[]) => {
         this.updateWorkHoursEvents(weeklyOffWorkHours);
+        this.prepareWeeklyAbsenceHours();
       });
   }
 
   private updateWorkHoursEvents(weeklyOffWorkHours: WorkHours[]) {
     let newEvents = this.events;
     this.events = [];
-    weeklyOffWorkHours.forEach(OffWorkHours => {
-      newEvents.push({
-        draggable: false,
-        end: new Date(OffWorkHours.endTime),
-        id: undefined,
-        meta: undefined,
-        start: new Date(OffWorkHours.startTime),
-        title: "Off work",
-        color: {
-          primary: "lightGray",
-          secondary: "lightGray"
-        }
-      })
+    weeklyOffWorkHours.forEach(offWorkHours => {
+      newEvents.push(
+        createOffWorkHoursEvent(offWorkHours.startTime, offWorkHours.endTime))
     });
     this.events = [...newEvents];
   }
 
-  openDayDialog(dayDate: Date) {
+  private prepareWeeklyAbsenceHours(): void {
 
+    this.scheduleService.getWeeklyAbsenceHours(this.worker.id, this.weekBoundaries).subscribe(
+      (weeklyAbsenceHours: WorkSchedule[]) => {
+        console.log(weeklyAbsenceHours);
+        this.updateAbsenceHoursEvents(weeklyAbsenceHours);
+        this.prepareWeeklyVisitsAsWorker();
+      }
+    );
+  }
+
+  private prepareWeeklyVisitsAsWorker(): void {
+
+    this.scheduleService.getWeeklyNotCancelledVisitsAsWorker(this.worker.id, this.weekBoundaries).subscribe(
+      /* possibly later change WorkSchedule on new interface (Visit?) */
+      (weeklyVisitsAsWorker: Visit[]) => {
+        console.log(weeklyVisitsAsWorker);
+        this.updateVisitsAsWorkerEvents(weeklyVisitsAsWorker);
+        this.prepareWeeklyVisitsAsClient();
+      }
+    );
+  }
+
+  private prepareWeeklyVisitsAsClient(): void {
+
+    this.scheduleService.getWeeklyNotCancelledVisitsAsClient(this.worker.id, this.weekBoundaries).subscribe(
+      /* possibly later change WorkSchedule on new interface (Visit?) */
+      (weeklyVisitsAsClient: Visit[]) => {
+        console.log(weeklyVisitsAsClient);
+        this.updateVisitsAsClientEvents(weeklyVisitsAsClient);
+      }
+    );
+  }
+
+  private updateVisitsAsWorkerEvents(weeklyVisitsAsWorker: Visit[]){
+    let newEvents = this.events;
+    this.events = [];
+    weeklyVisitsAsWorker.forEach(visitAsWorker => {
+      newEvents.push(
+        createVisitsAsWorkerEvent(visitAsWorker.timeFrom, visitAsWorker.timeTo, visitAsWorker.id));
+    });
+    this.events = [...newEvents];
+  }
+
+  private updateVisitsAsClientEvents(weeklyVisitsAsClient: Visit[]) {
+    let newEvents = this.events;
+    this.events = [];
+    weeklyVisitsAsClient.forEach(visitAsWorker => {
+      newEvents.push(
+        createVisitsAsClientEvent(visitAsWorker.timeFrom, visitAsWorker.timeTo, visitAsWorker.id));
+    });
+    this.events = [...newEvents];
+  }
+
+  private updateAbsenceHoursEvents(weeklyAbsenceHours: WorkSchedule[]) {
+    let newEvents = this.events;
+    this.events = [];
+    weeklyAbsenceHours.forEach(absenceHours => {
+      newEvents.push(
+        createAbsenceHoursEvent(absenceHours.timeFrom, absenceHours.timeTo)
+      );
+    });
+    this.events = [...newEvents];
+  }
+
+  openVisitDetailsDialog(id: string | number | undefined) {
+    const visitDetailsDialog = this.dialog.open(VisitDetailsComponent, {
+      width: '600px',
+      height: '600px',
+      panelClass: 'my-dialog',
+      data: {
+        visitId: id,
+      }
+    });
+
+    visitDetailsDialog.afterClosed().subscribe(
+      (value => {
+        this.prepareWeekEvents();
+      })
+    );
   }
 
   eventClick($event: { event: CalendarEvent<any>; sourceEvent: any }) {
 
+    if($event.event.id != null){
+      this.openVisitDetailsDialog($event.event.id);
+    }
   }
+
+  openDayDialog(date: Date){
+      ///?
+  }
+
 }
