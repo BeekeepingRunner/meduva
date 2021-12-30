@@ -62,6 +62,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy
       this.userService.getUserDetails(this.tokenStorageService.getCurrentUser()?.id).subscribe(
         user => {
           this.currentUser = user;
+          this.pageTitle = this.currentUser.name;
           this.setVisibleOptions();
 
           this.eventBusSub = this.eventBusService.on('logout', () => {
