@@ -1,6 +1,7 @@
 package com.szusta.meduva.service.equipment;
 
 import com.szusta.meduva.exception.EntityRecordNotFoundException;
+import com.szusta.meduva.exception.HasAssociatedVisitsException;
 import com.szusta.meduva.model.equipment.EquipmentItem;
 import com.szusta.meduva.model.equipment.EquipmentModel;
 import com.szusta.meduva.model.schedule.EquipmentSchedule;
@@ -75,7 +76,11 @@ public class EquipmentService {
     private void markModelItemsAsDeleted(EquipmentModel model) {
         List<EquipmentItem> itemsToDelete = model.getItems();
         itemsToDelete.forEach(item -> {
-            // item.setRoom(null) <- will be that necessary?
+
+            if (scheduleChecker.isOccupiedInTheFuture(item)) {
+                throw new HasAssociatedVisitsException("An item " + item.getName() + " (id = " + item.getId() + ") cannot be deleted because of the future visits");
+            }
+
             item.deactivate();
             item.markAsDeleted();
             equipmentItemRepository.save(item);

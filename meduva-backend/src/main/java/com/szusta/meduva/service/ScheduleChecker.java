@@ -104,4 +104,10 @@ public class ScheduleChecker {
                 room.getId(),
                 ERoomStatus.ROOM_UNAVAILABLE.getValue());
     }
+
+    public boolean isOccupiedInTheFuture(EquipmentItem eqItem) {
+        return !equipmentScheduleRepository.findAllInTheFuture(
+                eqItem.getId(), EEquipmentStatus.EQUIPMENT_OCCUPIED.getValue())
+                .isEmpty();
+    }
 }

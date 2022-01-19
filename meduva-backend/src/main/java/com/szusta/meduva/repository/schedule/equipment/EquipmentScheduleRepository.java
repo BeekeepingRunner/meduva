@@ -16,6 +16,15 @@ public interface EquipmentScheduleRepository extends UndeletableRepository<Equip
     @Query(
             value =
                     "select * from equipment_schedule s "
+                            +   "where s.equipment_item_id = ?1 and "
+                            +   "s.equipment_status_id = ?2 and s.time_from >= CURRENT_DATE()",
+            nativeQuery = true
+    )
+    List<EquipmentSchedule> findAllInTheFuture(long itemId, Long eqStatusId);
+
+    @Query(
+            value =
+                    "select * from equipment_schedule s "
                             +   "where s.equipment_item_id = ?3 and ("
                             +       "("
                             +           "(timestampdiff(MINUTE, time_from, ?2) > 0) and "

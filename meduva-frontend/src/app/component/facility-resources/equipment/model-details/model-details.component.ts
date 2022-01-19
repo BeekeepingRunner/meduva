@@ -57,14 +57,17 @@ export class ModelDetailsComponent implements OnInit {
   deleteModel() {
     this.equipmentService.deleteModelById(this.model.id).subscribe(
       ifSuccess => {
-        this.openFeedbackDialog();
+        this.openFeedbackDialog('Equipment model ' + this.model.name + ' has been deleted.');
+      },
+      err => {
+        this.openFeedbackDialog(err.error.message);
       }
     );
   }
 
-  private openFeedbackDialog() {
+  private openFeedbackDialog(message: string) {
     const feedbackDialogRef = this.dialog.open(FeedbackDialogComponent, {
-      data: {message: 'Equipment model ' + this.model.name + ' has been deleted.'}
+      data: {message: message}
     });
 
     feedbackDialogRef.afterClosed().subscribe(

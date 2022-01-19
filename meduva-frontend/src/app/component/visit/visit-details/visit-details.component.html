@@ -58,6 +58,9 @@
       <td>
         <div *ngFor="let eqItem of visit?.eqItems">
           {{ eqItem?.name }}
+          <span *ngIf="eqItem.deleted">
+            (deleted)
+          </span>
         </div>
       </td>
     </tr>
