@@ -10,7 +10,7 @@ import {RoomService} from "../../../../service/room.service";
 export class RoomListComponent implements OnInit {
 
   rooms: Room[] = [];
-  displayedColumns: string[] = ['name'];
+  displayedColumns: string[] = ['name','delete'];
 
   constructor(protected roomService: RoomService) { }
 
