@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Injectable, OnInit} from '@angular/core';
 import {Room} from "../../../../model/room";
 import {ActivatedRoute, Router} from "@angular/router";
 import {MatDialog} from "@angular/material/dialog";
@@ -11,6 +11,9 @@ import {Service} from "../../../../model/service";
   selector: 'app-room-details',
   templateUrl: './room-details.component.html',
   styleUrls: ['./room-details.component.css']
+})
+@Injectable({
+  providedIn: 'root'
 })
 export class RoomDetailsComponent implements OnInit {
 
@@ -45,33 +48,50 @@ export class RoomDetailsComponent implements OnInit {
     );
   }
 
-  openConfirmationDialog() {
+  openConfirmationDialog(roomId: number) {
     const confirmDialogRef = this.dialog.open(ConfirmationDialogComponent, {
       data: { message: 'Do you want to delete this room?' }
     });
 
     confirmDialogRef.afterClosed().subscribe(confirmed => {
       if (confirmed) {
-        this.deleteRoom();
+        this.deleteRoom(roomId);
+      }
+      else{
+        if(roomId!=-1){
+          this.router.navigateByUrl("/rooms");
+        }
       }
     });
   }
 
-  private deleteRoom() {
-    this.roomService.deleteById(this.room.id).subscribe(
-      ifSuccess => {
-        this.openFeedbackDialog();
-      },
-      err => {
-        this.wasDeletionSuccessful = false;
-        this.errorMessage = err.error.message;
+  private deleteRoom(roomId:number) {
+    if(roomId==-1){
+      if(this.room.id) {
+        roomId = this.room.id;
       }
-    );
+      else{
+        this.wasDeletionSuccessful = false;
+        this.errorMessage = "You cannot delete room, because that room does not exist";
+      }
+    }
+    if(this.wasDeletionSuccessful==true){
+      this.roomService.deleteById(roomId).subscribe(
+        ifSuccess => {
+          this.openFeedbackDialog();
+        },
+        err => {
+          this.wasDeletionSuccessful = false;
+          this.errorMessage = err.error.message;
+        }
+      );
+    }
+
   }
 
   private openFeedbackDialog() {
     const feedbackDialogRef = this.dialog.open(FeedbackDialogComponent, {
-      data: { message: 'Room ' + this.room.name + ' has been deleted.' }
+      data: { message: 'Room has been deleted.' }
     });
 
     feedbackDialogRef.afterClosed().subscribe(
