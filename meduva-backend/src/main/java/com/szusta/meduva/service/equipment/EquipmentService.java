@@ -77,7 +77,7 @@ public class EquipmentService {
         List<EquipmentItem> itemsToDelete = model.getItems();
         itemsToDelete.forEach(item -> {
 
-            if (scheduleChecker.isOccupiedInTheFuture(item)) {
+            if (scheduleChecker.isUsedInTheFuture(item)) {
                 throw new HasAssociatedVisitsException("An item " + item.getName() + " (id = " + item.getId() + ") cannot be deleted because of the future visits");
             }
 
