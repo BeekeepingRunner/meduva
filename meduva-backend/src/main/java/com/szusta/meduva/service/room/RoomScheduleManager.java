@@ -2,16 +2,10 @@ package com.szusta.meduva.service.room;
 
 import com.szusta.meduva.exception.EntityRecordNotFoundException;
 import com.szusta.meduva.model.Room;
-import com.szusta.meduva.model.equipment.EquipmentItem;
-import com.szusta.meduva.model.schedule.EquipmentSchedule;
 import com.szusta.meduva.model.schedule.RoomSchedule;
-import com.szusta.meduva.model.schedule.status.EquipmentStatus;
 import com.szusta.meduva.model.schedule.status.RoomStatus;
-import com.szusta.meduva.model.schedule.status.enums.EEquipmentStatus;
 import com.szusta.meduva.model.schedule.status.enums.ERoomStatus;
 import com.szusta.meduva.payload.TimeRange;
-import com.szusta.meduva.repository.schedule.equipment.EquipmentScheduleRepository;
-import com.szusta.meduva.repository.schedule.equipment.EquipmentStatusRepository;
 import com.szusta.meduva.repository.schedule.room.RoomScheduleRepository;
 import com.szusta.meduva.repository.schedule.room.RoomStatusRepository;
 import com.szusta.meduva.util.TimeUtils;

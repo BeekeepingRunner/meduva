@@ -204,13 +204,6 @@ public class WorkManager {
         return allDayOffWorkHours;
     }
 
-    private Calendar getFirstWeekDayStart(Date firstWeekDay) {
-        Calendar calendar = Calendar.getInstance();
-        Date firstWeekDayStart  = TimeUtils.getDayStart(firstWeekDay);
-        calendar.setTime(firstWeekDayStart);
-        return calendar;
-    }
-
     private boolean hasWorkHours(User worker, Date start, Date end) {
         List<WorkHours> workHours = workHoursRepository.getAllByWorkerIdBetween(worker.getId(), start, end);
         return !workHours.isEmpty();
