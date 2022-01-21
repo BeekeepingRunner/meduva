@@ -104,7 +104,10 @@ public class RoomService {
         Room room = roomRepository.findById(roomId)
                 .orElseThrow(() -> new EntityRecordNotFoundException("Cannot set room unavailability: room not found in DB with id : " + roomId));
 
-        TimeRange allDay = new TimeRange(TimeUtils.getDayStart(day), TimeUtils.getDayEnd(day));
+        TimeRange allDay = new TimeRange(
+                TimeUtils.getDayStart(day).getTime(),
+                TimeUtils.getDayEnd(day).getTime());
+
         if (scheduleChecker.isRoomFree(allDay, room)) {
             return roomScheduleManager.setUnavailability(room, allDay);
         } else {

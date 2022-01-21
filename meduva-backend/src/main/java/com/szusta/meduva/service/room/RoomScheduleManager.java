@@ -43,8 +43,8 @@ public class RoomScheduleManager {
     }
 
     public void deleteAllTypeOfEventsBetween(Long roomId, ERoomStatus status, Date day) {
-        Date dayStart = TimeUtils.getDayStart(day);
-        Date dayEnd = TimeUtils.getDayEnd(day);
+        Date dayStart = TimeUtils.getDayStart(day).getTime();
+        Date dayEnd = TimeUtils.getDayEnd(day).getTime();
         roomScheduleRepository.deleteByRoomIdBetween(roomId, status.getValue(), dayStart, dayEnd);
     }
 }

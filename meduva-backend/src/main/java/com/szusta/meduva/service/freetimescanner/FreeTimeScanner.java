@@ -106,8 +106,8 @@ public class FreeTimeScanner {
     }
 
     private WorkHours getWorkHours(Calendar day, User worker) throws NotAvailableException {
-        Date dayStart = TimeUtils.getDayStart(day.getTime());
-        Date dayEnd = TimeUtils.getDayEnd(dayStart);
+        Date dayStart = TimeUtils.getDayStart(day.getTime()).getTime();
+        Date dayEnd = TimeUtils.getDayEnd(dayStart).getTime();
 
         List<WorkHours> dayWorkHours =
                 workHoursRepository.getAllByWorkerIdBetween(worker.getId(), dayStart, dayEnd);

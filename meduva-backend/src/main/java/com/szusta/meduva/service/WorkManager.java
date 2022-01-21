@@ -102,27 +102,27 @@ public class WorkManager {
     }
 
     private boolean hasEventsBefore(Date newWorkStartTime, User worker) {
-        Date dayStart = TimeUtils.getDayStart(newWorkStartTime);
+        Date dayStart = TimeUtils.getDayStart(newWorkStartTime).getTime();
         TimeRange timeRange = new TimeRange(dayStart, newWorkStartTime);
         return !scheduleChecker.isWorkerFree(timeRange, worker);
     }
 
     private boolean hasEventsAfter(Date newWorkEndTime, User worker) {
-        Date dayEnd = TimeUtils.getDayEnd(newWorkEndTime);
+        Date dayEnd = TimeUtils.getDayEnd(newWorkEndTime).getTime();
         TimeRange timeRange = new TimeRange(newWorkEndTime, dayEnd);
         return !scheduleChecker.isWorkerFree(timeRange, worker);
     }
 
     private void deleteWorkHoursAt(Date dateTime, User worker) {
-        Date dayStart = TimeUtils.getDayStart(dateTime);
-        Date dayEnd = TimeUtils.getDayEnd(dateTime);
+        Date dayStart = TimeUtils.getDayStart(dateTime).getTime();
+        Date dayEnd = TimeUtils.getDayEnd(dateTime).getTime();
         workHoursRepository.deleteByWorkerIdBetween(worker.getId(), dayStart, dayEnd);
     }
 
     @Transactional
     public void deleteDailyAbsenceHours(User worker, Date dateTime){
-        Date dayStart = TimeUtils.getDayStart(dateTime);
-        Date dayEnd = TimeUtils.getDayEnd(dateTime);
+        Date dayStart = TimeUtils.getDayStart(dateTime).getTime();
+        Date dayEnd = TimeUtils.getDayEnd(dateTime).getTime();
         workerScheduleRepository.deleteByWorkerIdBetween(worker.getId(), EWorkerStatus.WORKER_ABSENT.getValue(), dayStart, dayEnd);
     }
     
@@ -140,8 +140,8 @@ public class WorkManager {
     }
 
     public List<WorkHours> getWeeklyWorkHours(User worker, Date firstWeekDay, Date lastWeekDay) {
-        firstWeekDay = TimeUtils.getDayStart(firstWeekDay);
-        lastWeekDay = TimeUtils.getDayEnd(lastWeekDay);
+        firstWeekDay = TimeUtils.getDayStart(firstWeekDay).getTime();
+        lastWeekDay = TimeUtils.getDayEnd(lastWeekDay).getTime();
         return workHoursRepository.getAllByWorkerIdBetween(worker.getId(), firstWeekDay, lastWeekDay);
     }
 
@@ -157,8 +157,8 @@ public class WorkManager {
     }
 
     public List<? super WorkerSchedule> getWeeklyAbsenceHours(User worker, Date firstWeekDay, Date lastWeekDay) {
-        firstWeekDay = TimeUtils.getDayStart(firstWeekDay);
-        lastWeekDay = TimeUtils.getDayEnd(lastWeekDay);
+        firstWeekDay = TimeUtils.getDayStart(firstWeekDay).getTime();
+        lastWeekDay = TimeUtils.getDayEnd(lastWeekDay).getTime();
         return workerScheduleRepository.findAllDuring(
                 firstWeekDay,
                 lastWeekDay,
@@ -172,8 +172,8 @@ public class WorkManager {
         List<TimeRange> weeklyOffWorkHours = new ArrayList<>();
 
         weeklyWorkHours.forEach(workHours -> {
-            Date dayStart = TimeUtils.getDayStart(workHours.getStartTime());
-            Date dayEnd = TimeUtils.getDayEnd(workHours.getStartTime());
+            Date dayStart = TimeUtils.getDayStart(workHours.getStartTime()).getTime();
+            Date dayEnd = TimeUtils.getDayEnd(workHours.getStartTime()).getTime();
             TimeRange timeBeforeWork = new TimeRange(dayStart, workHours.getStartTime());
             TimeRange timeAfterWork = new TimeRange(workHours.getEndTime(), dayEnd);
 
@@ -187,11 +187,11 @@ public class WorkManager {
     private List<TimeRange> getAllDayOffWeeklyWorkHours(User worker, Date firstWeekDay) {
 
         List<TimeRange> allDayOffWorkHours = new ArrayList<>();
-        Calendar calendar = getFirstWeekDayStart(firstWeekDay);
+        Calendar calendar = TimeUtils.getDayStart(firstWeekDay);
         for (int dayOfWeek = 1; dayOfWeek < 8; ++dayOfWeek)
         {
             Date currentDayStart = calendar.getTime();
-            Date currentDayEnd = TimeUtils.getDayEnd(currentDayStart);
+            Date currentDayEnd = TimeUtils.getDayEnd(currentDayStart).getTime();
 
             if (!hasWorkHours(worker, currentDayStart, currentDayEnd)) {
                 allDayOffWorkHours.add(

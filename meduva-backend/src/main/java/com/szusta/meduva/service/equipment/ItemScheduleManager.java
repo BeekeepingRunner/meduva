@@ -42,8 +42,8 @@ public class ItemScheduleManager {
 
     @Transactional
     public void deleteAllTypeOfEventsBetween(Long itemId, EEquipmentStatus status, Date day) {
-        Date dayStart = TimeUtils.getDayStart(day);
-        Date dayEnd = TimeUtils.getDayEnd(day);
+        Date dayStart = TimeUtils.getDayStart(day).getTime();
+        Date dayEnd = TimeUtils.getDayEnd(day).getTime();
         equipmentScheduleRepository.deleteByEqItemIdBetween(itemId, status.getValue(), dayStart, dayEnd);
     }
 }

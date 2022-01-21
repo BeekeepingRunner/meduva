@@ -8,31 +8,31 @@ public class TimeUtils {
     /**
      *  Returns the same date with time equal to 00:00:00
      */
-    public static Date getDayStart(Date dateTime) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(dateTime);
-        calendar.set(Calendar.HOUR_OF_DAY, 0);
-        calendar.set(Calendar.MINUTE, 0);
-        calendar.set(Calendar.SECOND, 0);
-        return calendar.getTime();
+    public static Calendar getDayStart(Date dateTime) {
+        Calendar dayStart = Calendar.getInstance();
+        dayStart.setTime(dateTime);
+        dayStart.set(Calendar.HOUR_OF_DAY, 0);
+        dayStart.set(Calendar.MINUTE, 0);
+        dayStart.set(Calendar.SECOND, 0);
+        return dayStart;
     }
 
     /**
      *  Returns the same date with time equal to 23:59:59
      */
-    public static Date getDayEnd(Date dateTime) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(dateTime);
-        calendar.set(Calendar.HOUR_OF_DAY, 23);
-        calendar.set(Calendar.MINUTE, 59);
-        calendar.set(Calendar.SECOND, 59);
-        return calendar.getTime();
+    public static Calendar getDayEnd(Date dateTime) {
+        Calendar dayEnd = Calendar.getInstance();
+        dayEnd.setTime(dateTime);
+        dayEnd.set(Calendar.HOUR_OF_DAY, 23);
+        dayEnd.set(Calendar.MINUTE, 59);
+        dayEnd.set(Calendar.SECOND, 59);
+        return dayEnd;
     }
 
     /**
      *  Returns the first day of month with time equal to 00:00:00
      */
-    public static Date getMonthStart(Date anyDayOfMonth) {
+    public static Calendar getMonthStart(Date anyDayOfMonth) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(anyDayOfMonth);
         calendar.set(Calendar.DAY_OF_MONTH, 1);
@@ -42,7 +42,7 @@ public class TimeUtils {
     /**
      *  Returns the next day with time equal to 00:00:00
      */
-    public static Date getNextDayStart(Date date) {
+    public static Calendar getNextDayStart(Date date) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
         calendar.add(Calendar.DAY_OF_MONTH, 1);
@@ -52,7 +52,7 @@ public class TimeUtils {
     /**
      *  Returns the first day of the next month with time equal to 00:00:00
      */
-    public static Date getNextMonthStart(Date anyDayOfMonth) {
+    public static Calendar getNextMonthStart(Date anyDayOfMonth) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(anyDayOfMonth);
         calendar.add(Calendar.MONTH, 1);
@@ -63,7 +63,7 @@ public class TimeUtils {
     /**
      *  Returns the last day of month with time equal to 23:59:59
      */
-    public static Date getMonthEnd(Date anyDayOfMonth) {
+    public static Calendar getMonthEnd(Date anyDayOfMonth) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(anyDayOfMonth);
         int maxDayNumber =  calendar.getActualMaximum(Calendar.DAY_OF_MONTH);

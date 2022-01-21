@@ -96,16 +96,16 @@ public class ScheduleChecker {
 
     public List<EquipmentSchedule> getItemUnavailabilityIn(EquipmentItem item, TimeRange weekBoundaries) {
         return equipmentScheduleRepository.findAllBetween(
-                TimeUtils.getDayStart(weekBoundaries.getStartTime()),
-                TimeUtils.getDayEnd(weekBoundaries.getEndTime()),
+                TimeUtils.getDayStart(weekBoundaries.getStartTime()).getTime(),
+                TimeUtils.getDayEnd(weekBoundaries.getEndTime()).getTime(),
                 item.getId(),
                 EEquipmentStatus.EQUIPMENT_UNAVAILABLE.getValue());
     }
 
     public List<RoomSchedule> getRoomUnavailabilityIn(Room room, TimeRange weekBoundaries) {
         return roomScheduleRepository.findAllDuring(
-                TimeUtils.getDayStart(weekBoundaries.getStartTime()),
-                TimeUtils.getDayEnd(weekBoundaries.getEndTime()),
+                TimeUtils.getDayStart(weekBoundaries.getStartTime()).getTime(),
+                TimeUtils.getDayEnd(weekBoundaries.getEndTime()).getTime(),
                 room.getId(),
                 ERoomStatus.ROOM_UNAVAILABLE.getValue());
     }

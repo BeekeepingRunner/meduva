@@ -113,7 +113,10 @@ public class EquipmentService {
         EquipmentItem eqItem = equipmentItemRepository.findById(itemId)
                 .orElseThrow(() -> new EntityRecordNotFoundException("Cannot set item unavailability: item not found in DB with id : " + itemId));
 
-        TimeRange allDay = new TimeRange(TimeUtils.getDayStart(day), TimeUtils.getDayEnd(day));
+        TimeRange allDay = new TimeRange(
+                TimeUtils.getDayStart(day).getTime(),
+                TimeUtils.getDayEnd(day).getTime());
+
         if (!scheduleChecker.isBusyWith(eqItem, EEquipmentStatus.EQUIPMENT_OCCUPIED, allDay)) {
             return itemScheduleManager.setUnavailability(eqItem, allDay);
         } else {

@@ -60,16 +60,14 @@ public class VisitService {
 
     public List<Date> getWorkerAvailableDaysOfMonth(User worker,
                                                     Service service,
-                                                    Date anyDayOfMonth) {
+                                                    Date sampleDayOfMonth) {
         checkIfCanPerform(worker, service);
         VisitContext visitContext = new VisitContext(worker, service, getSuitableRooms(service));
 
         List<Date> availableDaysOfMonth = new ArrayList<>();
 
-        Date monthStart = TimeUtils.getMonthStart(anyDayOfMonth);
-        Calendar currentDay = TimeUtils.getCalendar(monthStart);
-        Calendar nextMonthStart = TimeUtils.getCalendar(
-                TimeUtils.getNextMonthStart(anyDayOfMonth));
+        Calendar currentDay = TimeUtils.getMonthStart(sampleDayOfMonth);
+        Calendar nextMonthStart = TimeUtils.getNextMonthStart(sampleDayOfMonth);
         do {
             if (freeTimeScanner.isWorkerDayAvailable(currentDay, visitContext)) {
                 availableDaysOfMonth.add(currentDay.getTime());
