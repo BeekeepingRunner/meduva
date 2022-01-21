@@ -78,7 +78,8 @@ public class TimeUtils {
     }
 
     public static boolean hasNDaysElapsed(Calendar start, Calendar end, int days) {
-        Calendar nDaysBeforeEnd = (Calendar) end.clone();
+        Calendar nDaysBeforeEnd = Calendar.getInstance();
+        nDaysBeforeEnd.setTime(end.getTime());
         nDaysBeforeEnd.add(Calendar.DAY_OF_MONTH, -days);
         return start.before(nDaysBeforeEnd)
                 || areAtTheSameTime(start, nDaysBeforeEnd);
