@@ -2,11 +2,11 @@
 ## Table of contents
 * [General](#general)
 * [Technologies](#technologies)
-* [Setup](#setup)
+* [Running](#running)
 * [Functionalities](#functionalities)
 
 ## General
-Lorem ipsum
+System supporting health care units. 
 	
 ## Technologies
 Project is created with:
@@ -18,19 +18,19 @@ Project is created with:
 To run the project you need download this project from the github repository. You are able to do it in three ways:
 * Cloning the repository by git clone
 * Downloading the ZIP file
-* Opening with GitHub Desktop (first you need to download and install the github desktop software)
+* Opening with GitHub Desktop (it is required download and install the github desktop software)
 ### Cloning the repository by git clone
 * Using HTTPS
 ```
-$ git clone https://github.com/BeekeepingRunner/meduva.git
+$ git clone https://github.com/urgeorge/meduva.git
 ```
 * Using SSH key
 ```
-$ git clone git@github.com:BeekeepingRunner/meduva.git
+$ git clone git@github.com:urgeorge/meduva.git
 ```
 * Using GitHub CLI
 ```
-$ gh repo clone BeekeepingRunner/meduva
+$ gh repo clone urgeorge/meduva
 ```
 ### Running servers
 Then you need to start the frontend and backend servers. You can achieve this by typing and executing the following commands inside the proper server folder:
@@ -43,4 +43,4 @@ $ ng serve
 $ mvn spring-boot:run
 ```
 ## Functionalities
-In progress
+Working in progress
