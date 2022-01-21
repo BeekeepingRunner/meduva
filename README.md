@@ -22,15 +22,15 @@ To run the project you need download this project from the github repository. Yo
 ### Cloning the repository by git clone
 * Using HTTPS
 ```
-$ git clone https://github.com/urgeorge/meduva.git
+$ git clone https://github.com/BeekeepingRunner/meduva.git
 ```
 * Using SSH key
 ```
-$ git clone git@github.com:urgeorge/meduva.git
+$ git clone git@github.com:BeekeepingRunner/meduva.git
 ```
 * Using GitHub CLI
 ```
-$ gh repo clone urgeorge/meduva
+$ gh repo clone BeekeepingRunner/meduva
 ```
 ### Running servers
 Then you need to start the frontend and backend servers. You can achieve this by typing and executing the following commands inside the proper server folder:
