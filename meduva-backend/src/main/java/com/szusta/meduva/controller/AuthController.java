@@ -1,6 +1,5 @@
 package com.szusta.meduva.controller;
 
-import com.szusta.meduva.exception.EntityRecordNotFoundException;
 import com.szusta.meduva.exception.TokenRefreshException;
 import com.szusta.meduva.model.RefreshToken;
 import com.szusta.meduva.payload.request.LoginRequest;

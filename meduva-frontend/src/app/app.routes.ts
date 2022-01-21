@@ -43,6 +43,7 @@ import {VisitHistoryComponent} from "./component/visit/visit-history/visit-histo
 import {MakeAppointmentComponent} from "./component/visit/make-appointment/make-appointment.component";
 import {PlanYourVisitComponent} from "./component/visit/plan-your-visit/plan-your-visit.component";
 import {VisitDetailsComponent} from "./component/visit/visit-details/visit-details.component";
+import {LoginAgainComponent} from "./component/access-denied/login-again/login-again.component";
 
 export const routes: Routes = [
   { path: 'home', component: HomeComponent },
@@ -50,6 +51,7 @@ export const routes: Routes = [
   { path: 'login/reset-password-email', component: PasswordResetEmailInputComponent },
   { path: 'login/password-reset/:resetToken', component: PasswordResetComponent },
   { path: 'access-denied', component: AccessDeniedComponent },
+  { path: 'login-again', component: LoginAgainComponent },
   { path: 'register', component: RegisterComponent },
   {
     path: 'profile',
