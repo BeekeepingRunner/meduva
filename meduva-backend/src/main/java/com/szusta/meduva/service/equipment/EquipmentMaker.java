@@ -1,6 +1,5 @@
 package com.szusta.meduva.service.equipment;
 
-import com.szusta.meduva.exception.AlreadyExistsException;
 import com.szusta.meduva.exception.EntityRecordNotFoundException;
 import com.szusta.meduva.model.Room;
 import com.szusta.meduva.model.equipment.EquipmentItem;
