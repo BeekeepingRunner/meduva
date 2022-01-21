@@ -20,7 +20,7 @@ export class LoginComponent implements OnInit {
 
   constructor(
     private authService: AuthService,
-    private tokenStorage: JwtStorageService,
+    private jwtStorageService: JwtStorageService,
     private router: Router,
     private formBuilder: FormBuilder
   ) { }
@@ -36,7 +36,7 @@ export class LoginComponent implements OnInit {
   }
 
   hasJustLoggedIn(): boolean {
-    return !!this.tokenStorage.getToken();
+    return !!this.jwtStorageService.getToken();
   }
 
   onSubmit(): void {
@@ -65,9 +65,9 @@ export class LoginComponent implements OnInit {
   }
 
   private changeStateAfterLogin(userInfo: TokenUserInfo): void {
-    this.tokenStorage.saveToken(userInfo.accessToken);
-    this.tokenStorage.saveRefreshToken(userInfo.refreshToken);
-    this.tokenStorage.saveUser(userInfo);
+    this.jwtStorageService.saveToken(userInfo.accessToken);
+    this.jwtStorageService.saveRefreshToken(userInfo.refreshToken);
+    this.jwtStorageService.saveUser(userInfo);
 
     this.isLoginFailed = false;
     this.isLoggedIn = true;

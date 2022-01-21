@@ -1,14 +1,10 @@
 import {AfterViewInit, Component, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild} from '@angular/core';
-import {JwtStorageService, TokenUserInfo} from "./service/token/jwt-storage.service";
+import {JwtStorageService} from "./service/token/jwt-storage.service";
 import {MatSidenav} from "@angular/material/sidenav";
 import {BreakpointObserver} from "@angular/cdk/layout";
-import {Role, roleNames, User, UserRole} from "./model/user";
-import {ClientService} from "./service/client.service";
-import {Client} from "./model/client";
+import {roleNames, User, UserRole} from "./model/user";
 import {UserService} from "./service/user.service";
 import {RoleGuardService} from "./service/auth/role-guard.service";
-import {Router} from "@angular/router";
-import {VisitService} from "./service/visit.service";
 import {Subscription} from "rxjs";
 import {EventBusService} from "./_shared/event-bus.service";
 import {EventData} from "./_shared/event.class";
