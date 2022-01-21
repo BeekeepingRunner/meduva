@@ -46,14 +46,17 @@ export class ServiceDetailsComponent implements OnInit {
   deleteService() {
     this.servicesService.deleteById(this.service.id).subscribe(
       ifSuccess => {
-        this.openFeedbackDialog();
+        this.openFeedbackDialog('Service ' + this.service.name + ' has been deleted.');
+      },
+      err => {
+        this.openFeedbackDialog(err.error.message);
       }
     );
   }
 
-  private openFeedbackDialog() {
+  private openFeedbackDialog(message: string) {
     const feedbackDialogRef = this.dialog.open(FeedbackDialogComponent, {
-      data: { message: 'Service ' + this.service.name + ' has been deleted.' }
+      data: { message: message }
     });
 
     feedbackDialogRef.afterClosed().subscribe(

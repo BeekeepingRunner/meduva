@@ -2,6 +2,7 @@ package com.szusta.meduva.service;
 
 import com.szusta.meduva.exception.AlreadyExistsException;
 import com.szusta.meduva.exception.EntityRecordNotFoundException;
+import com.szusta.meduva.exception.HasAssociatedVisitsException;
 import com.szusta.meduva.model.Service;
 import com.szusta.meduva.repository.ServiceRepository;
 import com.szusta.meduva.service.equipment.ModelDeactivator;
@@ -10,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
-import java.util.Collections;
 import java.util.List;
 
 @org.springframework.stereotype.Service
@@ -18,12 +18,15 @@ public class ServicesService {
 
     private ServiceRepository serviceRepository;
     private ModelDeactivator modelDeactivator;
+    private ScheduleChecker scheduleChecker;
 
     @Autowired
     public ServicesService(ServiceRepository serviceRepository,
-                           ModelDeactivator modelDeactivator) {
+                           ModelDeactivator modelDeactivator,
+                           ScheduleChecker scheduleChecker) {
         this.serviceRepository = serviceRepository;
         this.modelDeactivator = modelDeactivator;
+        this.scheduleChecker = scheduleChecker;
     }
 
     public List<Service> findAllServices() {
@@ -64,8 +67,11 @@ public class ServicesService {
         Service service = serviceRepository.findById(serviceId)
                 .orElseThrow(() -> new EntityNotFoundException("Service not found with id : " + serviceId));
 
-        modelDeactivator.deactivateModelsWithLastService(service);
-        service.setEquipmentModel(Collections.emptyList()); // won't that connection be useful in the future though?
+        if (scheduleChecker.isUsedInTheFuture(service)) {
+            throw new HasAssociatedVisitsException("A service " + service.getName() + " (id = " + service.getId() + ") cannot be deleted because of the future visits");
+        }
+
+        modelDeactivator.deactivateModelsWithOneServiceOnly(service);
         service.markAsDeleted();
         serviceRepository.save(service);
     }

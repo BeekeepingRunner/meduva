@@ -1,3 +1,4 @@
+
 <mat-toolbar>
   <div class="left-item">
     <button mat-icon-button *ngIf="sidenav.mode === 'over' && isLoggedIn"
@@ -9,8 +10,7 @@
         close
       </mat-icon>
     </button>
-
-    <a href="#">{{ pageTitle }}</a>
+    <a href="home"><img id="logo" class="img-responsive" src="assets/images/Logo.png"></a>
   </div>
 
   <div class="right-item">
@@ -150,13 +150,20 @@
           </div>
         </mat-expansion-panel>
       </mat-accordion>
+
     </div>
 
   </mat-sidenav>
 
   <mat-sidenav-content>
-    <div class="content">
+    <div class="content" *ngIf="isLoggedIn">
       <router-outlet></router-outlet>
     </div>
+    <div class="homecontent" *ngIf="!isLoggedIn">
+      <router-outlet></router-outlet>
+    </div>
+
   </mat-sidenav-content>
+
 </mat-sidenav-container>
+

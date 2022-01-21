@@ -1,11 +1,15 @@
 /* You can add global styles to this file, and also import other style files */
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@500&display=swap');
 
 *{
   font-family: 'Segoe UI Historic', sans-serif;
 }
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+*{
+  font-family: 'Segoe UI Historic', sans-serif;
+}
+
+
 
 .centered-content {
   margin-top: 20px;
@@ -54,9 +58,21 @@ button:focus, .btn-primary:focus {
   color: red;
 }
 
+.mat-table
+{
+  background-color:transparent!important;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  border-radius: 10px;
+}
+table tr:last-child td /*To remove the last border*/
+{
+  border-bottom: 0 solid
+}
 .custom-event span{
   color: white;
-
 }
 app-choose-option-dialog {
   padding:0px;

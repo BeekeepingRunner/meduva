@@ -2,7 +2,6 @@ package com.szusta.meduva.advice;
 
 import com.szusta.meduva.exception.ErrorMessage;
 import com.szusta.meduva.exception.TokenRefreshException;
-import com.szusta.meduva.exception.EntityRecordNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -17,18 +16,6 @@ public class TokenControllerAdvice {
     @ExceptionHandler(value = TokenRefreshException.class)
     @ResponseStatus(HttpStatus.FORBIDDEN)
     public ErrorMessage handleTokenRefreshException(TokenRefreshException ex, WebRequest request) {
-
-        return new ErrorMessage(
-                HttpStatus.FORBIDDEN.value(),
-                new Date(),
-                ex.getMessage(),
-                request.getDescription(false)
-        );
-    }
-
-    @ExceptionHandler(value = EntityRecordNotFoundException.class)
-    @ResponseStatus(HttpStatus.FORBIDDEN)
-    public ErrorMessage handleTokenRefreshException(EntityRecordNotFoundException ex, WebRequest request) {
 
         return new ErrorMessage(
                 HttpStatus.FORBIDDEN.value(),

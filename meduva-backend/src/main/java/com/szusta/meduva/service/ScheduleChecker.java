@@ -1,6 +1,7 @@
 package com.szusta.meduva.service;
 
 import com.szusta.meduva.model.Room;
+import com.szusta.meduva.model.Service;
 import com.szusta.meduva.model.User;
 import com.szusta.meduva.model.equipment.EquipmentItem;
 import com.szusta.meduva.model.schedule.EquipmentSchedule;
@@ -11,6 +12,7 @@ import com.szusta.meduva.model.schedule.status.enums.EWorkerStatus;
 import com.szusta.meduva.payload.TimeRange;
 import com.szusta.meduva.repository.schedule.equipment.EquipmentScheduleRepository;
 import com.szusta.meduva.repository.schedule.room.RoomScheduleRepository;
+import com.szusta.meduva.repository.schedule.visit.VisitRepository;
 import com.szusta.meduva.repository.schedule.worker.WorkerScheduleRepository;
 import com.szusta.meduva.util.TimeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,14 +26,17 @@ public class ScheduleChecker {
     private EquipmentScheduleRepository equipmentScheduleRepository;
     private RoomScheduleRepository roomScheduleRepository;
     private WorkerScheduleRepository workerScheduleRepository;
+    private VisitRepository visitRepository;
 
     @Autowired
     public ScheduleChecker(EquipmentScheduleRepository equipmentScheduleRepository,
                            RoomScheduleRepository roomScheduleRepository,
-                           WorkerScheduleRepository workerScheduleRepository) {
+                           WorkerScheduleRepository workerScheduleRepository,
+                           VisitRepository visitRepository) {
         this.equipmentScheduleRepository = equipmentScheduleRepository;
         this.roomScheduleRepository = roomScheduleRepository;
         this.workerScheduleRepository = workerScheduleRepository;
+        this.visitRepository = visitRepository;
     }
 
     public boolean isWorkerFree(TimeRange timeRange, User worker) {
@@ -103,5 +108,15 @@ public class ScheduleChecker {
                 TimeUtils.getDayEnd(weekBoundaries.getEndTime()),
                 room.getId(),
                 ERoomStatus.ROOM_UNAVAILABLE.getValue());
+    }
+
+    public boolean isUsedInTheFuture(EquipmentItem eqItem) {
+        return !equipmentScheduleRepository.findAllInTheFuture(
+                eqItem.getId(), EEquipmentStatus.EQUIPMENT_OCCUPIED.getValue())
+                .isEmpty();
+    }
+
+    public boolean isUsedInTheFuture(Service service) {
+        return visitRepository.existsInTheFutureWith(service.getId());
     }
 }
