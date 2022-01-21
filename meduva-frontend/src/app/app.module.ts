@@ -98,6 +98,7 @@ import { VisitDetailsComponent } from './component/visit/visit-details/visit-det
 import {FooterComponent} from "./component/home/footer/footer.component";
 import {ChooseOptionDialogComponent} from "./component/dialog/choose-option-dialog/choose-option-dialog.component";
 import { EditVisitTermComponent } from './component/visit/edit-visit-term/edit-visit-term.component';
+import { LoginAgainComponent } from './component/access-denied/login-again/login-again.component';
 
 @NgModule({
   declarations: [
@@ -169,6 +170,7 @@ import { EditVisitTermComponent } from './component/visit/edit-visit-term/edit-v
     VisitDetailsComponent,
     ChooseOptionDialogComponent,
     EditVisitTermComponent,
+    LoginAgainComponent,
   ],
   imports: [
     BrowserModule,
