@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Injectable, OnInit} from '@angular/core';
 import {Room} from "../../../../model/room";
 import {ActivatedRoute, Router} from "@angular/router";
 import {MatDialog} from "@angular/material/dialog";
@@ -6,11 +6,16 @@ import {RoomService} from "../../../../service/room.service";
 import {ConfirmationDialogComponent} from "../../../dialog/confirmation-dialog/confirmation-dialog.component";
 import {FeedbackDialogComponent} from "../../../dialog/feedback-dialog/feedback-dialog.component";
 import {Service} from "../../../../model/service";
+import {Visit} from "../../../../model/visit";
+import {ConfirmationWithWarningDialogComponent} from "../../../dialog/confirmation-with-warning-dialog/confirmation-with-warning-dialog.component";
 
 @Component({
   selector: 'app-room-details',
   templateUrl: './room-details.component.html',
   styleUrls: ['./room-details.component.css']
+})
+@Injectable({
+  providedIn: 'root'
 })
 export class RoomDetailsComponent implements OnInit {
 
@@ -19,6 +24,7 @@ export class RoomDetailsComponent implements OnInit {
   errorMessage: string = '';
   columnName: string[] = ['Name'];
   services: Service[] = [];
+  visits: Visit[] = [];
 
   constructor(
     private route: ActivatedRoute,
@@ -43,41 +49,83 @@ export class RoomDetailsComponent implements OnInit {
         )
       }
     );
+    this.roomService.getRoomVisits(roomId).subscribe(
+      visits => {
+        this.visits=visits;
+      })
   }
 
-  openConfirmationDialog() {
-    const confirmDialogRef = this.dialog.open(ConfirmationDialogComponent, {
-      data: { message: 'Do you want to delete this room?' }
-    });
+  deleteRoomFromList(roomId:number){
+    this.roomService.getRoomVisits(roomId).subscribe(
+      visits => {
+        this.visits=visits;
+        this.openConfirmationDialog(roomId);
+      })
+  }
 
-    confirmDialogRef.afterClosed().subscribe(confirmed => {
-      if (confirmed) {
-        this.deleteRoom();
+  openConfirmationDialog(roomId?: number) {
+      const confirmDialogRef = this.visits.length>0 ?
+        this.dialog.open(ConfirmationWithWarningDialogComponent, {
+          data: { message: 'There are booked visits associated with this room. If you want to abandon these visits, you must do it manually. Are you sure you want to delete them?' }
+        })
+        : this.dialog.open(ConfirmationDialogComponent, {
+          data: { message: 'Do you want to delete this room?' }
+        });
+
+      confirmDialogRef.afterClosed().subscribe(confirmed => {
+        if(confirmed) {
+          if(roomId)
+          this.deleteRoom(roomId);
+          else{
+            this.deleteRoom()
+          }
+        }
+      });
+
+
+  }
+
+  private deleteRoom(roomId?:number) {
+    if(!roomId){
+      if(this.room.id) {
+        roomId = this.room.id;
       }
-    });
-  }
-
-  private deleteRoom() {
-    this.roomService.deleteById(this.room.id).subscribe(
-      ifSuccess => {
-        this.openFeedbackDialog();
-      },
-      err => {
+      else{
         this.wasDeletionSuccessful = false;
-        this.errorMessage = err.error.message;
+        this.errorMessage = "You cannot delete room, because that room does not exist";
       }
-    );
+    }
+    if(this.wasDeletionSuccessful){
+
+      this.roomService.deleteById(roomId).subscribe(
+        ifSuccess => {
+          this.openFeedbackDialog();
+        },
+        err => {
+          this.wasDeletionSuccessful = false;
+          this.errorMessage = err.error.message;
+        }
+      );
+    }
+
   }
 
   private openFeedbackDialog() {
     const feedbackDialogRef = this.dialog.open(FeedbackDialogComponent, {
-      data: { message: 'Room ' + this.room.name + ' has been deleted.' }
+      data: { message: 'Room has been deleted.' }
     });
 
     feedbackDialogRef.afterClosed().subscribe(
       acknowledged => {
-        this.router.navigate(['/rooms']);
+        if(this.router.url=="/rooms"){
+          location.reload();
+        }
+        else{
+          this.router.navigate(['/rooms']);
+        }
       }
     );
   }
+
+
 }

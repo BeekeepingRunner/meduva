@@ -2,11 +2,14 @@ package com.szusta.meduva.controller;
 
 import com.szusta.meduva.model.Room;
 import com.szusta.meduva.model.Service;
+import com.szusta.meduva.model.User;
 import com.szusta.meduva.model.schedule.RoomSchedule;
+import com.szusta.meduva.model.schedule.visit.Visit;
 import com.szusta.meduva.payload.TimeRange;
 import com.szusta.meduva.payload.request.DeleteDailyHoursRequest;
 import com.szusta.meduva.payload.request.add.NewRoomRequest;
 import com.szusta.meduva.service.room.RoomService;
+import com.szusta.meduva.service.visit.VisitService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,11 +22,14 @@ import java.util.stream.Collectors;
 public class RoomController {
 
     private RoomService roomService;
+    private VisitService visitService;
 
     @Autowired
-    public RoomController(RoomService roomService) {
+    public RoomController(RoomService roomService, VisitService visitService) {
         this.roomService = roomService;
+        this.visitService = visitService;
     }
+
 
     @GetMapping("/all")
     public List<Room> findAllRooms() {
@@ -87,6 +93,8 @@ public class RoomController {
         Date day = request.getDay();
         roomService.deleteDayUnavailability(roomId, day);
     }
-
-
+    @GetMapping("/{roomId}/visits")
+    public List<Visit> findAllIncomingRoomVisits(@PathVariable Long roomId) {
+        return visitService.findAllIncomingWithRoomId(roomId);
+    }
 }
