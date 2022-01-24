@@ -85,7 +85,6 @@ public class EquipmentController {
     public TimeRange setItemDayUnavailability(@PathVariable Long itemId, @RequestBody Date day) {
         EquipmentSchedule eqSchedule = equipmentService.setItemDayUnavailability(itemId, day);
         return new TimeRange(eqSchedule.getTimeFrom(), eqSchedule.getTimeTo());
-
     }
 
     @DeleteMapping("item/delete-day-unavailability/{itemId}")

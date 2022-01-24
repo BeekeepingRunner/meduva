@@ -99,29 +99,89 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
     }
 
-    // TODO: secure endpoint access for users with specific roles
     private void authorizeRequests(HttpSecurity http) throws Exception {
         http.authorizeRequests()
                 .antMatchers("/api/auth/**").permitAll()
                 .antMatchers("/api/test/all").permitAll()
+                .antMatchers("/api/greetings").permitAll()
                 .antMatchers("/api/password/request").permitAll()
                 .antMatchers("/api/password/user").permitAll()
                 .antMatchers("/api/password/validate-reset-token").permitAll()
                 .antMatchers("/api/password/change").permitAll()
-                /*
-                .antMatchers("/api/service/{id}").hasAuthority("ROLE_ADMIN")
-                .antMatchers("/services").hasAuthority("ROLE_ADMIN")
-                .antMatchers("/api/service/all/itemless").hasAuthority("ROLE_ADMIN")
-                .antMatchers("/api/room/{id}/edit-services").hasAuthority("ROLE_ADMIN")
-                .antMatchers("/api/user/edit/{id}").hasAuthority("ROLE_CLIENT")
-                .antMatchers("/api/email/request/{id}").hasAuthority("ROLE_CLIENT")
-                .antMatchers("/api/email/validate-email-reset-token").permitAll()
-                .antMatchers("/edit-role/{id}").hasAuthority("ROLE_ADMIN")
-                .antMatchers("/assignServicesToWorker/{id}").hasAuthority("ROLE_RECEPTIONIST")
-                .anyRequest().authenticated();
-                */
-        //.anyRequest().permitAll();
-                .anyRequest().authenticated();
 
+                .antMatchers("/api/creator/all").hasAuthority("ROLE_ADMIN")
+
+                .antMatchers("/api/email/**").hasAuthority("ROLE_CLIENT")
+
+                .antMatchers("/api/room/all").hasAuthority("ROLE_WORKER")
+                .antMatchers("/api/room/all/**").hasAuthority("ROLE_WORKER")
+                .antMatchers("/api/room/doesExistWithName/{roomName}").hasAuthority("ROLE_WORKER")
+                .antMatchers("/api/room/doesExistWithName/{roomName}").hasAuthority("ROLE_WORKER")
+                .antMatchers("/api/room/{id}").hasAuthority("ROLE_WORKER")
+                .antMatchers("/api/room/get-weekly-unavailability/{roomId}").hasAuthority("ROLE_WORKER")
+                .antMatchers("/api/room/set-day-unavailability/{roomId}").hasAuthority("ROLE_RECEPTIONIST")
+                .antMatchers("/api/room/delete-day-unavailability/{roomId}").hasAuthority("ROLE_RECEPTIONIST")
+
+                .antMatchers("/api/equipment/models/all/**").hasAuthority("ROLE_WORKER")
+                .antMatchers("/api/equipment/model/{id}").hasAuthority("ROLE_WORKER")
+                .antMatchers("/api/equipment/model/new").hasAuthority("ROLE_ADMIN")
+                .antMatchers("/api/equipment/model/connect").hasAuthority("ROLE_ADMIN")
+                .antMatchers("/api/equipment/model/doesExistWithName/{modelName}").hasAuthority("ROLE_ADMIN")
+                .antMatchers("/api/equipment/item/{id}").hasAuthority("ROLE_WORKER")
+                .antMatchers("/api/equipment/item/get-weekly-unavailability/{itemId}").hasAuthority("ROLE_WORKER")
+                .antMatchers("/api/equipment/item/set-day-unavailability/{itemId}").hasAuthority("ROLE_RECEPTIONIST")
+                .antMatchers("/api/equipment/item/delete-day-unavailability/{itemId}").hasAuthority("ROLE_RECEPTIONIST")
+
+                .antMatchers("/api/service/all").hasAuthority("ROLE_CLIENT")
+                .antMatchers("/api/service/all/**").hasAuthority("ROLE_CLIENT")
+                .antMatchers("/api/service/service/doesExistWithName/{serviceName}").hasAuthority("ROLE_CLIENT")
+                .antMatchers("/api/service/{id}").hasAuthority("ROLE_WORKER")
+
+                .antMatchers("/api/unregistered-client/find/{id}").hasAuthority("ROLE_WORKER")
+                .antMatchers("/api/unregistered-client/all").hasAuthority("ROLE_WORKER")
+                .antMatchers("/api/unregistered-client/all/undeleted").hasAuthority("ROLE_WORKER")
+                .antMatchers("/api/unregistered-client/add").hasAuthority("ROLE_WORKER")
+                .antMatchers("/api/unregistered-client/edit").hasAuthority("ROLE_RECEPTIONIST")
+                .antMatchers("/api/unregistered-client/{id}").hasAuthority("ROLE_ADMIN")
+
+                .antMatchers("/api/user/find/{id}").hasAuthority("ROLE_RECEPTIONIST")
+                .antMatchers("/api/user/all").hasAuthority("ROLE_RECEPTIONIST")
+                .antMatchers("/api/user/all/undeleted").hasAuthority("ROLE_RECEPTIONIST")
+                .antMatchers("/api/user/workers").hasAuthority("ROLE_RECEPTIONIST")
+                .antMatchers("/api/user/clients").hasAuthority("ROLE_RECEPTIONIST")
+                .antMatchers("/api/user/edit/{id}").hasAuthority("ROLE_ADMIN")
+                .antMatchers("/api/user/{id}").hasAuthority("ROLE_ADMIN")
+                .antMatchers("/api/user/edit-role/{id}").hasAuthority("ROLE_ADMIN")
+
+                .antMatchers("/api/visit/{visitId}").hasAuthority("ROLE_CLIENT")
+                .antMatchers("/api/visit/get-worker-available-days-in-month").hasAuthority("ROLE_CLIENT")
+                .antMatchers("/api/visit/get-available-worker-terms-for-day").hasAuthority("ROLE_CLIENT")
+                .antMatchers("/api/visit/all-as-client-by-user-id/{userId}").hasAuthority("ROLE_WORKER")
+                .antMatchers("/api/visit/all-of-unregistered-client/{unregisteredClientId}").hasAuthority("ROLE_WORKER")
+                .antMatchers("/api/visit/get-week-not-cancelled-visits-as-worker/{workerId}").hasAuthority("ROLE_WORKER")
+                .antMatchers("/api/visit/get-week-not-cancelled-visits-as-client/{workerId}").hasAuthority("ROLE_WORKER")
+                .antMatchers("/api/visit/get-week-not-cancelled-item-visit/{itemId}").hasAuthority("ROLE_WORKER")
+                .antMatchers("/api/visit/{visitId}/mark-as-done").hasAuthority("ROLE_WORKER")
+                .antMatchers("/api/visit/{visitId}/mark-as-paid").hasAuthority("ROLE_WORKER")
+                .antMatchers("/api/visit/mark-as-deleted/{visitId}").hasAuthority("ROLE_WORKER")
+                .antMatchers("/api/visit/{visitId}/cancel").hasAuthority("ROLE_CLIENT")
+                .antMatchers("/api/visit/cancel-all-of-unregistered-client/{unregisteredClientId}").hasAuthority("ROLE_RECEPTIONIST")
+                .antMatchers("/api/visit/cancel-all-as-client-by-user-id/{userId}").hasAuthority("ROLE_RECEPTIONIST")
+                .antMatchers("/api/visit/cancel-all-as-worker-by-user-id/{userId}").hasAuthority("ROLE_RECEPTIONIST")
+
+                .antMatchers("/api/worker/find-by-service/{serviceId}").hasAuthority("ROLE_CLIENT")
+                .antMatchers("/api/worker/find-clients/{workerId}").hasAuthority("ROLE_WORKER")
+                .antMatchers("/api/worker/find-unregistered-clients/{workerId}").hasAuthority("ROLE_WORKER")
+                .antMatchers("/api/worker/workerServices/{id}").hasAuthority("ROLE_CLIENT")
+                .antMatchers("/api/worker/assignServicesToWorker/{id}").hasAuthority("ROLE_ADMIN")
+                .antMatchers("/api/worker/get-week-work-hours/{workerId}").hasAuthority("ROLE_WORKER")
+                .antMatchers("/api/worker/get-week-off-work-hours/{workerId}").hasAuthority("ROLE_WORKER")
+                .antMatchers("/api/worker/get-week-absence-hours/{workerId}").hasAuthority("ROLE_WORKER")
+                .antMatchers("/api/worker/set-work-hours/{workerId}").hasAuthority("ROLE_RECEPTIONIST")
+                .antMatchers("/api/worker/set-absence-hours/{workerId}").hasAuthority("ROLE_RECEPTIONIST")
+                .antMatchers("/api/worker/delete-daily-absence-hours/{workerId}").hasAuthority("ROLE_RECEPTIONIST")
+                .antMatchers("/api/worker/delete-daily-work-hours/{workerId}").hasAuthority("ROLE_RECEPTIONIST")
+
+                .anyRequest().authenticated();
     }
 }
