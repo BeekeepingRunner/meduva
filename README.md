@@ -6,8 +6,8 @@
 * [Functionalities](#functionalities)
 
 ## General
-System supporting health care units. 
-	
+A uniwersal web application for health care units - places like medical, physioterapeutic, rehabilitation or wellness centres. The app includes visit, schedules and facility management. It enables services to be defined and linked to rooms, employees and equipment. Registered clients and workers can plan their visits. Available dates of visits are determined based on properly set working hours of individual employees and the availability of equipment and rooms. It is also possible to view schedules and define unavailability hours for workers, rooms and equipment.
+
 ## Technologies
 Project is created with:
 * Java: 11
@@ -42,5 +42,3 @@ $ ng serve
 ```
 $ mvn spring-boot:run
 ```
-## Functionalities
-Working in progress
