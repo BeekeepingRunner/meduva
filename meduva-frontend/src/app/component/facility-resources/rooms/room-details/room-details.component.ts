@@ -49,14 +49,10 @@ export class RoomDetailsComponent implements OnInit {
         )
       }
     );
-    this.getRoomVisits(roomId);
-  }
-
-  private getRoomVisits(roomId: number) {
-  this.roomService.getRoomVisits(roomId).subscribe(
-    visits => {
-      this.visits=visits;
-    })
+    this.roomService.getRoomVisits(roomId).subscribe(
+      visits => {
+        this.visits=visits;
+      })
   }
 
   deleteRoomFromList(roomId:number){
@@ -67,7 +63,7 @@ export class RoomDetailsComponent implements OnInit {
       })
   }
 
-  openConfirmationDialog(roomId: number) {
+  openConfirmationDialog(roomId?: number) {
       const confirmDialogRef = this.visits.length>0 ?
         this.dialog.open(ConfirmationWithWarningDialogComponent, {
           data: { message: 'There are booked visits associated with this room. If you want to abandon these visits, you must do it manually. Are you sure you want to delete them?' }
@@ -77,12 +73,11 @@ export class RoomDetailsComponent implements OnInit {
         });
 
       confirmDialogRef.afterClosed().subscribe(confirmed => {
-        if (confirmed) {
+        if(confirmed) {
+          if(roomId)
           this.deleteRoom(roomId);
-        }
-        else{
-          if(roomId!=-1){
-            this.router.navigateByUrl("/rooms");
+          else{
+            this.deleteRoom()
           }
         }
       });
@@ -90,8 +85,8 @@ export class RoomDetailsComponent implements OnInit {
 
   }
 
-  private deleteRoom(roomId:number) {
-    if(roomId==-1){
+  private deleteRoom(roomId?:number) {
+    if(!roomId){
       if(this.room.id) {
         roomId = this.room.id;
       }
@@ -100,7 +95,7 @@ export class RoomDetailsComponent implements OnInit {
         this.errorMessage = "You cannot delete room, because that room does not exist";
       }
     }
-    if(this.wasDeletionSuccessful==true){
+    if(this.wasDeletionSuccessful){
 
       this.roomService.deleteById(roomId).subscribe(
         ifSuccess => {
@@ -122,7 +117,12 @@ export class RoomDetailsComponent implements OnInit {
 
     feedbackDialogRef.afterClosed().subscribe(
       acknowledged => {
-        this.router.navigate(['/rooms']);
+        if(this.router.url=="/rooms"){
+          location.reload();
+        }
+        else{
+          this.router.navigate(['/rooms']);
+        }
       }
     );
   }

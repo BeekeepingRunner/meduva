@@ -8,7 +8,7 @@
 
       <ng-container matColumnDef="name">
         <th mat-header-cell *matHeaderCellDef>Rooms</th>
-        <td mat-cell *matCellDef="let room"><b>{{ room.name }}</b></td>
+        <td mat-cell *matCellDef="let room" [routerLink]="['/room/' + room.id]"><b>{{ room.name }}</b></td>
       </ng-container>
       <ng-container matColumnDef="delete" >
         <th mat-header-cell *matHeaderCellDef class="delete-column"></th>
@@ -18,8 +18,7 @@
       </ng-container>
 
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row *matRowDef="let row; let room; columns: displayedColumns;"
-          [routerLink]="['/room/' + room.id]">
+      <tr mat-row *matRowDef="let row; let room; columns: displayedColumns;">
       </tr>
     </table>
   </div>

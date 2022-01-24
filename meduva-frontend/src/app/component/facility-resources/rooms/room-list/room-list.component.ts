@@ -33,6 +33,5 @@ export class RoomListComponent implements OnInit {
 
   deleteRoomFromList(roomToDeleteId:number) {
    this.roomDetailsComponent.deleteRoomFromList(roomToDeleteId);
-
   }
 }
