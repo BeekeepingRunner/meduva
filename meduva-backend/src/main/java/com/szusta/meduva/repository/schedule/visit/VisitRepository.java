@@ -1,10 +1,12 @@
 package com.szusta.meduva.repository.schedule.visit;
 
+import com.szusta.meduva.model.Service;
 import com.szusta.meduva.model.UnregisteredClient;
 import com.szusta.meduva.model.schedule.visit.Visit;
 import com.szusta.meduva.repository.UnregisteredClientRepository;
 import com.szusta.meduva.repository.undeletable.UndeletableRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.Date;
@@ -92,4 +94,9 @@ public interface VisitRepository extends UndeletableRepository<Visit> {
     )
     List<Visit> findIncomingByRoomId(Long roomId);
 
+    @Query("SELECT CASE WHEN count(v) > 0 THEN true ELSE false END "
+                    + "FROM Visit v WHERE v.service.id = :serviceId "
+                    + "AND v.timeFrom >= CURRENT_DATE"
+    )
+    boolean existsInTheFutureWith(@Param("serviceId") Long serviceId);
 }

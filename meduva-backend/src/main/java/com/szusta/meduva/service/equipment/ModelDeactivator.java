@@ -27,7 +27,11 @@ public class ModelDeactivator {
         this.equipmentItemRepository = equipmentItemRepository;
     }
 
-    public void deactivateModelsWithLastService(Service service) {
+    /**
+     * @param service A service to look for in models to deactivate them.
+     * It has to be the only service that a given model is associated with for the model to become inactive.
+     */
+    public void deactivateModelsWithOneServiceOnly(Service service) {
 
         List<EquipmentModel> models = service.getEquipmentModel();
         List<EquipmentModel> modelsToDeactivate = getModelsToDeactivate(models);

@@ -11,6 +11,7 @@ import {JwtStorageService} from "../service/token/jwt-storage.service";
 import {BehaviorSubject, Observable, throwError} from "rxjs";
 import {catchError, filter, switchMap, take} from "rxjs/operators";
 import {AuthService} from "../service/auth/auth.service";
+import {Router} from "@angular/router";
 
 const TOKEN_HEADER_KEY = 'Authorization';
 const TOKEN_PREFIX = 'Bearer ';
@@ -23,7 +24,8 @@ export class AuthInterceptor implements HttpInterceptor {
 
   constructor(
     private jwtStorageService: JwtStorageService,
-    private authService: AuthService)
+    private authService: AuthService,
+    private router: Router)
   {
   }
 
@@ -68,7 +70,7 @@ export class AuthInterceptor implements HttpInterceptor {
           catchError((err) => {
             this.isRefreshing = false;
             this.jwtStorageService.signOut();
-            return throwError(err);
+            return this.router.navigate(['login-again']);
           })
         );
       }

@@ -1,14 +1,19 @@
-import {AfterViewInit, Component, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild} from '@angular/core';
-import {JwtStorageService, TokenUserInfo} from "./service/token/jwt-storage.service";
+import {
+  AfterViewInit,
+  ChangeDetectorRef,
+  Component,
+  OnChanges,
+  OnDestroy,
+  OnInit,
+  SimpleChanges,
+  ViewChild
+} from '@angular/core';
+import {JwtStorageService} from "./service/token/jwt-storage.service";
 import {MatSidenav} from "@angular/material/sidenav";
 import {BreakpointObserver} from "@angular/cdk/layout";
-import {Role, roleNames, User, UserRole} from "./model/user";
-import {ClientService} from "./service/client.service";
-import {Client} from "./model/client";
+import {roleNames, User, UserRole} from "./model/user";
 import {UserService} from "./service/user.service";
 import {RoleGuardService} from "./service/auth/role-guard.service";
-import {Router} from "@angular/router";
-import {VisitService} from "./service/visit.service";
 import {Subscription} from "rxjs";
 import {EventBusService} from "./_shared/event-bus.service";
 import {EventData} from "./_shared/event.class";
@@ -41,6 +46,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy
     private roleGuardService: RoleGuardService,
     private userService: UserService,
     private eventBusService: EventBusService,
+    private changeDetector: ChangeDetectorRef,
   ) {
   }
 
@@ -80,20 +86,24 @@ export class AppComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy
     this.showAdminPanel = this.roleGuardService.hasCurrentUserExpectedRole(roleNames[UserRole.ROLE_ADMIN]);
   }
 
-  // Responsible for closing and opening the side menu based on width of the browser's window
-  //
   ngAfterViewInit() {
     if (this.isLoggedIn) {
-      this.observer.observe(['(max-width: 800px)']).subscribe((res) => {
-        if (res.matches) {
-          this.sidenav.mode = 'over';
-          this.sidenav.close();
-        } else {
-          this.sidenav.mode = 'side';
-          this.sidenav.open();
-        }
-      });
+      this.setSidenavState();
     }
+  }
+
+  private setSidenavState(): void {
+    this.observer.observe(['(max-width: 800px)']).subscribe((res) => {
+      if (res.matches) {
+        this.sidenav.mode = 'over';
+        this.sidenav.close();
+      } else {
+        this.sidenav.mode = 'side';
+        this.sidenav.open();
+      }
+
+      this.changeDetector.detectChanges();
+    });
   }
 
   ngOnDestroy() {
