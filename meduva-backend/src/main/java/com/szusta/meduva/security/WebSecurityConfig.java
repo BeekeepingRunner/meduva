@@ -120,8 +120,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/assignServicesToWorker/{id}").hasAuthority("ROLE_RECEPTIONIST")
                 .anyRequest().authenticated();
                 */
-        //.anyRequest().permitAll();
-                .anyRequest().authenticated();
+        .anyRequest().permitAll();
+                //.anyRequest().authenticated();
 
     }
 }

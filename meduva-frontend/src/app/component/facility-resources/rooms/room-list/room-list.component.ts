@@ -32,7 +32,7 @@ export class RoomListComponent implements OnInit {
   }
 
   deleteRoomFromList(roomToDeleteId:number) {
-   this.roomDetailsComponent.openConfirmationDialog(roomToDeleteId);
+   this.roomDetailsComponent.deleteRoomFromList(roomToDeleteId);
 
   }
 }

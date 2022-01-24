@@ -6,6 +6,8 @@ import {RoomService} from "../../../../service/room.service";
 import {ConfirmationDialogComponent} from "../../../dialog/confirmation-dialog/confirmation-dialog.component";
 import {FeedbackDialogComponent} from "../../../dialog/feedback-dialog/feedback-dialog.component";
 import {Service} from "../../../../model/service";
+import {Visit} from "../../../../model/visit";
+import {ConfirmationWithWarningDialogComponent} from "../../../dialog/confirmation-with-warning-dialog/confirmation-with-warning-dialog.component";
 
 @Component({
   selector: 'app-room-details',
@@ -22,6 +24,7 @@ export class RoomDetailsComponent implements OnInit {
   errorMessage: string = '';
   columnName: string[] = ['Name'];
   services: Service[] = [];
+  visits: Visit[] = [];
 
   constructor(
     private route: ActivatedRoute,
@@ -46,23 +49,45 @@ export class RoomDetailsComponent implements OnInit {
         )
       }
     );
+    this.getRoomVisits(roomId);
+  }
+
+  private getRoomVisits(roomId: number) {
+  this.roomService.getRoomVisits(roomId).subscribe(
+    visits => {
+      this.visits=visits;
+    })
+  }
+
+  deleteRoomFromList(roomId:number){
+    this.roomService.getRoomVisits(roomId).subscribe(
+      visits => {
+        this.visits=visits;
+        this.openConfirmationDialog(roomId);
+      })
   }
 
   openConfirmationDialog(roomId: number) {
-    const confirmDialogRef = this.dialog.open(ConfirmationDialogComponent, {
-      data: { message: 'Do you want to delete this room?' }
-    });
+      const confirmDialogRef = this.visits.length>0 ?
+        this.dialog.open(ConfirmationWithWarningDialogComponent, {
+          data: { message: 'There are booked visits associated with this room. If you want to abandon these visits, you must do it manually. Are you sure you want to delete them?' }
+        })
+        : this.dialog.open(ConfirmationDialogComponent, {
+          data: { message: 'Do you want to delete this room?' }
+        });
 
-    confirmDialogRef.afterClosed().subscribe(confirmed => {
-      if (confirmed) {
-        this.deleteRoom(roomId);
-      }
-      else{
-        if(roomId!=-1){
-          this.router.navigateByUrl("/rooms");
+      confirmDialogRef.afterClosed().subscribe(confirmed => {
+        if (confirmed) {
+          this.deleteRoom(roomId);
         }
-      }
-    });
+        else{
+          if(roomId!=-1){
+            this.router.navigateByUrl("/rooms");
+          }
+        }
+      });
+
+
   }
 
   private deleteRoom(roomId:number) {
@@ -76,6 +101,8 @@ export class RoomDetailsComponent implements OnInit {
       }
     }
     if(this.wasDeletionSuccessful==true){
+
+
       this.roomService.deleteById(roomId).subscribe(
         ifSuccess => {
           this.openFeedbackDialog();
@@ -100,4 +127,6 @@ export class RoomDetailsComponent implements OnInit {
       }
     );
   }
+
+
 }

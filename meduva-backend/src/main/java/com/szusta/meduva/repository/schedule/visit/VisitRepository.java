@@ -82,4 +82,14 @@ public interface VisitRepository extends UndeletableRepository<Visit> {
                     + "ORDER BY v.time_to asc "
     )
     List<Visit> findAllNotCancelledWeeklyItemVisits(Long itemId, Date startTime, Date endTime);
+
+    @Query(
+            nativeQuery = true,
+            value = "SELECT * FROM visit "
+                    + "WHERE room_id = ?1 AND deleted = 0 AND visit_status_id = 1 "
+                    + "AND timestampdiff(MINUTE, time_from, CURRENT_TIME) <= 0 "
+                    + "ORDER BY time_from DESC "
+    )
+    List<Visit> findIncomingByRoomId(Long roomId);
+
 }
