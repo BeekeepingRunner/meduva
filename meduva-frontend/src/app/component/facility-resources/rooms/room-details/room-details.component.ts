@@ -102,7 +102,6 @@ export class RoomDetailsComponent implements OnInit {
     }
     if(this.wasDeletionSuccessful==true){
 
-
       this.roomService.deleteById(roomId).subscribe(
         ifSuccess => {
           this.openFeedbackDialog();
