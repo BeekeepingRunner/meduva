@@ -1,0 +1,63 @@
+<mat-card class="col-md-6 card container-fluid " *ngIf="isAWorker; else AccessDenied" >
+  <form class="basic-form container-fluid " (ngSubmit)="onSubmit()" [formGroup]="form">
+    <br>
+    <strong>Worker services:</strong>
+    <br><br>
+
+
+      <table mat-table [dataSource]="services" class="mat-elevation-z8">
+
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef>Name</th>
+          <td mat-cell *matCellDef="let service">{{ service.name }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="select">
+          <th mat-header-cell *matHeaderCellDef>
+            <mat-checkbox
+                          (change)="$event ? masterToggle() : null"
+                          [checked]="selection.hasValue() && isAllSelected()"
+                          [indeterminate]="selection.hasValue() && !isAllSelected()">
+            </mat-checkbox>
+          </th>
+          <td mat-cell *matCellDef="let row">
+            <mat-checkbox formControlName="checkControl"
+                          (click)="$event.stopPropagation()"
+                          (change)="$event ? selection.toggle(row): null"
+                          [checked]="selection.isSelected(row)">
+            </mat-checkbox>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; let service; columns: displayedColumns;">
+        </tr>
+      </table>
+
+
+    <br>
+    <button class="btn btn-primary btn-block" type="submit">Change services</button>
+
+    <br>
+
+    <div
+      class="alert alert-success"
+      role="alert"
+      *ngIf="editSuccessful">
+      Worker services edited successfully
+    </div>
+
+    <div
+      class="alert alert-danger"
+      role="alert"
+      *ngIf="editFailed">
+      Edit failed: {{ errorMessage }}
+    </div>
+
+  </form>
+
+</mat-card>
+
+<ng-template #AccessDenied>
+  Access Denied. User is not authorized to perform this operation.
+</ng-template>

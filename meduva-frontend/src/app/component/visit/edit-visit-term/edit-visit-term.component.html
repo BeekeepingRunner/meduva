@@ -1,0 +1,22 @@
+<app-term-selection *ngIf="worker"
+    [service]="service"
+    [worker]="worker"
+    [client]="client"
+    (termEmitter)="onTermSelection($event)">
+</app-term-selection>
+
+<div *ngIf="term != null && worker != null && service != null">
+  <br>
+  <strong>Visit summary:</strong>
+</div>
+
+
+<app-visit-summary *ngIf="term != null && worker != null && service != null"
+                   [client]="client"
+                   [worker]="worker"
+                   [service]="service"
+                   [term]="term">
+</app-visit-summary>
+
+
+<button mat-raised-button primary (click)="onVisitSubmit()">Submit</button>

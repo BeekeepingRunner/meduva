@@ -1,0 +1,53 @@
+
+
+<div class="centered-content">
+    <img class="wave" src="assets/images/login-register/wave.png">
+    <div class="container">
+      <div class="img">
+      </div>
+      <div class="login-content">
+        <form class="basic-form" *ngIf="!isLoggedIn" (ngSubmit)="onSubmit()" [formGroup]="form">
+          <img src="assets/images/login-register/login_picture.svg">
+          <h2 class="title">Login</h2>
+          <mat-form-field class="wide-element" appearance="outline">
+
+            <mat-label>Username:</mat-label>
+            <input matInput id="login" type="text" formControlName="login">
+            <mat-error *ngIf="form.controls.login.invalid &&
+                          (form.controls.login.dirty || form.controls.login.touched)">
+              Login is required
+            </mat-error>
+          </mat-form-field>
+          <br>
+
+          <mat-form-field class="wide-element" appearance="outline">
+            <mat-label>Password:</mat-label>
+            <input matInput [type]="hide ? 'password' : 'text'" formControlName="password">
+
+            <button mat-icon-button type="button" matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+              <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+            </button>
+            <mat-error *ngIf="form.controls.password.invalid &&
+                          (form.controls.password.dirty || form.controls.password.touched)">
+              Password is required
+            </mat-error>
+          </mat-form-field>
+
+
+          <a href="login/reset-password-email">Forgot the password?</a>
+          <button class="btn btn-primary btn-block" type="submit">
+            Login
+          </button>
+
+          <div
+            class="alert alert-warning"
+            role="alert"
+            *ngIf="isLoginFailed">
+            Login failed: <br />{{ errorMessage }}
+          </div>
+        </form>
+      </div>
+    </div>
+
+</div>
+<app-footer></app-footer>

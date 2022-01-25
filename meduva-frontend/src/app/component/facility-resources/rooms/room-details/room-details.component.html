@@ -1,0 +1,51 @@
+<div class="container mat-elevation-z8">
+  <button mat-icon-button color="primary" routerLink='/rooms'>
+    <- Back to Rooms
+  </button>
+  <br>
+
+  <table>
+    <tr style="font-size: larger">
+      <td><strong>Room: </strong></td>
+      <td><strong>{{ room?.name }}</strong></td>
+    </tr>
+    <br>
+    <tr>
+      <td><strong>Description:</strong></td>
+    </tr>
+  </table>
+
+  <p>{{ room?.description }}</p>
+  <br>
+
+  <strong>Performed services:</strong>
+
+  <table mat-table [dataSource]="services" class="mat-elevation-z8 col-md-4">
+
+    <ng-container matColumnDef="Name">
+      <th mat-header-cell *matHeaderCellDef class="col-md-4">Name</th>
+      <td mat-cell *matCellDef="let service"><b>{{ service.name }}</b></td>
+    </ng-container>
+    <tr mat-header-row *matHeaderRowDef="columnName"></tr>
+    <tr mat-row *matRowDef="let row; let service; columns: columnName;">
+  </table>
+
+
+
+  <div class=" row gx-5  p-3">
+    <div class="p-1">
+      <tr class="button-row">
+        <td><button mat-raised-button color="primary" [routerLink]="['/room/'+ room?.id +'/edit-performed-services']" >Edit itemless services</button></td>
+      </tr>
+    </div>
+  </div>
+  <br>
+  <tr class="button-row">
+    <td><button mat-raised-button color="warn" (click)="openConfirmationDialog()">Delete room</button></td>
+  </tr>
+  <br>
+
+  <div class="alert alert-warning" *ngIf="!wasDeletionSuccessful">
+    Failed to delete this room.<br />{{ errorMessage }}
+  </div>
+</div>

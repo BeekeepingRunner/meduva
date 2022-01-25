@@ -1,0 +1,32 @@
+<div class="container mat-elevation-z8">
+  <button mat-icon-button color="primary" routerLink='/services'>
+    <- Back to services
+  </button>
+  <br>
+
+  <table>
+    <tr style="font-size: larger">
+      <td><strong>Service: </strong></td>
+      <td><strong>{{ service?.name }}</strong></td>
+    </tr>
+    <tr>
+      <td><strong>Duration:</strong></td>
+      <td>{{ service?.durationInMin }} minutes</td>
+    </tr>
+    <tr>
+      <td><strong>Price:</strong></td>
+      <td>{{ service?.price | currency : "USD" }}</td>
+    </tr>
+    <br>
+    <tr>
+      <td><strong>Description:</strong></td>
+    </tr>
+  </table>
+
+  <p>{{ service?.description }}</p>
+  <br>
+  <tr class="button-row">
+    <td><button mat-raised-button color="warn" (click)="openDeleteConfirmDialog()">Delete service</button></td>
+  </tr>
+  <br>
+</div>

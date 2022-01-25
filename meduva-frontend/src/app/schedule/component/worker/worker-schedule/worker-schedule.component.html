@@ -1,0 +1,40 @@
+<h3>{{ worker?.name + ' ' + worker?.surname }}</h3>
+<br>
+
+<mwl-demo-utils-calendar-header [(view)]="view"
+                                [(viewDate)]="viewDate"
+                                (viewDateChange)="prepareWeekEvents()"
+                                (viewChange)="prepareWeekEvents()">
+</mwl-demo-utils-calendar-header>
+
+<ng-template #loading>
+  <div class="text-center">
+    <i class="fas fa-spin fa-spinner fa-5x"></i> <br />
+    Loading events...
+  </div>
+</ng-template>
+
+<div *ngIf="events else loading" [ngSwitch]="view">
+  <mwl-calendar-month-view
+    *ngSwitchCase="'month'"
+    [viewDate]="viewDate"
+    (columnHeaderClicked)="clickedColumn = $event.isoDayNumber"
+    (dayClicked)="clickedDate = $event.day.date">
+  </mwl-calendar-month-view>
+  <mwl-calendar-week-view
+    *ngSwitchCase="'week'"
+    [viewDate]="viewDate"
+    [events]="events"
+    (dayHeaderClicked)="openDayDialog($event.day.date)"
+    (hourSegmentClicked)="clickedDate = $event.date"
+    (eventClicked)="eventClick($event)"
+    [dayStartHour]="dayStartHour"
+    [dayEndHour]="dayEndHour">
+  </mwl-calendar-week-view>
+  <mwl-calendar-day-view
+    *ngSwitchCase="'day'"
+    [viewDate]="viewDate"
+    [events]="events"
+    (hourSegmentClicked)="clickedDate = $event.date">
+  </mwl-calendar-day-view>
+</div>

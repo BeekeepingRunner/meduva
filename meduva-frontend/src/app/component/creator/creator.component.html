@@ -1,0 +1,79 @@
+
+<mat-stepper [linear]="true" orientation="vertical" #stepper>
+
+
+  <mat-step label="Number of rooms"
+            [completed]="isFormValid">
+    <app-number-of-rooms (roomItemsEmitter)="onRoomsGeneration($event)"
+                    (stepCompletionEmitter)="onModelFormSubmitted($event)">
+    </app-number-of-rooms>
+    <div>
+      <button mat-button matStepperNext>Next</button>
+    </div>
+  </mat-step>
+
+
+
+  <mat-step label="Configure your rooms"
+            [completed]="checkIfNoRoomExistsInDatabase() && areAllItemsDisplaced()">
+
+    <app-configure-rooms-creator *ngIf="roomItems.length"
+                                 [roomItems]="roomItems"
+                                 (roomItemsEmitter)="onRoomsGeneration($event)">
+    </app-configure-rooms-creator>
+    <br>
+    <div>
+      <button mat-button matStepperPrevious>Back</button>
+      <button mat-button matStepperNext>Next</button>
+    </div>
+    <br>
+    <div *ngIf="roomSelectionError" class="alert alert-warning">
+      <p>{{ roomSelectionError }}</p>
+    </div>
+  </mat-step>
+
+  <mat-step label="Add the equipment">
+
+    <app-equipment-list-creator *ngIf="roomItems.length"
+                                [roomItems]="roomItems"
+                                (eqModelEmitter)="onEquipmentModelGot($event)">
+    </app-equipment-list-creator>
+    <br>
+    <div>
+      <button mat-button matStepperPrevious>Back</button>
+      <button mat-button matStepperNext>Next</button>
+    </div>
+    <br>
+    <div *ngIf="roomSelectionError" class="alert alert-warning">
+      <p>{{ roomSelectionError }}</p>
+    </div>
+  </mat-step>
+
+  <mat-step label="Personalize services"
+            [completed]="services.length>0">
+
+    <app-service-list-creator *ngIf="roomItems.length"
+                              [roomItems]="roomItems"
+                              [eqModels]="eqModels"
+                              (serviceConfigurationEmitter)="onServicesGot($event)"
+                              (equipmentConfigurationEmitter)="onEquipmentModelGot($event)"
+                              (roomConfigurationEmitter)="onRoomsGeneration($event)">
+    </app-service-list-creator>
+
+  </mat-step>
+
+
+  <mat-step>
+    <ng-template matStepLabel>Done</ng-template>
+    <p>Everything is ready.</p>
+    <br>
+    <p>Are u sure you want to save that configuration?</p>
+    <div>
+      <button mat-button >Back</button>
+      <button mat-button (click)="saveConfigurationInDatabase()">Save</button>
+    </div>
+  </mat-step>
+
+
+
+</mat-stepper>
