@@ -31,7 +31,7 @@ public class TimeUtilsTest {
     }
 
     @Nested
-    class getDayStartTest {
+    class getDayStartTests {
         @Test
         @DisplayName("should return the same day as the input, with time equal to 00:00:00")
         public void should_returnSameDayAtMidnight() {
@@ -55,7 +55,7 @@ public class TimeUtilsTest {
 
 
     @Nested
-    class getDayEndTest {
+    class getDayEndTests {
         @Test
         @DisplayName("should return same day with time equal to 23:59:59")
         public void should_return_same_day_end() {
@@ -78,7 +78,7 @@ public class TimeUtilsTest {
     }
 
     @Nested
-    class nextDayStartTest {
+    class getNextDayStartTests {
         @Test
         @DisplayName("should return the next day with time equal to 00:00:00")
         public void should_return_next_day_start() {
@@ -110,7 +110,7 @@ public class TimeUtilsTest {
     }
 
     @Nested
-    class nextMonthStartTest {
+    class getNextMonthStartTests {
         @Test
         @DisplayName("should return the first day of the next month with time equal to 00:00:00")
         public void should_return_next_months_first_day_start() {
@@ -142,7 +142,7 @@ public class TimeUtilsTest {
     }
 
     @Nested
-    class monthEndTest {
+    class getMonthEndTests {
         @Test
         @DisplayName("should return the last day of the same month with time equal to 23:59:59")
         public void should_return_same_months_last_day_end() {
@@ -174,7 +174,7 @@ public class TimeUtilsTest {
     }
 
     @Nested
-    class nDaysElapsed {
+    class hasNDaysElapsedTests {
 
         @Test
         @DisplayName("Should return true only if the actual number of elapsed days is equal or greater from the specified")
