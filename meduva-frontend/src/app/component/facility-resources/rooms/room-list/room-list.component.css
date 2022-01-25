@@ -18,3 +18,17 @@ table {
   background-color: rgba(100,93,154,0.45);
   cursor:pointer;
 }
+
+button{
+  margin-top: 10px;
+}
+
+.delete-column{
+  width: 5%;
+}
+.mat-icon{
+  vertical-align: middle;
+}
+.mat-icon:hover{
+  color: red;
+}

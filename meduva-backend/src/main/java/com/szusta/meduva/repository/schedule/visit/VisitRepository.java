@@ -85,6 +85,15 @@ public interface VisitRepository extends UndeletableRepository<Visit> {
     )
     List<Visit> findAllNotCancelledWeeklyItemVisits(Long itemId, Date startTime, Date endTime);
 
+    @Query(
+            nativeQuery = true,
+            value = "SELECT * FROM visit "
+                    + "WHERE room_id = ?1 AND deleted = 0 AND visit_status_id = 1 "
+                    + "AND timestampdiff(MINUTE, time_from, CURRENT_TIME) <= 0 "
+                    + "ORDER BY time_from DESC "
+    )
+    List<Visit> findIncomingByRoomId(Long roomId);
+
     @Query("SELECT CASE WHEN count(v) > 0 THEN true ELSE false END "
                     + "FROM Visit v WHERE v.service.id = :serviceId "
                     + "AND v.timeFrom >= CURRENT_DATE"

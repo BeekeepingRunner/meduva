@@ -6,6 +6,7 @@ import {environment} from "../../environments/environment";
 import {map} from "rxjs/operators";
 import {trimJSON} from "../util/json/trim";
 import {Room} from "../model/room";
+import {Visit} from "../model/visit";
 
 @Injectable({
   providedIn: 'root'
@@ -35,7 +36,9 @@ export class RoomService {
       map(services => trimJSON(services._embedded.services, ['_links']))
     )
   }
-
+  public getRoomVisits(roomId: number): Observable<Visit[]>{
+    return this.httpClient.get<Visit[]>(environment.API_BASE_URL + 'api/room/'+ roomId + '/visits');
+  }
   public addNewRoom(room: Room): Observable<Room> {
     return this.httpClient.post<Service>(environment.API_BASE_URL + 'api/room', room);
   }

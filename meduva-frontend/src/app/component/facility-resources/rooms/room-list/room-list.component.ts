@@ -1,6 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {Room} from "../../../../model/room";
 import {RoomService} from "../../../../service/room.service";
+import {RoomDetailsComponent} from "../room-details/room-details.component";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-room-list',
@@ -10,9 +12,12 @@ import {RoomService} from "../../../../service/room.service";
 export class RoomListComponent implements OnInit {
 
   rooms: Room[] = [];
-  displayedColumns: string[] = ['name'];
+  displayedColumns: string[] = ['name','delete'];
 
-  constructor(protected roomService: RoomService) { }
+  constructor(
+    protected roomService: RoomService,
+    private roomDetailsComponent: RoomDetailsComponent,
+    private router:Router) { }
 
   ngOnInit(): void {
     this.getAllRooms()
@@ -26,4 +31,7 @@ export class RoomListComponent implements OnInit {
     )
   }
 
+  deleteRoomFromList(roomToDeleteId:number) {
+   this.roomDetailsComponent.deleteRoomFromList(roomToDeleteId);
+  }
 }

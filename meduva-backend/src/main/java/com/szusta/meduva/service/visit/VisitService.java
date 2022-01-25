@@ -112,6 +112,9 @@ public class VisitService {
         return Optional.of(visit);
     }
 
+    public List<Visit> findAllIncomingWithRoomId(Long roomId) {
+        return visitRepository.findIncomingByRoomId(roomId);
+    }
 
     public List<Visit> findAllWhereUserIsClient(User client) {
         return visitRepository.findAllWhereUserIsClient(client.getId());
@@ -223,4 +226,6 @@ public class VisitService {
         return visitRepository.save(visit);
 
     }
+
+
 }
