@@ -42,14 +42,14 @@ public class TimeUtilsTest {
             testDate = TimeUtils.getDayStart(testDate.getTime());
 
             // then
-            assertAll(() -> {
-                assertEquals(initialSampleDate.get(Calendar.YEAR), testDate.get(Calendar.YEAR));
-                assertEquals(initialSampleDate.get(Calendar.MONTH), testDate.get(Calendar.MONTH));
-                assertEquals(initialSampleDate.get(Calendar.DAY_OF_MONTH), testDate.get(Calendar.DAY_OF_MONTH));
-                assertEquals(0, testDate.get(Calendar.HOUR_OF_DAY));
-                assertEquals(0, testDate.get(Calendar.MINUTE));
-                assertEquals(0, testDate.get(Calendar.SECOND));
-            });
+            assertAll(
+                    () -> assertEquals(initialSampleDate.get(Calendar.YEAR), testDate.get(Calendar.YEAR)),
+                    () -> assertEquals(initialSampleDate.get(Calendar.MONTH), testDate.get(Calendar.MONTH)),
+                    () -> assertEquals(initialSampleDate.get(Calendar.DAY_OF_MONTH), testDate.get(Calendar.DAY_OF_MONTH)),
+                    () -> assertEquals(0, testDate.get(Calendar.HOUR_OF_DAY)),
+                    () -> assertEquals(0, testDate.get(Calendar.MINUTE)),
+                    () -> assertEquals(0, testDate.get(Calendar.SECOND))
+            );
         }
     }
 
@@ -66,14 +66,14 @@ public class TimeUtilsTest {
             testDate = TimeUtils.getDayEnd(testDate.getTime());
 
             // then
-            assertAll(() -> {
-                assertEquals(initialSampleDate.get(Calendar.YEAR), testDate.get(Calendar.YEAR));
-                assertEquals(initialSampleDate.get(Calendar.MONTH), testDate.get(Calendar.MONTH));
-                assertEquals(initialSampleDate.get(Calendar.DAY_OF_MONTH), testDate.get(Calendar.DAY_OF_MONTH));
-                assertEquals(23, testDate.get(Calendar.HOUR_OF_DAY));
-                assertEquals(59, testDate.get(Calendar.MINUTE));
-                assertEquals(59, testDate.get(Calendar.SECOND));
-            });
+            assertAll(
+                    () -> assertEquals(initialSampleDate.get(Calendar.YEAR), testDate.get(Calendar.YEAR)),
+                    () -> assertEquals(initialSampleDate.get(Calendar.MONTH), testDate.get(Calendar.MONTH)),
+                    () -> assertEquals(initialSampleDate.get(Calendar.DAY_OF_MONTH), testDate.get(Calendar.DAY_OF_MONTH)),
+                    () -> assertEquals(23, testDate.get(Calendar.HOUR_OF_DAY)),
+                    () -> assertEquals(59, testDate.get(Calendar.MINUTE)),
+                    () -> assertEquals(59, testDate.get(Calendar.SECOND))
+            );
         }
     }
 
@@ -91,14 +91,14 @@ public class TimeUtilsTest {
 
             // then
             Calendar nextDay = getNextDay(initialSampleDate);
-            assertAll(() -> {
-                assertEquals(nextDay.get(Calendar.YEAR), testDate.get(Calendar.YEAR));
-                assertEquals(nextDay.get(Calendar.MONTH), testDate.get(Calendar.MONTH));
-                assertEquals(nextDay.get(Calendar.DAY_OF_MONTH), testDate.get(Calendar.DAY_OF_MONTH));
-                assertEquals(0, testDate.get(Calendar.HOUR_OF_DAY));
-                assertEquals(0, testDate.get(Calendar.MINUTE));
-                assertEquals(0, testDate.get(Calendar.SECOND));
-            });
+            assertAll(
+                    () -> assertEquals(nextDay.get(Calendar.YEAR), testDate.get(Calendar.YEAR)),
+                    () -> assertEquals(nextDay.get(Calendar.MONTH), testDate.get(Calendar.MONTH)),
+                    () -> assertEquals(nextDay.get(Calendar.DAY_OF_MONTH), testDate.get(Calendar.DAY_OF_MONTH)),
+                    () -> assertEquals(0, testDate.get(Calendar.HOUR_OF_DAY)),
+                    () -> assertEquals(0, testDate.get(Calendar.MINUTE)),
+                    () -> assertEquals(0, testDate.get(Calendar.SECOND))
+            );
         }
 
         private Calendar getNextDay(Calendar calendar) {
@@ -122,14 +122,14 @@ public class TimeUtilsTest {
 
             // then
             Calendar firstDayOfNextMonth = getFirstDayOfTheMonth(initialSampleDate);
-            assertAll(() -> {
-                assertEquals(firstDayOfNextMonth.get(Calendar.YEAR), testDate.get(Calendar.YEAR));
-                assertEquals(firstDayOfNextMonth.get(Calendar.MONTH), testDate.get(Calendar.MONTH));
-                assertEquals(firstDayOfNextMonth.get(Calendar.DAY_OF_MONTH), testDate.get(Calendar.DAY_OF_MONTH));
-                assertEquals(0, testDate.get(Calendar.HOUR_OF_DAY));
-                assertEquals(0, testDate.get(Calendar.MINUTE));
-                assertEquals(0, testDate.get(Calendar.SECOND));
-            });
+            assertAll(
+                    () -> assertEquals(firstDayOfNextMonth.get(Calendar.YEAR), testDate.get(Calendar.YEAR)),
+                    () -> assertEquals(firstDayOfNextMonth.get(Calendar.MONTH), testDate.get(Calendar.MONTH)),
+                    () -> assertEquals(firstDayOfNextMonth.get(Calendar.DAY_OF_MONTH), testDate.get(Calendar.DAY_OF_MONTH)),
+                    () -> assertEquals(0, testDate.get(Calendar.HOUR_OF_DAY)),
+                    () -> assertEquals(0, testDate.get(Calendar.MINUTE)),
+                    () -> assertEquals(0, testDate.get(Calendar.SECOND))
+            );
         }
 
         private Calendar getFirstDayOfTheMonth(Calendar calendar) {
@@ -155,14 +155,14 @@ public class TimeUtilsTest {
 
             // then
             Calendar lastDayOfMonth = getLastDayOfMonth(initialSampleDate);
-            assertAll(() -> {
-                assertEquals(lastDayOfMonth.get(Calendar.YEAR), testDate.get(Calendar.YEAR));
-                assertEquals(lastDayOfMonth.get(Calendar.MONTH), testDate.get(Calendar.MONTH));
-                assertEquals(lastDayOfMonth.get(Calendar.DAY_OF_MONTH), testDate.get(Calendar.DAY_OF_MONTH));
-                assertEquals(23, testDate.get(Calendar.HOUR_OF_DAY));
-                assertEquals(59, testDate.get(Calendar.MINUTE));
-                assertEquals(59, testDate.get(Calendar.SECOND));
-            });
+            assertAll(
+                    () -> assertEquals(lastDayOfMonth.get(Calendar.YEAR), testDate.get(Calendar.YEAR)),
+                    () -> assertEquals(lastDayOfMonth.get(Calendar.MONTH), testDate.get(Calendar.MONTH)),
+                    () -> assertEquals(lastDayOfMonth.get(Calendar.DAY_OF_MONTH), testDate.get(Calendar.DAY_OF_MONTH)),
+                    () -> assertEquals(23, testDate.get(Calendar.HOUR_OF_DAY)),
+                    () -> assertEquals(59, testDate.get(Calendar.MINUTE)),
+                    () -> assertEquals(59, testDate.get(Calendar.SECOND))
+            );
         }
 
         private Calendar getLastDayOfMonth(Calendar calendar) {
@@ -192,9 +192,12 @@ public class TimeUtilsTest {
             boolean hasMoreThanNDaysElapsed = TimeUtils.hasNDaysElapsed(initialSampleDate, fewDaysLater, numOfDaysElapsed + 1);
 
             // then
-            assertTrue(hasNDaysElapsed);
-            assertTrue(hasLessThanNDaysElapsed);
-            assertFalse(hasMoreThanNDaysElapsed);
+            assertAll(
+                    () -> assertTrue(hasNDaysElapsed),
+                    () -> assertTrue(hasLessThanNDaysElapsed),
+                    () -> assertFalse(hasMoreThanNDaysElapsed)
+            );
+
         }
 
         @Test
@@ -219,8 +222,10 @@ public class TimeUtilsTest {
             boolean hasNDaysElapsedSecondBefore = TimeUtils.hasNDaysElapsed(initialSampleDate, secondBeforeNDaysElapsed, numOfDaysElapsed);
 
             // then
-            assertTrue(hasNDaysElapsedSecondAfter);
-            assertFalse(hasNDaysElapsedSecondBefore);
+            assertAll(
+                    () -> assertTrue(hasNDaysElapsedSecondAfter),
+                    () -> assertFalse(hasNDaysElapsedSecondBefore)
+            );
         }
 
         @Test
