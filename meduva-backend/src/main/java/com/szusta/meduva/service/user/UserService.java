@@ -27,11 +27,6 @@ public class UserService {
         this.roleRepository = roleRepository;
     }
 
-    public User findByLogin(String login) {
-        return userRepository.findByLogin(login)
-                .orElseThrow(() -> new EntityRecordNotFoundException("User not found with login : " + login));
-    }
-
     public User findByEmail(String email) {
         return userRepository.findByEmail(email)
                 .orElseThrow(() -> new EntityRecordNotFoundException("User not found with email : " + email));
@@ -40,10 +35,6 @@ public class UserService {
     public User findById(long id){
         return userRepository.findById(id)
                 .orElseThrow(() -> new EntityRecordNotFoundException("User not found with id: " + id));
-    }
-
-    public Boolean existsByLogin(String login) {
-        return userRepository.existsByLogin(login);
     }
 
     public Boolean existsByEmail(String email) {
