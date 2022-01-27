@@ -116,19 +116,47 @@ public class UserServiceTest {
         }
     }
 
+    @Nested
+    class SaveTests {
+        @Test
+        void should_saveUserInRepository_when_correctUser() {
+            when(userRepository.save(any()))
+                    .thenReturn(new User());
+
+            User user = userService.save(new User());
+
+            assertAll(
+                    () -> assertNotNull(user),
+                    () -> verify(userRepository).save(any())
+            );
+        }
+
+        @Test
+        void should_throwException_when_incorrectUser() {
+            when(userRepository.save(any()))
+                    .thenThrow(IllegalArgumentException.class);
+
+            Executable executable = () -> userService.save(new User());
+
+            assertAll(
+                    () -> assertThrows(IllegalArgumentException.class, executable),
+                    () -> verify(userRepository).save(any())
+            );
+        }
+    }
+
+
     @Test
-    public void shouldThrowNotFoundException() {
+    void should_return_whenFindingAllUsers() {
+        when(userRepository.findAll())
+                .thenReturn(List.of(new User(), new User()));
 
-        when(userRepository.findById(1L)).thenReturn(Optional.empty());
-        when(userRepository.findByLogin("login")).thenReturn(Optional.empty());
-        when(userRepository.findByEmail("email")).thenReturn(Optional.empty());
+        User user = userService.save(new User());
 
-        assertThrows(EntityRecordNotFoundException.class, () -> userService.getUser(1L));
-        assertThrows(EntityRecordNotFoundException.class, () -> userService.findByEmail("email"));
-
-        verify(userRepository, times(1)).findById(1L);
-        verify(userRepository, times(1)).findByLogin("login");
-        verify(userRepository, times(1)).findByEmail("email");
+        assertAll(
+                () -> assertNotNull(user),
+                () -> verify(userRepository).save(any())
+        );
     }
 
     @Test
