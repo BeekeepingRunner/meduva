@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -43,7 +44,7 @@ public class UserServiceTest {
         void should_ReturnUserFromRepository() {
             // given
             String email = "email";
-            when(userRepository.findByEmail(email))
+            when(userRepository.findByEmail(anyString()))
                     .thenReturn(Optional.of(new User()));
 
             // when
@@ -59,7 +60,7 @@ public class UserServiceTest {
         void should_ThrowException_When_UserNotFound() {
             // given
             String email = "email";
-            when(userRepository.findByEmail(email)).thenThrow(EntityRecordNotFoundException.class);
+            when(userRepository.findByEmail(anyString())).thenThrow(EntityRecordNotFoundException.class);
 
             // when, then
             assertThrows(EntityRecordNotFoundException.class, () -> userService.findByEmail(email));
@@ -73,7 +74,7 @@ public class UserServiceTest {
         void should_ReturnUserFromRepository() {
             // given
             long id = 1L;
-            when(userRepository.findById(id))
+            when(userRepository.findById(anyLong()))
                     .thenReturn(Optional.of(new User()));
 
             // when
@@ -89,7 +90,7 @@ public class UserServiceTest {
         void should_ThrowException_When_UserNotFound() {
             // given
             long id = 1L;
-            when(userRepository.findById(id)).thenThrow(EntityRecordNotFoundException.class);
+            when(userRepository.findById(anyLong())).thenThrow(EntityRecordNotFoundException.class);
 
             // when, then
             assertThrows(EntityRecordNotFoundException.class, () -> userService.findById(id));
@@ -102,7 +103,7 @@ public class UserServiceTest {
         public void should_returnValueFromRepository() {
             // given
             String email = "email";
-            when(userRepository.existsByEmail(email)).thenReturn(true);
+            when(userRepository.existsByEmail(anyString())).thenReturn(true);
 
             // when
             boolean result = userService.existsByEmail(email);
