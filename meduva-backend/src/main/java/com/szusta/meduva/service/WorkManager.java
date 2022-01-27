@@ -218,10 +218,7 @@ public class WorkManager {
         int startHour = calendarStart.get(Calendar.HOUR_OF_DAY);
         int endHour = calendarEnd.get(Calendar.HOUR_OF_DAY);
 
-        if(startHour<6 || startHour>20 || endHour<6 || endHour>20){
-            return false;
-        }
-        return true;
+        return startHour >= 6 && startHour <= 20 && endHour >= 6 && endHour <= 20;
     }
 
 }
