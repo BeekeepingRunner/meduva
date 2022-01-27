@@ -10,7 +10,6 @@ import com.szusta.meduva.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
-import java.util.Set;
 
 @org.springframework.stereotype.Service
 public class WorkerService {
