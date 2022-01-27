@@ -36,18 +36,7 @@ public class WorkerService {
     }
 
     public Service[] getWorkerServices(User worker) {
-
-        Set<Service> serviceSet = worker.getServices();
-        return asArray(serviceSet);
-    }
-
-    private Service[] asArray(Set<Service> services) {
-        Service[] serviceArr = new Service[services.size()];
-        int ItemInTableCounter = 0;
-        for (Service s : services) {
-            serviceArr[ItemInTableCounter++] = s;
-        }
-        return serviceArr;
+        return worker.getServices().toArray(new Service[0]);
     }
 
     public List<User> findWorkerClients(Long workerId) {
