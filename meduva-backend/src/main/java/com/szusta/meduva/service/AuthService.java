@@ -123,7 +123,7 @@ public class AuthService {
 
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
         String jwt = jwtUtils.generateJwtTokenFrom(userDetails);
-        Set<Role> roles = userService.getUser(userDetails.getId()).getRoles();
+        Set<Role> roles = userService.findById(userDetails.getId()).getRoles();
 
         RefreshToken refreshToken = getRefreshTokenFrom(userDetails);
         return new JwtResponse(

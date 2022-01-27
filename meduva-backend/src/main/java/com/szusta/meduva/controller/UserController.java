@@ -27,7 +27,7 @@ public class UserController {
 
     @GetMapping("/find/{id}")
     public User getUser(@PathVariable Long id) {
-        return userService.getUser(id);
+        return userService.findById(id);
     }
 
     @GetMapping("/all")
@@ -53,7 +53,7 @@ public class UserController {
     @PostMapping("/edit/{id}")
     public User editUser(@PathVariable Long id,
                          @Valid @RequestBody UpdatedUserRequest request) {
-        User user = userService.getUser(id);
+        User user = userService.findById(id);
 
         user.setName(request.getName());
         user.setSurname(request.getSurname());

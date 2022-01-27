@@ -53,10 +53,6 @@ public class UserService {
         return this.userRepository.findAllUndeleted();
     }
 
-    public List<User> findAllDeleted() {
-        return this.userRepository.findAllDeleted();
-    }
-
     public List<User> findAllUsersWithMinimumRole(ERole roleId) {
 
         Optional<Role> role = roleRepository.findById(roleId.getValue());
@@ -71,11 +67,6 @@ public class UserService {
     public List<User> findAllClientsWithAccount() {
         return userRepository.findAllClientsWithAccount()
                 .orElseThrow(() -> new RuntimeException("Unable to fetch clients with accounts"));
-    }
-
-    public User getUser(Long id) {
-        return userRepository.findById(id)
-                .orElseThrow(() -> new EntityRecordNotFoundException("user not found with id : " + id));
     }
 
     public Long getCurrentUserId() {
