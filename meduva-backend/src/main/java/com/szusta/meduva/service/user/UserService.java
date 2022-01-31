@@ -27,11 +27,6 @@ public class UserService {
         this.roleRepository = roleRepository;
     }
 
-    public User findByLogin(String login) {
-        return userRepository.findByLogin(login)
-                .orElseThrow(() -> new EntityRecordNotFoundException("User not found with login : " + login));
-    }
-
     public User findByEmail(String email) {
         return userRepository.findByEmail(email)
                 .orElseThrow(() -> new EntityRecordNotFoundException("User not found with email : " + email));
@@ -40,10 +35,6 @@ public class UserService {
     public User findById(long id){
         return userRepository.findById(id)
                 .orElseThrow(() -> new EntityRecordNotFoundException("User not found with id: " + id));
-    }
-
-    public Boolean existsByLogin(String login) {
-        return userRepository.existsByLogin(login);
     }
 
     public Boolean existsByEmail(String email) {
@@ -62,10 +53,6 @@ public class UserService {
         return this.userRepository.findAllUndeleted();
     }
 
-    public List<User> findAllDeleted() {
-        return this.userRepository.findAllDeleted();
-    }
-
     public List<User> findAllUsersWithMinimumRole(ERole roleId) {
 
         Optional<Role> role = roleRepository.findById(roleId.getValue());
@@ -80,11 +67,6 @@ public class UserService {
     public List<User> findAllClientsWithAccount() {
         return userRepository.findAllClientsWithAccount()
                 .orElseThrow(() -> new RuntimeException("Unable to fetch clients with accounts"));
-    }
-
-    public User getUser(Long id) {
-        return userRepository.findById(id)
-                .orElseThrow(() -> new EntityRecordNotFoundException("user not found with id : " + id));
     }
 
     public Long getCurrentUserId() {

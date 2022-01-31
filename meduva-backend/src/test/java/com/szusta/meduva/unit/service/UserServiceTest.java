@@ -8,8 +8,10 @@ import com.szusta.meduva.repository.RoleRepository;
 import com.szusta.meduva.repository.UserRepository;
 import com.szusta.meduva.service.user.UserService;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.function.Executable;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -20,8 +22,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -32,58 +34,129 @@ public class UserServiceTest {
     @Mock
     RoleRepository roleRepository;
 
-    @Autowired
     @InjectMocks
     UserService userService;
 
-    @Test
-    @DisplayName("existsByLogin test")
-    public void existsByLoginTest() {
+    @Nested
+    class findByEmailTests {
 
-        String goodLogin = "login";
-        String badLogin = "loginn";
+        @Test
+        void should_ReturnUserFromRepository() {
+            // given
+            String email = "email";
+            when(userRepository.findByEmail(anyString()))
+                    .thenReturn(Optional.of(new User()));
 
-        when(userRepository.existsByLogin(goodLogin)).thenReturn(true);
-        when(userRepository.existsByLogin(badLogin)).thenReturn(false);
+            // when
+            User user = userService.findByEmail(email);
 
-        assertEquals(true, userService.existsByLogin(goodLogin));
-        assertEquals(false, userService.existsByLogin(badLogin));
+            assertAll(
+                    () -> assertNotNull(user),
+                    () -> verify(userRepository).findByEmail(email)
+            );
+        }
 
-        verify(userRepository, times(1)).existsByLogin(goodLogin);
-        verify(userRepository, times(1)).existsByLogin(badLogin);
+        @Test
+        void should_ThrowException_When_UserNotFound() {
+            // given
+            String email = "email";
+            when(userRepository.findByEmail(anyString())).thenThrow(EntityRecordNotFoundException.class);
+
+            // when, then
+            assertThrows(EntityRecordNotFoundException.class, () -> userService.findByEmail(email));
+        }
     }
 
-    @Test
-    @DisplayName("existsByEmail test")
-    public void existsByEmailTest() {
+    @Nested
+    class findByIdTests {
 
-        String goodEmail = "email";
-        String badEmail = "liame";
+        @Test
+        void should_ReturnUserFromRepository() {
+            // given
+            long id = 1L;
+            when(userRepository.findById(anyLong()))
+                    .thenReturn(Optional.of(new User()));
 
-        when(userRepository.existsByEmail(goodEmail)).thenReturn(true);
-        when(userRepository.existsByEmail(badEmail)).thenReturn(false);
+            // when
+            User user = userService.findById(id);
 
-        assertEquals(true, userService.existsByEmail(goodEmail));
-        assertEquals(false, userService.existsByEmail(badEmail));
+            assertAll(
+                    () -> assertNotNull(user),
+                    () -> verify(userRepository).findById(id)
+            );
+        }
 
-        verify(userRepository, times(1)).existsByEmail(goodEmail);
-        verify(userRepository, times(1)).existsByEmail(badEmail);
+        @Test
+        void should_ThrowException_When_UserNotFound() {
+            // given
+            long id = 1L;
+            when(userRepository.findById(anyLong())).thenThrow(EntityRecordNotFoundException.class);
+
+            // when, then
+            assertThrows(EntityRecordNotFoundException.class, () -> userService.findById(id));
+        }
     }
 
+    @Nested
+    class existsByEmailTests {
+        @Test
+        public void should_returnValueFromRepository() {
+            // given
+            String email = "email";
+            when(userRepository.existsByEmail(anyString())).thenReturn(true);
+
+            // when
+            boolean result = userService.existsByEmail(email);
+
+            // then
+            assertAll(
+                    () -> verify(userRepository).existsByEmail(email),
+                    () -> assertTrue(result)
+            );
+        }
+    }
+
+    @Nested
+    class SaveTests {
+        @Test
+        void should_saveUserInRepository_when_correctUser() {
+            when(userRepository.save(any()))
+                    .thenReturn(new User());
+
+            User user = userService.save(new User());
+
+            assertAll(
+                    () -> assertNotNull(user),
+                    () -> verify(userRepository).save(any())
+            );
+        }
+
+        @Test
+        void should_throwException_when_incorrectUser() {
+            when(userRepository.save(any()))
+                    .thenThrow(IllegalArgumentException.class);
+
+            Executable executable = () -> userService.save(new User());
+
+            assertAll(
+                    () -> assertThrows(IllegalArgumentException.class, executable),
+                    () -> verify(userRepository).save(any())
+            );
+        }
+    }
+
+
     @Test
-    public void shouldThrowNotFoundException() {
+    void should_return_whenFindingAllUsers() {
+        when(userRepository.findAll())
+                .thenReturn(List.of(new User(), new User()));
 
-        when(userRepository.findById(1L)).thenReturn(Optional.empty());
-        when(userRepository.findByLogin("login")).thenReturn(Optional.empty());
-        when(userRepository.findByEmail("email")).thenReturn(Optional.empty());
+        User user = userService.save(new User());
 
-        assertThrows(EntityRecordNotFoundException.class, () -> userService.getUser(1L));
-        assertThrows(EntityRecordNotFoundException.class, () -> userService.findByLogin("login"));
-        assertThrows(EntityRecordNotFoundException.class, () -> userService.findByEmail("email"));
-
-        verify(userRepository, times(1)).findById(1L);
-        verify(userRepository, times(1)).findByLogin("login");
-        verify(userRepository, times(1)).findByEmail("email");
+        assertAll(
+                () -> assertNotNull(user),
+                () -> verify(userRepository).save(any())
+        );
     }
 
     @Test

@@ -2,11 +2,13 @@ package com.szusta.meduva.service;
 
 import com.szusta.meduva.exception.AlreadyExistsException;
 import com.szusta.meduva.exception.BadRequestRoleException;
+import com.szusta.meduva.exception.EntityRecordNotFoundException;
 import com.szusta.meduva.model.RefreshToken;
 import com.szusta.meduva.model.User;
 import com.szusta.meduva.model.role.Role;
 import com.szusta.meduva.payload.request.SignupRequest;
 import com.szusta.meduva.payload.response.JwtResponse;
+import com.szusta.meduva.repository.UserRepository;
 import com.szusta.meduva.security.jwt.JwtUtils;
 import com.szusta.meduva.service.user.UserDetailsImpl;
 import com.szusta.meduva.service.user.UserService;
@@ -25,6 +27,8 @@ import java.util.Set;
 public class AuthService {
 
     private UserService userService;
+    private UserRepository userRepository;
+
     private RoleService roleService;
     private PasswordEncoder passwordEncoder;
 
@@ -34,12 +38,14 @@ public class AuthService {
 
     @Autowired
     public AuthService(UserService userService,
+                       UserRepository userRepository,
                        RoleService roleService,
                        PasswordEncoder passwordEncoder,
                        AuthenticationManager authenticationManager,
                        JwtUtils jwtUtils,
                        RefreshTokenService refreshTokenService) {
         this.userService = userService;
+        this.userRepository = userRepository;
         this.roleService = roleService;
         this.passwordEncoder = passwordEncoder;
         this.authenticationManager = authenticationManager;
@@ -49,10 +55,10 @@ public class AuthService {
 
     public void checkForExistingCredentials(String login, String email) {
 
-        if (userService.existsByLogin(login)) {
+        if (userRepository.existsByLogin(login)) {
             throw new AlreadyExistsException("That login is already taken : " + login);
         }
-        if (userService.existsByEmail(email)) {
+        if (userRepository.existsByEmail(email)) {
             throw new AlreadyExistsException("Email is already in use : " + email);
         }
     }
@@ -117,7 +123,7 @@ public class AuthService {
 
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
         String jwt = jwtUtils.generateJwtTokenFrom(userDetails);
-        Set<Role> roles = userService.getUser(userDetails.getId()).getRoles();
+        Set<Role> roles = userService.findById(userDetails.getId()).getRoles();
 
         RefreshToken refreshToken = getRefreshTokenFrom(userDetails);
         return new JwtResponse(
@@ -148,12 +154,8 @@ public class AuthService {
     }
 
     public boolean checkIfUserIsNotDeleted(String login){
-        User tempUser = userService.findByLogin(login);
-        if(tempUser.isDeleted()){
-            return false;
-        }else{
-            return true;
-        }
-
+        User tempUser = userRepository.findByLogin(login)
+                .orElseThrow(() -> new EntityRecordNotFoundException("User not found with login : " + login));
+        return !tempUser.isDeleted();
     }
 }
