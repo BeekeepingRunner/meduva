@@ -57,10 +57,18 @@ public class UserService {
 
         Optional<Role> role = roleRepository.findById(roleId.getValue());
         if (role.isPresent()) {
-            return userRepository.findDistinctByRolesIn(Collections.singleton(role.get()))
-                    .orElseThrow(() -> new EntityRecordNotFoundException("Unable to find users with role" + role.get().getName()));
+            return getUsersFromRepository(role.get());
         } else {
             throw new EntityRecordNotFoundException("Role not found with id : " + roleId);
+        }
+    }
+
+    private List<User> getUsersFromRepository(Role role) {
+        List<User> users = userRepository.findDistinctByRolesIn(Collections.singleton(role));
+        if (!users.isEmpty()) {
+            return users;
+        } else {
+            throw new EntityRecordNotFoundException("No users with role : " + role.getName());
         }
     }
 
