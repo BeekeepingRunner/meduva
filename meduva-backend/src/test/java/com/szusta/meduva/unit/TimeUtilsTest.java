@@ -1,54 +1,48 @@
 package com.szusta.meduva.unit;
 
 import com.szusta.meduva.util.TimeUtils;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvFileSource;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TimeUtilsTest {
 
-    Calendar initialSampleDate;
-    Calendar testDate;
+    static DateFormat dateFormat;
 
-    /**
-     * Sets helper calendar on 2021.01.01 10:15:00:00
-     */
-    @BeforeEach
-    public void setCalendar() {
-        initialSampleDate = Calendar.getInstance();
-        initialSampleDate.set(2021, Calendar.JANUARY, 1);
-        initialSampleDate.set(Calendar.HOUR_OF_DAY, 10);
-        initialSampleDate.set(Calendar.MINUTE, 15);
-        initialSampleDate.set(Calendar.SECOND, 0);
-        initialSampleDate.set(Calendar.MILLISECOND, 0);
-
-        testDate = Calendar.getInstance();
+    @BeforeAll
+    static void setUp() throws ParseException {
+        dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
     }
 
     @Nested
     class getDayStartTests {
-        @Test
+
+        @ParameterizedTest
+        @CsvFileSource(resources = "/test-dates/test_dates.csv")
         @DisplayName("should return the same day as the input, with time equal to 00:00:00")
-        public void should_returnSameDayAtMidnight() {
+        public void should_returnSameDayWithCorrectTime(String dateStr) throws ParseException {
             // given
-            testDate.setTime(initialSampleDate.getTime());
+            Calendar initialDate = Calendar.getInstance();
+            initialDate.setTime(dateFormat.parse(dateStr));
 
             // when
-            testDate = TimeUtils.getDayStart(testDate.getTime());
+            Calendar actualDayStart = TimeUtils.getDayStart(initialDate.getTime());
 
             // then
             assertAll(() -> {
-                assertEquals(initialSampleDate.get(Calendar.YEAR), testDate.get(Calendar.YEAR));
-                assertEquals(initialSampleDate.get(Calendar.MONTH), testDate.get(Calendar.MONTH));
-                assertEquals(initialSampleDate.get(Calendar.DAY_OF_MONTH), testDate.get(Calendar.DAY_OF_MONTH));
-                assertEquals(0, testDate.get(Calendar.HOUR_OF_DAY));
-                assertEquals(0, testDate.get(Calendar.MINUTE));
-                assertEquals(0, testDate.get(Calendar.SECOND));
+                assertEquals(initialDate.get(Calendar.YEAR), actualDayStart.get(Calendar.YEAR));
+                assertEquals(initialDate.get(Calendar.MONTH), actualDayStart.get(Calendar.MONTH));
+                assertEquals(initialDate.get(Calendar.DAY_OF_MONTH), actualDayStart.get(Calendar.DAY_OF_MONTH));
+                assertEquals(0, actualDayStart.get(Calendar.HOUR_OF_DAY));
+                assertEquals(0, actualDayStart.get(Calendar.MINUTE));
+                assertEquals(0, actualDayStart.get(Calendar.SECOND));
             });
         }
     }
@@ -56,54 +50,60 @@ public class TimeUtilsTest {
 
     @Nested
     class getDayEndTests {
-        @Test
+
+        @ParameterizedTest
+        @CsvFileSource(resources = "/test-dates/test_dates.csv")
         @DisplayName("should return same day with time equal to 23:59:59")
-        public void should_return_same_day_end() {
+        public void should_return_same_day_end(String dateStr) throws ParseException {
             // given
-            testDate.setTime(initialSampleDate.getTime());
+            Calendar initialDate = Calendar.getInstance();
+            initialDate.setTime(dateFormat.parse(dateStr));
 
             // when
-            testDate = TimeUtils.getDayEnd(testDate.getTime());
+            Calendar dayEnd = TimeUtils.getDayEnd(initialDate.getTime());
 
             // then
             assertAll(() -> {
-                assertEquals(initialSampleDate.get(Calendar.YEAR), testDate.get(Calendar.YEAR));
-                assertEquals(initialSampleDate.get(Calendar.MONTH), testDate.get(Calendar.MONTH));
-                assertEquals(initialSampleDate.get(Calendar.DAY_OF_MONTH), testDate.get(Calendar.DAY_OF_MONTH));
-                assertEquals(23, testDate.get(Calendar.HOUR_OF_DAY));
-                assertEquals(59, testDate.get(Calendar.MINUTE));
-                assertEquals(59, testDate.get(Calendar.SECOND));
+                assertEquals(initialDate.get(Calendar.YEAR), dayEnd.get(Calendar.YEAR));
+                assertEquals(initialDate.get(Calendar.MONTH), dayEnd.get(Calendar.MONTH));
+                assertEquals(initialDate.get(Calendar.DAY_OF_MONTH), dayEnd.get(Calendar.DAY_OF_MONTH));
+                assertEquals(23, dayEnd.get(Calendar.HOUR_OF_DAY));
+                assertEquals(59, dayEnd.get(Calendar.MINUTE));
+                assertEquals(59, dayEnd.get(Calendar.SECOND));
             });
         }
     }
 
     @Nested
     class getNextDayStartTests {
-        @Test
+
+        @ParameterizedTest
+        @CsvFileSource(resources = "/test-dates/test_dates.csv")
         @DisplayName("should return the next day with time equal to 00:00:00")
-        public void should_return_next_day_start() {
+        public void should_return_next_day_start(String dateStr) throws ParseException {
 
             // given
-            testDate.setTime(initialSampleDate.getTime());
+            Calendar initialDate = Calendar.getInstance();
+            initialDate.setTime(dateFormat.parse(dateStr));
 
             // when
-            testDate = TimeUtils.getNextDayStart(testDate.getTime());
+            Calendar nextDayStart = TimeUtils.getNextDayStart(initialDate.getTime());
 
             // then
-            Calendar nextDay = getNextDay(initialSampleDate);
+            Calendar expectedTime = getNextDay(initialDate);
             assertAll(() -> {
-                assertEquals(nextDay.get(Calendar.YEAR), testDate.get(Calendar.YEAR));
-                assertEquals(nextDay.get(Calendar.MONTH), testDate.get(Calendar.MONTH));
-                assertEquals(nextDay.get(Calendar.DAY_OF_MONTH), testDate.get(Calendar.DAY_OF_MONTH));
-                assertEquals(0, testDate.get(Calendar.HOUR_OF_DAY));
-                assertEquals(0, testDate.get(Calendar.MINUTE));
-                assertEquals(0, testDate.get(Calendar.SECOND));
+                assertEquals(expectedTime.get(Calendar.YEAR), nextDayStart.get(Calendar.YEAR));
+                assertEquals(expectedTime.get(Calendar.MONTH), nextDayStart.get(Calendar.MONTH));
+                assertEquals(expectedTime.get(Calendar.DAY_OF_MONTH), nextDayStart.get(Calendar.DAY_OF_MONTH));
+                assertEquals(0, nextDayStart.get(Calendar.HOUR_OF_DAY));
+                assertEquals(0, nextDayStart.get(Calendar.MINUTE));
+                assertEquals(0, nextDayStart.get(Calendar.SECOND));
             });
         }
 
-        private Calendar getNextDay(Calendar calendar) {
+        private Calendar getNextDay(Calendar baseDate) {
             Calendar nextDay = Calendar.getInstance();
-            nextDay.setTime(initialSampleDate.getTime());
+            nextDay.setTime(baseDate.getTime());
             nextDay.add(Calendar.DAY_OF_MONTH, 1);
             return nextDay;
         }
@@ -111,30 +111,34 @@ public class TimeUtilsTest {
 
     @Nested
     class getNextMonthStartTests {
-        @Test
+
+        @ParameterizedTest
+        @CsvFileSource(resources = "/test-dates/test_dates.csv")
         @DisplayName("should return the first day of the next month with time equal to 00:00:00")
-        public void should_return_next_months_first_day_start() {
+        public void should_return_next_months_first_day_start(String dateStr) throws ParseException {
+
             // given
-            testDate.setTime(initialSampleDate.getTime());
+            Calendar initialDate = Calendar.getInstance();
+            initialDate.setTime(dateFormat.parse(dateStr));
 
             // when
-            testDate = TimeUtils.getNextMonthStart(testDate.getTime());
+            Calendar actualNextMonthStart = TimeUtils.getNextMonthStart(initialDate.getTime());
 
             // then
-            Calendar firstDayOfNextMonth = getFirstDayOfTheMonth(initialSampleDate);
+            Calendar expectedTime = getFirstDayOfTheMonth(initialDate);
             assertAll(() -> {
-                assertEquals(firstDayOfNextMonth.get(Calendar.YEAR), testDate.get(Calendar.YEAR));
-                assertEquals(firstDayOfNextMonth.get(Calendar.MONTH), testDate.get(Calendar.MONTH));
-                assertEquals(firstDayOfNextMonth.get(Calendar.DAY_OF_MONTH), testDate.get(Calendar.DAY_OF_MONTH));
-                assertEquals(0, testDate.get(Calendar.HOUR_OF_DAY));
-                assertEquals(0, testDate.get(Calendar.MINUTE));
-                assertEquals(0, testDate.get(Calendar.SECOND));
+                assertEquals(expectedTime.get(Calendar.YEAR), actualNextMonthStart.get(Calendar.YEAR));
+                assertEquals(expectedTime.get(Calendar.MONTH), actualNextMonthStart.get(Calendar.MONTH));
+                assertEquals(expectedTime.get(Calendar.DAY_OF_MONTH), actualNextMonthStart.get(Calendar.DAY_OF_MONTH));
+                assertEquals(0, actualNextMonthStart.get(Calendar.HOUR_OF_DAY));
+                assertEquals(0, actualNextMonthStart.get(Calendar.MINUTE));
+                assertEquals(0, actualNextMonthStart.get(Calendar.SECOND));
             });
         }
 
-        private Calendar getFirstDayOfTheMonth(Calendar calendar) {
+        private Calendar getFirstDayOfTheMonth(Calendar baseDate) {
             Calendar firstDayOfTheMonth = Calendar.getInstance();
-            firstDayOfTheMonth.setTime(initialSampleDate.getTime());
+            firstDayOfTheMonth.setTime(baseDate.getTime());
             firstDayOfTheMonth.add(Calendar.MONTH, 1);
             firstDayOfTheMonth.set(Calendar.DAY_OF_MONTH, 1);
             return firstDayOfTheMonth;
@@ -143,32 +147,35 @@ public class TimeUtilsTest {
 
     @Nested
     class getMonthEndTests {
-        @Test
+
+        @ParameterizedTest
+        @CsvFileSource(resources = "/test-dates/test_dates.csv")
         @DisplayName("should return the last day of the same month with time equal to 23:59:59")
-        public void should_return_same_months_last_day_end() {
+        public void should_return_same_months_last_day_end(String dateStr) throws ParseException {
 
             // given
-            testDate.setTime(initialSampleDate.getTime());
+            Calendar initialDate = Calendar.getInstance();
+            initialDate.setTime(dateFormat.parse(dateStr));
 
             // when
-            testDate = TimeUtils.getMonthEnd(testDate.getTime());
+            Calendar actualMonthEnd = TimeUtils.getMonthEnd(initialDate.getTime());
 
             // then
-            Calendar lastDayOfMonth = getLastDayOfMonth(initialSampleDate);
+            Calendar expectedTime = getLastDayOfMonth(initialDate);
             assertAll(() -> {
-                assertEquals(lastDayOfMonth.get(Calendar.YEAR), testDate.get(Calendar.YEAR));
-                assertEquals(lastDayOfMonth.get(Calendar.MONTH), testDate.get(Calendar.MONTH));
-                assertEquals(lastDayOfMonth.get(Calendar.DAY_OF_MONTH), testDate.get(Calendar.DAY_OF_MONTH));
-                assertEquals(23, testDate.get(Calendar.HOUR_OF_DAY));
-                assertEquals(59, testDate.get(Calendar.MINUTE));
-                assertEquals(59, testDate.get(Calendar.SECOND));
+                assertEquals(expectedTime.get(Calendar.YEAR), actualMonthEnd.get(Calendar.YEAR));
+                assertEquals(expectedTime.get(Calendar.MONTH), actualMonthEnd.get(Calendar.MONTH));
+                assertEquals(expectedTime.get(Calendar.DAY_OF_MONTH), actualMonthEnd.get(Calendar.DAY_OF_MONTH));
+                assertEquals(23, actualMonthEnd.get(Calendar.HOUR_OF_DAY));
+                assertEquals(59, actualMonthEnd.get(Calendar.MINUTE));
+                assertEquals(59, actualMonthEnd.get(Calendar.SECOND));
             });
         }
 
-        private Calendar getLastDayOfMonth(Calendar calendar) {
+        private Calendar getLastDayOfMonth(Calendar baseDate) {
             Calendar lastDayOfMonth = Calendar.getInstance();
-            lastDayOfMonth.setTime(initialSampleDate.getTime());
-            lastDayOfMonth.set(Calendar.DAY_OF_MONTH, initialSampleDate.getActualMaximum(Calendar.DAY_OF_MONTH));
+            lastDayOfMonth.setTime(baseDate.getTime());
+            lastDayOfMonth.set(Calendar.DAY_OF_MONTH, baseDate.getActualMaximum(Calendar.DAY_OF_MONTH));
             return lastDayOfMonth;
         }
     }
@@ -176,20 +183,23 @@ public class TimeUtilsTest {
     @Nested
     class hasNDaysElapsedTests {
 
-        @Test
+        @ParameterizedTest
+        @CsvFileSource(resources = "/test-dates/test_dates_with_days_elapsed.csv")
         @DisplayName("Should return true only if the actual number of elapsed days is equal or greater from the specified")
-        public void should_ReturnTrue_when_atLeast_nDaysElapsed() {
+        public void should_ReturnTrue_when_atLeast_nDaysElapsed(String dateStr, String nDays) throws ParseException {
             // given
-            Calendar fewDaysLater = Calendar.getInstance();
-            fewDaysLater.setTime(initialSampleDate.getTime());
+            Calendar initialDate = Calendar.getInstance();
+            initialDate.setTime(dateFormat.parse(dateStr));
 
-            int numOfDaysElapsed = 5;
+            int numOfDaysElapsed = Integer.parseInt(nDays);
+            Calendar fewDaysLater = Calendar.getInstance();
+            fewDaysLater.setTime(initialDate.getTime());
             fewDaysLater.add(Calendar.DAY_OF_MONTH, numOfDaysElapsed);
 
             // when
-            boolean hasNDaysElapsed = TimeUtils.hasNDaysElapsed(initialSampleDate, fewDaysLater, numOfDaysElapsed);
-            boolean hasLessThanNDaysElapsed = TimeUtils.hasNDaysElapsed(initialSampleDate, fewDaysLater, numOfDaysElapsed - 1);
-            boolean hasMoreThanNDaysElapsed = TimeUtils.hasNDaysElapsed(initialSampleDate, fewDaysLater, numOfDaysElapsed + 1);
+            boolean hasNDaysElapsed = TimeUtils.hasNDaysElapsed(initialDate, fewDaysLater, numOfDaysElapsed);
+            boolean hasLessThanNDaysElapsed = TimeUtils.hasNDaysElapsed(initialDate, fewDaysLater, numOfDaysElapsed - 1);
+            boolean hasMoreThanNDaysElapsed = TimeUtils.hasNDaysElapsed(initialDate, fewDaysLater, numOfDaysElapsed + 1);
 
             // then
             assertTrue(hasNDaysElapsed);
@@ -197,60 +207,37 @@ public class TimeUtilsTest {
             assertFalse(hasMoreThanNDaysElapsed);
         }
 
-        @Test
-        @DisplayName("Should work with precision of one second")
-        public void should_work_with_precision_of_one_second() {
+        @ParameterizedTest
+        @CsvFileSource(resources = "/test-dates/test_dates_with_days_elapsed.csv")
+        @DisplayName("Should work with precision of one millisecond")
+        public void should_work_with_precision_of_one_millisecond(String dateStr, String nDays) throws ParseException {
 
             // given
-            int numOfDaysElapsed = 5;
+            Calendar initialDate = Calendar.getInstance();
+            initialDate.setTime(dateFormat.parse(dateStr));
 
-            Calendar fewDaysAndSecondLater = Calendar.getInstance();
-            fewDaysAndSecondLater.setTime(initialSampleDate.getTime());
-            fewDaysAndSecondLater.add(Calendar.DAY_OF_MONTH, numOfDaysElapsed);
-            fewDaysAndSecondLater.add(Calendar.SECOND, 1);
+            int numOfDaysElapsed = Integer.parseInt(nDays);
 
-            Calendar secondBeforeNDaysElapsed = Calendar.getInstance();
-            secondBeforeNDaysElapsed.setTime(initialSampleDate.getTime());
-            secondBeforeNDaysElapsed.add(Calendar.DAY_OF_MONTH, numOfDaysElapsed);
-            secondBeforeNDaysElapsed.add(Calendar.SECOND, -1);
+            Calendar fewDaysLaterPlusOneMs = Calendar.getInstance();
+            fewDaysLaterPlusOneMs.setTime(initialDate.getTime());
+            fewDaysLaterPlusOneMs.add(Calendar.DAY_OF_MONTH, numOfDaysElapsed);
+            fewDaysLaterPlusOneMs.add(Calendar.MILLISECOND, 1);
 
-            // when
-            boolean hasNDaysElapsedSecondAfter = TimeUtils.hasNDaysElapsed(initialSampleDate, fewDaysAndSecondLater, numOfDaysElapsed);
-            boolean hasNDaysElapsedSecondBefore = TimeUtils.hasNDaysElapsed(initialSampleDate, secondBeforeNDaysElapsed, numOfDaysElapsed);
-
-            // then
-            assertTrue(hasNDaysElapsedSecondAfter);
-            assertFalse(hasNDaysElapsedSecondBefore);
-        }
-
-        @Test
-        @DisplayName("Should work on dates with different months")
-        public void should_returnTrue_when_datesHaveDifferentMonths() {
-            // given
-            testDate.setTime(initialSampleDate.getTime());
-            int daysElapsed = 45;
-            testDate.add(Calendar.DAY_OF_MONTH, daysElapsed);
+            Calendar fewDaysLaterMinusOneMs = Calendar.getInstance();
+            fewDaysLaterMinusOneMs.setTime(initialDate.getTime());
+            fewDaysLaterMinusOneMs.add(Calendar.DAY_OF_MONTH, numOfDaysElapsed);
+            fewDaysLaterMinusOneMs.add(Calendar.MILLISECOND, -1);
 
             // when
-            boolean hasNDaysElapsed = TimeUtils.hasNDaysElapsed(initialSampleDate, testDate, daysElapsed);
+            boolean hasNDaysElapsedMillisecondAfter = TimeUtils
+                    .hasNDaysElapsed(initialDate, fewDaysLaterPlusOneMs, numOfDaysElapsed);
+
+            boolean hasNDaysElapsedMillisecondBefore = TimeUtils
+                    .hasNDaysElapsed(initialDate, fewDaysLaterMinusOneMs, numOfDaysElapsed);
 
             // then
-            assertTrue(hasNDaysElapsed);
-        }
-
-        @Test
-        @DisplayName("Should work on dates with different years")
-        public void should_ReturnTrue_when_DatesHaveDifferentYears() {
-            // given
-            testDate.setTime(initialSampleDate.getTime());
-            int daysElapsed = 500;
-            testDate.add(Calendar.DAY_OF_MONTH, daysElapsed);
-
-            // when
-            boolean hasNDaysElapsed = TimeUtils.hasNDaysElapsed(initialSampleDate, testDate, daysElapsed);
-
-            // then
-            assertTrue(hasNDaysElapsed);
+            assertTrue(hasNDaysElapsedMillisecondAfter);
+            assertFalse(hasNDaysElapsedMillisecondBefore);
         }
     }
 }
