@@ -60,6 +60,7 @@ class UserRepositoryTest {
         assertEquals(1, clients.get().size());
         assertEquals(userClient.getName(), clients.get().get(0).getName());
     }
+
     @Test
     void shouldFindUsersWithMinimumRoles() {
         // given
@@ -88,15 +89,15 @@ class UserRepositoryTest {
         userWorker = userRepositoryUnderTest.save(userWorker);
 
         // when
-        Optional<List<User>> users =
+        List<User> users =
                 userRepositoryUnderTest.findDistinctByRolesIn(Set.of(
                         roleRepository.getById(ERole.ROLE_CLIENT.getValue()),
                         roleRepository.getById(ERole.ROLE_WORKER.getValue())));
 
         // then
-        assertTrue(users.isPresent());
-        assertEquals(2, users.get().size());
-        assertEquals(userClient.getName(), users.get().get(0).getName());
+        assertFalse(users.isEmpty());
+        assertEquals(2, users.size());
+        assertEquals(userClient.getName(), users.get(0).getName());
     }
 
 }

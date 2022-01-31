@@ -15,7 +15,6 @@ import org.junit.jupiter.api.function.Executable;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -30,9 +29,9 @@ import static org.mockito.Mockito.*;
 public class UserServiceTest {
 
     @Mock
-    UserRepository userRepository;
+    UserRepository userRepositoryMock;
     @Mock
-    RoleRepository roleRepository;
+    RoleRepository roleRepositoryMock;
 
     @InjectMocks
     UserService userService;
@@ -44,7 +43,7 @@ public class UserServiceTest {
         void should_ReturnUserFromRepository() {
             // given
             String email = "email";
-            when(userRepository.findByEmail(anyString()))
+            when(userRepositoryMock.findByEmail(anyString()))
                     .thenReturn(Optional.of(new User()));
 
             // when
@@ -52,7 +51,7 @@ public class UserServiceTest {
 
             assertAll(
                     () -> assertNotNull(user),
-                    () -> verify(userRepository).findByEmail(email)
+                    () -> verify(userRepositoryMock).findByEmail(email)
             );
         }
 
@@ -60,7 +59,7 @@ public class UserServiceTest {
         void should_ThrowException_When_UserNotFound() {
             // given
             String email = "email";
-            when(userRepository.findByEmail(anyString())).thenThrow(EntityRecordNotFoundException.class);
+            when(userRepositoryMock.findByEmail(anyString())).thenThrow(EntityRecordNotFoundException.class);
 
             // when, then
             assertThrows(EntityRecordNotFoundException.class, () -> userService.findByEmail(email));
@@ -74,7 +73,7 @@ public class UserServiceTest {
         void should_ReturnUserFromRepository() {
             // given
             long id = 1L;
-            when(userRepository.findById(anyLong()))
+            when(userRepositoryMock.findById(anyLong()))
                     .thenReturn(Optional.of(new User()));
 
             // when
@@ -82,7 +81,7 @@ public class UserServiceTest {
 
             assertAll(
                     () -> assertNotNull(user),
-                    () -> verify(userRepository).findById(id)
+                    () -> verify(userRepositoryMock).findById(id)
             );
         }
 
@@ -90,7 +89,7 @@ public class UserServiceTest {
         void should_ThrowException_When_UserNotFound() {
             // given
             long id = 1L;
-            when(userRepository.findById(anyLong())).thenThrow(EntityRecordNotFoundException.class);
+            when(userRepositoryMock.findById(anyLong())).thenThrow(EntityRecordNotFoundException.class);
 
             // when, then
             assertThrows(EntityRecordNotFoundException.class, () -> userService.findById(id));
@@ -103,14 +102,14 @@ public class UserServiceTest {
         public void should_returnValueFromRepository() {
             // given
             String email = "email";
-            when(userRepository.existsByEmail(anyString())).thenReturn(true);
+            when(userRepositoryMock.existsByEmail(anyString())).thenReturn(true);
 
             // when
             boolean result = userService.existsByEmail(email);
 
             // then
             assertAll(
-                    () -> verify(userRepository).existsByEmail(email),
+                    () -> verify(userRepositoryMock).existsByEmail(email),
                     () -> assertTrue(result)
             );
         }
@@ -120,105 +119,179 @@ public class UserServiceTest {
     class SaveTests {
         @Test
         void should_saveUserInRepository_when_correctUser() {
-            when(userRepository.save(any()))
+            when(userRepositoryMock.save(any()))
                     .thenReturn(new User());
 
             User user = userService.save(new User());
 
             assertAll(
                     () -> assertNotNull(user),
-                    () -> verify(userRepository).save(any())
+                    () -> verify(userRepositoryMock).save(any())
             );
         }
 
         @Test
-        void should_throwException_when_incorrectUser() {
-            when(userRepository.save(any()))
+        void should_throwException_when_nullUser() {
+            User user = null;
+            when(userRepositoryMock.save(user))
                     .thenThrow(IllegalArgumentException.class);
 
-            Executable executable = () -> userService.save(new User());
+            Executable executable = () -> userService.save(user);
 
             assertAll(
                     () -> assertThrows(IllegalArgumentException.class, executable),
-                    () -> verify(userRepository).save(any())
+                    () -> verify(userRepositoryMock).save(user)
             );
         }
     }
 
+    @Nested
+    class FindAllTests {
+        @Test
+        void should_returnUserListUsingRepo() {
+            when(userRepositoryMock.findAll())
+                    .thenReturn(List.of(new User(), new User()));
 
-    @Test
-    void should_return_whenFindingAllUsers() {
-        when(userRepository.findAll())
-                .thenReturn(List.of(new User(), new User()));
+            List<User> users = userService.findAll();
 
-        User user = userService.save(new User());
+            assertAll(
+                    () -> assertEquals(2, users.size()),
+                    () -> verify(userRepositoryMock).findAll()
+            );
+        }
 
-        assertAll(
-                () -> assertNotNull(user),
-                () -> verify(userRepository).save(any())
-        );
+        @Test
+        void should_returnEmptyList_when_noUserExist() {
+            // given that userRepositoryMock returns empty list by default
+
+            // when
+            List<User> users = userService.findAll();
+
+            // then
+            assertAll(
+                    () -> assertEquals(0, users.size()),
+                    () -> verify(userRepositoryMock).findAll()
+            );
+        }
     }
 
-    @Test
-    public void findAllUsersWithMinimumRole() {
-        //given
-        User worker = new User();
-        List<User> users = new ArrayList<>();
-        users.add(worker);
+    @Nested
+    class FindAllUndeletedTests {
+        @Test
+        void should_returnUserListUsingRepo() {
+            when(userRepositoryMock.findAllUndeleted())
+                    .thenReturn(List.of(new User(), new User()));
 
-        Role clientRole = new Role(ERole.ROLE_CLIENT.getValue(), "ROLE_CLIENT");
-        Role workerRole = new Role(ERole.ROLE_WORKER.getValue(), "ROLE_WORKER");
+            List<User> users = userService.findAllUndeleted();
 
-        when(roleRepository.findById(ERole.ROLE_WORKER.getValue()))
-                .thenReturn(Optional.of(workerRole));
-        when(userRepository.findDistinctByRolesIn(Collections.singleton(workerRole)))
-                .thenReturn(Optional.of(users));
+            assertAll(
+                    () -> assertEquals(2, users.size()),
+                    () -> verify(userRepositoryMock).findAllUndeleted()
+            );
+        }
 
-        when(roleRepository.findById(ERole.ROLE_CLIENT.getValue()))
-                .thenReturn(Optional.of(clientRole));
-        when(userRepository.findDistinctByRolesIn(Collections.singleton(clientRole)))
-                .thenThrow(EntityRecordNotFoundException.class);
+        @Test
+        void should_returnEmptyList_when_noUserExist() {
+            // given that userRepositoryMock returns empty list by default
 
-        // good scenario
-        List<User> outUsers = userService.findAllUsersWithMinimumRole(ERole.ROLE_WORKER);
-        assertEquals(1, outUsers.size());
+            // when
+            List<User> users = userService.findAllUndeleted();
 
-        // bad scenario
-        assertThrows(EntityRecordNotFoundException.class,
-                () -> userService.findAllUsersWithMinimumRole(ERole.ROLE_CLIENT));
-
-        verify(roleRepository, times(1))
-                .findById(ERole.ROLE_WORKER.getValue());
-        verify(roleRepository, times(1))
-                .findById(ERole.ROLE_CLIENT.getValue());
-        verify(userRepository, times(1))
-                .findDistinctByRolesIn(Collections.singleton(clientRole));
-        verify(userRepository, times(1))
-                .findDistinctByRolesIn(Collections.singleton(workerRole));
+            // then
+            assertAll(
+                    () -> assertEquals(0, users.size()),
+                    () -> verify(userRepositoryMock).findAllUndeleted()
+            );
+        }
     }
+
+    @Nested
+    class FindAllUsersWithMinimumRoleTests {
+
+        @Test
+        public void should_returnUsersUsingDependencies_when_correctRole() {
+            // given
+            ERole roleId = ERole.ROLE_CLIENT;
+            List<User> users = List.of(new User(), new User());
+            Role role = new Role(1L, "ROLE_CLIENT");
+            when(roleRepositoryMock.findById(roleId.getValue()))
+                    .thenReturn(Optional.of(role));
+            when(userRepositoryMock.findDistinctByRolesIn(Collections.singleton(role)))
+                    .thenReturn(users);
+
+            // when
+            List<User> got = userService.findAllUsersWithMinimumRole(roleId);
+
+            // then
+            assertAll(
+                    () -> assertEquals(2, got.size()),
+                    () -> verify(roleRepositoryMock).findById(roleId.getValue()),
+                    () -> verify(userRepositoryMock).findDistinctByRolesIn(Collections.singleton(role))
+            );
+        }
+
+        @Test
+        public void should_ThrowException_when_roleDoesntExist() {
+            // given
+            ERole roleId = ERole.ROLE_RECEPTIONIST;
+            when(roleRepositoryMock.findById(roleId.getValue()))
+                    .thenReturn(Optional.empty());
+
+            // when
+            Executable executable = () -> userService.findAllUsersWithMinimumRole(roleId);
+
+            // then
+            assertAll(
+                    () -> assertThrows(EntityRecordNotFoundException.class, executable),
+                    () -> verify(roleRepositoryMock).findById(roleId.getValue())
+            );
+        }
+
+        @Test
+        public void should_ThrowException_when_noUsersWithSpecifiedRole() {
+            // given
+            ERole roleId = ERole.ROLE_RECEPTIONIST;
+            Role receptionist = new Role(3L, "ROLE_RECEPTIONIST");
+            when(roleRepositoryMock.findById(roleId.getValue()))
+                    .thenReturn(Optional.of(receptionist));
+            when(userRepositoryMock.findDistinctByRolesIn(Collections.singleton(receptionist)))
+                    .thenReturn(new ArrayList<>());
+
+            // when
+            Executable executable = () -> userService.findAllUsersWithMinimumRole(roleId);
+
+            // then
+            assertAll(
+                    () -> assertThrows(EntityRecordNotFoundException.class, executable),
+                    () -> verify(roleRepositoryMock).findById(roleId.getValue()),
+                    () -> verify(userRepositoryMock).findDistinctByRolesIn(Collections.singleton(receptionist))
+            );
+        }
+    }
+
 
     @Test
     @DisplayName("test findAllClientsWithAccount() success")
     public void testFindAllClientsWithAccount() {
 
         User client = new User();
-        when(userRepository.findAllClientsWithAccount())
+        when(userRepositoryMock.findAllClientsWithAccount())
                 .thenReturn(Optional.of(List.of(client)));
 
         userService.findAllClientsWithAccount();
 
-        verify(userRepository, times(1)).findAllClientsWithAccount();
+        verify(userRepositoryMock, times(1)).findAllClientsWithAccount();
     }
 
     @Test
     @DisplayName("test findAllClientsWithAccount() exception")
     public void shouldThrowRuntimeException() {
 
-        when(userRepository.findAllClientsWithAccount())
+        when(userRepositoryMock.findAllClientsWithAccount())
                 .thenThrow(RuntimeException.class);
 
         assertThrows(RuntimeException.class, () -> userService.findAllClientsWithAccount());
 
-        verify(userRepository, times(1)).findAllClientsWithAccount();
+        verify(userRepositoryMock, times(1)).findAllClientsWithAccount();
     }
 }
