@@ -269,29 +269,38 @@ public class UserServiceTest {
         }
     }
 
+    @Nested
+    class FindAllClientsWithAccountTests {
 
-    @Test
-    @DisplayName("test findAllClientsWithAccount() success")
-    public void testFindAllClientsWithAccount() {
+        @Test
+        public void should_returnUserList_when_registeredClientsInRepo() {
 
-        User client = new User();
-        when(userRepositoryMock.findAllClientsWithAccount())
-                .thenReturn(Optional.of(List.of(client)));
+            // given
+            when(userRepositoryMock.findAllClientsWithAccount())
+                    .thenReturn(Optional.of(List.of(new User(), new User())));
 
-        userService.findAllClientsWithAccount();
+            // when
+            List<User> registeredClients = userService.findAllClientsWithAccount();
 
-        verify(userRepositoryMock, times(1)).findAllClientsWithAccount();
-    }
+            // then
+            assertAll(
+                    () -> assertEquals(2, registeredClients.size()),
+                    () -> verify(userRepositoryMock).findAllClientsWithAccount()
+            );
+        }
 
-    @Test
-    @DisplayName("test findAllClientsWithAccount() exception")
-    public void shouldThrowRuntimeException() {
+        @Test
+        public void should_throwException_when_registeredClientsAreNotInRepo() {
 
-        when(userRepositoryMock.findAllClientsWithAccount())
-                .thenThrow(RuntimeException.class);
+            // given
+            when(userRepositoryMock.findAllClientsWithAccount())
+                    .thenThrow(EntityRecordNotFoundException.class);
 
-        assertThrows(RuntimeException.class, () -> userService.findAllClientsWithAccount());
+            // when
+            Executable executable = () -> userService.findAllClientsWithAccount();
 
-        verify(userRepositoryMock, times(1)).findAllClientsWithAccount();
+            // then
+            assertThrows(EntityRecordNotFoundException.class, executable);
+        }
     }
 }
