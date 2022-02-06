@@ -6,6 +6,7 @@ import com.szusta.meduva.model.role.Role;
 import com.szusta.meduva.model.User;
 import com.szusta.meduva.repository.RoleRepository;
 import com.szusta.meduva.repository.UserRepository;
+import com.szusta.meduva.service.user.UserDetailsImpl;
 import com.szusta.meduva.service.user.UserService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -15,6 +16,10 @@ import org.junit.jupiter.api.function.Executable;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.boot.autoconfigure.neo4j.Neo4jProperties;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -301,6 +306,16 @@ public class UserServiceTest {
 
             // then
             assertThrows(EntityRecordNotFoundException.class, executable);
+        }
+    }
+
+    @Nested
+    class GetCurrentUserIdTests {
+
+        // TODO: how to unit test Spring security context???
+        @Test
+        void should_returnCurrentUserId_When_userIsInTheContext() {
+
         }
     }
 }

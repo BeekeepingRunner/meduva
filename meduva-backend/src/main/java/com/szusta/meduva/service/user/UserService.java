@@ -7,6 +7,9 @@ import com.szusta.meduva.model.role.Role;
 import com.szusta.meduva.repository.RoleRepository;
 import com.szusta.meduva.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -77,26 +80,37 @@ public class UserService {
                 .orElseThrow(() -> new RuntimeException("Unable to fetch clients with accounts"));
     }
 
-    public Long getCurrentUserId() {
-        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        User user = userRepository.findByLogin(userDetails.getUsername())
-                .orElseThrow(() -> {
-                    String errorMsg = "Authenticated user couldn't be found in the database (login : " + userDetails.getUsername() + ")";
-                    return new EntityRecordNotFoundException(errorMsg);
-                });
-        return user.getId();
-    }
-
     @Transactional
     public void markAsDeleted(Long userId) {
-        if(userId==getCurrentUserId()){
+        if(Objects.equals(userId, getCurrentUserId())){
+            // TODO: replace with special exception and handle it in advice
             throw new IllegalArgumentException("Current user cannot delete himself");
         }
-        com.szusta.meduva.model.User user = userRepository.findById(userId)
+        User user = userRepository.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException("User not found with id : " + userId));
 
         user.markAsDeleted();
         userRepository.save(user);
+    }
+
+    private Long getCurrentUserId() {
+        SecurityContext context = SecurityContextHolder.getContext();
+        Authentication auth = context.getAuthentication();
+        if (auth != null) {
+            UserDetails currentUserDetails = (UserDetails) auth.getPrincipal();
+            return getCurrentUserIdFromRepo(currentUserDetails);
+        } else {
+            throw new AuthenticationCredentialsNotFoundException("Cannot get current user id: No authentication information available");
+        }
+    }
+
+    private Long getCurrentUserIdFromRepo(UserDetails currentUserDetails) {
+        User user = userRepository.findByLogin(currentUserDetails.getUsername())
+                .orElseThrow(() -> {
+                    String errorMsg = "Authenticated user couldn't be found in the database (login : " + currentUserDetails.getUsername() + ")";
+                    return new EntityRecordNotFoundException(errorMsg);
+                });
+        return user.getId();
     }
 
     @Transactional
