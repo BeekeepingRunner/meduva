@@ -8,9 +8,7 @@ import com.szusta.meduva.repository.RoleRepository;
 import com.szusta.meduva.repository.UserRepository;
 import com.szusta.meduva.service.user.UserDetailsImpl;
 import com.szusta.meduva.service.user.UserService;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.function.Executable;
 import org.mockito.InjectMocks;
@@ -21,10 +19,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -316,6 +311,119 @@ public class UserServiceTest {
         @Test
         void should_returnCurrentUserId_When_userIsInTheContext() {
 
+        }
+    }
+
+    @Nested
+    class changeUserRoleTests {
+
+        @Test
+        void should_returnUserWithNewRole_When_CorrectUserId() {
+            // given
+            Long userId = 1L;
+            User user = createTestUser(userId);
+            Long oldRoleId = 1L;
+            user.setRoles(Set.of(new Role(oldRoleId, "ROLE_CLIENT")));
+
+            when(userRepositoryMock.findById(userId))
+                    .thenReturn(Optional.of(user));
+
+            Long newRoleId = 2L;
+            Role oldRole = new Role(oldRoleId, "ROLE_CLIENT");
+            Role newRole = new Role(newRoleId, "ROLE_WORKER");
+            when(roleRepositoryMock.findById(oldRoleId))
+                    .thenReturn(Optional.of(oldRole));
+            when(roleRepositoryMock.findById(newRoleId))
+                    .thenReturn(Optional.of(newRole));
+
+            when(userRepositoryMock.save(user))
+                    .thenReturn(user);
+
+            // when
+            User userWithNewRole = userService.changeUserRole(userId, newRoleId);
+
+            // then
+            Set<Role> userRoles = userWithNewRole.getRoles();
+            assertTrue(userRoles.contains(newRole));
+        }
+
+        @Test
+        void should_returnUserWithoutHigherRole_When_NewRoleIsLowerThanOldOne() {
+            // given
+            Long userId = 1L;
+            User user = createTestUser(userId);
+
+            Long lowerRoleId = 1L;
+            Long higherRoleId = 2L;
+            Role lowerRole = new Role(lowerRoleId, "ROLE_CLIENT");
+            Role higherRole = new Role(higherRoleId, "ROLE_WORKER");
+
+            user.setRoles(Set.of(
+                    new Role(lowerRoleId, "ROLE_CLIENT"),
+                    new Role(higherRoleId, "ROLE_WORKER")));
+
+            when(userRepositoryMock.findById(userId))
+                    .thenReturn(Optional.of(user));
+            when(roleRepositoryMock.findById(lowerRoleId))
+                    .thenReturn(Optional.of(lowerRole));
+            when(userRepositoryMock.save(user))
+                    .thenReturn(user);
+
+            // when
+            User userWithNewRole = userService.changeUserRole(userId, lowerRoleId);
+
+            // then
+            Set<Role> userRoles = userWithNewRole.getRoles();
+            assertAll(
+                    () -> assertTrue(userRoles.contains(lowerRole)),
+                    () -> assertFalse(userRoles.contains(higherRole))
+            );
+        }
+
+        @Test
+        void should_throwException_When_UserWithIdDoesntExist() {
+            // given
+            Long userId = 1L;
+            User user = createTestUser(userId);
+            when(userRepositoryMock.findById(anyLong()))
+                    .thenThrow(EntityRecordNotFoundException.class);
+
+            // when
+            Executable executable = () -> userService.changeUserRole(userId, 1L);
+
+            // then
+            assertAll(
+                    () -> assertThrows(EntityRecordNotFoundException.class, executable),
+                    () -> verify(roleRepositoryMock, never()).findById(anyLong()),
+                    () -> verify(userRepositoryMock, never()).save(any())
+            );
+        }
+
+        @Test
+        void should_throwException_When_IncorrectRoleId() {
+            // given
+            Long userId = 1L;
+            User user = createTestUser(userId);
+            when(userRepositoryMock.findById(userId))
+                    .thenReturn(Optional.of(user));
+            when(roleRepositoryMock.findById(anyLong()))
+                    .thenThrow(EntityRecordNotFoundException.class);
+
+            // when
+            Executable executable = () -> userService.changeUserRole(userId, 1L);
+
+            // then
+            assertAll(
+                    () -> assertThrows(EntityRecordNotFoundException.class, executable),
+                    () -> verify(userRepositoryMock).findById(userId),
+                    () -> verify(userRepositoryMock, never()).save(any())
+            );
+        }
+
+        private User createTestUser(Long id) {
+            User user = new User("login", "email", "password", "name", "surname", "123123123");
+            user.setId(id);
+            return user;
         }
     }
 }
