@@ -93,7 +93,10 @@ public class UserService {
         userRepository.save(user);
     }
 
-    private Long getCurrentUserId() {
+    /**
+     * Returns an id of currently authenticated user associated with request
+     */
+    public Long getCurrentUserId() {
         SecurityContext context = SecurityContextHolder.getContext();
         Authentication auth = context.getAuthentication();
         if (auth != null) {
