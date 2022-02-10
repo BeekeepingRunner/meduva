@@ -16,6 +16,7 @@ import org.mockito.Mock;
 import org.mockito.MockedStatic;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.autoconfigure.neo4j.Neo4jProperties;
+import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
@@ -310,20 +311,32 @@ public class UserServiceTest {
 
     @Nested
     class GetCurrentUserIdTests {
+
+        /*
+        These two methods require preceding static mocking of SecurityContextHolder class
+         */
+        private SecurityContext mockSecurityContext(MockedStatic<SecurityContextHolder> contextHolderMock) {
+            SecurityContext context = mock(SecurityContext.class);
+            contextHolderMock.when(SecurityContextHolder::getContext)
+                    .thenReturn(context);
+            return context;
+        }
+        private Authentication mockAuthentication(SecurityContext securityContext) {
+            Authentication auth = mock(Authentication.class);
+            when(securityContext.getAuthentication()).thenReturn(auth);
+            return auth;
+        }
+
         @Test
         void should_returnCurrentUserId_When_userIsInTheContext() {
             try (MockedStatic<SecurityContextHolder> contextHolderMock = mockStatic(SecurityContextHolder.class)) {
-                // given D:
-                SecurityContext context = mock(SecurityContext.class);
-                contextHolderMock.when(SecurityContextHolder::getContext)
-                        .thenReturn(context);
-
-                Authentication auth = mock(Authentication.class);
-                when(context.getAuthentication()).thenReturn(auth);
+                // given
+                SecurityContext context = mockSecurityContext(contextHolderMock);
+                Authentication authentication = mockAuthentication(context);
 
                 final long expectedUserId = 1L;
                 UserDetails userDetails = new UserDetailsImpl(expectedUserId, "username", "email", "password", Collections.emptyList());
-                when(auth.getPrincipal()).thenReturn(userDetails);
+                when(authentication.getPrincipal()).thenReturn(userDetails);
 
                 User user = new User();
                 user.setId(expectedUserId);
@@ -335,6 +348,42 @@ public class UserServiceTest {
 
                 // then
                 assertEquals(actualUserId, expectedUserId);
+            }
+        }
+
+        @Test
+        void should_ThrowException_when_noSecurityContextAvailable() {
+            try (MockedStatic<SecurityContextHolder> contextHolderMock = mockStatic(SecurityContextHolder.class)) {
+                // given:
+                // returns null authentication by default
+                SecurityContext context = mockSecurityContext(contextHolderMock);
+
+                // when
+                Executable executable = () -> userService.getCurrentUserId();
+
+                // then
+                assertThrows(AuthenticationCredentialsNotFoundException.class, executable);
+            }
+        }
+
+        @Test
+        void should_ThrowException_When_userAuthenticatedButNotFoundInRepo() {
+            try (MockedStatic<SecurityContextHolder> contextHolderMock = mockStatic(SecurityContextHolder.class)) {
+                // given
+                SecurityContext context = mockSecurityContext(contextHolderMock);
+                Authentication authentication = mockAuthentication(context);
+
+                UserDetails userDetails = new UserDetailsImpl(1L, "username", "email", "password", Collections.emptyList());
+                when(authentication.getPrincipal()).thenReturn(userDetails);
+
+                when(userRepositoryMock.findByLogin(anyString()))
+                        .thenReturn(Optional.empty());
+
+                // when
+                Executable executable = () -> userService.getCurrentUserId();
+
+                // then
+                assertThrows(EntityRecordNotFoundException.class, executable);
             }
         }
     }
