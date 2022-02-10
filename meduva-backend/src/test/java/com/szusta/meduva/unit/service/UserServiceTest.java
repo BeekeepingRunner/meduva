@@ -13,10 +13,14 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.function.Executable;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.MockedStatic;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.autoconfigure.neo4j.Neo4jProperties;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.context.SecurityContextImpl;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.*;
@@ -306,11 +310,32 @@ public class UserServiceTest {
 
     @Nested
     class GetCurrentUserIdTests {
-
-        // TODO: how to unit test Spring security context???
         @Test
         void should_returnCurrentUserId_When_userIsInTheContext() {
+            try (MockedStatic<SecurityContextHolder> contextHolderMock = mockStatic(SecurityContextHolder.class)) {
+                // given D:
+                SecurityContext context = mock(SecurityContext.class);
+                contextHolderMock.when(SecurityContextHolder::getContext)
+                        .thenReturn(context);
 
+                Authentication auth = mock(Authentication.class);
+                when(context.getAuthentication()).thenReturn(auth);
+
+                final long expectedUserId = 1L;
+                UserDetails userDetails = new UserDetailsImpl(expectedUserId, "username", "email", "password", Collections.emptyList());
+                when(auth.getPrincipal()).thenReturn(userDetails);
+
+                User user = new User();
+                user.setId(expectedUserId);
+                when(userRepositoryMock.findByLogin(userDetails.getUsername()))
+                        .thenReturn(Optional.of(user));
+
+                // when
+                final Long actualUserId = userService.getCurrentUserId();
+
+                // then
+                assertEquals(actualUserId, expectedUserId);
+            }
         }
     }
 

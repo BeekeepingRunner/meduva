@@ -93,7 +93,7 @@ public class UserService {
         userRepository.save(user);
     }
 
-    private Long getCurrentUserId() {
+    public Long getCurrentUserId() {
         SecurityContext context = SecurityContextHolder.getContext();
         Authentication auth = context.getAuthentication();
         if (auth != null) {
