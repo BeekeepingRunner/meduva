@@ -10,7 +10,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.security.test.context.support.WithMockUser;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -38,6 +38,10 @@ class UserControllerTest {
     }
 
     @Test
+    @WithMockUser(
+            authorities = {"ROLE_USER", "ROLE_WORKER", "ROLE_RECEPTIONIST"},
+            username = "receptionist", password = "1234"
+    )
     public void getUser() {
         // given
         User expectedUser = new User();
