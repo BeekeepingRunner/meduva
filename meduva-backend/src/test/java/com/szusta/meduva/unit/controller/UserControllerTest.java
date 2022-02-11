@@ -16,6 +16,7 @@ import org.springframework.test.web.servlet.MvcResult;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -35,7 +36,7 @@ class UserControllerTest {
 
         @Test
         @WithMockUser(
-                authorities = {"ROLE_USER", "ROLE_WORKER", "ROLE_RECEPTIONIST"},
+                authorities = {"ROLE_CLIENT", "ROLE_WORKER", "ROLE_RECEPTIONIST"},
                 username = "receptionist", password = "1234"
         )
         public void should_returnUser_when_correctId() throws Exception {
@@ -54,6 +55,21 @@ class UserControllerTest {
 
             // then
             assertEquals(expectedUser.getId(), actual.getId());
+        }
+
+        @Test
+        @WithMockUser(
+                authorities = {"ROLE_CLIENT"},
+                username = "client", password = "1234"
+        )
+        public void should_blockAccess_when_unauthorized() throws Exception {
+            // given
+            Long id = 1L;
+
+            // when
+            mockMvc.perform(get("/api/user/find/{id}", id))
+                    // then
+                    .andExpect(status().isForbidden());
         }
     }
 
