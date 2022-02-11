@@ -1,59 +1,60 @@
 package com.szusta.meduva.unit.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.szusta.meduva.model.User;
 import com.szusta.meduva.service.user.UserService;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.boot.web.server.LocalServerPort;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.test.context.support.WithMockUser;
-
-import java.net.MalformedURLException;
-import java.net.URL;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest
+@AutoConfigureMockMvc
 class UserControllerTest {
-
-    @LocalServerPort
-    private int port;
-
-    private URL base;
 
     @MockBean
     private UserService userService;
 
     @Autowired
-    private TestRestTemplate template;
+    private MockMvc mockMvc;
 
-    @BeforeEach
-    public void setup() throws MalformedURLException {
-        this.base = new URL("http://localhost:" + port + "/api/user");
+    @Autowired
+    private ObjectMapper objectMapper;
+
+    @Nested
+    class GetUserTests {
+
+        @Test
+        @WithMockUser(
+                authorities = {"ROLE_USER", "ROLE_WORKER", "ROLE_RECEPTIONIST"},
+                username = "receptionist", password = "1234"
+        )
+        public void should_returnUser_when_correctId() throws Exception {
+            // given
+            User expectedUser = new User();
+            Long id = 1L;
+            expectedUser.setId(id);
+            when(userService.findById(id)).thenReturn(expectedUser);
+
+            // when
+            MvcResult mvcResult = mockMvc.perform(get("/api/user/find/{id}", id))
+                    .andReturn();
+
+            String userJSON = mvcResult.getResponse().getContentAsString();
+            User actual = objectMapper.readValue(userJSON, User.class);
+
+            // then
+            assertEquals(expectedUser.getId(), actual.getId());
+        }
     }
 
-    @Test
-    @WithMockUser(
-            authorities = {"ROLE_USER", "ROLE_WORKER", "ROLE_RECEPTIONIST"},
-            username = "receptionist", password = "1234"
-    )
-    public void getUser() {
-        // given
-        User expectedUser = new User();
-        Long id = 1L;
-        when(userService.findById(id)).thenReturn(expectedUser);
-
-        // when
-        ResponseEntity<User> response
-                = template.getForEntity(base.toString() + "/find/{id}", User.class, id);
-        User actual = response.getBody();
-
-        // then
-        assertEquals(expectedUser, actual);
-    }
 }
