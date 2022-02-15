@@ -1,4 +1,4 @@
-package com.szusta.meduva.integration.controller;
+package com.szusta.meduva.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.szusta.meduva.model.PasswordResetToken;

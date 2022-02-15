@@ -1,4 +1,4 @@
-package com.szusta.meduva.jpa.repository;
+package com.szusta.meduva.repository;
 
 import com.szusta.meduva.model.role.ERole;
 import com.szusta.meduva.model.User;

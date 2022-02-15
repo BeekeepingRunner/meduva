@@ -1,4 +1,4 @@
-package com.szusta.meduva.unit.service;
+package com.szusta.meduva.service;
 
 import com.szusta.meduva.exception.AlreadyExistsException;
 import com.szusta.meduva.model.Service;

@@ -1,4 +1,4 @@
-package com.szusta.meduva.unit;
+package com.szusta.meduva.util;
 
 import com.szusta.meduva.util.TimeUtils;
 import org.junit.jupiter.api.*;

@@ -1,4 +1,4 @@
-package com.szusta.meduva.unit.service;
+package com.szusta.meduva.service;
 
 import com.szusta.meduva.exception.EntityRecordNotFoundException;
 import com.szusta.meduva.model.role.Role;

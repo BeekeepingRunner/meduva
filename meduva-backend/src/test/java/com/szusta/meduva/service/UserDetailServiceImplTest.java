@@ -1,4 +1,4 @@
-package com.szusta.meduva.unit.service;
+package com.szusta.meduva.service;
 
 import com.szusta.meduva.model.role.Role;
 import com.szusta.meduva.model.User;
