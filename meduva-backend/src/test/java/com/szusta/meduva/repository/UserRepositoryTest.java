@@ -10,6 +10,9 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import java.util.Set;
 
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 class UserRepositoryTest {
@@ -26,7 +29,10 @@ class UserRepositoryTest {
         User savedUser = userRepository.save(user);
 
         // then
-        Assertions.assertThat(savedUser).isNotNull();
+        assertAll(
+                () -> Assertions.assertThat(savedUser).isNotNull(),
+                () -> Assertions.assertThat(savedUser.getId()).isGreaterThan(0)
+        );
     }
 
 }
