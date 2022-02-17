@@ -99,4 +99,64 @@ class UserRepositoryTest {
             assertTrue(actual.isEmpty());
         }
     }
+
+    @Nested
+    class ExistsByLoginTests {
+
+        @Test
+        void given_existingUser_whenCorrectLogin_thenReturnTrue() {
+            // given
+            User user = new User("login", "email@mail.com", "password", "name", "surname", "123123123");
+            userRepository.save(user);
+
+            // when
+            boolean doesUserExist = userRepository.existsByLogin(user.getLogin());
+
+            // then
+            assertTrue(doesUserExist);
+        }
+
+        @Test
+        void given_existingUser_whenIncorrectLogin_thenReturnFalse() {
+            // given
+            User user = new User("login", "email@mail.com", "password", "name", "surname", "123123123");
+            userRepository.save(user);
+
+            // when
+            boolean doesUserExist = userRepository.existsByLogin("wrong");
+
+            // then
+            assertFalse(doesUserExist);
+        }
+    }
+
+    @Nested
+    class ExistsByEmailTests {
+
+        @Test
+        void given_existingUser_whenCorrectEmail_thenReturnTrue() {
+            // given
+            User user = new User("login", "email@mail.com", "password", "name", "surname", "123123123");
+            userRepository.save(user);
+
+            // when
+            boolean doesUserExist = userRepository.existsByEmail(user.getEmail());
+
+            // then
+            assertTrue(doesUserExist);
+        }
+
+        @Test
+        void given_existingUser_whenIncorrectEmail_thenReturnFalse() {
+            // given
+            User user = new User("login", "email@mail.com", "password", "name", "surname", "123123123");
+            userRepository.save(user);
+
+            // when
+            boolean doesUserExist = userRepository.existsByEmail("wrong");
+
+            // then
+            assertFalse(doesUserExist);
+        }
+    }
 }
