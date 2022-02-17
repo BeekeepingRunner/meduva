@@ -35,6 +35,38 @@ class UserRepositoryTest {
     }
 
     @Nested
+    class DeleteTests {
+
+        @Test
+        void given_UserObject_whenDelete_thenRemoveUser() {
+            // given
+            User user = new User("login", "email@mail.com", "password", "name", "surname", "123123123");
+            userRepository.save(user);
+
+            // when
+            userRepository.delete(user);
+            Optional<User> userOptional = userRepository.findById(user.getId());
+
+            // then
+            assertTrue(userOptional.isEmpty());
+        }
+
+        @Test
+        void given_UserObject_whenDeleteById_thenRemoveUser() {
+            // given
+            User user = new User("login", "email@mail.com", "password", "name", "surname", "123123123");
+            userRepository.save(user);
+
+            // when
+            userRepository.deleteById(user.getId());
+            Optional<User> userOptional = userRepository.findById(user.getId());
+
+            // then
+            assertTrue(userOptional.isEmpty());
+        }
+    }
+
+    @Nested
     class FindByLoginTests {
 
         @Test
