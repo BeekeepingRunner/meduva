@@ -1,6 +1,7 @@
 package com.szusta.meduva.repository;
 
 import com.szusta.meduva.model.User;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,11 +20,22 @@ class UserRepositoryTest {
     @Autowired
     private UserRepository userRepository;
 
+    private User user;
+
+    @BeforeEach
+    public void setup() {
+        user = new User(
+                "login",
+                "email@mail.com",
+                "password",
+                "name",
+                "surname",
+                "123123123");
+    }
+
     @Test
     void given_UserObject_whenSave_thenReturnSavedUser() {
         // given
-        User user = new User("login", "email@mail.com", "password", "name", "surname", "123123123");
-
         // when
         User savedUser = userRepository.save(user);
 
@@ -40,7 +52,6 @@ class UserRepositoryTest {
         @Test
         void given_UserObject_whenDelete_thenRemoveUser() {
             // given
-            User user = new User("login", "email@mail.com", "password", "name", "surname", "123123123");
             userRepository.save(user);
 
             // when
@@ -54,7 +65,6 @@ class UserRepositoryTest {
         @Test
         void given_UserObject_whenDeleteById_thenRemoveUser() {
             // given
-            User user = new User("login", "email@mail.com", "password", "name", "surname", "123123123");
             userRepository.save(user);
 
             // when
@@ -72,7 +82,6 @@ class UserRepositoryTest {
         @Test
         void given_savedUser_whenCorrectLogin_thenReturnSavedUser() {
             // given
-            User user = new User("login", "email@mail.com", "password", "name", "surname", "123123123");
             userRepository.save(user);
 
             // when
@@ -88,7 +97,6 @@ class UserRepositoryTest {
         @Test
         void given_savedUser_whenIncorrectLogin_thenReturnEmptyOptional() {
             // given
-            User user = new User("login", "email@mail.com", "password", "name", "surname", "123123123");
             userRepository.save(user);
 
             // when
@@ -105,7 +113,6 @@ class UserRepositoryTest {
         @Test
         void given_savedUser_whenCorrectEmail_thenReturnSavedUser() {
             // given
-            User user = new User("login", "email@mail.com", "password", "name", "surname", "123123123");
             userRepository.save(user);
 
             // when
@@ -121,7 +128,6 @@ class UserRepositoryTest {
         @Test
         void given_savedUser_whenIncorrectEmail_thenReturnEmptyOptional() {
             // given
-            User user = new User("login", "email@mail.com", "password", "name", "surname", "123123123");
             userRepository.save(user);
 
             // when
@@ -138,7 +144,6 @@ class UserRepositoryTest {
         @Test
         void given_existingUser_whenCorrectLogin_thenReturnTrue() {
             // given
-            User user = new User("login", "email@mail.com", "password", "name", "surname", "123123123");
             userRepository.save(user);
 
             // when
@@ -151,7 +156,6 @@ class UserRepositoryTest {
         @Test
         void given_existingUser_whenIncorrectLogin_thenReturnFalse() {
             // given
-            User user = new User("login", "email@mail.com", "password", "name", "surname", "123123123");
             userRepository.save(user);
 
             // when
@@ -168,7 +172,6 @@ class UserRepositoryTest {
         @Test
         void given_existingUser_whenCorrectEmail_thenReturnTrue() {
             // given
-            User user = new User("login", "email@mail.com", "password", "name", "surname", "123123123");
             userRepository.save(user);
 
             // when
@@ -181,7 +184,6 @@ class UserRepositoryTest {
         @Test
         void given_existingUser_whenIncorrectEmail_thenReturnFalse() {
             // given
-            User user = new User("login", "email@mail.com", "password", "name", "surname", "123123123");
             userRepository.save(user);
 
             // when
